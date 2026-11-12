@@ -2,13 +2,15 @@
 
 | Campo | Valor |
 |---|---|
-| Estado | **Borrador v0.1, pendiente de revisión** |
+| Estado | **v1.0, revisado por el usuario. Ambigüedades cerradas** |
 | Fecha | 2026-11-12 |
 | Fuente | [`00-enunciado.md`](00-enunciado.md) |
-| Siguiente paso | Resolver las preguntas abiertas (§8) y redactar `02-especificacion.md` |
+| Siguiente paso | Especificación en [`02-especificacion/`](02-especificacion/README.md) |
 
-> Ninguna de las propuestas de este documento es una decisión cerrada. Todas las ambigüedades
-> están en estado **Abierta** hasta que el usuario las valide.
+> Las ambigüedades se cerraron el 2026-11-12 con las respuestas del usuario
+> ([`prompts/02-especificacion.md`](prompts/02-especificacion.md)). Cada una indica su decisión y su ID en
+> [`decisiones.md`](decisiones.md). El resto del documento se conserva tal como se escribió en la fase 1; las
+> correcciones posteriores están en [`02-especificacion/README.md`](02-especificacion/README.md) («Cambios respecto al análisis»).
 
 ## 0. Convenciones
 
@@ -84,7 +86,7 @@ El enunciado da más peso a la planificación (35 %) y al criterio técnico y co
 | RNF-08 | Estados de carga, error y vacío explícitos, sobre todo al consumir la API externa. | E §4.3 |
 | RNF-09 | Proyección y conversión «en tiempo real»: sin latencia perceptible al mover el slider o cambiar de divisa. | E §2.B |
 | RNF-10 | Código limpio y modular, sin ficheros masivos y con patrones consistentes. | E §3.2, §4.2 |
-| RNF-11 | Seguridad: validación de entrada, consultas parametrizadas, CORS restringido, sin trazas internas en las respuestas y sin datos personales en los logs. | E §1 (genérico) / I (concreción) |
+| RNF-11 | ~~Seguridad: validación de entrada, consultas parametrizadas, CORS restringido, sin trazas internas en las respuestas y sin datos personales en los logs.~~ **Sustituido** por RNF-SEC-01…21 ([`02-especificacion/06-seguridad.md`](02-especificacion/06-seguridad.md), D-40). | E §1 (genérico) / I (concreción) |
 | RNF-12 | Tests automatizados: unitarios e integración con Vitest, e2e con Playwright. | D |
 | RNF-13 | Accesibilidad básica: slider operable con teclado, etiquetas en los formularios y contraste suficiente. | P |
 | RNF-14 | Funciona igual en Windows, macOS y Linux (no sabemos qué SO usan los evaluadores). | I §4.4 |
@@ -101,7 +103,8 @@ El enunciado da más peso a la planificación (35 %) y al criterio técnico y co
 
 ## 4. Ambigüedades y huecos
 
-Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. **Todas están abiertas.**
+Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. **Todas están cerradas**: la línea
+«Estado» de cada una indica la decisión tomada.
 
 ### AMB-01 · Dominio del número de usuarios
 - **Enunciado:** «Tramo 1 (0 a 10 usuarios)». No hay mínimo, máximo ni tipo definidos.
@@ -109,6 +112,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
 - **Propuesta:** entero, mínimo 1 y máximo configurable (p. ej. 10 000) para evitar abusos y desbordamientos.
   El «0» del Tramo 1 se lee como el límite inferior del rango, no como un caso de uso.
 - **Afecta a:** RF-07, RF-08, RF-16.
+- **Estado:** **Cerrada** — entero de 1 a 10 000, con slider y campo numérico sincronizados (D-04). Escala del slider por segmentos (D-05, pendiente de validar).
 
 ### AMB-02 · Almacenamiento contratado y llamadas a la API
 - **Enunciado:** se piden como datos de la simulación, pero no tienen precio ni unidad.
@@ -116,6 +120,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
 - **Propuesta:** se guardan como datos informativos **sin efecto en el precio**. Almacenamiento en GB enteros ≥ 0 y
   llamadas a la API por mes como entero ≥ 0, ambos con un tope razonable.
 - **Afecta a:** RF-07, RF-08, RF-16.
+- **Estado:** **Cerrada** — informativos y sin efecto en el precio; GB enteros de 0 a 100 000 y llamadas por mes de 0 a 1 000 000 000 (D-06). Sigue abierta como pregunta para negocio (PN-01).
 
 ### AMB-03 · «Plan elegido»
 - **Enunciado:** el cliente guarda un «Plan Elegido», pero no se dice qué planes hay ni si cambian el precio.
@@ -124,6 +129,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
 - **Propuesta:** catálogo cerrado de planes **definido por el usuario**. El plan es un dato descriptivo y no cambia
   el cálculo. No propongo nombres para no inventar el catálogo.
 - **Afecta a:** RF-01, RF-08.
+- **Estado:** **Cerrada** — catálogo cerrado `STARTER`, `BUSINESS`, `ENTERPRISE`, descriptivo (D-07; SUPUESTO S-01 validado por el usuario; PN-02). El precio sale de una tarifa asociada al plan, para que en el futuro el plan pueda influir sin tocar el cálculo (D-08).
 
 ### AMB-04 · Impuesto por país
 - **Enunciado:** «Al total resultante se le debe sumar el impuesto (Tax/IVA) correspondiente al país del cliente.»
@@ -142,6 +148,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
   - Los tipos se guardan como datos configurables, no repartidos por el código.
   - Cada simulación guarda el tipo aplicado (*snapshot*).
 - **Afecta a:** RF-01, RF-09, RF-10.
+- **Estado:** **Cerrada** — lista y tipos aceptados y verificados en fuentes oficiales; simplificación documentada; tipos configurables; cada simulación guarda el tipo aplicado (D-09; PN-03).
 
 ### AMB-05 · Redondeo y precisión
 - **Hueco:** no hay regla de redondeo. Con precios enteros en euros la base nunca tiene céntimos, pero el impuesto
@@ -150,12 +157,14 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
   comercial (mitad hacia arriba), y total = base + impuesto redondeado. La conversión de divisa no toca los importes
   guardados (ver AMB-12).
 - **Afecta a:** RF-08, RF-09, RNF-04.
+- **Estado:** **Cerrada** — céntimos enteros, tipos en puntos básicos y un único redondeo comercial del impuesto (D-10).
 
 ### AMB-06 · Qué muestra la «proyección de la factura mensual»
 - **Enunciado:** «proyección de la factura mensual calculada en base a los tramos y convertida a la divisa seleccionada».
 - **Problema:** «factura» hace pensar en un importe con impuesto, pero el texto solo menciona los tramos.
 - **Propuesta:** mostrar el desglose por tramos (usuarios × precio por tramo), la base, el impuesto (con su tipo) y el total.
 - **Afecta a:** RF-16.
+- **Estado:** **Cerrada** — desglose completo: tramos, base, impuesto con su tipo y total (D-11).
 
 ### AMB-07 · Identificadores españoles admitidos y qué significa «verdadero»
 - **Enunciado:** «comprobar obligatoriamente que el DNI/NIF/CIF es verdadero utilizando el algoritmo oficial de control».
@@ -173,6 +182,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
     primeros dígitos son `00`; C, D, F, G, J, U, V → cualquiera) y **contrastarla con la Orden EHA/451/2008** al
     escribir la especificación.
 - **Afecta a:** RF-03.
+- **Estado:** **Cerrada** — DNI, NIE y CIF; K/L/M fuera; «verdadero» = estructura y carácter de control correctos (D-12). Al contrastarla, la Orden EHA/451/2008 resulta no definir el algoritmo ni la regla letra/dígito; se descarta la regla «00» (D-13, pendiente de validar).
 
 ### AMB-08 · Normalización del identificador fiscal
 - **Hueco:** no se dice cómo tratar mayúsculas, separadores o prefijos.
@@ -182,6 +192,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
   ASCII (se rechazan homóglifos Unicode). Aceptar el prefijo de país `ES` y eliminarlo. **No** rellenar con ceros a la
   izquierda (un DNI de 7 dígitos se rechaza). Se guarda la forma normalizada.
 - **Afecta a:** RF-02, RF-03, RF-04.
+- **Estado:** **Cerrada** — propuesta aceptada. Además, el prefijo de país solo se quita si el valor no es válido tal cual (D-14).
 
 ### AMB-09 · Validación «estricta» fuera de España
 - **Enunciado:** la validación es estricta para todos, pero el algoritmo oficial solo es obligatorio para España.
@@ -190,18 +201,21 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
   Se deja un punto de extensión para añadir validadores por país.
   Alternativa: validar el formato de cada país de la lista cerrada (AMB-04).
 - **Afecta a:** RF-02.
+- **Estado:** **Cerrada** — **propuesta rechazada**: formato oficial específico de cada país, con un validador por país detrás de una interfaz común (D-15). Identificador exigido: NIF-IVA o EIN (D-16, pendiente de validar; PN-04).
 
 ### AMB-10 · Unicidad de clientes
 - **Hueco:** no se dice si pueden existir dos clientes con el mismo identificador fiscal o el mismo email.
 - **Propuesta:** el par (país, identificador normalizado) es único; un duplicado devuelve `409 Conflict`.
   El email no es único (un mismo contacto puede gestionar varias empresas).
 - **Afecta a:** RF-01.
+- **Estado:** **Cerrada** — el par (país, identificador normalizado) es único → `409`; el email no es único (D-17).
 
 ### AMB-11 · Qué se guarda de una simulación
 - **Enunciado:** «Este cálculo debe persistirse en la base de datos.»
 - **Propuesta:** guardar las entradas, el desglose por tramo, la base, el tipo impositivo aplicado, el impuesto y el
   total en céntimos de EUR, con fecha en UTC. El backend **siempre recalcula**: no acepta importes enviados por el cliente.
 - **Afecta a:** RF-07, RF-10, RF-11.
+- **Estado:** **Cerrada** — propuesta aceptada, guardando además la tarifa y el país aplicados (D-18).
 
 ### AMB-12 · La divisa solo afecta a la visualización
 - **Enunciado:** «cambiar dinámicamente la divisa de visualización».
@@ -212,12 +226,14 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
   **actual**, con un aviso de importe orientativo y la fecha de los tipos. Para que el desglose cuadre, se convierten
   base e impuesto y el total mostrado es la suma de ambos ya redondeados.
 - **Afecta a:** RF-13, RF-15, RF-16.
+- **Estado:** **Cerrada** — EUR como fuente de verdad e historial al tipo actual con aviso (D-19). Regla de conversión por partidas hoja (D-20, pendiente de validar).
 
 ### AMB-13 · Divisas que se ofrecen
 - **Enunciado:** «(EUR, USD, GBP, etc.)». La API devuelve 166 divisas.
 - **Propuesta:** una lista corta de divisas habituales (p. ej. EUR, USD, GBP, CHF, JPY, MXN), para validar.
   El formato se adapta a los decimales de cada divisa (JPY no tiene decimales).
 - **Afecta a:** RF-13.
+- **Estado:** **Cerrada** — EUR, USD, GBP, CHF, JPY y MXN (D-21).
 
 ### AMB-14 · Desde dónde se llama a la API de tipos de cambio y qué es «tiempo real»
 - **Enunciado:** «La interfaz debe conectar con una API pública de tipos de cambio».
@@ -228,6 +244,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
   si falla. «Tiempo real» = la conversión se recalcula al instante al cambiar la divisa o mover el slider. La decisión
   técnica final se toma en la fase de arquitectura.
 - **Afecta a:** RF-12, RF-13, RNF-08, RNF-09.
+- **Estado:** **Cerrada** — desde el navegador, con caché, validación del esquema y vuelta a EUR (D-22). Caché de 1 h y uso de tipos guardados con menos de 48 h si falla el refresco (D-23, pendiente de validar). Atribución obligatoria según los términos del proveedor (D-24).
 
 ### AMB-15 · Contenido del «Dashboard» y comportamiento del buscador
 - **Enunciado:** «Buscador y Dashboard: Un buscador por nombre de empresa o identificador fiscal.»
@@ -237,6 +254,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
   Sin KPIs, para no inventar métricas. Búsqueda parcial que no distingue mayúsculas ni acentos en el nombre, y por
   identificador normalizado (AMB-08).
 - **Afecta a:** RF-04, RF-14.
+- **Estado:** **Cerrada** — listado paginado con buscador **y** métricas agregadas como Could; se rechaza la propuesta de no tener métricas (D-25). Importe medio = base sin impuestos (D-26, pendiente de validar). Orden por nombre (D-27).
 
 ### AMB-16 · Contexto del simulador
 - **Problema:** el impuesto depende del país del cliente, así que la proyección necesita un cliente. ¿Se puede simular
@@ -244,22 +262,26 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
 - **Propuesta:** el simulador siempre trabaja sobre un cliente y está dentro de su detalle o se abre desde él.
   Dónde se calcula la proyección (frontend, backend o lógica compartida) se decide en arquitectura (ver RT-02).
 - **Afecta a:** RF-16, RF-17.
+- **Estado:** **Cerrada** — el simulador siempre trabaja sobre un cliente, dentro de su detalle (D-28). Dónde se calcula la proyección se decide en arquitectura.
 
 ### AMB-17 · Alta de cliente desde la interfaz
 - **Hueco:** el enunciado exige `POST /customers`, pero no incluye un formulario de alta entre las vistas obligatorias.
 - **Problema:** sin formulario, los clientes solo podrían crearse con datos de ejemplo o llamando a la API a mano.
 - **Propuesta:** añadir un formulario de alta sencillo que muestre los errores de validación fiscal que devuelva el backend.
 - **Afecta a:** RF-06.
+- **Estado:** **Cerrada** — hay formulario de alta (D-28).
 
 ### AMB-18 · Edición y borrado
 - **Hueco:** solo se piden altas y consultas.
 - **Propuesta:** sin edición ni borrado. Las simulaciones son inmutables (son presupuestos históricos).
 - **Afecta a:** RF-01, RF-07.
+- **Estado:** **Cerrada** — solo altas y consultas; las simulaciones son inmutables (D-29).
 
 ### AMB-19 · Autenticación y autorización
 - **Hueco:** es una «herramienta interna» y no se menciona el control de acceso.
 - **Propuesta:** fuera de alcance, documentado como riesgo (RT-09) y con un punto de extensión.
 - **Afecta a:** RNF-11.
+- **Estado:** **Cerrada** — sin autenticación, justificado en el modelo de amenazas (D-30, S-02).
 
 ### AMB-20 · Rutas y contrato de errores de la API
 - **Huecos:** solo se definen dos rutas de escritura. No hay códigos de estado, formato de error ni paginación.
@@ -267,21 +289,25 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
   resto en la especificación: errores en formato *Problem Details* (RFC 9457) con `400`, `404`, `409` y `422`, y
   paginación por `limit`/`offset`.
 - **Afecta a:** RF-01, RF-04, RF-05, RF-07, RF-11, RNF-05.
+- **Estado:** **Cerrada** — rutas literales, RFC 9457 y la regla de códigos del usuario (D-31); frontera 400/422 y códigos complementarios (D-32); formato de error (D-33).
 
 ### AMB-21 · Validación de email y nombre de empresa
 - **Propuesta:** email con formato válido según el validador estándar de Zod, guardado en minúsculas, de 254 caracteres
   como máximo. Nombre de empresa sin espacios al principio ni al final, de 2 a 200 caracteres.
 - **Afecta a:** RF-01.
+- **Estado:** **Cerrada** — no se llegó a preguntar; queda la propuesta, más normalización NFC y rechazo de caracteres de control (D-34, pendiente de validar).
 
 ### AMB-22 · Idioma y formato de la interfaz
 - **Propuesta:** interfaz en español, con números y fechas en formato `es-ES` y la divisa según la selección.
 - **Afecta a:** RF-13 a RF-16.
+- **Estado:** **Cerrada** — español con formato `es-ES` (D-35).
 
 ### AMB-23 · Entrega y arranque en local
 - **Huecos:** no se dice si hay que usar Docker ni si debe haber datos de ejemplo.
 - **Propuesta:** arranque solo con npm (instalar, migrar y sembrar, levantar todo con un comando), sin depender de
   Docker. Datos de ejemplo con empresas ficticias e identificadores generados con un carácter de control válido.
 - **Afecta a:** RNF-18.
+- **Estado:** **Cerrada** — npm como camino principal, más Docker Compose, CI en GitHub Actions, e2e, demo pública, repositorio público y datos de ejemplo (D-36).
 
 ## 5. Casos límite
 
@@ -409,6 +435,9 @@ Probabilidad (P) e impacto (I): A = alto, M = medio, B = bajo.
 - Interfaz en varios idiomas (AMB-22).
 
 ## 8. Preguntas abiertas
+
+**Respondidas por el usuario el 2026-11-12** ([`prompts/02-especificacion.md`](prompts/02-especificacion.md)).
+Las preguntas que quedan abiertas para negocio están en [`decisiones.md`](decisiones.md) (PN-01…04).
 
 | ID | Pregunta | Ambigüedad |
 |---|---|---|

@@ -6,6 +6,9 @@ multi-divisa para clientes corporativos. Es una prueba técnica: el proceso de i
 
 - Enunciado: `ai-workspace/00-enunciado.md`
 - Análisis de requisitos: `ai-workspace/01-analisis.md`
+- Especificación: `ai-workspace/02-especificacion/` (empezar por su `README.md`)
+- Registro de decisiones, supuestos y preguntas para negocio: `ai-workspace/decisiones.md`
+- Prompts literales del usuario: `ai-workspace/prompts/`
 
 ## Reglas de trabajo
 
@@ -19,11 +22,27 @@ multi-divisa para clientes corporativos. Es una prueba técnica: el proceso de i
 4. **Idioma:** documentación en español; código, identificadores y mensajes de commit en inglés,
    siguiendo [Conventional Commits](https://www.conventionalcommits.org/).
 5. **Cierre de cada paso:** resumen corto con qué se ha hecho, qué se ha decidido y qué dudas quedan.
+6. **Prompts como evidencia:** cada prompt del usuario se guarda literal en `ai-workspace/prompts/`, uno por fase.
+7. **Registro de decisiones:** toda decisión de diseño se anota en `ai-workspace/decisiones.md` (`D-xx`) con la
+   alternativa descartada, el motivo y quién la toma. Las de Claude que requieren validación se marcan como
+   `Claude · pendiente`.
+8. **Verificar antes de afirmar:** los datos externos (normas, formatos, tipos impositivos, APIs) se contrastan con
+   la fuente oficial y se citan. Los vectores de prueba se calculan con un script, nunca de memoria.
 
 ## Trazabilidad
 
-Los requisitos tienen ID (`RF-xx` funcionales, `RNF-xx` no funcionales) definidos en
-`ai-workspace/01-analisis.md`. Specs, código y tests deben referenciar esos IDs.
+Los documentos de fase se numeran (`00-`, `01-`, …). Los transversales (`decisiones.md`, `prompts/`) no llevan número.
+
+| Prefijo | Qué es | Dónde se define |
+|---|---|---|
+| `RF-xx`, `RNF-xx`, `RNF-SEC-xx` | Requisitos | `01-analisis.md`, `02-especificacion/01-alcance.md`, `02-especificacion/06-seguridad.md` |
+| `CL-xx` | Casos límite | `01-analisis.md` §5, `02-especificacion/07-criterios-aceptacion.md` §0 |
+| `TV-…` | Vectores de prueba | `02-especificacion/02-reglas-negocio.md`, `02-especificacion/03-validacion-fiscal.md` |
+| `AC-xx` | Criterios de aceptación | `02-especificacion/07-criterios-aceptacion.md` |
+| `D-xx`, `S-xx`, `PN-xx` | Decisiones, supuestos, preguntas para negocio | `decisiones.md` |
+
+Código y tests referencian estos IDs: cada test cita el `AC-xx` que verifica. La matriz está en
+`02-especificacion/08-trazabilidad.md`.
 
 ## Stack (decidido)
 
