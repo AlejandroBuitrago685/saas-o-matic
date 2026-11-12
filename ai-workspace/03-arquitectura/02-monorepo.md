@@ -148,7 +148,7 @@ Las arrastra Angular (`ng new`) y son de mantenimiento mínimo: `rxjs` 7.8.2, `t
 | `typescript` | 6.0.3 | — | Compilador (fijado, D-67). |
 | `drizzle-kit` | 0.31.11 | 2026-10-21 | Generar y comprobar migraciones. |
 | `vitest`, `@vitest/coverage-v8` | 5.1.0 | 2026-11-02 | Tests unitarios y de integración, y cobertura. Angular 22 usa Vitest por defecto. |
-| `fast-check` | 4.10.x | 2026-09-19 | Tests de propiedades (AC-03). |
+| ~~`fast-check`~~ | — | — | **Descartada (D-90):** el dominio es finito y se recorre entero, sin muestreo aleatorio. |
 | `@playwright/test` | 1.65.0 | 2026-11-12 | e2e. |
 | `@axe-core/playwright` | 4.14.0 | 2026-11-06 | Auditoría automática de accesibilidad (AC-86). |
 | `eslint`, `typescript-eslint`, `angular-eslint` | 10.14 / 8.72 / 22.6 | 2026-10/11 | Lint estricto. |

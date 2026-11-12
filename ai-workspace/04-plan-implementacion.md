@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |---|---|
-| Estado | **Borrador v0.1, pendiente de validación** (D-75) |
+| Estado | **v1, validado** (D-75). El calendario se recalcula al cerrar P1 (S-05 resuelto, D-69). |
 | Fecha | 2026-11-12 |
 | Plazo | Fecha límite de trabajo: **lunes 16/11 a las 23:00** (D-69, S-05). Objetivo: **entregar el domingo 15**. El lunes es solo margen. |
 | Entradas | [`02-especificacion/`](02-especificacion/README.md) · [`03-arquitectura/`](03-arquitectura/README.md) · [`decisiones.md`](decisiones.md) |
@@ -89,7 +89,7 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
 - **Módulos:** `packages/domain` (`money`, `pricing`, `tax`, `catalog`, `text`, `slider`, `shared`).
 - **Tests:**
   - parametrizados con los vectores;
-  - `fast-check` para AC-03;
+  - AC-03 recorriendo todos los `n` de 2 a 10 000 (D-90, sin `fast-check`);
   - recorrido exhaustivo del slider;
   - umbral de cobertura del 100 %.
 - **Riesgos:** bajos. Que el redondeo use coma flotante sin querer: lo impiden TV-RD-01 y la regla de aritmética entera.
