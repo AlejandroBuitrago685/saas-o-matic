@@ -216,9 +216,17 @@ Los prompts literales están en [`prompts/`](prompts/) y las decisiones, en [`de
 | `npx playwright` está en `allow` y, sin Playwright instalado, `npx` lo descargaría sin preguntar: se fija en `devDependencies`. | P6 |
 | Aviso `DEP0190` de Node 24+ por `shell: true` con argumentos en `scripts/lib/repo.mjs` (solo Windows). | P10 |
 | Comprobar en una sesión nueva que el `deny` de `.env` de `.claude/settings.json` se aplica. | P1 |
-| Protección de la rama `main` en GitHub (CI obligatorio para integrar, AC-96): ajuste del repositorio, con permiso del usuario. | Al publicar P0 |
+| Vulnerabilidades moderadas de desarrollo (`minimatch`, `esbuild` de `drizzle-kit`), riesgo aceptado (D-89): ver si hay versiones corregidas sin bajar de versión mayor. | P10 |
 
-**Decisiones:** D-76 a D-87.
+**Decisiones:** D-76 a D-89.
+
+**Publicación**
+- `main` subida como rama principal y PR #1 abierta desde `feat/p0-scaffolding`. CI en verde a la primera:
+  `quality` en Node 22, 24 y 26, y `audit`.
+- `audit` pasa, pero informa de vulnerabilidades moderadas, todas de desarrollo; en producción, 0. Riesgo aceptado
+  con motivo (D-89), porque el «arreglo» de npm baja de versión mayor ESLint y drizzle-kit.
+- `main` protegida, a petición del usuario: PR obligatoria y los 4 checks en verde para integrar, sin aprobaciones
+  (D-88). La marca de la auditoría pasa a ⚙ en `CLAUDE.md`.
 
 **Tiempo:** estimado 4,5 h · real ≈ 1 h 45 min de trabajo (14:12–15:00, 15:25–15:30 y 19:00–19:45), en 5,5 h de
 reloj por dos pausas: mi parada a mitad de turno y el límite de uso de la sesión.

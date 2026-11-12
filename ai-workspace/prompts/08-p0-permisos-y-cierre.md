@@ -3,7 +3,7 @@ Prompts literales enviados por el usuario a Claude Code (Opus 5.5).
 - Parte: P0 · Scaffolding y herramientas (durante la implementación y al cerrar la parte)
 - Fecha: 2026-11-12
 - Nota: los mensajes 1 y 3 se enviaron a mitad de turno. El 1 no se guardó en su momento: lo detectó el revisor.
-Son cinco mensajes, en orden. El texto de cada uno está tal cual se envió, sin editar.
+Son seis mensajes, en orden. El texto de cada uno está tal cual se envió, sin editar.
 -->
 
 ## Mensaje 1 · Permisos de Claude Code (durante la implementación de P0)
@@ -37,3 +37,12 @@ I hit my usage limit while you were working, but it has reset now. Please contin
 Antes de nada, sube main con git push -u origin main, para que main sea la rama principal del repositorio. Después sube la rama de P0 y abre la PR contra main con gh. Ya lo tengo instalado y autenticado; si no te aparece en el PATH, está en "C:\Program Files\GitHub CLI\gh.exe".
 
 Te autorizo esos dos push. El merge de la PR me lo pides cuando el CI esté en verde.
+
+## Mensaje 6 · Marca de la auditoría y protección de `main`
+
+Las dos cosas, sí:
+
+1. Cuando el CI esté en verde, haz el commit que pasa a ⚙ la marca de la auditoría. Te autorizo ese push.
+2. Protege main: que sea obligatorio pasar por una PR y que los 4 checks del CI (quality en Node 22, 24 y 26, y audit) estén en verde para hacer merge. Sin aprobaciones obligatorias, porque trabajo solo y no podría aprobar mis propias PR.
+
+Después pídeme el merge y seguimos con P1 y P2.

@@ -92,7 +92,7 @@ Versión exacta. Sin dependencias que compilen código nativo (RT-06).
 - Configuración validada al arrancar; ningún secreto en el repo; no se leen ni se editan `.env` ⚙.
 - La respuesta de la API de tipos se valida antes de usarla; el backend no hace peticiones salientes.
 - Prohibidos `innerHTML`, `outerHTML` y `bypassSecurityTrust*` ⚙.
-- Auditoría de dependencias en CI ⏳; contenedores sin root.
+- Auditoría de dependencias en CI ⚙ (falla con vulnerabilidades altas o críticas); contenedores sin root.
 
 ## Tests
 
@@ -117,8 +117,9 @@ Una parte está **hecha** cuando cumple **todo** esto:
 7. Commit en Conventional Commits.
 
 ⚙ = una herramienta configurada **y probada** lo comprueba (ESLint, `tsc`, scripts y hooks de Claude Code, cada uno con
-tests en `tools/`). ⏳ = configurado pero todavía no demostrado: la auditoría, hasta que corra el primer CI en GitHub;
-la trazabilidad, que solo informa hasta P10 (D-86). Detalle en `03-arquitectura/09-calidad-y-automatizacion.md`.
+tests en `tools/`; la auditoría, en el CI de GitHub). ⏳ = configurado pero todavía no demostrado: la trazabilidad, que
+solo informa hasta P10 (D-86), y la regla de módulos, que llega en P4. `main` está protegida: solo se integra por PR
+con los 4 checks del CI en verde (D-88). Detalle en `03-arquitectura/09-calidad-y-automatizacion.md`.
 
 ## Trazabilidad
 
