@@ -1,3 +1,32 @@
 // Public API of @saas-o-matic/domain. Nothing outside this file may be imported from other packages.
+
 export { err, ok } from './shared/result.js';
 export type { Err, Ok, Result } from './shared/result.js';
+export type { ConfigIssue } from './shared/config-issue.js';
+
+export { COUNTRIES, PLANS, TAX_ID_TYPES } from './catalog/constants.js';
+export type { Country, Plan, TaxIdType } from './catalog/constants.js';
+export { tariffForPlan, taxRateFor, validateCatalog } from './catalog/validate-catalog.js';
+export type { Catalog, CatalogInput } from './catalog/validate-catalog.js';
+
+export { MAX_ACTIVE_USERS, MIN_ACTIVE_USERS } from './pricing/active-users.js';
+export { calculatePricing } from './pricing/calculate-pricing.js';
+export type { Pricing, PricingError, PricingLine } from './pricing/calculate-pricing.js';
+export { validateTariff } from './pricing/validate-tariff.js';
+export type { TariffInput, TariffTierInput, ValidTariff } from './pricing/validate-tariff.js';
+export { MAX_TAX_RATE_BPS, MIN_TAX_RATE_BPS } from './tax/calculate-tax.js';
+
+export {
+  MAX_SLIDER_POSITION,
+  MIN_SLIDER_POSITION,
+  positionToUsers,
+  usersToPosition,
+} from './slider/slider-scale.js';
+
+export {
+  MAX_COMPANY_NAME_LENGTH,
+  MIN_COMPANY_NAME_LENGTH,
+  normalizeCompanyName,
+} from './text/normalize-company-name.js';
+export type { CompanyNameError } from './text/normalize-company-name.js';
+export { normalizeForSearch } from './text/normalize-for-search.js';

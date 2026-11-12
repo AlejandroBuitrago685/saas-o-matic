@@ -2,49 +2,52 @@
 
 | Campo | Valor |
 |---|---|
-| Estado | **Borrador v0.1, pendiente de validación** (D-75) |
+| Estado | **v1, validado** (D-75). El calendario se recalcula al cerrar P1 (S-05 resuelto, D-69). |
 | Fecha | 2026-11-12 |
-| Plazo | Fecha límite de trabajo: **lunes 16/11 a las 23:00** (D-69, S-05). Objetivo: **entregar el domingo 15**. El lunes es solo margen. |
+| Plazo | Límite de la empresa: **jueves 19/11 a las 23:00** (S-05 resuelto, D-69). Objetivo: **entregar el lunes 16**; el martes 17 es margen (D-97). |
 | Entradas | [`02-especificacion/`](02-especificacion/README.md) · [`03-arquitectura/`](03-arquitectura/README.md) · [`decisiones.md`](decisiones.md) |
 
-## 1. Capacidad frente a esfuerzo
+## 1. Capacidad frente a esfuerzo (v2, D-97)
 
 | Concepto | Horas |
 |---|---|
-| Esfuerzo estimado de las 13 partes (§3), incluido el protocolo (§4): unos 45 min por parte entre plan, revisor, diario y commit | **≈ 39,25 h** |
-| Trabajo programado en el calendario (§2), según la disponibilidad supuesta (S-06, **por validar**): jue 13:00–23:00 · vie y sáb 09:00–23:00 · dom 09:00–20:00 | **≈ 40 h** (jue 9,25 · vie 12,5 · sáb 12 · dom 6,5) |
-| Holgura antes del lunes | **≈ 3,5 h** (domingo por la tarde), más el lunes entero |
+| Esfuerzo pendiente tras P1: P2–P12 según §3, protocolo incluido (unos 45 min por parte) | **≈ 32,5 h** |
+| Trabajo programado (§2): viernes a lunes, de 09:00 a 19:00 con una hora para comer (S-07, **por validar**) | **36 h** (4 × 9 h) |
+| Holgura | **≈ 3,5 h** antes del lunes a las 19:00, más el martes entero. El miércoles y el jueves no se planifican. |
 
-**Lectura honesta:** el plan completo **cabe, pero justo**.
+**Lectura honesta:** cabe con jornadas de 9 h y poca holgura dentro de cada día; un bloqueo serio (Docker en el CI,
+Windows, el hosting de la demo) se come la holgura y pasa al martes, que existe precisamente para eso. P0 y P1 se
+cerraron dentro de su estimación, así que las estimaciones de §3 se mantienen.
 
-- Exige jornadas de **unas 12 h el viernes y el sábado**, con descansos cortos.
-- Deja solo unas 3,5 h de holgura el domingo: un bloqueo serio, como el CI en Windows, Docker en el CI o Signal Forms,
-  se la come entera.
-- Llegar el domingo con todo depende de las cuatro condiciones de §6. Si se tuercen, el lunes deja de ser margen y
-  pasa a ser necesario. Los puntos de control de §5 dicen qué se aplaza y cuándo.
+## 2. Calendario (v2, recalculado al cerrar P1 · D-97)
 
-## 2. Calendario
+Horas en **horario peninsular (UTC+1)**, como el resto del plan (el reloj del equipo marca UTC+0, una hora menos). Jornadas de **09:00 a 19:00 con una hora para comer** (9 h; supuesto S-07, por
+validar). Fecha límite: **jueves 19/11 a las 23:00** (S-05 resuelto). Objetivo: **entregar el lunes 16**; el martes
+17 es margen y el miércoles y el jueves no se planifican.
 
 | Día | Franja | Parte | Hito / punto de control |
 |---|---|---|---|
-| **Jue 12** | 13:00–17:30 | **P0** Scaffolding y herramientas | |
-| | 17:30–20:00 | **P1** Dominio: precios, impuestos, redondeo, catálogo, texto, slider | |
-| | 20:30–22:45 | **P2** Dominio: identificador fiscal | **C1 · jue 23:00** |
-| **Vie 13** | 09:00–12:30 | **P3** Contrato y base de la API | |
-| | 13:30–16:00 | **P4** API de la porción vertical | **C2 · vie 16:00** |
-| | 16:00–20:30 | **P5** Web de la porción vertical | |
-| | 21:00–23:00 | **P6** (1.ª mitad) Docker Compose y nginx | |
-| **Sáb 14** | 09:00–10:00 | **P6** (2.ª mitad) e2e de la porción vertical y CSP | **C3 · sáb 10:00 → porción vertical completa** |
-| | 10:00–11:00 | **P11** (1.ª mitad) Primer despliegue de la demo | |
-| | 11:00–14:00 | **P7** Búsqueda y dashboard | |
-| | 15:00–18:30 | **P8** Divisas | **C4 · sáb 18:30** |
-| | 18:30–22:00 | **P9** Robustez: seguridad, estados, responsive, accesibilidad | **C5 · sáb 23:00** |
-| **Dom 15** | 09:00–11:30 | **P10** Should/Could y CI completo | |
-| | 11:30–13:00 | **P11** (2.ª mitad) Demo final y AC-61 | **C6 · dom 13:00** |
-| | 14:00–16:30 | **P12** README, prueba desde un clon limpio y revisión final | **C7 · dom 17:00** |
-| | 16:30–20:00 | Holgura | |
-| | ≈ 20:00 | **Entrega** | |
-| **Lun 16** | Todo el día | Solo margen | Límite: 23:00 |
+| **Jue 12** | 14:12–21:30 | P0 y P1 (hechas, con dos pausas) | |
+| **Vie 13** | 09:00–11:00 | **P2** Dominio: identificador fiscal | El usuario elige el hosting de la demo antes de las 14:00 |
+| | 11:00–13:30 y 14:30–15:30 | **P3** Contrato y base de la API | |
+| | 15:30–18:00 | **P4** API de la porción vertical | |
+| | 18:00–19:00 | Holgura (1 h) | **C1 · vie 19:00** |
+| **Sáb 14** | 09:00–13:30 | **P5** Web de la porción vertical | |
+| | 14:30–17:30 | **P6** Docker Compose, nginx y e2e de la porción vertical | |
+| | 17:30–18:30 | **P11** (1.ª mitad) Primer despliegue de la demo | |
+| | 18:30–19:00 | Holgura (0,5 h) | **C2 · sáb 19:00 → porción vertical completa** |
+| **Dom 15** | 09:00–12:00 | **P7** Búsqueda y dashboard | |
+| | 12:00–13:30 y 14:30–16:30 | **P8** Divisas | |
+| | 16:30–19:00 | **P9** (1.ª parte) Robustez | **C3 · dom 19:00** |
+| **Lun 16** | 09:00–10:00 | **P9** (final) | |
+| | 10:00–12:30 | **P10** Should/Could y CI completo | |
+| | 12:30–13:30 | **P11** (2.ª mitad) Demo final y AC-61 | **C4 · lun 13:30** |
+| | 14:30–17:00 | **P12** README, clon limpio y revisión final | **C5 · lun 17:00** |
+| | 17:00–19:00 | Holgura (2 h) | ≈ 19:00 **Entrega** |
+| **Mar 17** | Todo el día | Solo margen | |
+| **Jue 19** | — | — | Límite de la empresa: 23:00 |
+
+Esfuerzo pendiente 32,5 h frente a 36 h programadas: **3,5 h de holgura** antes del lunes a las 19:00, más el martes.
 
 La **prueba desde un clon limpio** (P12) sigue el README al pie de la letra: clon nuevo en una carpeta vacía, sin
 caché de npm y sin nada instalado a mano. Si un paso no está en el README, la prueba falla.
@@ -89,7 +92,7 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
 - **Módulos:** `packages/domain` (`money`, `pricing`, `tax`, `catalog`, `text`, `slider`, `shared`).
 - **Tests:**
   - parametrizados con los vectores;
-  - `fast-check` para AC-03;
+  - AC-03 recorriendo todos los `n` de 2 a 10 000 (D-90, sin `fast-check`);
   - recorrido exhaustivo del slider;
   - umbral de cobertura del 100 %.
 - **Riesgos:** bajos. Que el redondeo use coma flotante sin querer: lo impiden TV-RD-01 y la regla de aritmética entera.
@@ -298,7 +301,7 @@ Plantilla de entrada del diario: **Hecho** · **Falló** · **Correcciones** (de
 
 ## 5. Contingencia
 
-No se recorta nada salvo que un punto de control falle. Si falla, se aplaza **en este orden**, empezando por el primero:
+No se recorta nada salvo que la entrega se vaya más allá del **martes 17 a las 19:00** (D-97). Si pasa, se aplaza **en este orden**, empezando por el primero:
 
 | N.º | Se aplaza | Prioridad | Impacto |
 |---|---|---|---|
@@ -319,19 +322,19 @@ No se recorta nada salvo que un punto de control falle. Si falla, se aplaza **en
 - el trabajo `quality` del CI con la matriz;
 - el README y la prueba desde un clon limpio.
 
-**Puntos de control:**
-
+**Puntos de control (v2, D-97):**
 | Punto | Momento | Debe estar | Si no está |
 |---|---|---|---|
-| C1 | Jue 23:00 | P0 y P1 cerrados | Se aplazan **1** y **2**; P2 pasa al viernes a las 08:30. |
-| C2 | Vie 16:00 | P3 y P4 cerrados (API de la porción vertical) | Se aplaza **3**. |
-| C3 | Sáb 10:00 | P6 cerrado (porción vertical con e2e y Docker) | Se aplica **7**; el primer despliegue de la demo pasa al domingo a las 11:30. |
-| C4 | Sáb 18:30 | P7 y P8 cerrados | Se aplaza **4**. |
-| C5 | Sáb 23:00 | P9 cerrado | Se aplazan **5** y **6**. |
-| C6 | Dom 13:00 | P10 y P11 cerrados | Se aplaza **8** (y **9** si Docker también falla). |
-| C7 | Dom 17:00 | P12 en verde (clon limpio) | Se usa el lunes. Nada Must se recorta. Límite: lunes 23:00. |
+| C1 | Vie 19:00 | P2, P3 y P4 (API de la porción vertical) | Se usa la holgura del sábado; lo que no quepa pasa al martes. |
+| C2 | Sáb 19:00 | P5, P6 y el primer despliegue (porción vertical con e2e y Docker) | Se aplica **7** de §5 y el despliegue pasa al lunes. |
+| C3 | Dom 19:00 | P7 y P8 | Lo pendiente pasa al lunes y la holgura del lunes se consume. |
+| C4 | Lun 13:30 | P9, P10 y la demo | El martes deja de ser margen. |
+| C5 | Lun 17:00 | P12 en verde (clon limpio) | Entrega el martes. |
 
-## 6. Condiciones para llegar el domingo
+**Regla nueva:** la lista de aplazamientos de §5 solo se aplica si la entrega se va más allá del **martes a las 19:00**.
+Hasta entonces, un retraso consume holgura y después el martes. Nada Must se recorta nunca.
+
+## 6. Condiciones para llegar el lunes
 
 1. **Planes aprobados rápido:** el protocolo es el cuello de botella. Para ahorrar unos 45 minutos, **P1 y P2 pueden
    presentarse en un único plan** (mismo paquete, puro TDD).

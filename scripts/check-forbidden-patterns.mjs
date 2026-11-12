@@ -2,10 +2,13 @@
 /**
  * Fails if the repository contains patterns forbidden by the security rules:
  * - innerHTML / outerHTML / bypassSecurityTrust* in the web app, including templates (RNF-SEC-14, AC-56);
- * - committed .env files other than .env.example (RNF-SEC-12, AC-55).
+ * - committed .env files other than .env.example (RNF-SEC-12, AC-55);
+ * - invisible characters written literally in code or configuration (D-96): format characters such as zero-width
+ *   spaces or bidirectional overrides ("Trojan Source"), line or paragraph separators and non-ASCII spaces. They
+ *   cannot be seen in a review; tests build them with String.fromCodePoint instead.
  * Usage: node scripts/check-forbidden-patterns.mjs
  */
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -17,6 +20,29 @@ const FORBIDDEN_IN_WEB = [
   { pattern: /bypassSecurityTrust/, rule: 'bypassSecurityTrust* (RNF-SEC-14)' },
 ];
 const ENV_FILE = /^\.env(\..+)?$/;
+const CODE_OR_CONFIG = /\.(ts|js|mjs|cjs|html|css|json|ya?ml)$/;
+/**
+ * Format (Cf), line and paragraph separators (Zl, Zp), default-ignorable code points (variation selectors, Hangul
+ * fillers, U+034F…), every space separator (Zs) except U+0020 and every control (Cc) except tab and CR.
+ */
+const INVISIBLE = /[\p{Cf}\p{Zl}\p{Zp}\p{Default_Ignorable_Code_Point}]|[^\P{Zs}\x20]|[^\P{Cc}\t\r]/u;
+
+/**
+ * @param {readonly { path: string, content: string }[]} files
+ * @returns {string[]} one line per line of code that contains an invisible character
+ */
+export function findInvisibleCharacters(files) {
+  return files.flatMap(({ path, content }) =>
+    content.split('\n').flatMap((line, index) => {
+      const codePoint = INVISIBLE.exec(line)?.[0].codePointAt(0);
+      if (codePoint === undefined) return [];
+      const code = codePoint.toString(16).toUpperCase().padStart(4, '0');
+      return [
+        `${path}:${String(index + 1)}: invisible U+${code} (build it with String.fromCodePoint) (D-96)`,
+      ];
+    }),
+  );
+}
 
 /**
  * @param {readonly { path: string, content: string }[]} webFiles
@@ -39,14 +65,18 @@ export function findCommittedEnvFiles(trackedPaths) {
   });
 }
 
+/** @param {readonly string[]} paths */
+const readAll = (paths) =>
+  paths.map((path) => ({ path, content: readFileSync(join(REPO_ROOT, path), 'utf8') }));
+
 function main() {
-  const webFiles = listRepoFiles()
-    .filter((path) => WEB_SOURCE.test(path))
-    .map((path) => ({ path, content: readFileSync(join(REPO_ROOT, path), 'utf8') }));
+  const repoFiles = listRepoFiles().filter((path) => existsSync(join(REPO_ROOT, path)));
+  const webFiles = readAll(repoFiles.filter((path) => WEB_SOURCE.test(path)));
   const envFiles = findCommittedEnvFiles(listTrackedFiles()).map(
     (path) => `${path}: committed .env file (RNF-SEC-12)`,
   );
-  const violations = [...findForbiddenWebPatterns(webFiles), ...envFiles];
+  const invisible = findInvisibleCharacters(readAll(repoFiles.filter((path) => CODE_OR_CONFIG.test(path))));
+  const violations = [...findForbiddenWebPatterns(webFiles), ...envFiles, ...invisible];
   if (violations.length > 0) {
     process.stderr.write(`Forbidden patterns found:\n${violations.map((v) => `  - ${v}`).join('\n')}\n`);
     process.exit(1);

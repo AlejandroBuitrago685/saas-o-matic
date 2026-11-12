@@ -7,7 +7,7 @@ hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel�
 
 | Nivel | Qué se prueba | Herramienta | Entorno | AC |
 |---|---|---|---|---|
-| **Dominio** (`packages/domain`) | Tramos, impuestos, redondeo, conversión, normalización, validadores fiscales, escala del slider, validación del catálogo y transiciones de la máquina de tipos (si se extraen al dominio). | Vitest; `fast-check` para propiedades | Node, sin I/O | AC-01…07, AC-10…16, AC-91 (parte U) |
+| **Dominio** (`packages/domain`) | Tramos, impuestos, redondeo, conversión, normalización, validadores fiscales, escala del slider, validación del catálogo y transiciones de la máquina de tipos (si se extraen al dominio). | Vitest; propiedades con recorridos exhaustivos (D-90) | Node, sin I/O | AC-01…07, AC-10…16, AC-91 (parte U) |
 | **Integración de la API** (`apps/api`) | Cada endpoint de punta a punta dentro del proceso: esquema, casos de uso, repositorios, SQL real, errores RFC 9457, cabeceras, límite de peticiones, logs y configuración. | Vitest + `app.inject()` | SQLite **en memoria** con las migraciones reales; un test con fichero para los pragmas | AC-20…34, AC-40…48, AC-50…55, AC-58, AC-59, AC-62 |
 | **Componentes** (`apps/web`) | Stores (sobre todo `ExchangeRatesStore`), interceptores de errores, diccionario de mensajes, slider (`aria-valuetext`), panel de proyección y estados de las vistas. | Builder de tests unitarios de Angular con el runner Vitest (el predeterminado en 22) y jsdom | Sin red: `HttpTestingController` y un `fetch` simulado | Apoyan a AC-70…92 con pruebas rápidas |
 | **e2e** (`e2e/`) | Flujos del usuario en el navegador. | Playwright (Chromium) + `@axe-core/playwright` | Pila de Docker Compose (como la demo) en CI; servidores de desarrollo en local | AC-52 (parte E), AC-61, AC-63, AC-70…92 |
@@ -21,7 +21,7 @@ hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel�
   (`{ id: 'TV-PR-04', users: 15, expectedBaseCents: 14000, … }`) y alimentan tests parametrizados
   (`it.each(vectors)('$id …')`). Así cada vector de la spec es exactamente un caso de test.
 - **Propiedades:**
-  - AC-03 (crecimiento y coste marginal) con `fast-check`.
+  - AC-03 (crecimiento y coste marginal) **de forma exhaustiva**: todos los `n` de 2 a 10 000 (D-90, sin `fast-check`).
   - AC-91 (slider) **de forma exhaustiva**: 280 posiciones y 10 000 valores, sin muestreo.
 - **Cobertura mínima:** 100 % de líneas y ramas en `domain`, como umbral del CI.
 - **Could:** tests de mutación (Stryker) sobre `domain` para medir la calidad de los propios tests.
