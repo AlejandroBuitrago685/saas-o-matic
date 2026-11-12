@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |---|---|
-| Estado | **v1.0, aprobada por el usuario con condiciones (2026-11-12).** Quedan pendientes D-49 y D-53. |
+| Estado | **v1.0, aprobada por el usuario (2026-11-12).** No quedan decisiones pendientes. |
 | Fecha | 2026-11-12 |
 | Entradas | [`../01-analisis.md`](../01-analisis.md) (ambigüedades cerradas) · [`../decisiones.md`](../decisiones.md) |
 | Siguiente fase | `03-arquitectura` (tablas, carpetas, librerías y dónde se calcula la proyección) |
@@ -67,11 +67,11 @@ El usuario aprobó las decisiones pendientes con condiciones
 1. **Escala del slider como función pura** (D-48, D-49): definición exacta, propiedades que deben cumplir los tests,
    16 vectores `TV-SL` y `aria-valuetext` como Must ([`05-frontend.md`](05-frontend.md) §3.4.1, AC-91). Al
    concretarla se vio que, con los pasos aprobados, los segmentos ocupan el 35,7/32,1/32,1 % del recorrido, no el
-   50/30/20 % que decía D-05: corregido en D-49, **pendiente de validar**.
+   50/30/20 % que decía D-05: corregido en D-49 (validada).
 2. **CIF reales** (D-50): Telefónica, Inditex, Mercadona y Banco Santander como `TV-ES-31…34`
    ([`03-validacion-fiscal.md`](03-validacion-fiscal.md) §5.1, AC-12).
 3. **Estados de la API de tipos siempre visibles** (D-51): indicador fijo en la cabecera, visible también con EUR
    seleccionado, con «Reintentar» en el error y en los tipos desactualizados, y un e2e por estado
    ([`05-frontend.md`](05-frontend.md) §4.4, AC-80…82).
 4. **CI** (D-52, D-53): matriz de Node solo para lint, tests unitarios, de integración y build; e2e y auditoría una
-   vez. Se añade una prueba de humo en Windows y macOS (D-53, **pendiente de validar**) (RNF-21, AC-95, AC-96).
+   vez. Se añade una prueba de humo en Windows y macOS (D-53, validada) (RNF-21, AC-95, AC-96).

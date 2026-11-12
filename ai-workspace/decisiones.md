@@ -96,15 +96,16 @@ especificación, el código y los tests.
 | ID | Decisión | Alternativa descartada | Motivo | Quién | Refs |
 |---|---|---|---|---|---|
 | D-48 | La conversión entre posición del slider y número de usuarios es una **función pura con tests**: se llega exactamente a 10, 11, 50 y 51, e ir y volver devuelve el mismo valor. El slider anuncia «{n} usuarios» a los lectores de pantalla con `aria-valuetext` (Must). | Lógica de conversión dentro de la vista. | Testabilidad y accesibilidad. | Usuario | D-05, RF-16, RNF-13 |
-| D-49 | Concreción de D-05: 280 posiciones (0–279). 0–99 → 1–100; 100–189 → 110–1 000; 190–279 → 1 100–10 000. Con esos pasos los segmentos ocupan el **35,7 %, 32,1 % y 32,1 %** del recorrido, no el 50/30/20 % que decía D-05. Un valor que no corresponde a ninguna posición se representa con la más cercana (en caso de empate, la menor). | Mantener el 50/30/20 % cambiando los pasos (p. ej. 20 y 200). | Los pasos son lo que el usuario ve y ya estaban aprobados; los porcentajes de D-05 eran una estimación errónea. | Claude · pendiente | D-05, D-48 |
+| D-49 | Concreción de D-05: 280 posiciones (0–279). 0–99 → 1–100; 100–189 → 110–1 000; 190–279 → 1 100–10 000. Con esos pasos los segmentos ocupan el **35,7 %, 32,1 % y 32,1 %** del recorrido, no el 50/30/20 % que decía D-05. Un valor que no corresponde a ninguna posición se representa con la más cercana (en caso de empate, la menor). | Mantener el 50/30/20 % cambiando los pasos (p. ej. 20 y 200). | Los pasos son lo que el usuario ve y ya estaban aprobados; los porcentajes de D-05 eran una estimación errónea. | Claude · validada | D-05, D-48 |
 | D-50 | Además de los vectores sintéticos, se prueban CIF reales públicos: Telefónica `A28015865`, Inditex `A15075062`, Mercadona `A46103834` y Banco Santander `A39000013`. Los cuatro pasan con el algoritmo de D-13, y su asociación a cada empresa se ha comprobado en fuentes públicas (CNMV y registros LEI). | Solo vectores sintéticos. | Contrastar el algoritmo con casos reales, además del de la AEAT. | Usuario | D-13, RF-03 |
 | D-51 | Los estados de la API de tipos de cambio se ven **siempre**, sea cual sea la divisa seleccionada: carga, error con «Reintentar» y aviso de tipos desactualizados con su fecha. El fallback (caché o EUR) nunca oculta el error. Cada estado tiene su e2e con la API simulada. | Fallback silencioso. | El enunciado evalúa expresamente los estados de carga y error de la API externa. | Usuario | D-23, RF-12, RNF-08 |
 | D-52 | CI: lint, tests unitarios, tests de integración y build en una matriz con Node 22, 24 y 26; los e2e, una sola vez, con la versión de `.nvmrc`. | Ejecutar los e2e en toda la matriz. | Que el pipeline no tarde demasiado. | Usuario | RNF-21, D-37 |
-| D-53 | La matriz de D-52 se ejecuta en Linux. Además, una prueba de humo en Windows y otra en macOS con la versión de `.nvmrc` (instalación limpia, build, arranque y `GET /health`). La auditoría de dependencias se ejecuta una sola vez. | Matriz completa de 3 SO × 3 versiones de Node, o solo Linux. | Cubre RNF-14 y el riesgo RT-06 (driver nativo de SQLite en la máquina del evaluador) sin multiplicar la duración del pipeline. | Claude · pendiente | RNF-14, RNF-21, RT-06 |
+| D-53 | La matriz de D-52 se ejecuta en Linux. Además, una prueba de humo en Windows y otra en macOS con la versión de `.nvmrc` (instalación limpia, build, arranque y `GET /health`). La auditoría de dependencias se ejecuta una sola vez. | Matriz completa de 3 SO × 3 versiones de Node, o solo Linux. | Cubre RNF-14 y el riesgo RT-06 (driver nativo de SQLite en la máquina del evaluador) sin multiplicar la duración del pipeline. | Claude · validada | RNF-14, RNF-21, RT-06 |
 
 ## Validaciones del usuario
 
-Prompt literal: [`prompts/03-validacion-especificacion.md`](prompts/03-validacion-especificacion.md).
+Prompts literales: [`prompts/03-validacion-especificacion.md`](prompts/03-validacion-especificacion.md) y
+[`prompts/04-validacion-d49-d53.md`](prompts/04-validacion-d49-d53.md).
 
 | Fecha | Elemento | Resultado | Condiciones | Decisiones derivadas |
 |---|---|---|---|---|
@@ -116,6 +117,7 @@ Prompt literal: [`prompts/03-validacion-especificacion.md`](prompts/03-validacio
 | 2026-11-12 | D-26, D-34 | Aprobadas | — | — |
 | 2026-11-12 | D-47, S-02 | Aprobados | — | — |
 | 2026-11-12 | RNF-21 | Ajustado | Matriz de Node para lint, tests unitarios, de integración y build; e2e una vez con `.nvmrc`. | D-52, D-53 |
+| 2026-11-12 | D-49, D-53 | Aprobadas tal como se propusieron | — | — |
 
 ## Supuestos
 
