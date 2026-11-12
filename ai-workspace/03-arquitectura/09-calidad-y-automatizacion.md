@@ -22,6 +22,7 @@ scaffolding ([ADR-013](adr/ADR-013-cumplimiento-automatico.md)).
 | Web sin valores de `contract` ni `zod` | `no-restricted-imports` + `@typescript-eslint/consistent-type-imports` | Ídem |
 | Migraciones aplicadas inmutables | Hook `PreToolUse` (§5). La comprobación en el CI («`drizzle-kit generate` no produce cambios») llega en P3, con el primer esquema. | Edición; CI desde P3 |
 | Sin secretos | `.gitignore`, `check-forbidden-patterns` (`.env` versionados), permisos `deny` y hook `PreToolUse` | CI, sesión |
+| Sin caracteres invisibles literales en código y configuración (formato, bidi, separadores, controles, espacios no ASCII) | `check-forbidden-patterns` (D-96) | Hook `Stop`, CI |
 | Dependencias auditadas | `npm audit --audit-level=high`; las moderadas de desarrollo son riesgo aceptado (D-89) | CI |
 | Nada se integra con el CI en rojo | Protección de `main` en GitHub: PR obligatoria y los 4 checks del CI (D-88) | Merge |
 | Cada test cita su AC o TV (los de infraestructura, su D o ADR) | `scripts/trace-tests.mjs`: informa en el CI; con `--strict` bloquea desde P10 | CI |

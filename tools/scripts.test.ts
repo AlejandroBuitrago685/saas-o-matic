@@ -4,7 +4,11 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { findBadFileNames } from '../scripts/check-filenames.mjs';
-import { findCommittedEnvFiles, findForbiddenWebPatterns } from '../scripts/check-forbidden-patterns.mjs';
+import {
+  findCommittedEnvFiles,
+  findForbiddenWebPatterns,
+  findInvisibleCharacters,
+} from '../scripts/check-forbidden-patterns.mjs';
 import { listTrackedFiles } from '../scripts/lib/repo.mjs';
 import { automatedCriteria, definedVectors, missingIds } from '../scripts/trace-tests.mjs';
 import { affectedAreas, needsWholeRepoChecks, verificationSteps } from '../scripts/verify-changed.mjs';
@@ -21,6 +25,37 @@ describe('AC-56 forbidden patterns in the web app (RNF-SEC-14)', () => {
     expect(findings).toHaveLength(2);
     expect(findings[0]).toContain('x.html');
     expect(findings[1]).toContain('y.ts');
+  });
+});
+
+describe('D-96 no invisible characters written literally in code or configuration', () => {
+  const char = (codePoint: number): string => String.fromCodePoint(codePoint);
+
+  it.each([
+    ['a zero-width space', 0x200b],
+    ['a right-to-left override (Trojan Source)', 0x202e],
+    ['a byte order mark inside a line', 0xfeff],
+    ['a no-break space', 0x00a0],
+    ['a line separator', 0x2028],
+    ['an escape character, which hides text in a terminal diff', 0x001b],
+    ['a NUL character', 0x0000],
+    ['a C1 next-line control', 0x0085],
+    ['a variation selector', 0xfe0f],
+    ['a combining grapheme joiner', 0x034f],
+    ['a Hangul filler', 0x3164],
+  ])('flags %s with its file, line and code point', (_case, codePoint) => {
+    const content = `const ok = 1;\nconst name = 'Ac${char(codePoint)}me';\n`;
+    const hex = codePoint.toString(16).toUpperCase().padStart(4, '0');
+
+    expect(findInvisibleCharacters([{ path: 'packages/domain/src/x.ts', content }])).toEqual([
+      `packages/domain/src/x.ts:2: invisible U+${hex} (build it with String.fromCodePoint) (D-96)`,
+    ]);
+  });
+
+  it('accepts ordinary spaces, tabs, CRLF line ends, accents and escapes written as code', () => {
+    const content = "const a = 'Telefonía Ñandú';\r\n\tconst b = String.fromCodePoint(0x200b);\n";
+
+    expect(findInvisibleCharacters([{ path: 'x.ts', content }])).toEqual([]);
   });
 });
 

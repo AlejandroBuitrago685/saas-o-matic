@@ -228,5 +228,80 @@ Los prompts literales están en [`prompts/`](prompts/) y las decisiones, en [`de
 - `main` protegida, a petición del usuario: PR obligatoria y los 4 checks en verde para integrar, sin aprobaciones
   (D-88). La marca de la auditoría pasa a ⚙ en `CLAUDE.md`.
 
-**Tiempo:** estimado 4,5 h · real ≈ 1 h 45 min de trabajo (14:12–15:00, 15:25–15:30 y 19:00–19:45), en 5,5 h de
+**Tiempo:** estimado 4,5 h · real ≈ 1 h 45 min de trabajo (hora peninsular, UTC+1: 14:12–15:00, 15:25–15:30 y
+19:00–19:45; el reloj del equipo y los commits locales marcan UTC+0, una hora menos), en 5,5 h de
 reloj por dos pausas: mi parada a mitad de turno y el límite de uso de la sesión.
+
+---
+
+## P1 · Dominio: precios, impuestos, redondeo, catálogo, texto y slider — 2026-11-12 · rama `feat/p1-domain-pricing`
+
+**Hecho** (TDD por módulo: vectores → test en rojo → código → verde)
+- `money`: redondeo comercial con cociente y resto enteros (D-91), exacto hasta 2⁵³.
+- `tax`: impuesto único sobre la base, en puntos básicos (AC-04, AC-05; TV-RD-01 da 3 443).
+- `pricing`:
+  - `validateTariff` devuelve todos los problemas, cada uno con su ruta, y una `ValidTariff`;
+  - `calculatePricing` solo acepta `ValidTariff` (D-95);
+  - cubre AC-01, AC-02, AC-03 recorriendo los 9 999 valores de `n` (D-90) y AC-06, más `AMOUNT_OUT_OF_RANGE` más
+    allá de 2⁵³.
+- `slider`: TV-SL-01…16 y las cuatro propiedades sobre las 280 posiciones y los 10 000 valores (AC-91, parte U).
+- `text`: `normalizeCompanyName` con las reglas que fijó el usuario (D-94) y `normalizeForSearch` (ADR-006).
+- `catalog`:
+  - las listas cerradas `COUNTRIES`, `PLANS` y `TAX_ID_TYPES`;
+  - `validateCatalog`: todos los problemas con su ruta (AC-07, parte de dominio);
+  - `tariffForPlan` y `taxRateFor` (AC-06).
+- API pública en `index.ts`, con un test que fija qué se exporta.
+- Vectores como datos tipados en `packages/domain/test/vectors/`.
+- `npm run verify` en verde en 59 s:
+  - 303 tests de Node y cobertura del dominio al 100 % (139/139 sentencias, 94/94 ramas);
+  - trazabilidad: AC 14/81 (+8) · TV 41/129 (+41).
+
+**Falló**
+- **La herramienta con la que escribo ficheros descodificó los `\u…` de dos tests** en caracteres invisibles
+  literales: U+200B, U+202E, U+FEFF, U+2028, U+2029, espacio duro y marcas combinantes.
+  - Los tests pasaban, pero lo que probaban no se veía en el código.
+  - Lo detecté al comprobar los bytes de un fichero que Prettier había tocado.
+  - Corregido construyendo esos caracteres con `String.fromCodePoint`, y con una barrera nueva en
+    `check-forbidden-patterns` (D-96), con tests.
+  - Ni el lint, ni los tipos, ni los tests lo habrían detectado.
+- **Trazabilidad inflada:** un comentario del fichero de vectores citaba TV-PR-14 y 15, y el script los daba por
+  cubiertos (43 en vez de 41). Reescrito sin los IDs.
+- **Cobertura del 98,5 %:** se debía a una guarda imposible en `validateTariff`.
+  - La quité cambiando la estructura, en vez de escribir un test artificial.
+  - En el slider evité igual una aserción `as`, que el lint rechazaba con razón.
+- **`vitest --project` no mide la cobertura** (resuelve las rutas desde el paquete). Se mide sin filtro, como en el CI.
+- **Horas del diario de P0 sin zona horaria:** las calculé en horario peninsular, pero el equipo y los commits locales
+  marcan UTC+0. Ahora lo indica.
+
+**Correcciones del usuario**
+- Concreción de D-34 (D-94): Cc y Cf rechazados; longitud en puntos de código.
+- S-05 resuelto: entrega el lunes 16, el martes 17 como margen y P2 el viernes; recalcular el calendario (D-97).
+- P2: medir el barrido de AC-14 y, si pasa de unos 2 s, un test rápido representativo y el barrido completo solo en
+  el CI.
+
+**Revisor**
+- **APTO**, sin P0 ni P1. Recalculó a mano los 41 vectores y confirmó que los recorridos de AC-03 y AC-91 son
+  exhaustivos de verdad.
+- Tres P2, corregidos con test:
+  - el total no se comprobaba contra 2⁵³ (caso con 1 bps);
+  - D-96 no veía los controles ni los puntos de código ignorables por defecto;
+  - D-69 remitía a un ID equivocado.
+- P3 corregidos:
+  - oráculo de fuerza bruta para el desempate del slider en los tres segmentos;
+  - copia explícita de los campos del tramo;
+  - `duplicatesOf`;
+  - sustitutos sueltos rechazados en el nombre (nota en D-94);
+  - fila de D-96 en 09-calidad §1.
+- Registrado: PN-05 (un precio de 0 frente a «la base siempre crece»).
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| `trace-tests` da por cubiertos AC-07 (U/I) y AC-91 (U/E) con solo su parte U: exigir citas por nivel antes de pasar a `--strict`. | P10 |
+| PN-05: ¿puede un tramo costar 0? Hoy se admite (02-reglas §2.1). | Negocio (no bloquea) |
+| S-07: disponibilidad del calendario v2, por validar. | Usuario |
+
+**Decisiones:** D-90 a D-96 (D-90…D-93 aprobadas; D-94 del usuario); D-97 (calendario v2).
+
+**Tiempo:** estimado 2,25 h · real ≈ 1 h (20:12–21:15, hora peninsular), revisión y cierre incluidos.
