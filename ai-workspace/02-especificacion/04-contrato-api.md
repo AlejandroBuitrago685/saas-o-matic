@@ -102,9 +102,8 @@ Fuera de esos rangos → `400`. Formato de la respuesta:
 | `GET /stats` | Métricas del dashboard | RF-19 | Could |
 | `GET /health` | Comprobación de estado | RNF-24 | Should |
 
-**Pendiente de arquitectura:** si se decide calcular la proyección en el servidor (RT-02), se añadirá
-`POST /simulations/preview`, que calculará sin guardar y tendrá el mismo cuerpo y el mismo `pricing` que
-`POST /simulations`.
+**Resuelto en arquitectura:** la proyección se calcula en el navegador con el dominio compartido, así que **no** se
+añade `POST /simulations/preview` (D-61, [ADR-008](../03-arquitectura/adr/ADR-008-proyeccion-en-cliente.md)).
 
 ### 3.1 `GET /catalog`
 

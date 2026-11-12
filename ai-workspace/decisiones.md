@@ -102,6 +102,28 @@ especificación, el código y los tests.
 | D-52 | CI: lint, tests unitarios, tests de integración y build en una matriz con Node 22, 24 y 26; los e2e, una sola vez, con la versión de `.nvmrc`. | Ejecutar los e2e en toda la matriz. | Que el pipeline no tarde demasiado. | Usuario | RNF-21, D-37 |
 | D-53 | La matriz de D-52 se ejecuta en Linux. Además, una prueba de humo en Windows y otra en macOS con la versión de `.nvmrc` (instalación limpia, build, arranque y `GET /health`). La auditoría de dependencias se ejecuta una sola vez. | Matriz completa de 3 SO × 3 versiones de Node, o solo Linux. | Cubre RNF-14 y el riesgo RT-06 (driver nativo de SQLite en la máquina del evaluador) sin multiplicar la duración del pipeline. | Claude · validada | RNF-14, RNF-21, RT-06 |
 
+### Arquitectura (fase 3, 2026-11-12)
+
+Cada una tiene su ADR en [`03-arquitectura/adr/`](03-arquitectura/adr/README.md).
+
+| ID | Decisión | Alternativa descartada | Motivo | Quién | Refs |
+|---|---|---|---|---|---|
+| D-54 | Paquete `domain` en TypeScript puro y sin dependencias (sin DOM ni Node), con API pública solo por `index.ts`, `Result` en lugar de excepciones, TDD y cobertura del 100 %. Lo usan la API y la web. | Dominio dentro de la API, con una copia en la web. | Una sola implementación de las reglas (RT-02). La restricción es del usuario; los detalles, de Claude. | Usuario | ADR-001 |
+| D-55 | Paquete `contract` con esquemas Zod. La API los usa para validar, serializar y generar OpenAPI; la web los consume solo con `import type`. | Tipos duplicados en la web; contrato en OpenAPI con generación de tipos. | Una única fuente del contrato, sin Zod en el bundle. | Claude · pendiente | ADR-002 |
+| D-56 | Driver `better-sqlite3` 13.1.1, con binarios Node-API incluidos. La instalación sin compilar está verificada en la máquina del usuario. | `@libsql/client`, `sql.js`, `node:sqlite`. | RT-06. | Claude · pendiente | ADR-003, RT-06 |
+| D-57 | Desglose en la tabla `simulation_tiers`, con `CHECK` de la aritmética de cada tramo. Triggers de solo inserción en las tres tablas. | Columna JSON; sin triggers. | Integridad en la propia base de datos (persistencia limpia, D-29). | Claude · pendiente | ADR-004 |
+| D-58 | Catálogo como configuración tipada validada al arrancar. Las listas cerradas se refuerzan con `CHECK` generados a partir de las constantes de `domain`. | Tablas sembradas. | Una sola fuente, revisable y con tipos; encaja con AC-07 y AC-46. | Claude · pendiente | ADR-005 |
+| D-59 | Búsqueda con la columna `company_name_search`, normalizada en `domain`, y `LIKE … ESCAPE '!'`; índice `(company_name_search, id)`. | FTS5 con `trigram`; función SQL propia; ICU. | Medido: 8,5 ms por página con 100 000 clientes. | Claude · pendiente | ADR-006, RT-08 |
+| D-60 | UUID en `TEXT` de 36 caracteres, fechas en `INTEGER` (ms UTC), importes en céntimos y tipos en bps. `CHECK (typeof …)` en las columnas numéricas. Pragmas `foreign_keys = ON`, `WAL`, `synchronous = NORMAL`, `busy_timeout` y `trusted_schema = OFF`. | `BLOB`; fechas en ISO; `STRICT` editado a mano. | Drizzle no admite `STRICT`. | Claude · pendiente | ADR-007 |
+| D-61 | La proyección se calcula en el navegador con `domain` y `GET /catalog`; no hay `POST /simulations/preview`. | Endpoint de previsualización. | RNF-09 sin red y la misma función que el servidor (RT-02). | Claude · pendiente | ADR-008 |
+| D-62 | `Result` en el dominio, `AppError` en los casos de uso y un único manejador RFC 9457. | `Result` hasta la ruta; excepciones en el dominio. | Sin lógica en las rutas y sin filtrar detalles internos. | Claude · pendiente | ADR-009 |
+| D-63 | `buildApp(deps)` sin escuchar, con inyección manual de dependencias. Tests con `app.inject()` y SQLite en memoria. | Contenedor de inyección. | Explícito y sin dependencias. | Claude · pendiente | ADR-010 |
+| D-64 | Web: stores con signals, `httpResource`, Signal Forms, sin Zone.js y sin estilos de componente (CSP `style-src 'self'`). | NgRx Signal Store; Reactive Forms; `unsafe-inline`. | API estables en Angular 22; menos dependencias. | Claude · pendiente | ADR-011 |
+| D-65 | La SPA llama a `/api/…` y un proxy (`ng serve` o nginx) quita el prefijo; la API conserva sus rutas literales. | Prefijo en la API; CORS entre orígenes; *hash routing*. | Evita el choque con la ruta `/customers/:id` de la SPA y simplifica CSP y CORS. | Claude · pendiente | ADR-012 |
+| D-66 | Las reglas se aplican con TypeScript estricto, ESLint (límites de 250 líneas por fichero, 40 por función, complejidad 8, profundidad 3 y 3 parámetros, más fronteras), dependency-cruiser, scripts propios, hooks de Claude Code, lefthook, CI y el subagente revisor. | Solo `CLAUDE.md`. | RT-11; la IA recibe la respuesta en el momento. | Claude · pendiente | ADR-013 |
+| D-67 | TypeScript 6.0.3 exacto en todo el monorepo. | TypeScript 7 (publicado el 2026-11-12). | Angular 22 y typescript-eslint exigen `<6.1`. | Claude | ADR-014, RT-07 |
+| D-68 | Los e2e del CI se ejecutan una sola vez (D-52) contra la pila de Docker Compose. En local, también contra los servidores de desarrollo, omitiendo los tests `@prod-only`. | e2e contra `ng serve` en CI. | Comprueba la CSP y las cabeceras reales, el proxy `/api` y que el contenedor no corre como root (AC-52, AC-60). | Claude · pendiente | 03-arquitectura/07-tests §1.3 |
+
 ## Validaciones del usuario
 
 Prompts literales: [`prompts/03-validacion-especificacion.md`](prompts/03-validacion-especificacion.md) y
