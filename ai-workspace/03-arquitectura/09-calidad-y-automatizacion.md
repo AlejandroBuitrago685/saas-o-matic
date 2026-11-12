@@ -8,9 +8,9 @@ scaffolding ([ADR-013](adr/ADR-013-cumplimiento-automatico.md)).
 
 | Regla (`CLAUDE.md`) | Herramienta | Cuándo |
 |---|---|---|
-| TypeScript estricto, sin `any`, sin `!` | `tsc` (§2) + typescript-eslint (§3) | Hook tras editar, pre-commit, CI |
+| TypeScript estricto, sin `any`, sin `!` | `tsc` (§2) + typescript-eslint (§3) | Lint: hook tras editar y pre-commit. `tsc`: hook `Stop`. Ambos: CI |
 | Tipos explícitos en las API públicas | `@typescript-eslint/explicit-module-boundary-types` | Ídem |
-| Fronteras entre paquetes y capas | `eslint-plugin-boundaries` + `exports` de cada paquete | Ídem |
+| Fronteras entre paquetes y capas | `eslint-plugin-boundaries` + `no-restricted-imports` + `exports` de cada paquete (§3.3) | Ídem |
 | Sin ciclos | `dependency-cruiser` (`no-circular`) | CI |
 | Tamaño y complejidad | Reglas de ESLint (§3.2) | Hook, pre-commit, CI |
 | Nombres de fichero | `scripts/check-filenames.mjs` (sin dependencias) | CI |
@@ -20,10 +20,10 @@ scaffolding ([ADR-013](adr/ADR-013-cumplimiento-automatico.md)).
 | Sin estilos de componente (CSP) | `no-restricted-syntax` sobre `styles`/`styleUrl` en `@Component` | Ídem |
 | Sin `console`, sin `process.env` fuera de `config/` | `no-console`, `no-restricted-properties` | Ídem |
 | Web sin valores de `contract` ni `zod` | `no-restricted-imports` + `@typescript-eslint/consistent-type-imports` | Ídem |
-| Migraciones aplicadas inmutables | Hook `PreToolUse` (§5) + comprobación de CI | Edición, CI |
-| Sin secretos | `.gitignore`, comprobación de `.env` en CI, permisos de Claude Code que bloquean la lectura de `.env` | CI, sesión |
+| Migraciones aplicadas inmutables | Hook `PreToolUse` (§5). La comprobación en el CI («`drizzle-kit generate` no produce cambios») llega en P3, con el primer esquema. | Edición; CI desde P3 |
+| Sin secretos | `.gitignore`, `check-forbidden-patterns` (`.env` versionados), permisos `deny` y hook `PreToolUse` | CI, sesión |
 | Dependencias auditadas | `npm audit --audit-level=high` | CI |
-| Cada test cita su AC o TV | `scripts/trace-tests.mjs` | CI |
+| Cada test cita su AC o TV (los de infraestructura, su D o ADR) | `scripts/trace-tests.mjs`: informa en el CI; con `--strict` bloquea desde P10 | CI |
 | Cobertura del dominio al 100 % | Umbrales de Vitest | CI |
 | «Hecho» = tests en verde | Hook `Stop` (§5) | Al terminar cada tarea |
 
@@ -56,7 +56,7 @@ scaffolding ([ADR-013](adr/ADR-013-cumplimiento-automatico.md)).
 | Regla | Código | Tests |
 |---|---|---|
 | `max-lines` (sin líneas en blanco ni comentarios) | **250** por fichero | 400 |
-| `max-lines-per-function` | **40** | Desactivada para `describe`; 60 por test |
+| `max-lines-per-function` | **40** | Desactivada (un `describe` agrupa muchos tests) |
 | `complexity` (ciclomática) | **8** | — |
 | `max-depth` | **3** | — |
 | `max-params` | **3** (si hacen falta más, un objeto con nombre) | — |
@@ -66,49 +66,118 @@ scaffolding ([ADR-013](adr/ADR-013-cumplimiento-automatico.md)).
 Una excepción a un límite exige `// eslint-disable-next-line <regla> -- <motivo>`, y la regla
 `eslint-comments/require-description` obliga a escribir el motivo. El revisor señala cualquier excepción.
 
-### 3.3 Fronteras (`eslint-plugin-boundaries`)
+### 3.3 Fronteras (implementación de P0, D-83)
 
-Elementos definidos por patrón de ruta:
+Dos mecanismos, porque cada uno resuelve bien una cosa:
 
-- **Paquetes:** `domain`, `contract`, `api`, `web`, `e2e`.
-- **Capas de la API:** `api-routes`, `api-use-case`, `api-repository`, `api-db`, `api-http`, `api-config`,
-  `api-shared`, `api-composition` (`app.ts`, `main.ts`).
-- **Zonas de la web:** `web-core`, `web-shared`, `web-feature`.
+1. **`eslint-plugin-boundaries` v7** (`tools/eslint/boundaries.js`) para las dependencias **entre carpetas del
+   repositorio**.
+   - Elementos por carpeta desde la raíz (`partialMatch: false`); el primer patrón que coincide gana.
+   - Elementos: `domain`, `contract`; en la API, `api-module` (cada carpeta de `modules/`), `api-db`, `api-http`,
+     `api-config`, `api-shared` y `api-composition` (el resto de `apps/api/src`); en la web, `web-feature-<nombre>`
+     (una por feature), `web-core`, `web-shared` y `web-root`.
+   - Política por defecto: **disallow**. Por diseño de la v7, las dependencias externas y de Node no se evalúan
+     (`not-local`).
+   - La resolución usa `eslint-import-resolver-typescript`, que sigue los `./x.js` hasta `x.ts` y los paquetes del
+     workspace hasta su `dist`.
+2. **`no-restricted-imports`** por zona (`tools/eslint/restrictions.js`) para las **librerías externas** y para las
+   **capas dentro de un módulo**, que se distinguen por el sufijo del fichero:
+   - `domain`: solo imports relativos, sin globales del entorno, sin `Date.now()`, `Math.random()` ni `new Date()`.
+   - `contract`: solo `zod` y el dominio.
+   - Web: `zod` prohibido; `@saas-o-matic/contract` solo con `import type`.
+   - `*.routes.ts`, `http/`, `app.ts` y `main.ts`: sin Drizzle ni SQLite. Las rutas tampoco pueden importar un `*.repository`.
+   - `db/` y `*.repository.ts`: sin Fastify.
+   - `*.use-case.ts`: sin Drizzle, sin Fastify y sin importar un repositorio (usa el puerto).
+   - Resto de `apps/api/src`: sin Drizzle ni Fastify.
+   - `process.env` prohibido fuera de `apps/api/src/config/`.
 
-| Desde | Puede importar |
+| Desde | Puede importar (ficheros del repositorio) |
 |---|---|
 | `domain` | `domain` |
-| `contract` | `contract`, `domain`, `zod` |
-| `api-routes` | `api-use-case` (tipos), `contract`, `api-shared` |
-| `api-use-case` | `domain`, `api-shared`, puertos del propio módulo |
-| `api-repository` | `api-db`, `api-shared`, `domain` (tipos), `drizzle-orm` |
-| `api-composition` | Todo lo de la API |
-| `web-feature` | `web-core`, `web-shared`, `domain`, `contract` (solo tipos); `simulator` ← `customer-detail` |
-| `web-core` | `web-shared`, `domain`, `contract` (solo tipos) |
-| `web-shared` | `domain` |
+| `contract` | `contract`, `domain` |
+| `api-module` | `api-module`, `api-db`, `api-shared`, `contract`, `domain` |
+| `api-db` | `api-db`, `api-shared`, `domain` |
+| `api-http` | `api-http`, `api-shared`, `contract`, `domain` |
+| `api-config` / `api-shared` | sí mismo, `api-shared`, `domain` |
+| `api-composition` | Todo lo de la API, `contract`, `domain` |
+| `web-feature-X` | `web-feature-X`, `web-core`, `web-shared`, `domain`, `contract`; además, `customer-detail` → `simulator` |
+| `web-core` | `web-core`, `web-shared`, `domain`, `contract` |
+| `web-shared` | `web-shared`, `domain` |
+| `web-root` | Todas las features, `web-core`, `web-shared`, `domain`, `contract` |
 
-`drizzle-orm` y `better-sqlite3` solo se pueden importar desde `api-repository` y `api-db`; `fastify`, solo desde
-`api-routes`, `api-http` y `api-composition`.
+Que un módulo de la API solo use otro por su `index.ts` se añadirá en P4, cuando exista el segundo módulo.
+
+### 3.4 Cómo se ha probado (P0)
+
+Una regla solo lleva ⚙ en `CLAUDE.md` si tiene un test que demuestra que salta.
+
+- `tools/eslint-rules.test.ts` y `tools/eslint-zones.test.ts` escriben un fichero temporal (`__lint_fixture__*`, ignorado
+  por git) **en su ubicación real**, lo lintan con la configuración del repositorio y comprueban la regla esperada.
+  - Casos que deben fallar: `any`, `!`, `max-lines`, `max-lines-per-function`, `complexity`, `max-depth`, `max-params`,
+    excepción sin motivo, `console`, import externo, `Date.now()` o `fetch` en el dominio, dominio → app, `zod` o
+    valores de `contract` en la web, `bypassSecurityTrust*`, estilos de componente, feature → feature, Drizzle en un
+    caso de uso, Fastify en un repositorio, `process.env` fuera de `config/`.
+  - Casos de control que deben pasar: un fichero limpio y un `import type` desde `contract`.
+- `tools/repo-config.test.ts`:
+  - `engines`, `.nvmrc` y TypeScript fijado;
+  - un import profundo a un paquete no compila (`TS2307`, por el campo `exports`);
+  - dependency-cruiser falla ante un ciclo.
+- `tools/scripts.test.ts` y `tools/claude-hooks.test.ts`: scripts de comprobación y hooks (§5).
 
 ## 4. Hooks de git (lefthook)
 
-- `pre-commit`: ESLint con `--fix` y Prettier sobre los ficheros preparados; `tsc -b` de los paquetes afectados.
-- `commit-msg`: commitlint con la configuración convencional.
-- `pre-push`: tests unitarios y de integración.
+- `pre-commit`: Prettier (`--write`, vuelve a preparar lo arreglado) y ESLint sobre los ficheros preparados.
+  Los tipos los vigilan el hook `Stop` y el CI.
+- `commit-msg`: commitlint con la configuración convencional (probado: acepta `feat: …` y rechaza `Added stuff`).
+- `pre-push`: `npm test`.
+- Se instalan solos con el `postinstall` de lefthook. En el CI se desactivan con `LEFTHOOK=0`.
 - `--no-verify` está prohibido por regla y por hook de Claude Code (§5).
 
-## 5. Hooks de Claude Code (`.claude/settings.json`)
+## 5. Entorno de Claude Code (`.claude/settings.json`)
 
-Los scripts viven en `scripts/claude-hooks/`, en Node y sin dependencias. Leen el JSON del evento por `stdin`.
+Fichero versionado, validado contra el esquema oficial (`schemastore.org/claude-code-settings.json`) el 2026-11-12.
 
-| Evento | *Matcher* | Acción | Al fallar |
-|---|---|---|---|
-| `PostToolUse` | `Edit\|Write` | Si el fichero es `.ts`, `.html` o `.json` de `apps/` o `packages/`: Prettier y ESLint sobre ese fichero, y `tsc -b` del paquete al que pertenece. | Código de salida 2 con los errores resumidos por `stderr`, para que Claude los corrija en el acto. |
-| `PreToolUse` | `Edit\|Write` | Bloquea la edición de una migración ya existente en `apps/api/drizzle/*.sql` (solo se pueden crear nuevas) y de ficheros `.env`. | Código 2 con el motivo. |
-| `PreToolUse` | `Bash` | Bloquea `git commit --no-verify`, `git push --force`, `drizzle-kit push` y `npm install` sin `--save-exact` o fuera de la raíz. | Código 2 con el motivo. |
-| `Stop` | — | Ejecuta `npm run verify:changed`: lint, tipos y tests unitarios y de integración de los paquetes cambiados desde `HEAD`. | Código 2: Claude no puede dar la tarea por terminada con tests en rojo. Si la entrada trae `stop_hook_active: true`, no vuelve a bloquear, para evitar bucles. |
+### 5.1 Permisos (D-81, revisados en D-85)
 
-Permisos: `deny` para leer o escribir `.env*` (salvo `.env.example`) y para `git push` sin confirmación.
+Los pidió el usuario para no tener que confirmar cada acción segura y frecuente.
+
+| Tipo | Reglas | Motivo |
+|---|---|---|
+| `allow` (32) | `npm ci`, `npm install` **sin argumentos** (reinstala lo del *lockfile*), `npm run …`, `npm test`; `npx` de las herramientas del repositorio (`ng`, `vitest`, `eslint`, `prettier`, `tsc`, `drizzle-kit`, `playwright`); `node scripts/…`; git local (`status`, `diff`, `log`, `add`, `commit`, `switch`, `checkout -b`, `branch`, `rebase`); `gh pr create/view/checks` | Comandos seguros y frecuentes; no salen del repositorio salvo las PR, que el usuario autorizó como flujo (D-82). |
+| `ask` (7) | `git push` y `git push …`; `npm install <paquete>`, `npm i …`, `npm add …`; `gh pr merge` | Publicar, añadir una dependencia o hacer *merge* son decisiones del usuario (D-85). |
+| `deny` (12) | `Read(**/.env)`, `.env.local`, `.env.*.local`, `.env.development`, `.env.production`, `.env.test` y los mismos con `Edit` | RNF-SEC-12. No se usa `.env.*` para no bloquear `.env.example`, porque en Claude Code `deny` gana a `allow`. |
+
+**Cómo se probó y qué no se pudo probar:**
+
+- Fichero válido según el esquema.
+- Con solo los permisos (antes de añadir los hooks), una lectura de un `.env` ficticio **no** se bloqueó en la misma
+  sesión: o los permisos no se recargan a mitad de sesión, o el patrón no coincidía.
+- Después, al añadir los hooks, Claude Code sí los recargó en caliente: el `PreToolUse` bloqueó una sonda al momento.
+- Desde entonces, cualquier lectura de `.env` la bloquea **primero el hook**, así que no se puede comprobar el `deny`
+  por separado.
+- Las dos barreras quedan activas. El `deny` se volverá a comprobar en una sesión nueva.
+- Ojo: `deny` sobre `Read`/`Edit` no cubre `cat .env` por la shell; eso lo bloquea el hook.
+- Un test (`tools/repo-config.test.ts`) fija qué va en `ask` y que `allow` no instala paquetes nuevos.
+- Riesgo aceptado: `npx playwright` está en `allow` y, mientras Playwright no esté instalado (P6), `npx` lo
+  descargaría del registro sin preguntar (sin TTY asume `--yes`). Nadie lo ejecuta antes de P6, que lo fija en
+  `devDependencies`.
+
+### 5.2 Hooks (D-80, D-86, D-87)
+
+Scripts en `scripts/claude-hooks/`, en Node y sin dependencias. Leen el evento JSON por `stdin`. Cada uno separa una
+función de decisión pura, probada con eventos simulados, de un envoltorio mínimo, probado lanzando el proceso real.
+
+| Evento | *Matcher* | Acción | Al fallar | Tiempo medido (2026-11-12) |
+|---|---|---|---|---|
+| `PreToolUse` | `Read\|Grep\|Edit\|Write\|MultiEdit\|NotebookEdit\|Bash\|PowerShell` | Bloquea: editar una migración o sus metadatos ya versionados en `apps/api/drizzle/`; leer, buscar o editar `.env` en cualquier caja (salvo `.env.example`), también por `path` o `glob`; `git commit --no-verify` (también `-n`, `-nm`, `--no-veri`) y desactivar los hooks (`LEFTHOOK=0`, `core.hooksPath`); *push* forzado (`-f`, `--force*`, `+rama`); descartar trabajo (`git switch -f` / `--discard-changes`, `checkout -- / .`, `restore`, `reset --hard`, `clean -f`); `git branch -D`; `drizzle-kit push` / `drop`; escribir o borrar en `apps/api/drizzle/`; comandos que mencionan `.env`. Cada regla lee un tramo del comando (`&&`, `;`, `\|`…), sin texto entre comillas. Detalle y falso positivo conocido en D-87. | Código 2 con el motivo. | ≈ 0,1 s |
+| `PostToolUse` | `Edit\|Write\|MultiEdit` | **Solo ESLint del fichero editado** (como pidió el usuario): ni tipos, ni tests, ni Prettier. | Código 2 con los primeros 30 errores. | 2,6–3,5 s por fichero (lint con tipos) |
+| `Stop` | — | `verify:changed`: compila los paquetes y lanza **en paralelo** formato y lint de los ficheros cambiados, `check-filenames`, `check-forbidden-patterns`, tipos de las áreas afectadas y tests (Vitest, más `ng test` si cambió la web); después, los tests de `tools`. Un cambio en la configuración raíz afecta a todo, y uno en la de lint o formato comprueba todo el repositorio (D-86). **Nunca hace build.** | Código 2 con el final de la salida; Claude no puede terminar en rojo. Con `stop_hook_active` no vuelve a bloquear. | Peor caso (todo P0 sin commitear, todas las áreas): **12 s**. En serie eran 25–30 s. |
+
+- El peor caso supera ligeramente los 10 s pedidos, porque el lint con tipos de unos 60 ficheros a la vez tarda 11,5 s.
+- En un turno normal (pocos ficheros de un área) el `Stop` queda en pocos segundos: medido tras el commit de P0, ver
+  el diario.
+- Si la web cambia, `ng test` añade unos 8 s en paralelo.
+- Se descartó la regla «`npm install` sin `--save-exact`» del diseño: `.npmrc` ya fija `save-exact=true` (D-78).
 
 ## 6. Subagente revisor
 

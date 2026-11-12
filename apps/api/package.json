@@ -1,0 +1,28 @@
+{
+  "name": "@saas-o-matic/api",
+  "version": "0.0.0",
+  "private": true,
+  "description": "SaaS-O-Matic REST API (Fastify + Zod + SQLite/Drizzle).",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "@fastify/swagger": "9.9.3",
+    "@saas-o-matic/contract": "0.0.0",
+    "@saas-o-matic/domain": "0.0.0",
+    "better-sqlite3": "13.1.1",
+    "drizzle-orm": "0.45.4",
+    "fastify": "5.12.8",
+    "fastify-type-provider-zod": "7.0.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "9.6.0",
+    "drizzle-kit": "0.31.11",
+    "pino-pretty": "13.2.0",
+    "tsx": "4.23.15"
+  }
+}

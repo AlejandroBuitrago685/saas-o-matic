@@ -2,7 +2,7 @@
 Prompt literal enviado por el usuario a Claude Code (Opus 5.5).
 - Fase: 2 · Especificación (validación de las decisiones pendientes)
 - Fecha: 2026-11-12
-- Contexto: respuesta a las 8 decisiones «Claude · pendiente» y a los supuestos S-02 y S-03 del commit 1577793.
+- Contexto: respuesta a las 8 decisiones «Claude · pendiente» y a los supuestos S-02 y S-03 del commit e9fbe2e.
 El texto que sigue a este comentario es el prompt tal cual se envió, sin editar.
 -->
 

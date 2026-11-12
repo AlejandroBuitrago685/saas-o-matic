@@ -133,6 +133,14 @@ publicación en npm, consultada el 2026-11-12). Cualquier dependencia nueva sigu
 
 El logger es `pino`, que ya viene con Fastify: no es una dependencia nueva.
 
+**Instalado en P0** (versiones exactas, `save-exact`): `fastify` 5.12.8, `fastify-type-provider-zod` 7.0.0,
+`@fastify/swagger` 9.9.3, `zod` 4.6.7, `drizzle-orm` 0.45.4, `better-sqlite3` 13.1.1 y `@angular/*` 22.2.6.
+
+Las arrastra Angular (`ng new`) y son de mantenimiento mínimo: `rxjs` 7.8.2, `tslib` 2.9.1, `postcss` 8.5.32 y
+`jsdom` 30.1.3 (entorno de los tests de componentes; la rama 30 es la que propone el CLI, aunque ya exista la 31).
+
+`@fastify/helmet`, `@fastify/cors`, `@fastify/rate-limit` y `uuid` se instalan en P3, cuando se usan.
+
 ### 4.2 Desarrollo y CI
 
 | Paquete | Versión | Último publish | Para qué |
@@ -147,6 +155,11 @@ El logger es `pino`, que ya viene con Fastify: no es una dependencia nueva.
 | `eslint-plugin-boundaries` | 7.4.2 | 2026-11-05 | Fronteras entre paquetes y capas. |
 | `eslint-config-prettier` | 10.1.8 | 2025-07-20 | Desactivar las reglas de estilo que chocan con Prettier. No se publica desde hace más de un año, pero solo es una lista de reglas desactivadas y es la opción de referencia. |
 | `@eslint-community/eslint-plugin-eslint-comments` | 4.8.1 | 2026-09-12 | Exigir un motivo en cada excepción de lint. |
+| `eslint-import-resolver-typescript` | 4.4.5 | 2026-06-01 | **(P0)** Que boundaries resuelva los imports TS (`./x.js` → `x.ts`) y los paquetes del workspace. Sus *peers* `eslint-plugin-import` e `import-x` son opcionales y no se instalan (D-84). |
+| `@eslint/js` | 10.0.1 | 2026-07-10 | **(P0)** Reglas base recomendadas de ESLint 10, que ya no vienen incluidas (D-84). |
+| `globals` | 17.14.0 | 2026-11-01 | **(P0)** Globales de Node para los ficheros JS de configuración y scripts. |
+| `@types/node` | 22.20.5 | 2026-10-01 | **(P0)** Tipos de la versión **mínima** soportada (Node 22): el compilador avisa si se usa una API de Node 24 o 26. |
+| `@types/better-sqlite3` | 9.6.0 | 2026-08-01 | **(P0)** Tipos del driver. |
 | `@commitlint/config-conventional` | 21.2.4 | 2026-10-18 | Reglas de Conventional Commits. |
 | `dependency-cruiser` | 18.7.2 | 2026-11-02 | Detectar ciclos y generar el grafo de dependencias. |
 | `prettier` | 3.10.x | 2026-11-12 | Formato. |

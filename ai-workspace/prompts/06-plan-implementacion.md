@@ -2,7 +2,7 @@
 Prompt literal enviado por el usuario a Claude Code (Opus 5.5).
 - Fase: 3 · Validación de la arquitectura y Fase 4 · Plan de implementación
 - Fecha: 2026-11-12
-- Contexto: arquitectura del commit 089ecc5 con 13 decisiones pendientes.
+- Contexto: arquitectura del commit e729bf8 con 13 decisiones pendientes.
 El texto que sigue a este comentario es el prompt tal cual se envió, sin editar.
 -->
 
@@ -33,3 +33,9 @@ Escribe `ai-workspace/04-plan-implementacion.md` con:
 5. **Diario de desarrollo** en `ai-workspace/diario.md`: una entrada corta por parte con lo hecho, lo que falló, las correcciones que hicimos yo o el revisor y las decisiones tomadas. Es la evidencia del desarrollo iterativo que pide el enunciado. Créalo ya, con una entrada para las fases 1 a 4.
 
 Haz commit y dime si el calendario te parece realista. Si crees que no llegamos con todo, dímelo ahora.
+
+## Mensaje adicional (durante la fase 4, tras una interrupción)
+
+<!-- Añadido el 2026-11-12 al cerrar P0: no se guardó en su momento. -->
+
+Try again
