@@ -1,0 +1,12 @@
+# Generated or vendored
+node_modules/
+dist/
+coverage/
+.angular/
+package-lock.json
+apps/api/drizzle/meta/
+
+# Hand-written documentation with aligned Markdown tables: formatting it would only add noise
+ai-workspace/
+CLAUDE.md
+.claude/

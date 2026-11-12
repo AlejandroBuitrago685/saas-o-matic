@@ -1,0 +1,71 @@
+# Pipeline (03-arquitectura/08-despliegue.md §3, D-52, D-53).
+# P0: `quality` (Node 22/24/26 matrix) and `audit`. P6 adds `e2e`; P10 adds the Windows/macOS smoke jobs.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Git hooks are a local safety net; CI runs the same checks explicitly.
+  LEFTHOOK: '0'
+  NG_CLI_ANALYTICS: 'false'
+
+jobs:
+  quality:
+    name: quality (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24, 26]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - name: Format
+        run: npm run format:check
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: File names, forbidden patterns and dependency cycles
+        run: npm run check
+      - name: Node tests (domain coverage 100 %)
+        run: npx vitest run --coverage
+      - name: Web unit tests
+        run: npm run test -w @saas-o-matic/web
+      - name: Build
+        run: npm run build
+      - name: Traceability report
+        run: npm run trace
+
+  audit:
+    name: audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Dependency audit (fails on high or critical, AC-57)
+        run: npm audit --audit-level=high
+      - name: No committed .env files (AC-55)
+        run: node scripts/check-forbidden-patterns.mjs

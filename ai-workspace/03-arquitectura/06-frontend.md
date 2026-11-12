@@ -25,7 +25,7 @@ Signal Forms (`form`, estable desde 22.0), `provideZonelessChangeDetection` (des
 
 ```text
 src/app/
-├── app.config.ts · app.routes.ts · app.component.ts
+├── app.config.ts · app.routes.ts · app.ts · app.html   # nombres de la guía 2025 (D-76)
 ├── core/                         # servicios globales y estructura de la app (se instancian una vez)
 │   ├── api/                      # interceptores, ApiError, parseo de Problem Details
 │   ├── catalog/                  # CatalogStore (GET /api/catalog)
@@ -44,7 +44,7 @@ src/app/
 
 | Zona | Puede importar | No puede importar |
 |---|---|---|
-| `features/x` | `core`, `shared`, `@saas-o-matic/domain`, tipos de `@saas-o-matic/contract` | Otra feature (salvo `simulator`, que usa `customer-detail`) |
+| `features/x` | `core`, `shared`, `@saas-o-matic/domain`, tipos de `@saas-o-matic/contract` | Otra feature (salvo `customer-detail`, que monta `simulator`) |
 | `core` | `shared`, `domain`, tipos de `contract` | `features` |
 | `shared` | `domain` (para formatear) | `core`, `features` |
 

@@ -33,7 +33,7 @@ Documentos: `ai-workspace/` → `00-enunciado.md` · `01-analisis.md` · `02-esp
 Monorepo: `packages/domain` (reglas puras) · `packages/contract` (esquemas Zod) · `apps/api` (Fastify) ·
 `apps/web` (Angular) · `e2e`. Detalle en `03-arquitectura/02-monorepo.md`, `03-backend.md` y `06-frontend.md`.
 
-**Reglas de dependencia** ⏳ (`eslint-plugin-boundaries`, `03-arquitectura/09-calidad-y-automatizacion.md` §3):
+**Reglas de dependencia** ⚙ (`eslint-plugin-boundaries` + `no-restricted-imports`, `09-calidad-y-automatizacion.md` §3):
 
 - `domain` no depende de nada: ni npm, ni Node, ni DOM, ni `Date.now()` o `Math.random()`.
 - `contract` → `domain`, `zod`.
@@ -42,18 +42,19 @@ Monorepo: `packages/domain` (reglas puras) · `packages/contract` (esquemas Zod)
 - API: `routes` → `use-case` → puertos ← `repository` → `db`.
   - **Ninguna regla de negocio en las rutas.**
   - Drizzle solo en `repository` y `db`; Fastify solo en `routes`, `http` y la raíz de composición.
-  - Un módulo solo usa otro por su `index.ts`.
+  - Un módulo solo usa otro por su `index.ts` ⏳ (la regla se añade en P4, cuando exista un segundo módulo).
 - Web: `features` → `core`, `shared`; una feature no importa otra (excepción declarada: `simulator` ← `customer-detail`).
 
 ## Código
 
-- **Tamaño** ⏳: 250 líneas por fichero, 40 por función, complejidad 8, anidamiento 3, 3 parámetros (si hacen falta
+- **Tamaño** ⚙: 250 líneas por fichero, 40 por función, complejidad 8, anidamiento 3, 3 parámetros (si hacen falta
   más, un objeto). **Una responsabilidad por fichero.** Cada excepción lleva `-- motivo`.
-- **TypeScript** ⏳: `strict` y los flags de `09-calidad` §2; **sin `any`**, **sin `!`**, tipos explícitos en lo
+- **TypeScript** ⚙: `strict` y los flags de `09-calidad` §2; **sin `any`**, **sin `!`**, tipos explícitos en lo
   exportado; `import type` para los tipos; `switch` exhaustivos. TypeScript **6.0.3** fijado (D-67).
 - **Nombres:**
   - Ficheros en `kebab-case` con sufijo de rol: `create-customer.use-case.ts`, `customers.repository.ts`,
-    `customers.routes.ts`, `*.store.ts`, `*.page.ts`, `*.test.ts` ⏳.
+    `customers.routes.ts`, `*.store.ts`, `*.page.ts`, `*.test.ts` ⚙. Componentes de Angular sin sufijo
+    `.component` (guía de estilo 2025, D-76).
   - Tipos en `PascalCase`; funciones y variables en `camelCase`; constantes en `UPPER_SNAKE`; booleanos con
     `is`/`has`/`can`; sin prefijo `I` en las interfaces.
   - Base de datos en `snake_case` plural; índices `<tabla>_<cols>_idx`, únicos `_uq`.
@@ -64,10 +65,10 @@ Monorepo: `packages/domain` (reglas puras) · `packages/contract` (esquemas Zod)
 - **Logs:**
   - pino; una línea por petición con el **patrón de ruta**.
   - **Nunca** cuerpos, consultas, emails, identificadores fiscales, nombres de empresa ni IPs.
-  - Sin `console` ⏳.
+  - Sin `console` ⚙.
 - **Frontend:** signals; `computed` para lo derivado; `effect` solo para efectos externos; **sin `styles` ni
-  `styleUrl`** ⏳ (CSP).
-- **Configuración:** solo en `apps/api/src/config/`, validada al arrancar; no se lee `process.env` fuera de ahí ⏳.
+  `styleUrl`** ⚙ (CSP).
+- **Configuración:** solo en `apps/api/src/config/`, validada al arrancar; no se lee `process.env` fuera de ahí ⚙.
 
 ## Dependencias nuevas
 
@@ -88,15 +89,16 @@ Versión exacta. Sin dependencias que compilen código nativo (RT-06).
 - IDs UUID v7; listados paginados (máximo 100); límite de peticiones.
 - Cabeceras y CSP; CORS con lista cerrada; `no-store` en todo salvo `GET /catalog`.
 - Errores sin detalles internos; logs sin datos personales.
-- Configuración validada al arrancar; ningún secreto en el repo; no se leen ni se editan `.env` ⏳.
+- Configuración validada al arrancar; ningún secreto en el repo; no se leen ni se editan `.env` ⚙.
 - La respuesta de la API de tipos se valida antes de usarla; el backend no hace peticiones salientes.
-- Prohibidos `innerHTML`, `outerHTML` y `bypassSecurityTrust*` ⏳.
-- Auditoría de dependencias en CI ⏳; contenedores sin root.
+- Prohibidos `innerHTML`, `outerHTML` y `bypassSecurityTrust*` ⚙.
+- Auditoría de dependencias en CI ⚙ (falla con vulnerabilidades altas o críticas); contenedores sin root.
 
 ## Tests
 
-- **TDD en `domain`:** primero el test con los vectores de la spec; cobertura del 100 % ⏳.
-- Cada test cita su `AC-xx` y/o `TV-…` en el título ⏳ (`scripts/trace-tests.mjs`).
+- **TDD en `domain`:** primero el test con los vectores de la spec; cobertura del 100 % ⚙.
+- Cada test cita en su título su `AC-xx` y/o `TV-…`; los de infraestructura, su `D-xx` o ADR ⏳
+  (`scripts/trace-tests.mjs` solo informa hasta P10, donde pasa a bloquear).
 - Cada bug lleva un test de regresión que falla antes del arreglo.
 - Integración de la API con `app.inject()` y SQLite en memoria. e2e con la API externa siempre simulada.
   Estrategia completa en `03-arquitectura/07-tests.md`.
@@ -106,7 +108,7 @@ Versión exacta. Sin dependencias que compilen código nativo (RT-06).
 Una parte está **hecha** cuando cumple **todo** esto:
 
 1. Sus AC tienen tests y pasan: unitarios, de integración y e2e según el nivel del AC.
-2. Lint, tipos, fronteras y formato pasan sin excepciones nuevas sin motivo (el hook `Stop` lo verifica ⏳).
+2. Lint, tipos, fronteras y formato pasan sin excepciones nuevas sin motivo (el hook `Stop` lo verifica ⚙).
 3. Cumple las reglas de seguridad aplicables y no deja datos personales en los logs.
 4. En la interfaz: estados de carga, vacío y error, y funciona a 360 px y con teclado.
 5. Documentación al día: contrato o OpenAPI, decisiones nuevas en `decisiones.md` y trazabilidad.
@@ -114,9 +116,10 @@ Una parte está **hecha** cuando cumple **todo** esto:
    `git diff`, los AC y TV que cubre el cambio y el resultado de lint y tests.
 7. Commit en Conventional Commits.
 
-⏳ = la comprobará una herramienta que **todavía no está configurada**; se configura en la parte P0 (scaffolding).
-Cuando una herramienta quede configurada y probada, su marca pasa a ⚙ (= se comprueba automáticamente). **Hoy
-ninguna regla tiene ⚙** (D-71). Diseño en `03-arquitectura/09-calidad-y-automatizacion.md`.
+⚙ = una herramienta configurada **y probada** lo comprueba (ESLint, `tsc`, scripts y hooks de Claude Code, cada uno con
+tests en `tools/`; la auditoría, en el CI de GitHub). ⏳ = configurado pero todavía no demostrado: la trazabilidad, que
+solo informa hasta P10 (D-86), y la regla de módulos, que llega en P4. `main` está protegida: solo se integra por PR
+con los 4 checks del CI en verde (D-88). Detalle en `03-arquitectura/09-calidad-y-automatizacion.md`.
 
 ## Trazabilidad
 

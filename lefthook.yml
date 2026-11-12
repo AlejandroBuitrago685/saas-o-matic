@@ -1,0 +1,24 @@
+# Git hooks (03-arquitectura/09-calidad-y-automatizacion.md §4). Installed by lefthook's postinstall.
+# Skipped in CI with LEFTHOOK=0. `--no-verify` is forbidden (CLAUDE.md, PreToolUse hook).
+# pre-commit runs in order (format, then lint the formatted files) and has no tsc: types are checked by the
+# Stop hook, pre-push and CI (D-86).
+pre-commit:
+  piped: true
+  commands:
+    1_format:
+      glob: '*.{ts,js,mjs,cjs,json,html,css,yml,yaml}'
+      run: npx prettier --write {staged_files}
+      stage_fixed: true
+    2_lint:
+      glob: '*.{ts,js,mjs,cjs,html}'
+      run: npx eslint --max-warnings=0 --no-warn-ignored {staged_files}
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit {1}
+
+pre-push:
+  commands:
+    tests:
+      run: npm test

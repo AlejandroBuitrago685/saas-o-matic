@@ -1,0 +1,21 @@
+{
+  "name": "@saas-o-matic/contract",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Zod schemas and types of the HTTP API contract. The web app imports types only.",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@saas-o-matic/domain": "0.0.0",
+    "zod": "4.6.7"
+  }
+}

@@ -6,7 +6,7 @@ Los prompts literales están en [`prompts/`](prompts/) y las decisiones, en [`de
 
 ---
 
-## Fase 1 · Análisis — 2026-11-12 · commit `d860065`
+## Fase 1 · Análisis — 2026-11-12 · commit `626ac38`
 
 **Hecho**
 - Comprobados Node 22.23.4 y npm 10.9.9 contra los `engines` reales de Angular 22, Vitest 5 y `better-sqlite3`.
@@ -31,7 +31,7 @@ Los prompts literales están en [`prompts/`](prompts/) y las decisiones, en [`de
 
 ---
 
-## Fase 2 · Especificación — 2026-11-12 · commits `1577793`, `5bf8294`, `80bd9c1` y `df33f27`
+## Fase 2 · Especificación — 2026-11-12 · commits `e9fbe2e`, `da3e2ec`, `72cd2ab` y `6fc6745`
 
 **Hecho**
 - Especificación en 9 ficheros: alcance MoSCoW, reglas de negocio, validación fiscal, contrato de la API, frontend,
@@ -75,7 +75,7 @@ Los prompts literales están en [`prompts/`](prompts/) y las decisiones, en [`de
 
 ---
 
-## Fase 3 · Arquitectura — 2026-11-12 · commit `089ecc5`
+## Fase 3 · Arquitectura — 2026-11-12 · commit `e729bf8`
 
 **Hecho**
 - 9 documentos de arquitectura, 14 ADR, `CLAUDE.md` con reglas de código y el subagente `revisor`.
@@ -106,7 +106,7 @@ Los prompts literales están en [`prompts/`](prompts/) y las decisiones, en [`de
 
 ---
 
-## Fase 4 · Plan de implementación — 2026-11-12
+## Fase 4 · Plan de implementación — 2026-11-12 · commit `c04abd5`
 
 **Hecho**
 - **Verificación real de `inlineCritical`:** app nueva de Angular 22.2 compilada en producción.
@@ -135,3 +135,98 @@ Los prompts literales están en [`prompts/`](prompts/) y las decisiones, en [`de
 - Confirmar la fecha con la empresa.
 - Crear el repositorio de GitHub para P0.
 - Elegir el hosting de la demo el viernes.
+
+---
+
+## P0 · Scaffolding y herramientas — 2026-11-12 · rama `feat/p0-scaffolding`
+
+**Hecho**
+- Monorepo con npm workspaces, TypeScript 6.0.3 estricto y dos `tsconfig` por paquete.
+- `domain` con `Result` (primer ciclo TDD: rojo → verde) y `contract` con el esquema de `/health`.
+- API con `buildApp()` sin escuchar, `GET /health` y configuración validada con Zod; el proceso real sale con código 1
+  y nombra la variable si la configuración es inválida (AC-55).
+- Angular 22 generado con el CLI oficial (`--style=tailwind --zoneless --ai-config=none`) y adaptado: sin estilos de
+  componente, `inlineCritical: false`, proxy `/api`, tests `*.test.ts`.
+- ESLint con límites, fronteras y seguridad; Prettier; lefthook y commitlint; dependency-cruiser.
+- Scripts `check-filenames`, `check-forbidden-patterns`, `trace-tests`, `verify-changed` y `dev`.
+- Hooks y permisos de Claude Code; CI con `quality` (matriz 22/24/26) y `audit`.
+- **Cada regla marcada con ⚙ en `CLAUDE.md` tiene un test que demuestra que salta.**
+- `npm run verify` en verde en 57 s: 164 tests de Node y 2 de la web, cobertura del dominio al 100 %, build de
+  producción y trazabilidad (AC 6/81 · TV 0/129, esperable en P0).
+- Hooks: `PreToolUse` ≈ 0,1 s; `PostToolUse` 2,6–3,5 s; `Stop` 7,2 s en un turno típico (un fichero de la API) y
+  23 s en el peor caso (toda P0 sin commit: todas las áreas y los tests de `tools` en una segunda etapa). Supera los
+  10 s pedidos solo cuando cambian `tools/`, `scripts/` o la configuración raíz.
+- `npm ci` real en el monorepo: 86 s, sin compilar nada nativo; una sola copia de `@angular/core`.
+- Antes del primer push, el email de autor y *committer* de los 7 commits anteriores pasó al *noreply* de GitHub
+  (`git filter-branch --env-filter`, conserva nombres y fechas). Los *hashes* cambiaron: los de este diario y de
+  `prompts/` están actualizados.
+
+**Falló**
+- `tsc` emitió `dist` aunque había un error de tipos (`exactOptionalPropertyTypes` con el `logger` de Fastify), y mi
+  comprobación lo dio por bueno porque `| head` ocultaba el código de salida. Corregido el tipo, añadido
+  `noEmitOnError` y comprobaciones con el código de salida real.
+- `verbatimModuleSyntax` detectó un `import { Routes }` sin `type` en el código generado por Angular.
+- El `postinstall` de lefthook creó un `lefthook.yml` por defecto que sobrescribí sin querer, y dejó instalado un hook
+  `prepare-commit-msg` sobrante (eliminado).
+- dependency-cruiser rechazó `extensionAlias` (opción inexistente). No hacía falta: resuelve `./x.js` → `x.ts` solo.
+- `verify:changed` encontró errores de tipos reales en `trace-tests.mjs`: la herramienta funcionó contra mi propio código.
+- Primer `verify:changed` en serie: 25–30 s en el peor caso. En paralelo: 12 s.
+- El test de `trace-tests` citaba IDs reales en su ejemplo y los contaba como cubiertos (falso positivo). Cambiados
+  por IDs inexistentes. Los AC de nivel `CI` se buscan también en `.github/workflows`.
+- La regla `deny` de `.env` no se aplicó en la misma sesión (los permisos no se recargaron). Queda la barrera del hook
+  `PreToolUse`, probada; el `deny` se comprobará en una sesión nueva.
+- El subagente `revisor` no estaba disponible en la sesión (Claude Code carga `.claude/agents/` al empezar). Se lanzó
+  un agente general con sus mismas instrucciones, en solo lectura.
+- **Me paré a mitad de P0** con 86 ficheros preparados y sin commit: terminé el turno esperando al revisor, que
+  corría en segundo plano. No hubo error ni bloqueo de un hook; fue un fallo de criterio. Desde entonces, mientras
+  espero a un agente sigo con trabajo que no dependa de él y no cierro el turno.
+- No guardé a tiempo dos prompts del usuario enviados a mitad de turno (lo detectó el revisor). Guardados.
+- Mi propio hook `PreToolUse` bloqueó tres comandos míos con *heredoc* que solo **mencionaban** `.env` o
+  `drizzle-kit drop` en el texto. Las reglas de git y drizzle ya no leen el cuerpo de los *heredocs*; la de `.env`
+  sí, a propósito (D-87).
+
+**Correcciones del usuario**
+- Rama y PR por parte en lugar de commits directos a `main` (D-82).
+- Hooks rápidos: `PostToolUse` solo lint del fichero y `Stop` sin build (D-80).
+- Lista de permisos `allow`/`ask`/`deny` para no confirmar cada acción (D-81), revisada tras el revisor (D-85).
+- Email *noreply* para los commits públicos (detectado por Claude antes del primer push).
+
+**Revisor**
+- Primera pasada: **NO APTO**, con 1 P0, 5 P1 y una lista de P2/P3.
+  - P0: un test borraba la carpeta entera `apps/web/src/app/features` al limpiar sus ficheros temporales.
+  - P1: `lint` fallaba en un clon limpio sin `dist`; rutas relativas en los hooks; `PreToolUse` sin `Grep`, sin
+    mayúsculas ni comodines; la API podía importar `db/` desde rutas y casos de uso; `npm install <paquete>` en
+    `allow` (decisión del usuario, D-85).
+  - Todos corregidos, cada uno con su test. También los P2/P3 baratos (D-86, D-87).
+- Segunda pasada: **APTO**, sin P0 ni P1 abiertos. Señaló 8 P2 y 6 P3, casi todos en el hook `PreToolUse`: evaluaba las
+  reglas sobre el comando compuesto entero y con el texto entre comillas (falsos positivos como
+  `git switch -c x && git add .`, y un hueco: `gh pr create --body-file ".env"` pasaba). Corregidos los 8 P2 y
+  5 de los 6 P3, con tests (D-86, D-87). El P3 restante (`npx playwright` en `allow`) es decisión del usuario y
+  queda como riesgo aceptado hasta P6. Su «no comprobado» (que los hooks se disparen en Windows con
+  `$CLAUDE_PROJECT_DIR`) se comprobó en vivo: el hook bloqueó una sonda y varios comandos míos.
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| Fastify registra por defecto la IP y la URL completa (con su *query*) de cada petición: serializadores de pino con el patrón de ruta y sin IP (RNF-SEC, `CLAUDE.md` «Logs»). | P3 |
+| Comodines de `boundaries` para ficheros sin clasificar y regla «un módulo solo usa otro por su `index.ts`» (⏳ en `CLAUDE.md`). | P4 |
+| `strictTemplates` de la web solo se comprueba en el build, no en `npm run typecheck` ni en `verify:changed`: añadir la comprobación de plantillas. | P5 |
+| Docker: `npm ci --omit=dev` ejecutaría `prepare` sin TypeScript; usar `--ignore-scripts` en la imagen. | P6 |
+| `npx playwright` está en `allow` y, sin Playwright instalado, `npx` lo descargaría sin preguntar: se fija en `devDependencies`. | P6 |
+| Aviso `DEP0190` de Node 24+ por `shell: true` con argumentos en `scripts/lib/repo.mjs` (solo Windows). | P10 |
+| Comprobar en una sesión nueva que el `deny` de `.env` de `.claude/settings.json` se aplica. | P1 |
+| Vulnerabilidades moderadas de desarrollo (`minimatch`, `esbuild` de `drizzle-kit`), riesgo aceptado (D-89): ver si hay versiones corregidas sin bajar de versión mayor. | P10 |
+
+**Decisiones:** D-76 a D-89.
+
+**Publicación**
+- `main` subida como rama principal y PR #1 abierta desde `feat/p0-scaffolding`. CI en verde a la primera:
+  `quality` en Node 22, 24 y 26, y `audit`.
+- `audit` pasa, pero informa de vulnerabilidades moderadas, todas de desarrollo; en producción, 0. Riesgo aceptado
+  con motivo (D-89), porque el «arreglo» de npm baja de versión mayor ESLint y drizzle-kit.
+- `main` protegida, a petición del usuario: PR obligatoria y los 4 checks en verde para integrar, sin aprobaciones
+  (D-88). La marca de la auditoría pasa a ⚙ en `CLAUDE.md`.
+
+**Tiempo:** estimado 4,5 h · real ≈ 1 h 45 min de trabajo (14:12–15:00, 15:25–15:30 y 19:00–19:45), en 5,5 h de
+reloj por dos pausas: mi parada a mitad de turno y el límite de uso de la sesión.

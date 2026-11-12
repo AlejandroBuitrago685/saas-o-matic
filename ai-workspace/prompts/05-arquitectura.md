@@ -2,7 +2,7 @@
 Prompt literal enviado por el usuario a Claude Code (Opus 5.5).
 - Fase: 3 · Arquitectura
 - Fecha: 2026-11-12
-- Contexto: especificación v1.0 aprobada sin decisiones pendientes (commits 80bd9c1 y df33f27).
+- Contexto: especificación v1.0 aprobada sin decisiones pendientes (commits 72cd2ab y 6fc6745).
 El texto que sigue a este comentario es el prompt tal cual se envió, sin editar.
 -->
 

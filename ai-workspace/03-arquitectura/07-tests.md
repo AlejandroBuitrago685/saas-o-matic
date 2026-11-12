@@ -72,7 +72,8 @@ hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel�
 
 | Momento | Qué | Duración objetivo |
 |---|---|---|
-| Tras cada edición de Claude (hook) | ESLint y `tsc` del paquete afectado | < 10 s |
-| Al terminar Claude una tarea (hook `Stop`) | Lint, tipos y tests unitarios y de integración de los paquetes cambiados | < 60 s |
-| `pre-commit` (lefthook) | ESLint y Prettier sobre los ficheros preparados; `commitlint` | < 15 s |
+| Tras cada edición de Claude (hook `PostToolUse`) | ESLint **solo del fichero editado**; sin `tsc` (D-80) | < 5 s (2,6–3,5 s medidos) |
+| Al terminar Claude una tarea (hook `Stop`) | `verify:changed`: formato y lint de los ficheros cambiados, comprobaciones del repo, tipos y tests de las áreas afectadas; nunca el build (D-80, D-86) | < 30 s |
+| `pre-commit` (lefthook) | Prettier y después ESLint sobre los ficheros preparados, sin `tsc` (D-86); `commitlint` en `commit-msg` | < 15 s |
+| `pre-push` (lefthook) | `npm test` | < 1 min |
 | CI en cada *push* o PR | Todo (08-despliegue §3) | < 10 min |
