@@ -112,7 +112,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
 - **Propuesta:** entero, mínimo 1 y máximo configurable (p. ej. 10 000) para evitar abusos y desbordamientos.
   El «0» del Tramo 1 se lee como el límite inferior del rango, no como un caso de uso.
 - **Afecta a:** RF-07, RF-08, RF-16.
-- **Estado:** **Cerrada** — entero de 1 a 10 000, con slider y campo numérico sincronizados (D-04). Escala del slider por segmentos (D-05, pendiente de validar).
+- **Estado:** **Cerrada** — entero de 1 a 10 000, con slider y campo numérico sincronizados (D-04). Escala del slider por segmentos (D-05, validada).
 
 ### AMB-02 · Almacenamiento contratado y llamadas a la API
 - **Enunciado:** se piden como datos de la simulación, pero no tienen precio ni unidad.
@@ -182,7 +182,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
     primeros dígitos son `00`; C, D, F, G, J, U, V → cualquiera) y **contrastarla con la Orden EHA/451/2008** al
     escribir la especificación.
 - **Afecta a:** RF-03.
-- **Estado:** **Cerrada** — DNI, NIE y CIF; K/L/M fuera; «verdadero» = estructura y carácter de control correctos (D-12). Al contrastarla, la Orden EHA/451/2008 resulta no definir el algoritmo ni la regla letra/dígito; se descarta la regla «00» (D-13, pendiente de validar).
+- **Estado:** **Cerrada** — DNI, NIE y CIF; K/L/M fuera; «verdadero» = estructura y carácter de control correctos (D-12). Al contrastarla, la Orden EHA/451/2008 resulta no definir el algoritmo ni la regla letra/dígito; se descarta la regla «00» (D-13, validada).
 
 ### AMB-08 · Normalización del identificador fiscal
 - **Hueco:** no se dice cómo tratar mayúsculas, separadores o prefijos.
@@ -201,7 +201,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
   Se deja un punto de extensión para añadir validadores por país.
   Alternativa: validar el formato de cada país de la lista cerrada (AMB-04).
 - **Afecta a:** RF-02.
-- **Estado:** **Cerrada** — **propuesta rechazada**: formato oficial específico de cada país, con un validador por país detrás de una interfaz común (D-15). Identificador exigido: NIF-IVA o EIN (D-16, pendiente de validar; PN-04).
+- **Estado:** **Cerrada** — **propuesta rechazada**: formato oficial específico de cada país, con un validador por país detrás de una interfaz común (D-15). Identificador exigido: NIF-IVA o EIN (D-16, validada; PN-04).
 
 ### AMB-10 · Unicidad de clientes
 - **Hueco:** no se dice si pueden existir dos clientes con el mismo identificador fiscal o el mismo email.
@@ -226,7 +226,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
   **actual**, con un aviso de importe orientativo y la fecha de los tipos. Para que el desglose cuadre, se convierten
   base e impuesto y el total mostrado es la suma de ambos ya redondeados.
 - **Afecta a:** RF-13, RF-15, RF-16.
-- **Estado:** **Cerrada** — EUR como fuente de verdad e historial al tipo actual con aviso (D-19). Regla de conversión por partidas hoja (D-20, pendiente de validar).
+- **Estado:** **Cerrada** — EUR como fuente de verdad e historial al tipo actual con aviso (D-19). Regla de conversión por partidas hoja (D-20, validada).
 
 ### AMB-13 · Divisas que se ofrecen
 - **Enunciado:** «(EUR, USD, GBP, etc.)». La API devuelve 166 divisas.
@@ -244,7 +244,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
   si falla. «Tiempo real» = la conversión se recalcula al instante al cambiar la divisa o mover el slider. La decisión
   técnica final se toma en la fase de arquitectura.
 - **Afecta a:** RF-12, RF-13, RNF-08, RNF-09.
-- **Estado:** **Cerrada** — desde el navegador, con caché, validación del esquema y vuelta a EUR (D-22). Caché de 1 h y uso de tipos guardados con menos de 48 h si falla el refresco (D-23, pendiente de validar). Atribución obligatoria según los términos del proveedor (D-24).
+- **Estado:** **Cerrada** — desde el navegador, con caché, validación del esquema y vuelta a EUR (D-22). Caché de 1 h y uso de tipos guardados con menos de 48 h si falla el refresco (D-23, validada). Atribución obligatoria según los términos del proveedor (D-24).
 
 ### AMB-15 · Contenido del «Dashboard» y comportamiento del buscador
 - **Enunciado:** «Buscador y Dashboard: Un buscador por nombre de empresa o identificador fiscal.»
@@ -254,7 +254,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
   Sin KPIs, para no inventar métricas. Búsqueda parcial que no distingue mayúsculas ni acentos en el nombre, y por
   identificador normalizado (AMB-08).
 - **Afecta a:** RF-04, RF-14.
-- **Estado:** **Cerrada** — listado paginado con buscador **y** métricas agregadas como Could; se rechaza la propuesta de no tener métricas (D-25). Importe medio = base sin impuestos (D-26, pendiente de validar). Orden por nombre (D-27).
+- **Estado:** **Cerrada** — listado paginado con buscador **y** métricas agregadas como Could; se rechaza la propuesta de no tener métricas (D-25). Importe medio = base sin impuestos (D-26, validada). Orden por nombre (D-27).
 
 ### AMB-16 · Contexto del simulador
 - **Problema:** el impuesto depende del país del cliente, así que la proyección necesita un cliente. ¿Se puede simular
@@ -295,7 +295,7 @@ Cada entrada trae la cita o el hueco, el problema que plantea y una propuesta. *
 - **Propuesta:** email con formato válido según el validador estándar de Zod, guardado en minúsculas, de 254 caracteres
   como máximo. Nombre de empresa sin espacios al principio ni al final, de 2 a 200 caracteres.
 - **Afecta a:** RF-01.
-- **Estado:** **Cerrada** — no se llegó a preguntar; queda la propuesta, más normalización NFC y rechazo de caracteres de control (D-34, pendiente de validar).
+- **Estado:** **Cerrada** — no se llegó a preguntar; queda la propuesta, más normalización NFC y rechazo de caracteres de control (D-34, validada).
 
 ### AMB-22 · Idioma y formato de la interfaz
 - **Propuesta:** interfaz en español, con números y fechas en formato `es-ES` y la divisa según la selección.
