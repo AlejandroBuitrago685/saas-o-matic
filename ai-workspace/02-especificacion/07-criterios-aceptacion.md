@@ -301,6 +301,11 @@ Estos criterios son la base de los tests: cada test citará su `AC-xx`.
 - Cuando se muestra en el listado y en el detalle
 - Entonces aparece como texto literal y no se ejecuta ningún script.
 
+**AC-64 · Sin violaciones de CSP** · Refs: RNF-SEC-06, D-70 · Nivel: E
+- Dado la SPA servida con la configuración de producción (pila de Docker Compose) y un detector de violaciones de CSP activo en todos los tests (eventos `securitypolicyviolation` y mensajes de consola)
+- Cuando se recorren el dashboard, el alta, el detalle con el simulador y la vista de no encontrado, y cualquier otro e2e se ejecuta contra esa pila
+- Entonces no se registra ninguna violación (si se registra una, falla el test en curso); el `index.html` servido no contiene `<style>` ni `<script>` en línea ni atributos `on*`; y la hoja de estilos está aplicada (un elemento con una clase de Tailwind tiene el estilo calculado esperado).
+
 ## 6. Interfaz
 
 **AC-70 · Estados del dashboard** · Refs: RF-14, RNF-08, CL-37, CL-41 · Nivel: E

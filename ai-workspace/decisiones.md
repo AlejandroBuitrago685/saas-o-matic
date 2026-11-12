@@ -10,7 +10,7 @@ especificación, el código y los tests.
 - **Refs:** ambigüedad (`AMB-xx`), requisito (`RF`/`RNF`) o documento de la especificación afectado.
 - Una decisión no se edita: si cambia, se añade una nueva que la sustituye y se indica en ambas.
 
-Última actualización: 2026-11-12 (fase 2, especificación validada por el usuario).
+Última actualización: 2026-11-12 (fase 4, plan de implementación).
 
 ## Decisiones
 
@@ -109,20 +109,32 @@ Cada una tiene su ADR en [`03-arquitectura/adr/`](03-arquitectura/adr/README.md)
 | ID | Decisión | Alternativa descartada | Motivo | Quién | Refs |
 |---|---|---|---|---|---|
 | D-54 | Paquete `domain` en TypeScript puro y sin dependencias (sin DOM ni Node), con API pública solo por `index.ts`, `Result` en lugar de excepciones, TDD y cobertura del 100 %. Lo usan la API y la web. | Dominio dentro de la API, con una copia en la web. | Una sola implementación de las reglas (RT-02). La restricción es del usuario; los detalles, de Claude. | Usuario | ADR-001 |
-| D-55 | Paquete `contract` con esquemas Zod. La API los usa para validar, serializar y generar OpenAPI; la web los consume solo con `import type`. | Tipos duplicados en la web; contrato en OpenAPI con generación de tipos. | Una única fuente del contrato, sin Zod en el bundle. | Claude · pendiente | ADR-002 |
-| D-56 | Driver `better-sqlite3` 13.1.1, con binarios Node-API incluidos. La instalación sin compilar está verificada en la máquina del usuario. | `@libsql/client`, `sql.js`, `node:sqlite`. | RT-06. | Claude · pendiente | ADR-003, RT-06 |
-| D-57 | Desglose en la tabla `simulation_tiers`, con `CHECK` de la aritmética de cada tramo. Triggers de solo inserción en las tres tablas. | Columna JSON; sin triggers. | Integridad en la propia base de datos (persistencia limpia, D-29). | Claude · pendiente | ADR-004 |
-| D-58 | Catálogo como configuración tipada validada al arrancar. Las listas cerradas se refuerzan con `CHECK` generados a partir de las constantes de `domain`. | Tablas sembradas. | Una sola fuente, revisable y con tipos; encaja con AC-07 y AC-46. | Claude · pendiente | ADR-005 |
-| D-59 | Búsqueda con la columna `company_name_search`, normalizada en `domain`, y `LIKE … ESCAPE '!'`; índice `(company_name_search, id)`. | FTS5 con `trigram`; función SQL propia; ICU. | Medido: 8,5 ms por página con 100 000 clientes. | Claude · pendiente | ADR-006, RT-08 |
-| D-60 | UUID en `TEXT` de 36 caracteres, fechas en `INTEGER` (ms UTC), importes en céntimos y tipos en bps. `CHECK (typeof …)` en las columnas numéricas. Pragmas `foreign_keys = ON`, `WAL`, `synchronous = NORMAL`, `busy_timeout` y `trusted_schema = OFF`. | `BLOB`; fechas en ISO; `STRICT` editado a mano. | Drizzle no admite `STRICT`. | Claude · pendiente | ADR-007 |
-| D-61 | La proyección se calcula en el navegador con `domain` y `GET /catalog`; no hay `POST /simulations/preview`. | Endpoint de previsualización. | RNF-09 sin red y la misma función que el servidor (RT-02). | Claude · pendiente | ADR-008 |
-| D-62 | `Result` en el dominio, `AppError` en los casos de uso y un único manejador RFC 9457. | `Result` hasta la ruta; excepciones en el dominio. | Sin lógica en las rutas y sin filtrar detalles internos. | Claude · pendiente | ADR-009 |
-| D-63 | `buildApp(deps)` sin escuchar, con inyección manual de dependencias. Tests con `app.inject()` y SQLite en memoria. | Contenedor de inyección. | Explícito y sin dependencias. | Claude · pendiente | ADR-010 |
-| D-64 | Web: stores con signals, `httpResource`, Signal Forms, sin Zone.js y sin estilos de componente (CSP `style-src 'self'`). | NgRx Signal Store; Reactive Forms; `unsafe-inline`. | API estables en Angular 22; menos dependencias. | Claude · pendiente | ADR-011 |
-| D-65 | La SPA llama a `/api/…` y un proxy (`ng serve` o nginx) quita el prefijo; la API conserva sus rutas literales. | Prefijo en la API; CORS entre orígenes; *hash routing*. | Evita el choque con la ruta `/customers/:id` de la SPA y simplifica CSP y CORS. | Claude · pendiente | ADR-012 |
-| D-66 | Las reglas se aplican con TypeScript estricto, ESLint (límites de 250 líneas por fichero, 40 por función, complejidad 8, profundidad 3 y 3 parámetros, más fronteras), dependency-cruiser, scripts propios, hooks de Claude Code, lefthook, CI y el subagente revisor. | Solo `CLAUDE.md`. | RT-11; la IA recibe la respuesta en el momento. | Claude · pendiente | ADR-013 |
-| D-67 | TypeScript 6.0.3 exacto en todo el monorepo. | TypeScript 7 (publicado el 2026-11-12). | Angular 22 y typescript-eslint exigen `<6.1`. | Claude | ADR-014, RT-07 |
-| D-68 | Los e2e del CI se ejecutan una sola vez (D-52) contra la pila de Docker Compose. En local, también contra los servidores de desarrollo, omitiendo los tests `@prod-only`. | e2e contra `ng serve` en CI. | Comprueba la CSP y las cabeceras reales, el proxy `/api` y que el contenedor no corre como root (AC-52, AC-60). | Claude · pendiente | 03-arquitectura/07-tests §1.3 |
+| D-55 | Paquete `contract` con esquemas Zod. La API los usa para validar, serializar y generar OpenAPI; la web los consume solo con `import type`. | Tipos duplicados en la web; contrato en OpenAPI con generación de tipos. | Una única fuente del contrato, sin Zod en el bundle. | Claude · validada | ADR-002 |
+| D-56 | Driver `better-sqlite3` 13.1.1, con binarios Node-API incluidos. La instalación sin compilar está verificada en la máquina del usuario. | `@libsql/client`, `sql.js`, `node:sqlite`. | RT-06. | Claude · validada | ADR-003, RT-06 |
+| D-57 | Desglose en la tabla `simulation_tiers`, con `CHECK` de la aritmética de cada tramo. Triggers de solo inserción en las tres tablas. | Columna JSON; sin triggers. | Integridad en la propia base de datos (persistencia limpia, D-29). | Claude · validada | ADR-004 |
+| D-58 | Catálogo como configuración tipada validada al arrancar. Las listas cerradas se refuerzan con `CHECK` generados a partir de las constantes de `domain`. | Tablas sembradas. | Una sola fuente, revisable y con tipos; encaja con AC-07 y AC-46. | Claude · validada | ADR-005 |
+| D-59 | Búsqueda con la columna `company_name_search`, normalizada en `domain`, y `LIKE … ESCAPE '!'`; índice `(company_name_search, id)`. | FTS5 con `trigram`; función SQL propia; ICU. | Medido: 8,5 ms por página con 100 000 clientes. | Claude · validada | ADR-006, RT-08 |
+| D-60 | UUID en `TEXT` de 36 caracteres, fechas en `INTEGER` (ms UTC), importes en céntimos y tipos en bps. `CHECK (typeof …)` en las columnas numéricas. Pragmas `foreign_keys = ON`, `WAL`, `synchronous = NORMAL`, `busy_timeout` y `trusted_schema = OFF`. | `BLOB`; fechas en ISO; `STRICT` editado a mano. | Drizzle no admite `STRICT`. | Claude · validada | ADR-007 |
+| D-61 | La proyección se calcula en el navegador con `domain` y `GET /catalog`; no hay `POST /simulations/preview`. | Endpoint de previsualización. | RNF-09 sin red y la misma función que el servidor (RT-02). | Claude · validada | ADR-008 |
+| D-62 | `Result` en el dominio, `AppError` en los casos de uso y un único manejador RFC 9457. | `Result` hasta la ruta; excepciones en el dominio. | Sin lógica en las rutas y sin filtrar detalles internos. | Claude · validada | ADR-009 |
+| D-63 | `buildApp(deps)` sin escuchar, con inyección manual de dependencias. Tests con `app.inject()` y SQLite en memoria. | Contenedor de inyección. | Explícito y sin dependencias. | Claude · validada | ADR-010 |
+| D-64 | Web: stores con signals, `httpResource`, Signal Forms, sin Zone.js y sin estilos de componente (CSP `style-src 'self'`). | NgRx Signal Store; Reactive Forms; `unsafe-inline`. | API estables en Angular 22; menos dependencias. | Claude · validada | ADR-011 |
+| D-65 | La SPA llama a `/api/…` y un proxy (`ng serve` o nginx) quita el prefijo; la API conserva sus rutas literales. | Prefijo en la API; CORS entre orígenes; *hash routing*. | Evita el choque con la ruta `/customers/:id` de la SPA y simplifica CSP y CORS. | Claude · validada | ADR-012 |
+| D-66 | Las reglas se aplican con TypeScript estricto, ESLint (límites de 250 líneas por fichero, 40 por función, complejidad 8, profundidad 3 y 3 parámetros, más fronteras), dependency-cruiser, scripts propios, hooks de Claude Code, lefthook, CI y el subagente revisor. | Solo `CLAUDE.md`. | RT-11; la IA recibe la respuesta en el momento. | Claude · validada | ADR-013 |
+| D-67 | TypeScript 6.0.3 exacto en todo el monorepo. | TypeScript 7 (publicado el 2026-11-12). | Angular 22 y typescript-eslint exigen `<6.1`. | Claude · validada | ADR-014, RT-07 |
+| D-68 | Los e2e del CI se ejecutan una sola vez (D-52) contra la pila de Docker Compose. En local, también contra los servidores de desarrollo, omitiendo los tests `@prod-only`. | e2e contra `ng serve` en CI. | Comprueba la CSP y las cabeceras reales, el proxy `/api` y que el contenedor no corre como root (AC-52, AC-60). | Claude · validada | 03-arquitectura/07-tests §1.3 |
+
+### Validación de la arquitectura y plan (2026-11-12)
+
+| ID | Decisión | Alternativa descartada | Motivo | Quién | Refs |
+|---|---|---|---|---|---|
+| D-69 | **Plazo de trabajo:** el correo dice «lunes, 19 de noviembre, a las 23:00», pero el 19 es jueves. Hasta que la empresa lo aclare, la fecha límite es la más temprana posible, el **lunes 16/11 a las 23:00**. Objetivo: entregar el **domingo 15** con todo lo planificado; el lunes es solo margen. | Trabajar con el jueves 19. | Si la fecha buena fuera el lunes 16, trabajar con el 19 haría llegar tarde. | Usuario | S-05, 04-plan |
+| D-70 | **Build de producción con `inlineCritical: false`.** Verificado con una app nueva de Angular 22.2: con el valor por defecto, el `index.html` lleva un `<style>` en línea y un `<script>` en línea que activa la hoja global (`media="print"` → `all`); la CSP bloquearía el script y la app se vería sin estilos. Con `false`, ninguno de los dos. Además, AC-64: un *fixture* e2e hace fallar cualquier test en el que haya una violación de CSP. | Mantener el valor por defecto y relajar la CSP (`unsafe-inline`). | RNF-SEC-06 sin debilitar la CSP. | Usuario (verificación de Claude) | D-64, D-65, RNF-SEC-06, AC-64 |
+| D-71 | En `CLAUDE.md`, la marca ⚙ («se comprueba automáticamente») solo va en reglas cuya herramienta esté configurada y probada. Mientras no lo esté, la regla lleva ⏳ (pendiente). Al cerrar P0 se actualizan las marcas. | Marcar como automático lo que solo está diseñado. | No afirmar en las reglas algo que todavía no es cierto. | Usuario | D-66, CLAUDE.md |
+| D-72 | El subagente revisor **no tiene `Bash`**: solo `Read`, `Grep` y `Glob`. Quien lo invoca le pasa la lista de ficheros, el diff, los AC y TV del cambio y el resultado de lint y tests. Verificado en la documentación oficial (`code.claude.com/docs/en/sub-agents`): `tools` no documenta patrones con argumentos, y en `disallowedTools` un argumento «still removes the whole tool». | Hook `PreToolUse` para filtrar los comandos del revisor. | Más simple y sin superficie de escritura. | Usuario (verificación de Claude) | D-66, `.claude/agents/revisor.md` |
+| D-73 | **Protocolo de cada parte:** el usuario activa el modo plan → Claude presenta el plan de la parte → aprobación → implementación con TDD donde aplique → lint, tipos y tests en verde → subagente revisor, con todos los P0 y P1 corregidos → diario y trazabilidad al día → commit. | Implementar sin plan aprobado por parte. | Control del usuario y evidencia del proceso. | Usuario | 04-plan §4 |
+| D-74 | **Diario de desarrollo** en `ai-workspace/diario.md`: una entrada corta por parte (lo hecho, lo que falló, las correcciones del usuario o del revisor y las decisiones). | Reconstruir el proceso al final a partir del historial. | Evidencia del desarrollo iterativo (§3.3 del enunciado). | Usuario | `diario.md` |
+| D-75 | **Plan de implementación v1:** 13 partes (P0–P12), con la porción vertical en P1–P6; calendario, puntos de control y orden de aplazamiento de `04-plan-implementacion.md`. | Construir capa por capa (todo el backend y luego todo el frontend). | Tener cuanto antes algo que funcione de punta a punta y que la integración salga pronto. | Claude · pendiente | 04-plan, S-06 |
 
 ## Validaciones del usuario
 
@@ -140,6 +152,7 @@ Prompts literales: [`prompts/03-validacion-especificacion.md`](prompts/03-valida
 | 2026-11-12 | D-47, S-02 | Aprobados | — | — |
 | 2026-11-12 | RNF-21 | Ajustado | Matriz de Node para lint, tests unitarios, de integración y build; e2e una vez con `.nvmrc`. | D-52, D-53 |
 | 2026-11-12 | D-49, D-53 | Aprobadas tal como se propusieron | — | — |
+| 2026-11-12 | D-55…D-68 (arquitectura) | Aprobadas con ajustes | CSP: comprobar `inlineCritical` y añadir un e2e que falle ante cualquier violación de CSP; ⚙ solo con la herramienta configurada; revisor sin `Bash` si `tools` no permite limitarlo. Prompt: [`prompts/06-plan-implementacion.md`](prompts/06-plan-implementacion.md). | D-70, D-71, D-72 |
 
 ## Supuestos
 
@@ -149,6 +162,8 @@ Prompts literales: [`prompts/03-validacion-especificacion.md`](prompts/03-valida
 | S-02 | En producción, la herramienta solo es accesible desde la red corporativa (o tras un proxy con identidad), y todos los comerciales tienen los mismos permisos. | Validado por el usuario (2026-11-12). | D-30, 06-seguridad §3 |
 | S-03 | Fuera de España, el identificador que se pide a un cliente corporativo es su NIF-IVA (o el EIN en EE. UU.). | Validado por el usuario (2026-11-12); pendiente de negocio (PN-04). | D-16 |
 | S-04 | El almacenamiento y las llamadas a la API no influyen en el precio. | Validado por el usuario; pendiente de negocio (PN-01). | D-06 |
+| S-05 | La fecha de entrega no es posterior al **lunes 16/11/2026 a las 23:00**. El correo dice «lunes, 19 de noviembre», pero el 19 es jueves. | Lo fija el usuario; **pendiente de confirmar con la empresa**. | D-69 |
+| S-06 | Disponibilidad para el calendario: jueves 12 de 13:00 a 23:00, viernes 13 y sábado 14 de 09:00 a 23:00, domingo 15 de 09:00 a 20:00, con descansos cortos. Unas **40 h de trabajo programado más 3,5 h de holgura** el domingo. | **Pendiente de validar por el usuario.** | D-75, 04-plan §1 |
 
 ## Preguntas abiertas para negocio
 

@@ -13,6 +13,13 @@ Signal Forms (`form`, estable desde 22.0), `provideZonelessChangeDetection` (des
   la API van a la ruta relativa `/api/…` (ADR-012).
 - **Sin estilos de componente**: no se usan `styles` ni `styleUrl`; solo utilidades de Tailwind y una hoja global.
   Así la CSP puede ser `style-src 'self'` sin `unsafe-inline` (RNF-SEC-06, regla de lint en 09-calidad §3).
+- **Build de producción con `optimization.styles.inlineCritical: false`** (D-70). Verificado el 2026-11-12 con una
+  app nueva de Angular 22.2 compilada en producción:
+  - Con el valor por defecto (`true`), el `index.html` lleva un `<style>` con el CSS crítico y la hoja global con
+    `media="print"`, más un **`<script>` en línea** al final del `body` que la pasa a `all`. Con
+    `script-src 'self'`, ese script se bloquea y la app quedaría **sin estilos**.
+  - Con `false`: 0 `<style>`, 0 `<script>` en línea, ningún atributo `on*` y un `<link rel="stylesheet">` normal.
+  - AC-64 lo vigila en cada ejecución de los e2e.
 
 ## 2. Estructura
 

@@ -4,7 +4,7 @@ Generada a partir de las referencias (`Refs` y `Vectores`) de [`07-criterios-ace
 con un script de verificación. Se regenera cada vez que cambian los criterios. En la fase de implementación se
 añadirá una columna con el test que verifica cada criterio.
 
-Comprobaciones hechas al generarla (2026-11-12, tras la validación del usuario):
+Comprobaciones hechas al generarla (2026-11-12, con AC-64 añadido en la fase 4):
 
 - Todos los RF-01…20, RNF-01…26 (salvo RNF-11, sustituido), RNF-SEC-01…21 y CL-01…60 tienen al menos un criterio.
 - Los 129 vectores definidos (`TV-…`) están referenciados por algún criterio, y todos los referenciados existen.
@@ -86,7 +86,7 @@ El detalle de cada uno está en [`06-seguridad.md`](06-seguridad.md) §2.
 | RNF-SEC-03 | AC-22, AC-42 |
 | RNF-SEC-04 | AC-62 |
 | RNF-SEC-05 | AC-33 |
-| RNF-SEC-06 | AC-52, AC-63 |
+| RNF-SEC-06 | AC-52, AC-63, AC-64 |
 | RNF-SEC-07 | AC-53 |
 | RNF-SEC-08 | AC-51 |
 | RNF-SEC-09 | AC-32 |
@@ -138,6 +138,6 @@ Un criterio puede tener más de un nivel (p. ej. `I/CI`).
 |---|---|---|
 | Unitario (`U`) | AC-01, AC-02, AC-03, AC-04, AC-05, AC-06, AC-07, AC-10, AC-11, AC-12, AC-13, AC-14, AC-15, AC-16, AC-91 | 15 |
 | Integración (`I`) | AC-07, AC-20, AC-21, AC-22, AC-23, AC-24, AC-25, AC-26, AC-27, AC-28, AC-29, AC-30, AC-31, AC-32, AC-33, AC-34, AC-40, AC-41, AC-42, AC-43, AC-44, AC-45, AC-46, AC-47, AC-48, AC-50, AC-51, AC-52, AC-53, AC-54, AC-55, AC-58, AC-59, AC-62 | 34 |
-| E2E (`E`) | AC-52, AC-61, AC-63, AC-70, AC-71, AC-72, AC-73, AC-74, AC-75, AC-76, AC-77, AC-78, AC-79, AC-80, AC-81, AC-82, AC-83, AC-84, AC-85, AC-86, AC-87, AC-88, AC-89, AC-90, AC-91, AC-92 | 26 |
+| E2E (`E`) | AC-52, AC-61, AC-63, AC-64, AC-70, AC-71, AC-72, AC-73, AC-74, AC-75, AC-76, AC-77, AC-78, AC-79, AC-80, AC-81, AC-82, AC-83, AC-84, AC-85, AC-86, AC-87, AC-88, AC-89, AC-90, AC-91, AC-92 | 27 |
 | Pipeline (CI) (`CI`) | AC-55, AC-56, AC-57, AC-60, AC-93, AC-95, AC-96, AC-97, AC-98 | 9 |
 | Revisión (`R`) | AC-59, AC-61, AC-93, AC-94, AC-99 | 5 |

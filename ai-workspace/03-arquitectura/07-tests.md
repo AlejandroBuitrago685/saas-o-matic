@@ -1,6 +1,6 @@
 # 07 · Estrategia de tests
 
-Los 82 criterios de aceptación (spec `07-criterios-aceptacion.md`) y los 129 vectores (`TV-…`) son la lista de lo que
+Los 83 criterios de aceptación (spec `07-criterios-aceptacion.md`) y los 129 vectores (`TV-…`) son la lista de lo que
 hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel» de cada AC.
 
 ## 1. Niveles
@@ -50,6 +50,11 @@ hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel�
   la CSP y las cabeceras reales (AC-52), el proxy `/api` y que el contenedor no corre como root (AC-60).
   - En local también se pueden ejecutar contra los servidores de desarrollo; los tests etiquetados `@prod-only` se omiten.
 - **Accesibilidad:** `@axe-core/playwright` en cada vista (AC-86). Ventana de 360 × 800 para AC-84.
+- **Detector de violaciones de CSP (AC-64, D-70):** un *fixture* automático de Playwright, activo en **todos** los
+  tests que se ejecutan contra la pila de producción.
+  - Registra los eventos `securitypolicyviolation` (con `page.addInitScript`) y los mensajes de consola de CSP.
+  - Al terminar cada test, falla si ha registrado alguno.
+  - Así, una violación de CSP hace fallar cualquier e2e, no solo uno dedicado.
 
 ## 2. Trazabilidad test → AC / TV
 

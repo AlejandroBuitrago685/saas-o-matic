@@ -2,10 +2,10 @@
 
 | Campo | Valor |
 |---|---|
-| Estado | **Borrador v0.1, pendiente de validación** |
+| Estado | **v1.0, aprobada por el usuario con ajustes (2026-11-12):** D-70, D-71 y D-72. |
 | Fecha | 2026-11-12 |
 | Entradas | [`../02-especificacion/`](../02-especificacion/README.md) (v1.0 aprobada) · [`../decisiones.md`](../decisiones.md) |
-| Siguiente fase | Scaffolding: estructura del monorepo, herramientas, hooks y CI, todavía sin funcionalidades |
+| Siguiente fase | Implementación según [`../04-plan-implementacion.md`](../04-plan-implementacion.md), empezando por P0 (scaffolding) |
 
 Define **cómo** se construye lo que la especificación dice que hay que construir. Las decisiones con impacto tienen
 su ADR en [`adr/`](adr/) y su entrada `D-xx` en el registro.

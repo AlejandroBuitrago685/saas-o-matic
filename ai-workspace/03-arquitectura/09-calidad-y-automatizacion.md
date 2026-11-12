@@ -115,10 +115,11 @@ Permisos: `deny` para leer o escribir `.env*` (salvo `.env.example`) y para `git
 `.claude/agents/revisor.md` (ya creado en esta fase). Revisa un cambio contra `CLAUDE.md`, la especificación y
 `06-seguridad.md`, y devuelve los hallazgos ordenados por prioridad, de P0 (bloqueante) a P3 (mejora).
 
-- Herramientas: `Read`, `Grep` y `Glob`, más `Bash` limitado por instrucciones a comandos de git de solo lectura
-  (`git diff`, `git log`, `git show`, `git status`).
-- No está verificado que el campo `tools` del agente admita reglas con argumentos (del tipo `Bash(git diff:*)`). En
-  el scaffolding se comprobará; si no las admite, se reforzará con un hook `PreToolUse` que rechace los comandos que
-  no sean de solo lectura cuando los lance el revisor.
+- Herramientas: **solo `Read`, `Grep` y `Glob`**, sin `Bash` (D-72). La documentación oficial de Claude Code
+  (`code.claude.com/docs/en/sub-agents`, consultada el 2026-11-12) dice que `tools` acepta nombres de herramientas,
+  pero no documenta patrones con argumentos (`Bash(git diff:*)`). En `disallowedTools`, una entrada con argumento
+  «still removes the whole tool». No se puede limitar `Bash` a comandos de solo lectura desde el fichero del agente.
+- Quien lo invoca le pasa la lista de ficheros cambiados, el diff (pegado o como ruta a un fichero), los AC y TV que
+  cubre el cambio y el resultado de lint, tipos y tests.
 - Se usa al cerrar cada parte (definición de hecho en `CLAUDE.md`). Los P0 y P1 se corrigen antes del commit; los P2
   y P3 se corrigen o se registran.
