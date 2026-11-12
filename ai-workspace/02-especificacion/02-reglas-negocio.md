@@ -48,7 +48,7 @@ válida solo si se cumplen todas estas condiciones; si no, el servicio no arranc
 - el primer tramo empieza en 1;
 - los tramos son contiguos (`fromUser` = `toUser` del anterior + 1);
 - solo el último tramo no tiene límite superior (`toUser` = `null`);
-- los precios son enteros ≥ 0.
+- los precios son enteros **mayores que 0** (D-98; tramos gratuitos, pregunta abierta PN-05).
 
 **Tarifa `STANDARD`** (enunciado §2.A):
 

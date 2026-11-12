@@ -45,12 +45,20 @@ describe('AC-07 an invalid tariff is rejected with the datum that fails (RNF-SEC
     [
       'has a decimal price',
       tariff([{ tier: 1, fromUser: 1, toUser: null, unitPriceCents: 999.5 }]),
-      'tariffs[BROKEN].tiers[0].unitPriceCents: must be an integer ≥ 0 (cents)',
+      'tariffs[BROKEN].tiers[0].unitPriceCents: must be an integer > 0 (cents, D-98)',
     ],
     [
       'has a negative price',
       tariff([{ tier: 1, fromUser: 1, toUser: null, unitPriceCents: -1 }]),
-      'tariffs[BROKEN].tiers[0].unitPriceCents: must be an integer ≥ 0 (cents)',
+      'tariffs[BROKEN].tiers[0].unitPriceCents: must be an integer > 0 (cents, D-98)',
+    ],
+    [
+      'has a free tier (D-98: prices must be > 0 in this delivery, PN-05)',
+      tariff([
+        { tier: 1, fromUser: 1, toUser: 10, unitPriceCents: 1000 },
+        { tier: 2, fromUser: 11, toUser: null, unitPriceCents: 0 },
+      ]),
+      'tariffs[BROKEN].tiers[1].unitPriceCents: must be an integer > 0 (cents, D-98)',
     ],
     [
       'ends a tier before it starts',
