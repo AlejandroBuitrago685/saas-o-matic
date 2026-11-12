@@ -228,8 +228,8 @@ Los prompts literales están en [`prompts/`](prompts/) y las decisiones, en [`de
 - `main` protegida, a petición del usuario: PR obligatoria y los 4 checks en verde para integrar, sin aprobaciones
   (D-88). La marca de la auditoría pasa a ⚙ en `CLAUDE.md`.
 
-**Tiempo:** estimado 4,5 h · real ≈ 1 h 45 min de trabajo (hora peninsular, UTC+1: 14:12–15:00, 15:25–15:30 y
-19:00–19:45; el reloj del equipo y los commits locales marcan UTC+0, una hora menos), en 5,5 h de
+**Tiempo:** estimado 4,5 h · real ≈ 1 h 45 min de trabajo (hora de Canarias, UTC+0: 13:12–14:00, 14:25–14:30 y
+18:00–18:45), en 5,5 h de
 reloj por dos pausas: mi parada a mitad de turno y el límite de uso de la sesión.
 
 ---
@@ -270,8 +270,8 @@ reloj por dos pausas: mi parada a mitad de turno y el límite de uso de la sesi�
   - La quité cambiando la estructura, en vez de escribir un test artificial.
   - En el slider evité igual una aserción `as`, que el lint rechazaba con razón.
 - **`vitest --project` no mide la cobertura** (resuelve las rutas desde el paquete). Se mide sin filtro, como en el CI.
-- **Horas del diario de P0 sin zona horaria:** las calculé en horario peninsular, pero el equipo y los commits locales
-  marcan UTC+0. Ahora lo indica.
+- **Horas del diario de P0 en otra zona horaria:** las calculé en horario peninsular, pero el usuario trabaja en
+  Canarias (UTC+0), como marcan el equipo y los commits. Corregidas a su hora.
 
 **Correcciones del usuario**
 - Concreción de D-34 (D-94): Cc y Cf rechazados; longitud en puntos de código.
@@ -304,4 +304,4 @@ reloj por dos pausas: mi parada a mitad de turno y el límite de uso de la sesi�
 
 **Decisiones:** D-90 a D-96 (D-90…D-93 aprobadas; D-94 del usuario); D-97 (calendario v2).
 
-**Tiempo:** estimado 2,25 h · real ≈ 1 h (20:12–21:15, hora peninsular), revisión y cierre incluidos.
+**Tiempo:** estimado 2,25 h · real ≈ 1 h (19:12–20:15, hora de Canarias), revisión y cierre incluidos.

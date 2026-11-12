@@ -6,7 +6,7 @@ Prompts literales enviados por el usuario a Claude Code (Opus 5.5).
 - Nota: el mensaje trae dos respuestas incompatibles sobre la zona horaria; Claude pide aclaración antes de tocar
   los documentos.
 - El mensaje 2 se envió a mitad de turno. No contiene IPs, usuarios ni rutas del servidor.
-Son dos mensajes, en orden. El texto de cada uno está tal cual se envió, sin editar.
+Son tres mensajes, en orden. El texto de cada uno está tal cual se envió, sin editar.
 -->
 
 ## Mensaje 1 · Revisión del cierre de P1
@@ -33,3 +33,7 @@ Hosting de la demo, con lo que he revisado en el servidor:
 - Rate limiting: entre el cliente y la API hay Cloudflare y dos nginx. Asegúrate de que la API ve la IP real del cliente; si no, el límite por IP no sirve.
 
 Plantéalo en P11 con su plan y lo apruebo antes de tocar nada en el servidor.
+
+## Mensaje 3 · Aclaración de la zona horaria
+
+Perdona, se me fueron las dos líneas. Estoy en Canarias (UTC+0): ajusta los documentos a esa hora. Después sube los dos commits y pídeme el merge de la PR #3 cuando el CI esté en verde.

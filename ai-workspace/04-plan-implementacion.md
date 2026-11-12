@@ -21,13 +21,13 @@ cerraron dentro de su estimación, así que las estimaciones de §3 se mantienen
 
 ## 2. Calendario (v2, recalculado al cerrar P1 · D-97)
 
-Horas en **horario peninsular (UTC+1)**, como el resto del plan (el reloj del equipo marca UTC+0, una hora menos). Jornadas de **09:00 a 19:00 con una hora para comer** (9 h; supuesto S-07, por
+Horas locales del usuario, en **Canarias (UTC+0)**: la misma hora que marcan el equipo y los commits. Jornadas de **09:00 a 19:00 con una hora para comer** (9 h; supuesto S-07, por
 validar). Fecha límite: **jueves 19/11 a las 23:00** (S-05 resuelto). Objetivo: **entregar el lunes 16**; el martes
 17 es margen y el miércoles y el jueves no se planifican.
 
 | Día | Franja | Parte | Hito / punto de control |
 |---|---|---|---|
-| **Jue 12** | 14:12–21:30 | P0 y P1 (hechas, con dos pausas) | |
+| **Jue 12** | 13:12–20:30 | P0 y P1 (hechas, con dos pausas) | |
 | **Vie 13** | 09:00–11:00 | **P2** Dominio: identificador fiscal | El usuario pasa el alias SSH del VPS y el subdominio de la demo antes de las 14:00 (D-99) |
 | | 11:00–13:30 y 14:30–15:30 | **P3** Contrato y base de la API | |
 | | 15:30–18:00 | **P4** API de la porción vertical | |
@@ -44,7 +44,7 @@ validar). Fecha límite: **jueves 19/11 a las 23:00** (S-05 resuelto). Objetivo:
 | | 15:00–17:30 | **P12** README, clon limpio y revisión final | **C5 · lun 17:30** |
 | | 17:30–19:00 | Holgura (1,5 h) | ≈ 19:00 **Entrega** |
 | **Mar 17** | Todo el día | Solo margen | |
-| **Jue 19** | — | — | Límite de la empresa: 23:00 |
+| **Jue 19** | — | — | Límite de la empresa: 23:00 (hora de la empresa: si es peninsular, son las 22:00 en Canarias) |
 
 Esfuerzo pendiente 33,5 h (P11 reestimada a 3 h por D-99) frente a 36 h programadas: **2,5 h de holgura** antes del lunes a las 19:00, más el martes.
 

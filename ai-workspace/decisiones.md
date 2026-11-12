@@ -193,7 +193,7 @@ Prompts literales: [`prompts/03-validacion-especificacion.md`](prompts/03-valida
 | 2026-11-12 | D-88 (detalles añadidos por Claude) y D-89 | Aprobados | Prompt: [`prompts/09-p1-p2-plan.md`](prompts/09-p1-p2-plan.md), mensaje 1. | — |
 | 2026-11-12 | Plan conjunto de P1 y P2 | Aprobado, con tres respuestas | D-34 concretada (D-94); S-05 resuelto: entrega el lunes 16, el martes 17 como margen y P2 el viernes; recalcular el calendario al cerrar P1. Prompt: mensaje 2. | D-94, D-69 |
 | 2026-11-12 | D-90…D-93 | Aprobadas | Para P2: medir el barrido de AC-14 y, si pasa de unos 2 s, test rápido representativo y barrido completo solo en el CI. Prompt: mensaje 3. | D-90 |
-| 2026-11-12 | D-94 (sustitutos sueltos), D-95, D-96, D-97 y S-07 | Aprobados | PN-05 resuelto para esta entrega (D-98); hosting de la demo (D-99); zona horaria de los documentos, **pendiente de aclarar** (dos respuestas incompatibles). Prompt: [`prompts/10-p1-cierre.md`](prompts/10-p1-cierre.md). | D-98, D-99 |
+| 2026-11-12 | D-94 (sustitutos sueltos), D-95, D-96, D-97 y S-07 | Aprobados | PN-05 resuelto para esta entrega (D-98); hosting de la demo (D-99); zona horaria: el mensaje traía dos respuestas incompatibles; el usuario aclaró después **Canarias (UTC+0)** y los documentos usan esa hora. Prompt: [`prompts/10-p1-cierre.md`](prompts/10-p1-cierre.md). | D-98, D-99 |
 
 ## Supuestos
 
@@ -203,9 +203,9 @@ Prompts literales: [`prompts/03-validacion-especificacion.md`](prompts/03-valida
 | S-02 | En producción, la herramienta solo es accesible desde la red corporativa (o tras un proxy con identidad), y todos los comerciales tienen los mismos permisos. | Validado por el usuario (2026-11-12). | D-30, 06-seguridad §3 |
 | S-03 | Fuera de España, el identificador que se pide a un cliente corporativo es su NIF-IVA (o el EIN en EE. UU.). | Validado por el usuario (2026-11-12); pendiente de negocio (PN-04). | D-16 |
 | S-04 | El almacenamiento y las llamadas a la API no influyen en el precio. | Validado por el usuario; pendiente de negocio (PN-01). | D-06 |
-| S-05 | La fecha de entrega no es posterior al **lunes 16/11/2026 a las 23:00**. El correo dice «lunes, 19 de noviembre», pero el 19 es jueves. | **Resuelto (2026-11-12):** la empresa confirma el jueves 19/11 a las 23:00. | D-69 |
+| S-05 | La fecha de entrega no es posterior al **lunes 16/11/2026 a las 23:00**. El correo dice «lunes, 19 de noviembre», pero el 19 es jueves. | **Resuelto (2026-11-12):** la empresa confirma el jueves 19/11 a las 23:00 (hora de la empresa: si es peninsular, son las 22:00 en Canarias). | D-69 |
 | S-06 | Disponibilidad para el calendario: jueves 12 de 13:00 a 23:00, viernes 13 y sábado 14 de 09:00 a 23:00, domingo 15 de 09:00 a 20:00, con descansos cortos. Unas **40 h de trabajo programado más 3,5 h de holgura** el domingo. | Validado por el usuario (2026-11-12). | D-75, 04-plan §1 |
-| S-07 | Disponibilidad del calendario v2: de viernes 13 a lunes 16, de 09:00 a 19:00 con una hora para comer (9 h al día); el martes 17, entero como margen. Horas en horario peninsular, como el resto del plan. | Validado por el usuario (2026-11-12). | D-97, 04-plan §1 |
+| S-07 | Disponibilidad del calendario v2: de viernes 13 a lunes 16, de 09:00 a 19:00 con una hora para comer (9 h al día); el martes 17, entero como margen. Horas locales del usuario (Canarias, UTC+0). | Validado por el usuario (2026-11-12). | D-97, 04-plan §1 |
 
 ## Preguntas abiertas para negocio
 
