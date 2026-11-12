@@ -91,6 +91,7 @@ Ejemplo de la fuente oficial: 12345678 mod 23 = 14 → `Z` → `12345678Z`.
 cuándo el control es letra o dígito (verificado en el texto consolidado). Se usa el algoritmo de uso general,
 **contrastado con un NIF real publicado por la AEAT**: `Q2826000H`, que figura en la página *Estructura y funciones* de
 su sede electrónica (`https://sede.agenciatributaria.gob.es/Sede/gobierno-abierto/transparencia/informacion-institucional-organizativa-planificacion/estructura-funciones.html`).
+Además, el algoritmo se contrasta con los CIF de cuatro empresas cotizadas (TV-ES-31…34, D-50).
 Riesgo residual documentado en RT-03 y D-13.
 
 Sean `d1 … d7` los siete dígitos:
@@ -163,8 +164,17 @@ Irlanda del Norte (`XI`) queda fuera de alcance: con país `GB`, un valor que em
 
 ## 5. Vectores de prueba
 
-Todos los caracteres de control se han calculado con un script independiente. `TV-ES-13` es un caso real publicado
-por la AEAT. Los demás son identificadores sintéticos: no se usan identificadores de empresas o personas reales.
+Todos los caracteres de control se han calculado con un script independiente. `TV-ES-13` (AEAT) y `TV-ES-31…34`
+(empresas cotizadas, D-50) son NIF reales de personas jurídicas, publicados por ellas mismas o por registros
+públicos. Nunca se usan identificadores de personas físicas reales. El resto de vectores son sintéticos.
+
+Fuentes de los CIF reales (consultadas el 2026-11-12):
+
+- Telefónica y Banco Santander: consultas por NIF de la CNMV
+  (`https://www.cnmv.es/portal/Consultas/ee/informaciongobcorp?nif=A28015865`,
+  `https://www.cnmv.es/portal/ancv/isin?nif=A39000013`).
+- Inditex y Mercadona: sus registros LEI (`https://lei.bloomberg.com/leis/view/549300TTCXZOGZM2EY83`,
+  `https://lei.bloomberg.com/leis/view/959800G1STVUPYU6NU22`).
 
 ### 5.1 España
 
@@ -200,6 +210,10 @@ por la AEAT. Los demás son identificadores sintéticos: no se usan identificado
 | TV-ES-28 | `K1234567L`, `L1234567L`, `M1234567L` | Inválido | `UNSUPPORTED_TYPE` | RF-03, D-12 |
 | TV-ES-29 | `B1234567` | Inválido | `INVALID_FORMAT` (8 caracteres) | RF-03 |
 | TV-ES-30 | `AB123456789` (NIF-IVA francés con país ES) | Inválido | `INVALID_FORMAT` | RF-02, CL-27 |
+| TV-ES-31 | `A28015865` | Válido | CIF real: Telefónica, S.A. | RF-03, CL-21, D-50 |
+| TV-ES-32 | `A15075062` | Válido | CIF real: Industria de Diseño Textil, S.A. (Inditex) | RF-03, CL-21, D-50 |
+| TV-ES-33 | `A46103834` | Válido | CIF real: Mercadona, S.A. | RF-03, CL-21, D-50 |
+| TV-ES-34 | `A39000013` | Válido | CIF real: Banco Santander, S.A. | RF-03, CL-21, D-50 |
 
 ### 5.2 Normalización
 

@@ -22,7 +22,8 @@ multi-divisa para clientes corporativos. Es una prueba técnica: el proceso de i
 4. **Idioma:** documentación en español; código, identificadores y mensajes de commit en inglés,
    siguiendo [Conventional Commits](https://www.conventionalcommits.org/).
 5. **Cierre de cada paso:** resumen corto con qué se ha hecho, qué se ha decidido y qué dudas quedan.
-6. **Prompts como evidencia:** cada prompt del usuario se guarda literal en `ai-workspace/prompts/`, uno por fase.
+6. **Prompts como evidencia:** cada prompt del usuario se guarda literal en `ai-workspace/prompts/`, un fichero por
+   prompt, numerados en orden (`01-`, `02-`, …).
 7. **Registro de decisiones:** toda decisión de diseño se anota en `ai-workspace/decisiones.md` (`D-xx`) con la
    alternativa descartada, el motivo y quién la toma. Las de Claude que requieren validación se marcan como
    `Claude · pendiente`.
@@ -37,7 +38,7 @@ Los documentos de fase se numeran (`00-`, `01-`, …). Los transversales (`decis
 |---|---|---|
 | `RF-xx`, `RNF-xx`, `RNF-SEC-xx` | Requisitos | `01-analisis.md`, `02-especificacion/01-alcance.md`, `02-especificacion/06-seguridad.md` |
 | `CL-xx` | Casos límite | `01-analisis.md` §5, `02-especificacion/07-criterios-aceptacion.md` §0 |
-| `TV-…` | Vectores de prueba | `02-especificacion/02-reglas-negocio.md`, `02-especificacion/03-validacion-fiscal.md` |
+| `TV-…` | Vectores de prueba | `02-especificacion/02-reglas-negocio.md`, `02-especificacion/03-validacion-fiscal.md`, `02-especificacion/05-frontend.md` (slider) |
 | `AC-xx` | Criterios de aceptación | `02-especificacion/07-criterios-aceptacion.md` |
 | `D-xx`, `S-xx`, `PN-xx` | Decisiones, supuestos, preguntas para negocio | `decisiones.md` |
 

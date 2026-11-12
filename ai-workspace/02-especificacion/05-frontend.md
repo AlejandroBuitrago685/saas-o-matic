@@ -1,6 +1,6 @@
 # 05 · Frontend
 
-Cubre RF-06, RF-12…RF-19, RNF-07…RNF-09 y RNF-13. Decisiones: D-05, D-19…D-28 y D-35.
+Cubre RF-06, RF-12…RF-19, RNF-07…RNF-09 y RNF-13. Decisiones: D-05, D-19…D-28, D-35, D-48, D-49 y D-51.
 
 ## 1. Principios
 
@@ -111,12 +111,64 @@ Comportamiento:
 
 | Control | Regla |
 |---|---|
-| Usuarios activos | Slider y campo numérico sincronizados (D-04), de 1 a 10 000, valor inicial 1. El slider usa la escala por segmentos de D-05; el campo numérico admite cualquier entero del rango y, si el valor no cae en una posición del slider, este se coloca en la más cercana sin cambiar el valor. |
+| Usuarios activos | Slider y campo numérico sincronizados (D-04), de 1 a 10 000, valor inicial 1. El slider usa la escala de §3.4.1; el campo numérico admite cualquier entero del rango y, si el valor no cae en una posición del slider, este se coloca en la más cercana sin cambiar el valor. |
 | Almacenamiento (GB) | Campo numérico, de 0 a 100 000, valor inicial 0. Etiqueta «informativo, no afecta al precio». |
 | Llamadas a la API al mes | Campo numérico, de 0 a 1 000 000 000, valor inicial 0. La misma etiqueta. |
 
 Si un valor está fuera de rango o no es entero: error en el propio campo, la proyección mantiene el último valor
 válido y «Guardar simulación» queda deshabilitado. El valor nunca se corrige en silencio.
+
+#### 3.4.1 Escala del slider (D-05, D-48, D-49)
+
+La conversión entre posición y número de usuarios es una **función pura**, sin estado y sin dependencias de la vista,
+con dos operaciones:
+
+- `aUsuarios(p)`, para posiciones enteras `p` de 0 a 279:
+
+  | Posiciones | Usuarios | Paso | Parte del recorrido |
+  |---|---|---|---|
+  | 0–99 | `p + 1` → 1…100 | 1 | 35,7 % |
+  | 100–189 | `100 + (p − 99) × 10` → 110…1 000 | 10 | 32,1 % |
+  | 190–279 | `1 000 + (p − 189) × 100` → 1 100…10 000 | 100 | 32,1 % |
+
+- `aPosición(n)`, para cualquier entero `n` de 1 a 10 000: la posición cuyo valor está más cerca de `n`. En caso de
+  empate, la menor.
+
+Propiedades que deben cumplir los tests:
+
+1. `aUsuarios` es estrictamente creciente, con `aUsuarios(0) = 1` y `aUsuarios(279) = 10 000`.
+2. **Ida y vuelta desde la posición:** `aPosición(aUsuarios(p)) = p` para toda `p`.
+3. **Ida y vuelta desde el valor:** `aUsuarios(aPosición(n)) = n` para todo valor `n` que corresponda a una posición.
+   En particular, **10, 11, 50 y 51 se alcanzan exactamente**.
+4. Para cualquier `n`, la diferencia entre `n` y el valor de su posición no supera medio paso de su segmento (0, 5 o 50).
+
+Teclado: las flechas mueven una posición; Inicio y Fin van a las posiciones 0 y 279; Re Pág y Av Pág mueven diez
+posiciones.
+
+**Lectores de pantalla (Must, D-48):** el slider tiene la etiqueta «Usuarios activos» y `aria-valuetext` =
+«{n} usuarios», donde `n` es el valor real del campo numérico, aunque no corresponda a ninguna posición. Sin ese
+texto, un lector de pantalla anunciaría el número de posición (por ejemplo, «14»), que no significa nada para el usuario.
+
+Vectores de prueba (calculados y comprobados de forma exhaustiva para las 280 posiciones y los 10 000 valores):
+
+| ID | Entrada | Resultado | Refs |
+|---|---|---|---|
+| TV-SL-01 | `aUsuarios(0)` | 1 | RF-16, CL-48 |
+| TV-SL-02 | `aUsuarios(9)` | 10 | RF-16, CL-58 |
+| TV-SL-03 | `aUsuarios(10)` | 11 | RF-16, CL-58 |
+| TV-SL-04 | `aUsuarios(49)` | 50 | RF-16, CL-58 |
+| TV-SL-05 | `aUsuarios(50)` | 51 | RF-16, CL-58 |
+| TV-SL-06 | `aUsuarios(99)` | 100 | RF-16, D-49 |
+| TV-SL-07 | `aUsuarios(100)` | 110 | RF-16, D-49 |
+| TV-SL-08 | `aUsuarios(189)` | 1 000 | RF-16, D-49 |
+| TV-SL-09 | `aUsuarios(190)` | 1 100 | RF-16, D-49 |
+| TV-SL-10 | `aUsuarios(279)` | 10 000 | RF-16, CL-48 |
+| TV-SL-11 | `aPosición(105)` | 99 (valor 100; empate, se elige la menor) | RF-16, D-49 |
+| TV-SL-12 | `aPosición(106)` | 100 (valor 110) | RF-16, D-49 |
+| TV-SL-13 | `aPosición(995)` | 188 (valor 990; empate) | RF-16, D-49 |
+| TV-SL-14 | `aPosición(1049)` | 189 (valor 1 000) | RF-16, D-49 |
+| TV-SL-15 | `aPosición(1051)` | 190 (valor 1 100) | RF-16, D-49 |
+| TV-SL-16 | `aPosición(9999)` | 279 (valor 10 000) | RF-16, CL-48 |
 
 **Proyección** (RF-16, D-11), siempre visible junto a los controles:
 
@@ -182,17 +234,27 @@ Además, para cada divisa ofrecida, el valor debe ser un número finito mayor qu
 deshabilita esa divisa (CL-31). Si falla cualquiera de las condiciones 1 a 4, la respuesta entera se descarta. Los
 campos que no se usan se ignoran.
 
-### 4.4 Estados de los tipos de cambio
+### 4.4 Estados de los tipos de cambio (D-23, D-51)
 
-| Estado | Cuándo | Qué se ve |
-|---|---|---|
-| Cargando | Aún no hay tipos válidos y hay una petición en curso. | Divisas distintas de EUR deshabilitadas con «Cargando tipos…». Todo funciona en EUR (CL-32). |
-| Vigentes | Tipos válidos de hace menos de 1 h. | Indicador «Tipos del {fecha de `time_last_update_utc`}». |
-| Refrescando | Tipos caducados y petición en curso. | Se siguen usando los anteriores, sin bloquear nada. |
-| Desactualizados | Falla el refresco y los tipos guardados tienen menos de 48 h. | «Tipos desactualizados del {fecha}» y botón «Reintentar» (CL-60). |
-| No disponibles | No hay tipos válidos. | Solo EUR. Si había otra divisa seleccionada, se pasa a EUR con el aviso «No se han podido obtener los tipos de cambio; importes en EUR», y botón «Reintentar» (CL-30). |
+**El fallback nunca oculta el error.** El estado de los tipos se muestra siempre en un **indicador fijo de la
+cabecera**, junto al selector de divisa. Se ve **sea cual sea la divisa seleccionada**, también en EUR, y no es una
+notificación que desaparece. Cada cambio de estado se anuncia a los lectores de pantalla sin interrumpir.
 
-Si se cambia de divisa con una petición en curso, se muestra la última divisa elegida en cuanto haya tipos (CL-33).
+| Estado | Cuándo | Indicador (siempre visible) | Efecto en importes y selector |
+|---|---|---|---|
+| Cargando | Aún no hay tipos válidos y hay una petición en curso. | «Cargando tipos de cambio…» con un indicador de actividad. | Las divisas distintas de EUR están deshabilitadas; todo funciona en EUR (CL-32). |
+| Vigentes | Tipos válidos de hace menos de 1 h. | «Tipos del {fecha de `time_last_update_utc`}». | Todas las divisas válidas, disponibles. |
+| Refrescando | Tipos caducados y petición en curso. | «Tipos del {fecha}» + «Actualizando…» con indicador de actividad. | Se siguen usando los anteriores, sin bloquear nada. |
+| Desactualizados | Falla el refresco y los tipos guardados tienen menos de 48 h. | Aviso «Tipos desactualizados del {fecha}» y botón **«Reintentar»** (CL-60). | Se usan los tipos guardados, con `≈` y la nota de importes orientativos. |
+| Error | No hay tipos válidos (fallo de red, *timeout*, `4xx`/`5xx` incluido `429`, o respuesta que no supera §4.3). | Aviso «No se han podido obtener los tipos de cambio» y botón **«Reintentar»** (CL-30). | Solo EUR. Si había otra divisa seleccionada, se pasa a EUR y el aviso lo dice: «…; importes en EUR». |
+
+Reglas de transición:
+
+- «Reintentar» lanza una petición al momento, aunque se haya recibido un `429` (la restricción de 20 min solo afecta
+  a los intentos automáticos). Mientras dura, el indicador pasa a «Cargando…» o «Actualizando…». Si va bien → Vigentes;
+  si falla → vuelve a Error o a Desactualizados con el mismo aviso.
+- Si se cambia de divisa con una petición en curso, se muestra la última divisa elegida en cuanto haya tipos (CL-33).
+- Cada estado (Cargando, Error y Desactualizados) tiene su propio test e2e con la API simulada (AC-80, AC-81, AC-82).
 
 ### 4.5 Conversión y formato (D-20)
 
@@ -211,9 +273,9 @@ Si se cambia de divisa con una petición en curso, se muestra la última divisa 
 - Listados: una columna por debajo de 640 px, dos desde 640 px y tres desde 1 024 px en el dashboard.
 - Zonas táctiles de al menos 44 × 44 px.
 - Todos los controles tienen etiqueta. Los errores están asociados a su campo y el foco va al primer error al enviar.
-- **Slider:**
-  - Operable con teclado: flechas (un paso del segmento actual), Inicio y Fin (mínimo y máximo), Re Pág y Av Pág (diez pasos).
-  - Su texto accesible es «{n} usuarios».
+- **Slider** (§3.4.1):
+  - Operable con teclado: flechas (una posición), Inicio y Fin (mínimo y máximo), Re Pág y Av Pág (diez posiciones).
+  - `aria-valuetext` = «{n} usuarios». Esto es **Must** (D-48), aunque el resto de este apartado sea Should.
 - El total de la proyección está en una región que los lectores de pantalla anuncian sin interrumpir, como mucho cada 500 ms.
 - Contraste WCAG 2.1 AA (4,5:1 en texto normal), foco siempre visible, ninguna información solo por color, y se
   respeta `prefers-reduced-motion`.

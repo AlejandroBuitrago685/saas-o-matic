@@ -15,7 +15,7 @@ RF-18 en adelante y RNF-20 en adelante son **nuevos en esta fase**.
 |---|---|---|---|
 | RF-01 | Alta de cliente corporativo (`POST /customers`). | Must | D-07, D-17, D-34 |
 | RF-02 | Validación estricta del identificador fiscal para cualquier país de la lista. | Must | D-14, D-15, D-16 |
-| RF-03 | España: algoritmo oficial de control para DNI, NIE y CIF. | Must | D-12, D-13 |
+| RF-03 | España: algoritmo oficial de control para DNI, NIE y CIF. | Must | D-12, D-13, D-50 |
 | RF-04 | Búsqueda de clientes por nombre o identificador fiscal (`GET /customers?q=`). | Must | D-27 |
 | RF-05 | Detalle de cliente (`GET /customers/{id}`). | Must | — |
 | RF-06 | Formulario de alta de cliente en la interfaz. | Must | D-28 |
@@ -24,11 +24,11 @@ RF-18 en adelante y RNF-20 en adelante son **nuevos en esta fase**.
 | RF-09 | Impuesto del país del cliente sobre la base. | Must | D-09, D-10 |
 | RF-10 | Guardar el cálculo completo de la simulación. | Must | D-18, D-46 |
 | RF-11 | Historial de simulaciones de un cliente. | Must | — |
-| RF-12 | Tipos de cambio desde una API pública (`open.er-api.com`). | Must | D-22, D-23 |
+| RF-12 | Tipos de cambio desde una API pública (`open.er-api.com`), con los estados de carga, error y tipos desactualizados siempre visibles. | Must | D-22, D-23, D-51 |
 | RF-13 | Selector de divisa que convierte al momento todos los importes. | Must | D-19, D-20, D-21 |
 | RF-14 | Vista Buscador y Dashboard. | Must | D-25, D-27 |
 | RF-15 | Vista Detalle del cliente (tarjetas responsive + historial). | Must | D-19 |
-| RF-16 | Simulador interactivo con proyección en tiempo real. | Must | D-04, D-05, D-11, D-28 |
+| RF-16 | Simulador interactivo con proyección en tiempo real. | Must | D-04, D-05, D-11, D-28, D-48, D-49 |
 | RF-17 | Guardar la simulación proyectada desde el simulador. | Must | — |
 | RF-18 | **(nuevo)** Mostrar la atribución del proveedor de tipos de cambio, como exigen sus términos de uso. | Must | D-24 |
 | RF-19 | **(nuevo)** Métricas agregadas en el dashboard: número de clientes, número de simulaciones e importe medio simulado (`GET /stats`). | Could | D-25, D-26 |
@@ -50,7 +50,7 @@ RF-18 en adelante y RNF-20 en adelante son **nuevos en esta fase**.
 | RNF-10 | Código limpio y modular. | Must | — |
 | RNF-11 | ~~Seguridad genérica~~ **Sustituido** por RNF-SEC-01…21 ([`06-seguridad.md`](06-seguridad.md)). | — | D-40 |
 | RNF-12 | Tests unitarios, de integración y e2e. | Must | D-01 |
-| RNF-13 | Accesibilidad básica (WCAG 2.1 AA en contraste, teclado y etiquetas). | Should | — |
+| RNF-13 | Accesibilidad básica (WCAG 2.1 AA en contraste, teclado y etiquetas). El `aria-valuetext` del slider es **Must** (D-48). | Should | D-48 |
 | RNF-14 | Funciona en Windows, macOS y Linux. | Must | D-03 |
 | RNF-15 | `/ai-workspace` con specs y planes. | Must | D-02 |
 | RNF-16 | Documentación de arquitectura y directrices para la IA. | Must | — |
@@ -58,7 +58,7 @@ RF-18 en adelante y RNF-20 en adelante son **nuevos en esta fase**.
 | RNF-18 | README para levantar todo en local en pocos pasos. | Must | D-36 |
 | RNF-19 | Repositorio público en GitHub. | Must | D-36 |
 | RNF-20 | **(nuevo)** Docker Compose como alternativa de arranque. | Should | D-36 |
-| RNF-21 | **(nuevo)** CI en GitHub Actions con matriz Node 22/24/26: lint, tests unitarios, de integración y e2e, y auditoría de dependencias. | Must | D-36, D-37 |
+| RNF-21 | **(nuevo)** CI en GitHub Actions: lint, tests unitarios, tests de integración y build en una matriz con Node 22, 24 y 26 (en Linux); e2e y auditoría de dependencias una sola vez, con la versión de `.nvmrc`; prueba de humo en Windows y macOS. | Must | D-36, D-37, D-52, D-53 |
 | RNF-22 | **(nuevo)** Demo desplegada con URL pública, sujeta a RNF-SEC-20. | Should | D-36, D-47 |
 | RNF-23 | **(nuevo)** `engines` con el rango de Node que admite Angular y `.nvmrc`. | Must | D-37, D-38 |
 | RNF-24 | **(nuevo)** Health check (`GET /health`) para Docker, CI y la demo. | Should | D-46 |

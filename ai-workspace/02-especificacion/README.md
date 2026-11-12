@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |---|---|
-| Estado | **Borrador v0.1, pendiente de aprobación** |
+| Estado | **v1.0, aprobada por el usuario con condiciones (2026-11-12).** Quedan pendientes D-49 y D-53. |
 | Fecha | 2026-11-12 |
 | Entradas | [`../01-analisis.md`](../01-analisis.md) (ambigüedades cerradas) · [`../decisiones.md`](../decisiones.md) |
 | Siguiente fase | `03-arquitectura` (tablas, carpetas, librerías y dónde se calcula la proyección) |
@@ -31,7 +31,7 @@ esquema de base de datos, estructura de carpetas y librerías concretas quedan p
 | `RNF-SEC-xx` | Requisito de seguridad (sustituye a RNF-11) | `06-seguridad.md` |
 | `CL-xx` | Caso límite | `01-analisis.md` (CL-01…51) y `07-criterios-aceptacion.md` §0 (CL-52…60, nuevos) |
 | `D-xx`, `S-xx`, `PN-xx` | Decisión, supuesto, pregunta abierta para negocio | `decisiones.md` |
-| `TV-<área>-xx` | Vector de prueba (entrada y salida esperada) | `02-reglas-negocio.md`, `03-validacion-fiscal.md` |
+| `TV-<área>-xx` | Vector de prueba (entrada y salida esperada) | `02-reglas-negocio.md`, `03-validacion-fiscal.md`, `05-frontend.md` (slider) |
 | `AC-xx` | Criterio de aceptación | `07-criterios-aceptacion.md` |
 | `T-xx` | Amenaza del modelo STRIDE | `06-seguridad.md` |
 
@@ -57,3 +57,21 @@ Lo que se ha corregido o concretado al verificar fuentes durante esta fase:
 7. **RNF-11 sustituido** por RNF-SEC-01…21 (D-40).
 8. **Requisitos nuevos:** RF-18…20 y RNF-20…26 (ver `01-alcance.md`).
 9. **Casos límite nuevos:** CL-52…60.
+
+## Cambios tras la validación (2026-11-12)
+
+El usuario aprobó las decisiones pendientes con condiciones
+([`../prompts/03-validacion-especificacion.md`](../prompts/03-validacion-especificacion.md); registro en
+[`../decisiones.md`](../decisiones.md) «Validaciones del usuario»):
+
+1. **Escala del slider como función pura** (D-48, D-49): definición exacta, propiedades que deben cumplir los tests,
+   16 vectores `TV-SL` y `aria-valuetext` como Must ([`05-frontend.md`](05-frontend.md) §3.4.1, AC-91). Al
+   concretarla se vio que, con los pasos aprobados, los segmentos ocupan el 35,7/32,1/32,1 % del recorrido, no el
+   50/30/20 % que decía D-05: corregido en D-49, **pendiente de validar**.
+2. **CIF reales** (D-50): Telefónica, Inditex, Mercadona y Banco Santander como `TV-ES-31…34`
+   ([`03-validacion-fiscal.md`](03-validacion-fiscal.md) §5.1, AC-12).
+3. **Estados de la API de tipos siempre visibles** (D-51): indicador fijo en la cabecera, visible también con EUR
+   seleccionado, con «Reintentar» en el error y en los tipos desactualizados, y un e2e por estado
+   ([`05-frontend.md`](05-frontend.md) §4.4, AC-80…82).
+4. **CI** (D-52, D-53): matriz de Node solo para lint, tests unitarios, de integración y build; e2e y auditoría una
+   vez. Se añade una prueba de humo en Windows y macOS (D-53, **pendiente de validar**) (RNF-21, AC-95, AC-96).

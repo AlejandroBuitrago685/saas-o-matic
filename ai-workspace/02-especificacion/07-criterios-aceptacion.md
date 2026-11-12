@@ -80,10 +80,10 @@ Estos criterios son la base de los tests: cada test citará su `AC-xx`.
 **AC-11 · NIE** · Refs: RF-03, CL-20 · Nivel: U · Vectores: TV-ES-08…12
 - Ídem con tipo `NIE`.
 
-**AC-12 · CIF** · Refs: RF-03, CL-20…CL-24, CL-56, CL-57 · Nivel: U · Vectores: TV-ES-13…27, TV-ES-29
+**AC-12 · CIF** · Refs: RF-03, CL-20…CL-24, CL-56, CL-57, D-50 · Nivel: U · Vectores: TV-ES-13…27, TV-ES-29, TV-ES-31…34
 - Dado el país ES y cada entrada del vector
 - Cuando se valida
-- Entonces el resultado coincide, incluido el caso real `Q2826000H` (válido), las claves que exigen dígito o letra y el caso `W1234567L` (`INVALID_FORMAT`: no es un NIE y la L no es un control de CIF posible).
+- Entonces el resultado coincide, incluidos los casos reales `Q2826000H` (AEAT, control letra) y los CIF de Telefónica, Inditex, Mercadona y Banco Santander (control dígito), todos válidos; las claves que exigen dígito o letra y el caso `W1234567L` (`INVALID_FORMAT`: no es un NIE y la L no es un control de CIF posible).
 
 **AC-13 · NIF especiales K, L, M** · Refs: RF-03, D-12 · Nivel: U · Vectores: TV-ES-28
 - Dado `K1234567L`, `L1234567L` o `M1234567L` con país ES
@@ -353,20 +353,29 @@ Estos criterios son la base de los tests: cada test citará su `AC-xx`.
 - Cuando se selecciona cada divisa
 - Entonces las partidas, la base y el total coinciden con el vector (GBP total 141,61; JPY base 24.812 sin decimales); el precio unitario sigue en EUR; y se ve la nota «Importes orientativos… con tipos del 12/11/2026».
 
-**AC-80 · Fallo de la API de tipos** · Refs: RF-12, RNF-08, RNF-SEC-13, CL-29, CL-30, CL-31 · Nivel: E
-- Dado que la API interceptada devuelve, en cada caso: un error de red; un `500`; un `200` con `"result": "error"`; un `200` con `base_code: "USD"`; o un `200` sin `GBP`
-- Cuando se abre la aplicación y se intenta elegir una divisa
-- Entonces en los cuatro primeros casos solo EUR está disponible, con el aviso y «Reintentar»; en el último solo GBP está deshabilitada; y en todos los casos los importes en EUR son correctos.
+**AC-80 · Estado de error de la API de tipos** · Refs: RF-12, RNF-08, RNF-SEC-13, CL-29, CL-30, CL-31, D-51 · Nivel: E
+- Dado que la API simulada devuelve, en cada caso: un error de red; un `500`; un `429`; un `200` con `"result": "error"`; o un `200` con `base_code: "USD"`, y no hay tipos en caché
+- Cuando se abre la aplicación **con EUR seleccionado**
+- Entonces, sin que el usuario haga nada, el indicador de la cabecera muestra «No se han podido obtener los tipos de cambio» y el botón «Reintentar»; solo EUR está disponible; y los importes en EUR son correctos.
+- Y cuando la API pasa a responder bien y se pulsa «Reintentar», el indicador pasa por «Cargando tipos de cambio…» a «Tipos del 12/11/2026» y se habilitan las demás divisas (incluso después de un `429`).
+- Y si se recibe un `200` sin `GBP`, el indicador muestra la fecha de los tipos y solo GBP aparece deshabilitada.
 
-**AC-81 · API de tipos lenta** · Refs: RF-12, CL-32 · Nivel: E
-- Dado que la API interceptada tarda 3 s
+**AC-81 · Estado de carga de la API de tipos** · Refs: RF-12, RNF-08, CL-32, D-51 · Nivel: E
+- Dado que la API simulada tarda 3 s en responder y no hay tipos en caché
 - Cuando se abre el detalle y se mueve el slider
-- Entonces se ve «Cargando tipos…», la proyección en EUR se actualiza con normalidad y, al llegar los tipos, las demás divisas se habilitan.
+- Entonces, desde el primer momento y hasta que llega la respuesta, el indicador muestra «Cargando tipos de cambio…» con su indicador de actividad; la proyección en EUR se actualiza con normalidad; y al llegar los tipos el indicador muestra su fecha y se habilitan las demás divisas.
+- Y con tipos caducados y un refresco en curso, el indicador muestra la fecha anterior más «Actualizando…».
 
-**AC-82 · Caché y tipos desactualizados** · Refs: RF-12, CL-36, CL-60, D-23 · Nivel: E
-- Dado tipos guardados hace 30 min; o guardados hace 2 h con el refresco fallando y `time_last_update_unix` de hace 20 h; o de hace 3 días con el refresco fallando
+**AC-82 · Caché y estado de tipos desactualizados** · Refs: RF-12, RNF-08, CL-36, CL-60, D-23, D-51 · Nivel: E
+- Dado tipos en caché obtenidos hace 30 min
 - Cuando se recarga la aplicación
-- Entonces, respectivamente: no se hace ninguna petición y se ve la fecha de los tipos; se usan los guardados con «Tipos desactualizados del …»; y solo EUR está disponible.
+- Entonces no se hace ninguna petición y el indicador muestra «Tipos del 12/11/2026».
+- Dado tipos en caché obtenidos hace 2 h, con `time_last_update_unix` de hace 20 h, y que el refresco falla
+- Cuando se recarga la aplicación con USD seleccionado
+- Entonces el indicador muestra «Tipos desactualizados del {fecha}» y el botón «Reintentar», y los importes siguen en USD con `≈`, usando los tipos guardados.
+- Dado tipos en caché de hace 3 días y que el refresco falla
+- Cuando se recarga la aplicación
+- Entonces se ve el estado de error de AC-80 y solo EUR está disponible.
 
 **AC-83 · Atribución** · Refs: RF-18, D-24 · Nivel: E
 - Dado cualquier vista
@@ -386,7 +395,7 @@ Estos criterios son la base de los tests: cada test citará su `AC-xx`.
 **AC-86 · Accesibilidad básica (Should)** · Refs: RNF-13, CL-48 · Nivel: E
 - Dado el simulador manejado solo con teclado
 - Cuando se usan las flechas, Inicio, Fin, Re Pág y Av Pág sobre el slider, y se recorre el formulario de alta con el tabulador
-- Entonces el valor cambia según [`05-frontend.md`](05-frontend.md) §5, el texto accesible del slider es «{n} usuarios», todos los controles tienen etiqueta y el foco es visible; y una auditoría automática de accesibilidad no encuentra infracciones graves.
+- Entonces el valor cambia según [`05-frontend.md`](05-frontend.md) §3.4.1, todos los controles tienen etiqueta y el foco es visible (el `aria-valuetext` del slider, que es Must, se comprueba en AC-91); y una auditoría automática de accesibilidad no encuentra infracciones graves.
 
 **AC-87 · Historial convertido** · Refs: RF-15, D-19 · Nivel: E
 - Dado un cliente con simulaciones
@@ -408,10 +417,11 @@ Estos criterios son la base de los tests: cada test citará su `AC-xx`.
 - Cuando se cambia el número de usuarios
 - Entonces el total actualizado es visible en menos de 100 ms (medido en el test e2e en el equipo de CI, con margen documentado).
 
-**AC-91 · Slider en los límites de tramo** · Refs: RF-16, CL-58, D-05 · Nivel: E
-- Dado el slider
-- Cuando se lleva con el teclado a 10, 11, 50 y 51
-- Entonces se alcanzan exactamente esos valores (pasos de 1 en el primer segmento) y la proyección cambia de tramo en 11 y en 51.
+**AC-91 · Escala del slider y anuncio accesible** · Refs: RF-16, RNF-13, CL-48, CL-58, D-05, D-48, D-49 · Nivel: U/E · Vectores: TV-SL-01…16
+- Dado la función de conversión de [`05-frontend.md`](05-frontend.md) §3.4.1
+- Cuando se evalúa con cada vector, con todas las posiciones (0–279) y con todos los valores (1–10 000)
+- Entonces los resultados coinciden con los vectores y se cumplen las cuatro propiedades: monotonía, ida y vuelta desde la posición, ida y vuelta desde el valor (10, 11, 50 y 51 incluidos) y desviación máxima de medio paso.
+- Y en el navegador, al llevar el slider con el teclado a 10, 11, 50 y 51, se alcanzan exactamente esos valores, la proyección cambia de tramo en 11 y en 51, y `aria-valuetext` anuncia «10 usuarios», «11 usuarios», «50 usuarios» y «51 usuarios». Con 105 escrito en el campo numérico, `aria-valuetext` dice «105 usuarios».
 
 **AC-92 · Métricas en el dashboard (Could)** · Refs: RF-19 · Nivel: E
 - Dado datos de ejemplo conocidos
@@ -430,15 +440,15 @@ Estos criterios son la base de los tests: cada test citará su `AC-xx`.
 - Cuando se revisa
 - Entonces es público en GitHub, y [`06-seguridad.md`](06-seguridad.md) §3.6 documenta por qué no hay login, sus supuestos y el riesgo residual.
 
-**AC-95 · Arranque en limpio** · Refs: RNF-18, RNF-14, RNF-23 · Nivel: CI
-- Dado un clon limpio del repositorio en Linux, Windows y macOS, con Node 22, 24 y 26
-- Cuando se ejecutan los comandos del README (instalar, migrar, sembrar, arrancar)
+**AC-95 · Arranque en limpio** · Refs: RNF-18, RNF-14, RNF-23, D-53 · Nivel: CI
+- Dado un clon limpio del repositorio
+- Cuando se ejecutan los comandos del README (instalar, migrar, sembrar, arrancar) en Linux con Node 22, 24 y 26, y en Windows y macOS con la versión de `.nvmrc` (prueba de humo)
 - Entonces el backend responde en `GET /health` y la interfaz carga el dashboard con los datos de ejemplo, sin pasos manuales adicionales.
 
-**AC-96 · CI con matriz** · Refs: RNF-21, RNF-12 · Nivel: CI
+**AC-96 · CI con matriz** · Refs: RNF-21, RNF-12, D-52, D-53 · Nivel: CI
 - Dado un *push* o una *pull request*
 - Cuando se ejecuta el pipeline
-- Entonces se ejecutan lint, tests unitarios, tests de integración, e2e y la auditoría en Node 22, 24 y 26, y un fallo bloquea la integración.
+- Entonces lint, tests unitarios, tests de integración y build se ejecutan en Node 22, 24 y 26; los e2e y la auditoría de dependencias, una sola vez, con la versión de `.nvmrc`; y cualquier fallo bloquea la integración.
 
 **AC-97 · Docker Compose (Should)** · Refs: RNF-20 · Nivel: CI
 - Dado Docker instalado
