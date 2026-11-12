@@ -28,7 +28,7 @@ validar). Fecha límite: **jueves 19/11 a las 23:00** (S-05 resuelto). Objetivo:
 | Día | Franja | Parte | Hito / punto de control |
 |---|---|---|---|
 | **Jue 12** | 14:12–21:30 | P0 y P1 (hechas, con dos pausas) | |
-| **Vie 13** | 09:00–11:00 | **P2** Dominio: identificador fiscal | El usuario elige el hosting de la demo antes de las 14:00 |
+| **Vie 13** | 09:00–11:00 | **P2** Dominio: identificador fiscal | El usuario pasa el alias SSH del VPS y el subdominio de la demo antes de las 14:00 (D-99) |
 | | 11:00–13:30 y 14:30–15:30 | **P3** Contrato y base de la API | |
 | | 15:30–18:00 | **P4** API de la porción vertical | |
 | | 18:00–19:00 | Holgura (1 h) | **C1 · vie 19:00** |
@@ -339,7 +339,7 @@ Hasta entonces, un retraso consume holgura y después el martes. Nada Must se re
 1. **Planes aprobados rápido:** el protocolo es el cuello de botella. Para ahorrar unos 45 minutos, **P1 y P2 pueden
    presentarse en un único plan** (mismo paquete, puro TDD).
 2. **El repositorio de GitHub creado en P0** (jueves), para que el CI corra desde el principio.
-3. **El hosting de la demo elegido el viernes** y la cuenta creada antes del sábado a las 10:00.
+3. **El acceso al VPS de la demo** (alias SSH y subdominio, D-99) el viernes antes de las 14:00.
 4. **Ningún bloqueo de más de 1 h:** si algo se atasca más de una hora, se aplica el plan B de esa parte (indicado en
    sus riesgos) y se sigue.
 

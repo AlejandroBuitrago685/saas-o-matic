@@ -101,7 +101,7 @@ Todas las columnas son `NOT NULL` salvo `simulation_tiers.to_user`. `CK` = `CHEC
 | `from_user` | INTEGER | CK `>= 1` |
 | `to_user` | INTEGER NULL | CK `to_user IS NULL OR to_user >= from_user` |
 | `units` | INTEGER | CK `units > 0` (solo se guardan tramos con usuarios) |
-| `unit_price_cents` | INTEGER | CK `>= 0` |
+| `unit_price_cents` | INTEGER | CK `> 0` (D-98) |
 | `subtotal_cents` | INTEGER | CK `subtotal_cents = units * unit_price_cents` |
 
 - `PRIMARY KEY (simulation_id, tier)`.

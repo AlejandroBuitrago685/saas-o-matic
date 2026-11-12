@@ -19,7 +19,8 @@ declare const VALID_TARIFF: unique symbol;
 /** A tariff that passed `validateTariff`: the only kind `calculatePricing` accepts (D-95). */
 export type ValidTariff = TariffInput & { readonly [VALID_TARIFF]: true };
 
-const isCents = (value: number): boolean => Number.isSafeInteger(value) && value >= 0;
+/** Prices must be > 0 in this delivery (D-98): free tiers are an open business question (PN-05). */
+const isPositiveCents = (value: number): boolean => Number.isSafeInteger(value) && value > 0;
 
 /** `previous` is undefined for the first tier. */
 function fromUserIssue(tier: TariffTierInput, previous: TariffTierInput | undefined): string | undefined {
@@ -52,7 +53,10 @@ function tierIssues({ tiers, path }: TariffContext, tier: TariffTierInput, index
     ],
     ['fromUser', fromUserIssue(tier, index === 0 ? undefined : tiers[index - 1])],
     ['toUser', toUserIssue(tier, index === tiers.length - 1)],
-    ['unitPriceCents', isCents(tier.unitPriceCents) ? undefined : 'must be an integer ≥ 0 (cents)'],
+    [
+      'unitPriceCents',
+      isPositiveCents(tier.unitPriceCents) ? undefined : 'must be an integer > 0 (cents, D-98)',
+    ],
   ];
   return checks.flatMap(([field, message]) =>
     message === undefined ? [] : [{ path: `${path}.tiers[${String(index)}].${field}`, message }],

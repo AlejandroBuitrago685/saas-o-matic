@@ -66,7 +66,7 @@ Estos criterios son la base de los tests: cada test citará su `AC-xx`.
 - Entonces la base es 13 000 (5 × 2 000 + 3 × 1 000), y la función de cálculo no se ha modificado (es la misma que usa AC-01).
 
 **AC-07 · Configuración de negocio inválida** · Refs: RNF-SEC-12, RNF-25 · Nivel: U/I
-- Dado una tarifa con huecos entre tramos, que no empieza en 1, con más de un tramo sin límite o con precios no enteros; o un tipo impositivo fuera de 0–10 000 bps
+- Dado una tarifa con huecos entre tramos, que no empieza en 1, con más de un tramo sin límite o con precios no positivos (D-98) o no enteros; o un tipo impositivo fuera de 0–10 000 bps
 - Cuando arranca el servicio
 - Entonces el arranque falla con un mensaje que dice qué dato no es válido, y no se aceptan peticiones.
 
