@@ -11,9 +11,9 @@
 
 | Concepto | Horas |
 |---|---|
-| Esfuerzo pendiente tras P1: P2–P12 según §3, protocolo incluido (unos 45 min por parte) | **≈ 32,5 h** |
+| Esfuerzo pendiente tras P1: P2–P12 según §3, protocolo incluido (unos 45 min por parte; P11 reestimada a 3 h) | **≈ 33,5 h** |
 | Trabajo programado (§2): viernes a lunes, de 09:00 a 19:00 con una hora para comer (S-07, **por validar**) | **36 h** (4 × 9 h) |
-| Holgura | **≈ 3,5 h** antes del lunes a las 19:00, más el martes entero. El miércoles y el jueves no se planifican. |
+| Holgura | **≈ 2,5 h** antes del lunes a las 19:00, más el martes entero. El miércoles y el jueves no se planifican. |
 
 **Lectura honesta:** cabe con jornadas de 9 h y poca holgura dentro de cada día; un bloqueo serio (Docker en el CI,
 Windows, el hosting de la demo) se come la holgura y pasa al martes, que existe precisamente para eso. P0 y P1 se
@@ -34,20 +34,19 @@ validar). Fecha límite: **jueves 19/11 a las 23:00** (S-05 resuelto). Objetivo:
 | | 18:00–19:00 | Holgura (1 h) | **C1 · vie 19:00** |
 | **Sáb 14** | 09:00–13:30 | **P5** Web de la porción vertical | |
 | | 14:30–17:30 | **P6** Docker Compose, nginx y e2e de la porción vertical | |
-| | 17:30–18:30 | **P11** (1.ª mitad) Primer despliegue de la demo | |
-| | 18:30–19:00 | Holgura (0,5 h) | **C2 · sáb 19:00 → porción vertical completa** |
+| | 17:30–19:00 | **P11** (1.ª mitad) Primer despliegue de la demo (plan aprobado antes) | **C2 · sáb 19:00 → porción vertical completa** |
 | **Dom 15** | 09:00–12:00 | **P7** Búsqueda y dashboard | |
 | | 12:00–13:30 y 14:30–16:30 | **P8** Divisas | |
 | | 16:30–19:00 | **P9** (1.ª parte) Robustez | **C3 · dom 19:00** |
 | **Lun 16** | 09:00–10:00 | **P9** (final) | |
 | | 10:00–12:30 | **P10** Should/Could y CI completo | |
-| | 12:30–13:30 | **P11** (2.ª mitad) Demo final y AC-61 | **C4 · lun 13:30** |
-| | 14:30–17:00 | **P12** README, clon limpio y revisión final | **C5 · lun 17:00** |
-| | 17:00–19:00 | Holgura (2 h) | ≈ 19:00 **Entrega** |
+| | 12:30–13:30 y 14:30–15:00 | **P11** (2.ª mitad) Demo final y AC-61 | **C4 · lun 15:00** |
+| | 15:00–17:30 | **P12** README, clon limpio y revisión final | **C5 · lun 17:30** |
+| | 17:30–19:00 | Holgura (1,5 h) | ≈ 19:00 **Entrega** |
 | **Mar 17** | Todo el día | Solo margen | |
 | **Jue 19** | — | — | Límite de la empresa: 23:00 |
 
-Esfuerzo pendiente 32,5 h frente a 36 h programadas: **3,5 h de holgura** antes del lunes a las 19:00, más el martes.
+Esfuerzo pendiente 33,5 h (P11 reestimada a 3 h por D-99) frente a 36 h programadas: **2,5 h de holgura** antes del lunes a las 19:00, más el martes.
 
 La **prueba desde un clon limpio** (P12) sigue el README al pie de la letra: clon nuevo en una carpeta vacía, sin
 caché de npm y sin nada instalado a mano. Si un paso no está en el README, la prueba falla.
@@ -128,7 +127,8 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
 - **Riesgos:**
   - traducir los errores de Zod 4 a nuestros códigos;
   - interpolar constantes en los `CHECK` de Drizzle;
-  - la migración personalizada con triggers.
+  - la migración personalizada con triggers;
+  - **la IP real del cliente** (D-99): en la demo hay Cloudflare y dos nginx delante de la API. `TRUST_PROXY` se configura por saltos o por direcciones de confianza, nunca con `true`, y un test con `X-Forwarded-For` encadenado comprueba qué IP usa el límite de peticiones.
 - **Hecho cuando:** `GET /catalog` y `GET /health` responden según el contrato, todo error sale como RFC 9457 y el
   inventario OpenAPI coincide con las rutas registradas.
 
@@ -239,20 +239,26 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
 - **Riesgos:** particularidades de los *runners* de Windows y macOS (rutas, fin de línea, procesos en segundo plano).
 - **Hecho cuando:** el CI completo pasa y la trazabilidad no tiene AC sin test.
 
-### P11 · Demo pública · 2 h (1 h el sábado y 1 h el domingo)
+### P11 · Demo pública · 3 h (1,5 h el sábado y 1,5 h el lunes; reestimada por D-99)
 
 - **Objetivo:** demo en una URL pública con las medidas de D-47.
 - **AC:** AC-61.
-- **Módulos:** configuración del proveedor elegido; `DEMO_MODE` en el punto de entrada de la API.
+- **Módulos:** `DEMO_MODE` en el punto de entrada de la API; Docker Compose de producción; publicación de imágenes en GHCR desde el CI; configuración de nginx del sitio de la demo.
 - **Tests:** AC-61 manual y automatizado:
   - aviso visible;
   - HTTPS con HSTS;
   - límite de 5 escrituras;
   - regeneración de datos al arrancar.
+- **Destino (D-99, datos del servidor fuera del repositorio):**
+  - VPS del usuario, al que se accede por SSH a través de Tailscale. **Ni IPs, ni usuarios, ni rutas del servidor** en el repositorio ni en la documentación.
+  - Subdominio `saas-o-matic.codeserviceapi.es`, con Cloudflare como proxy; el registro DNS lo crea el usuario.
+  - nginx ya en los puertos 80 y 443, con certificados de Let's Encrypt y la IP real de Cloudflare restaurada. La demo va en **un fichero de configuración propio**, sin tocar los demás sitios.
+  - Docker no está instalado y el servidor es pequeño (1 CPU, ~2 GB libres): las imágenes **se construyen en el CI**, se publican en GHCR y el VPS solo hace *pull*.
+  - Docker se salta UFW: los contenedores **solo escuchan en 127.0.0.1**, en el puerto 4010.
 - **Riesgos:**
-  - **depende de una decisión y una cuenta del usuario**: elegir entre las opciones de `03-arquitectura/08-despliegue.md`
-    §4, a más tardar el viernes;
-  - `TRUST_PROXY` según el proveedor.
+  - **el plan de P11 se presenta y se aprueba antes de tocar el servidor** (instalar Docker incluido);
+  - la IP real a través de Cloudflare y de dos nginx (ver P3);
+  - la memoria disponible: límites de memoria en Compose y una sola réplica.
 - **Hecho cuando:** la URL responde, AC-61 pasa y el README la enlaza.
 
 ### P12 · Cierre: README, clon limpio y revisión final · 2,5 h
@@ -328,8 +334,8 @@ No se recorta nada salvo que la entrega se vaya más allá del **martes 17 a las
 | C1 | Vie 19:00 | P2, P3 y P4 (API de la porción vertical) | Se usa la holgura del sábado; lo que no quepa pasa al martes. |
 | C2 | Sáb 19:00 | P5, P6 y el primer despliegue (porción vertical con e2e y Docker) | Se aplica **7** de §5 y el despliegue pasa al lunes. |
 | C3 | Dom 19:00 | P7 y P8 | Lo pendiente pasa al lunes y la holgura del lunes se consume. |
-| C4 | Lun 13:30 | P9, P10 y la demo | El martes deja de ser margen. |
-| C5 | Lun 17:00 | P12 en verde (clon limpio) | Entrega el martes. |
+| C4 | Lun 15:00 | P9, P10 y la demo | El martes deja de ser margen. |
+| C5 | Lun 17:30 | P12 en verde (clon limpio) | Entrega el martes. |
 
 **Regla nueva:** la lista de aplazamientos de §5 solo se aplica si la entrega se va más allá del **martes a las 19:00**.
 Hasta entonces, un retraso consume holgura y después el martes. Nada Must se recorta nunca.

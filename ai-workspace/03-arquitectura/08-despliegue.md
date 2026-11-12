@@ -92,6 +92,10 @@ flowchart LR
 
 ## 4. Demo pública (RNF-22, D-47)
 
+> **Elegido (D-99):** el VPS del usuario, detrás de su nginx existente, con imágenes de GHCR construidas en el CI y
+> contenedores solo en 127.0.0.1. Las opciones de abajo quedan como contexto de la decisión. El detalle de la
+> instalación se presenta en el plan de P11, que se aprueba antes de tocar el servidor.
+
 **Requisitos de D-47:**
 
 - HTTPS con HSTS.
