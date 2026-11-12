@@ -174,7 +174,7 @@ Las listas de `country`, `plan` y `tax_id_type` en los `CHECK` se generan a part
 `domain` que usan el contrato y el catálogo. El esquema de Drizzle las interpola y `drizzle-kit` las vuelca en la
 migración. Añadir un país supone: constante en `domain` + validador + entrada en el catálogo + **migración nueva**
 (SQLite reconstruye la tabla). Ese coste es intencionado, porque un país nuevo también necesita su validador.
-Un test comprueba que constante, catálogo, registro de validadores y `CHECK` coinciden (AC-16).
+Un test comprueba que constante, catálogo, registro de validadores y `CHECK` coinciden (AC-16); el registro es además un tipo total sobre los países (D-100).
 
 ## 7. Migraciones y datos de ejemplo
 

@@ -11,7 +11,7 @@ el servicio (AC-07, AC-46). Las simulaciones guardan una instantánea, así que 
 ## Decisión
 
 - El catálogo es **código tipado** (`apps/api/src/config/catalog.data.ts`) validado al arrancar con `validateCatalog`
-  de `domain`: tarifas contiguas, tipos de 0 a 10 000 bps, planes con tarifa existente y países con validador fiscal.
+  de `domain`: tarifas contiguas, tipos de 0 a 10 000 bps, planes con tarifa existente. Que cada país tenga validador fiscal lo garantiza el tipo del registro de validadores, que no compila sin él (D-100).
   Si falla, el servicio no arranca.
 - La web lo recibe por `GET /catalog`.
 - Las listas cerradas (`country`, `plan`, `tax_id_type`) se refuerzan con `CHECK ... IN (…)` en la base de datos,

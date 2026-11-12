@@ -11,9 +11,9 @@
 
 | Concepto | Horas |
 |---|---|
-| Esfuerzo pendiente tras P1: P2–P12 según §3, protocolo incluido (unos 45 min por parte; P11 reestimada a 3 h) | **≈ 33,5 h** |
+| Esfuerzo pendiente tras P2: P3–P12 según §3, protocolo incluido (unos 45 min por parte; P11 reestimada a 3 h) | **≈ 31,5 h** |
 | Trabajo programado (§2): viernes a lunes, de 09:00 a 19:00 con una hora para comer (S-07, **por validar**) | **36 h** (4 × 9 h) |
-| Holgura | **≈ 2,5 h** antes del lunes a las 19:00, más el martes entero. El miércoles y el jueves no se planifican. |
+| Holgura | **≈ 4,5 h** antes del lunes a las 19:00, más el martes entero. El miércoles y el jueves no se planifican. |
 
 **Lectura honesta:** cabe con jornadas de 9 h y poca holgura dentro de cada día; un bloqueo serio (Docker en el CI,
 Windows, el hosting de la demo) se come la holgura y pasa al martes, que existe precisamente para eso. P0 y P1 se
@@ -27,11 +27,10 @@ validar). Fecha límite: **jueves 19/11 a las 23:00** (S-05 resuelto). Objetivo:
 
 | Día | Franja | Parte | Hito / punto de control |
 |---|---|---|---|
-| **Jue 12** | 13:12–20:30 | P0 y P1 (hechas, con dos pausas) | |
-| **Vie 13** | 09:00–11:00 | **P2** Dominio: identificador fiscal | El usuario pasa el alias SSH del VPS y el subdominio de la demo antes de las 14:00 (D-99) |
-| | 11:00–13:30 y 14:30–15:30 | **P3** Contrato y base de la API | |
-| | 15:30–18:00 | **P4** API de la porción vertical | |
-| | 18:00–19:00 | Holgura (1 h) | **C1 · vie 19:00** |
+| **Jue 12** | 13:12–21:00 | P0, P1 y P2 (hechas, con dos pausas; P2 adelantada del viernes) | |
+| **Vie 13** | 09:00–12:30 | **P3** Contrato y base de la API | |
+| | 12:30–13:30 y 14:30–16:00 | **P4** API de la porción vertical | |
+| | 16:00–19:00 | Holgura (3 h: P2 se hizo el jueves) | **C1 · vie 19:00** |
 | **Sáb 14** | 09:00–13:30 | **P5** Web de la porción vertical | |
 | | 14:30–17:30 | **P6** Docker Compose, nginx y e2e de la porción vertical | |
 | | 17:30–19:00 | **P11** (1.ª mitad) Primer despliegue de la demo (plan aprobado antes) | **C2 · sáb 19:00 → porción vertical completa** |
@@ -46,7 +45,7 @@ validar). Fecha límite: **jueves 19/11 a las 23:00** (S-05 resuelto). Objetivo:
 | **Mar 17** | Todo el día | Solo margen | |
 | **Jue 19** | — | — | Límite de la empresa: 23:00 (hora de la empresa: si es peninsular, son las 22:00 en Canarias) |
 
-Esfuerzo pendiente 33,5 h (P11 reestimada a 3 h por D-99) frente a 36 h programadas: **2,5 h de holgura** antes del lunes a las 19:00, más el martes.
+Esfuerzo pendiente 31,5 h (P2 ya hecha; P11 reestimada a 3 h por D-99) frente a 36 h programadas: **4,5 h de holgura** antes del lunes a las 19:00, más el martes.
 
 La **prueba desde un clon limpio** (P12) sigue el README al pie de la letra: clon nuevo en una carpeta vacía, sin
 caché de npm y sin nada instalado a mano. Si un paso no está en el README, la prueba falla.
@@ -331,7 +330,7 @@ No se recorta nada salvo que la entrega se vaya más allá del **martes 17 a las
 **Puntos de control (v2, D-97):**
 | Punto | Momento | Debe estar | Si no está |
 |---|---|---|---|
-| C1 | Vie 19:00 | P2, P3 y P4 (API de la porción vertical) | Se usa la holgura del sábado; lo que no quepa pasa al martes. |
+| C1 | Vie 19:00 | P3 y P4 (API de la porción vertical) | Se usa la holgura del sábado; lo que no quepa pasa al martes. |
 | C2 | Sáb 19:00 | P5, P6 y el primer despliegue (porción vertical con e2e y Docker) | Se aplica **7** de §5 y el despliegue pasa al lunes. |
 | C3 | Dom 19:00 | P7 y P8 | Lo pendiente pasa al lunes y la holgura del lunes se consume. |
 | C4 | Lun 15:00 | P9, P10 y la demo | El martes deja de ser margen. |
@@ -345,7 +344,7 @@ Hasta entonces, un retraso consume holgura y después el martes. Nada Must se re
 1. **Planes aprobados rápido:** el protocolo es el cuello de botella. Para ahorrar unos 45 minutos, **P1 y P2 pueden
    presentarse en un único plan** (mismo paquete, puro TDD).
 2. **El repositorio de GitHub creado en P0** (jueves), para que el CI corra desde el principio.
-3. **El acceso al VPS de la demo** (alias SSH y subdominio, D-99) el viernes antes de las 14:00.
+3. **El acceso al VPS de la demo** (alias SSH y subdominio, D-99): recibido el jueves.
 4. **Ningún bloqueo de más de 1 h:** si algo se atasca más de una hora, se aplica el plan B de esa parte (indicado en
    sus riesgos) y se sigue.
 

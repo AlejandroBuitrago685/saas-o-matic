@@ -137,8 +137,9 @@ Variables de entorno validadas con Zod al arrancar (`loadConfig`). Se versiona `
 | `DEMO_MODE` | Booleano | `false` | Activa los límites de la demo y la regeneración de datos al arrancar (08-despliegue §4). |
 
 Los **datos del catálogo** (países y tipos, planes, tarifas y su asociación) son código tipado en
-`src/config/catalog.data.ts`. Al arrancar se validan con `validateCatalog` de `domain` y se comprueba que coincidan
-con el registro de validadores fiscales (AC-16) ([ADR-005](adr/ADR-005-catalogo-configuracion-tipada.md)).
+`src/config/catalog.data.ts`. Al arrancar se validan con `validateCatalog` de `domain`. Que coincidan con el registro de
+validadores fiscales lo garantiza su tipo, que no compila sin un validador por país (AC-16, D-100); el prefijo y los tipos que publica
+`GET /catalog` salen de `taxIdRulesFor` (D-104) ([ADR-005](adr/ADR-005-catalogo-configuracion-tipada.md)).
 
 ## 6. Logs
 

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import * as domain from './index.js';
 
 describe('ADR-001 public API of the domain: only what other packages need', () => {
-  it('exports the functions and constants of P1, and nothing internal', () => {
+  it('exports the functions and constants of P1 and P2, and nothing internal (the tax id registry included)', () => {
     expect(Object.keys(domain).sort()).toEqual(
       [
         'COUNTRIES',
@@ -28,6 +28,10 @@ describe('ADR-001 public API of the domain: only what other packages need', () =
         'usersToPosition',
         'validateCatalog',
         'validateTariff',
+        'validateTaxId',
+        'taxIdRulesFor',
+        'MAX_TAX_ID_INPUT_LENGTH',
+        'MIN_TAX_ID_INPUT_LENGTH',
       ].sort(),
     );
   });
