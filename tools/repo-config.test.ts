@@ -1,6 +1,7 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
@@ -62,6 +63,69 @@ describe('D-81 / D-85 Claude Code permissions', () => {
 
   it('denies reading and editing .env files (RNF-SEC-12)', () => {
     expect(permissions['deny']).toEqual(expect.arrayContaining(['Read(**/.env)', 'Edit(**/.env)']));
+  });
+});
+
+describe('D-101 slow sweeps run in CI and verify, never in npm test (pre-push) nor in the Stop hook', () => {
+  interface VitestConfig {
+    readonly default: { readonly test?: { readonly projects?: unknown[]; readonly name?: unknown } };
+  }
+  const loadConfig = (file: string): Promise<VitestConfig> =>
+    import(pathToFileURL(join(REPO_ROOT, file)).href) as Promise<VitestConfig>;
+
+  /** Names of the projects of the root Vitest config, read from each project's own config file. */
+  async function rootProjectNames(): Promise<string[]> {
+    const root = await loadConfig('vitest.config.ts');
+    const paths = (root.default.test?.projects ?? []).filter(
+      (path): path is string => typeof path === 'string',
+    );
+    const configs = await Promise.all(
+      paths.map((path) => loadConfig(path.endsWith('.ts') ? path : `${path}/vitest.config.ts`)),
+    );
+    return configs.map((config) => String(config.default.test?.name));
+  }
+
+  /** Every `vitest run` command of a workflow or script, with its options. */
+  const vitestRuns = (text: string): string[] =>
+    [...text.matchAll(/vitest run[^\n&]*/g)].map((match) => match[0]);
+
+  it('the root config has the domain-slow project, and CI and verify run every project (no --project)', async () => {
+    const scripts = readJson('package.json')['scripts'] as Record<string, string>;
+    const ciRuns = vitestRuns(readFileSync(join(REPO_ROOT, '.github/workflows/ci.yml'), 'utf8'));
+    const verifyRuns = vitestRuns(scripts['verify'] ?? '');
+
+    expect(await rootProjectNames()).toContain('domain-slow');
+    expect(ciRuns.length).toBeGreaterThan(0);
+    expect(verifyRuns.length).toBeGreaterThan(0);
+    expect([...ciRuns, ...verifyRuns].filter((run) => run.includes('--project'))).toEqual([]);
+  });
+
+  it('npm test runs exactly the root projects except domain-slow, so a new project is never left out', async () => {
+    const testScript = (readJson('package.json')['scripts'] as Record<string, string>)['test'] ?? '';
+    const selected = [...testScript.matchAll(/--project (\S+)/g)].map((match) => match[1]);
+
+    expect(selected.sort()).toEqual(
+      (await rootProjectNames()).filter((name) => name !== 'domain-slow').sort(),
+    );
+  });
+
+  it('npm test and verify:changed select their projects and leave domain-slow out', async () => {
+    const { verificationSteps } = await import('../scripts/verify-changed.mjs');
+    const { parallel, afterwards } = verificationSteps(
+      ['domain', 'tools'],
+      ['packages/domain/src/x.ts'],
+      true,
+    );
+    const commands = [...parallel, ...afterwards].map((step) => step.cmd.join(' '));
+    const testScript = (readJson('package.json')['scripts'] as Record<string, string>)['test'] ?? '';
+
+    expect(testScript).toContain('--project domain ');
+    expect(testScript).not.toContain('domain-slow');
+    expect(commands.filter((command) => command.includes('vitest'))).not.toEqual([]);
+    expect(commands.every((command) => !command.includes('vitest') || command.includes('--project'))).toBe(
+      true,
+    );
+    expect(commands.join(' ')).not.toContain('domain-slow');
   });
 });
 

@@ -23,6 +23,7 @@ hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel�
 - **Propiedades:**
   - AC-03 (crecimiento y coste marginal) **de forma exhaustiva**: todos los `n` de 2 a 10 000 (D-90, sin `fast-check`).
   - AC-91 (slider) **de forma exhaustiva**: 280 posiciones y 10 000 valores, sin muestreo.
+  - AC-14 (homóglifos) con un test rápido representativo y, aparte, el barrido completo del plano básico en el proyecto `domain-slow` (unos 4 s): corre en el CI y en `npm run verify`, no en `npm test` ni en el hook `Stop` (D-101).
 - **Cobertura mínima:** 100 % de líneas y ramas en `domain`, como umbral del CI.
 - **Could:** tests de mutación (Stryker) sobre `domain` para medir la calidad de los propios tests.
 

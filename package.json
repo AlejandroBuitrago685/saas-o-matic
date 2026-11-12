@@ -23,7 +23,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "node scripts/check-filenames.mjs && node scripts/check-forbidden-patterns.mjs && depcruise packages apps/api/src apps/web/src --config .dependency-cruiser.cjs",
-    "test": "npm run build:packages && vitest run && npm run test -w @saas-o-matic/web",
+    "test": "npm run build:packages && vitest run --project domain --project contract --project api --project tools && npm run test -w @saas-o-matic/web",
     "test:node": "vitest run",
     "trace": "node scripts/trace-tests.mjs",
     "verify": "npm run format:check && npm run lint && npm run typecheck && npm run check && npm run build:packages && vitest run --coverage && npm run test -w @saas-o-matic/web && npm run build && npm run trace",

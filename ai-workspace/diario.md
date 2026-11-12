@@ -305,3 +305,69 @@ reloj por dos pausas: mi parada a mitad de turno y el límite de uso de la sesi�
 **Decisiones:** D-90 a D-96 (D-90…D-93 aprobadas; D-94 del usuario); D-97 (calendario v2).
 
 **Tiempo:** estimado 2,25 h · real ≈ 1 h (19:12–20:15, hora de Canarias), revisión y cierre incluidos.
+
+---
+
+## P2 · Dominio: identificador fiscal — 2026-11-12 · rama `feat/p2-tax-id`
+
+**Hecho** (TDD: vectores → test en rojo → código → verde)
+- `validateTaxId(input, country)`: los 7 pasos de normalización de 03-validacion-fiscal §2.
+  - La comprobación ASCII va antes de pasar a mayúsculas (TV-NO-09, `ſ`).
+  - Primero se valida el valor tal cual y después sin el prefijo (TV-INT-15).
+- Interfaz común `TaxIdValidator` (RNF-26) y **un fichero por país**.
+  - España se reparte en tres: clasificación por estructura, DNI/NIE y CIF, con las claves de D-13.
+  - EE. UU. tiene, además, los 83 prefijos EIN del IRS como dato tipado (D-103).
+- Registro `Record<Country, TaxIdValidator>`: un país sin validador no compila (AC-16, D-100).
+- Los 76 vectores (82 entradas) como datos tipados. Los caracteres no ASCII se construyen con `String.fromCodePoint`.
+- AC-14 en dos niveles (D-101), tras medirlo:
+  - el barrido completo tarda 4,5–4,9 s y va en el proyecto `domain-slow` (CI y `verify`);
+  - el test rápido representativo va en la suite normal.
+  - `vitest --project domain`, que es lo que ejecuta el hook `Stop`, tarda 0,57 s.
+- `npm run verify` en verde (53 s):
+  - 497 tests de Node y cobertura del dominio al 100 % (205/205 sentencias, 130/130 ramas);
+  - trazabilidad: AC 21/81 (+7) · TV 117/129 (+76).
+
+**Falló**
+- **Me desvié del plan aprobado:** agrupé PT, DE, IT, FR y GB en un solo fichero, cuando el plan decía uno por país (lo
+  que hace que añadir un país sea un fichero nuevo). Lo vi enseguida y los separé.
+- **Una «В» cirílica literal** en el comentario que explica por qué no deben escribirse literales: la tecleé yo. Ahora
+  la nombro. D-96 no la habría detectado, porque es visible.
+- **Complejidad 13** en la clasificación de España, por los `?? ''` de los grupos de captura, que además eran ramas
+  imposibles. Reescrita como tabla de estructuras; los trozos se toman por posición, porque las cuatro estructuras
+  tienen 9 caracteres.
+- **`\s` de JavaScript elimina U+FEFF:** la spec dice «espacio en blanco Unicode» y U+FEFF es de formato. Cambiado a
+  `\p{White_Space}` (D-102). Lo vi al preparar el test rápido: insertar un BOM habría dado un identificador válido.
+  El test lo fija ahora.
+- **Trazabilidad inflada otra vez por un comentario** (TV 118 en vez de 117). Corregido.
+
+**Correcciones del usuario**
+- AC-16 con el tipo del registro, sin la comprobación en `validateCatalog` (D-100).
+- La condición de tiempo del barrido de AC-14 (D-101).
+
+**Revisor**
+- **APTO**, sin P0 ni P1. Recalculó a mano el CIF de Q2826000H y de los cuatro CIF reales, y los restos de DNI y NIE.
+  Comprobó que la lista EIN coincide con la spec (83 + 17) y que nada no ASCII puede colarse tras el paso 2.
+- Cuatro P2, corregidos con test:
+  - `GET /catalog` necesitará el prefijo y los tipos de cada país: la interfaz declara ahora sus `types` y el dominio
+    publica `taxIdRulesFor` y los límites de longitud 1–32 (D-104);
+  - la lista de 83 prefijos EIN no tenía test propio;
+  - el test de D-101 no comprobaba que el CI ejecute el barrido;
+  - la lista de proyectos de `npm test` podía desincronizarse de la configuración raíz.
+- P3 corregidos:
+  - el sufijo `.slow.test.ts` decide qué es lento;
+  - el barrido elimina los pares repetidos (de 4,7 a 3,7 s);
+  - el test rápido añade `ß`, ligaduras y muestras con prefijo, para detectar una inversión del orden ASCII →
+    mayúsculas. Lo comprobé con una **mutación manual**: con el orden invertido fallan 6 muestras;
+  - la documentación queda alineada con D-100.
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| `trace-tests` cuenta los IDs que aparecen en comentarios: contar solo los de títulos de test y campos `id`. Ya ha inflado la cifra dos veces. | P10 |
+| El último vector de normalización (33 caracteres → `400`) y los dos últimos de usuarios (§6.2) van al esquema del contrato. | P3 |
+
+**Decisiones:** D-100 (usuario), D-101 (condición del usuario), D-102, D-103 y D-104.
+
+**Tiempo:** estimado 2 h · real ≈ 45 min (20:16–21:00, hora de Canarias), revisión incluida. Adelantada al jueves:
+el viernes gana 2 h de holgura (calendario actualizado).

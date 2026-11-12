@@ -28,7 +28,7 @@ npm run dev
 | Comando             | Qué hace                                                                                                           |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `npm run dev`       | Paquetes en modo watch, API y web a la vez.                                                                        |
-| `npm test`          | Tests de dominio, contrato, API, herramientas y web.                                                               |
+| `npm test`          | Tests de dominio, contrato, API, herramientas y web (sin los barridos lentos, D-101).                              |
 | `npm run lint`      | ESLint estricto (límites de tamaño, fronteras entre capas, reglas de seguridad).                                   |
 | `npm run typecheck` | TypeScript estricto en todos los paquetes.                                                                         |
 | `npm run verify`    | Todo lo anterior más formato, comprobaciones del repo, cobertura y build (los pasos del trabajo `quality` del CI). |

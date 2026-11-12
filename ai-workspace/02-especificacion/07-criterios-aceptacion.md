@@ -103,7 +103,7 @@ Estos criterios son la base de los tests: cada test citará su `AC-xx`.
 **AC-16 · Un validador por país** · Refs: RNF-26, D-15 · Nivel: U
 - Dado el conjunto de países del catálogo
 - Cuando se compara con el conjunto de países que tienen validador
-- Entonces son idénticos. Un país del catálogo sin validador hace fallar el test (y el arranque, según RNF-SEC-12).
+- Entonces son idénticos. Un país del catálogo sin validador hace fallar el test y, antes, la compilación: el registro es un tipo total sobre los países (D-100).
 
 ## 3. API de clientes
 
