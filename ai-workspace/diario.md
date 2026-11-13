@@ -527,8 +527,8 @@ La holgura del viernes absorbe la hora de más.
 | `reference` de errores: los 8 últimos caracteres del UUID, no los 8 primeros de `instance` | P5 |
 | Cierre ordenado con SIGTERM; subred fija de Compose y `TRUST_PROXY` (D-113); `--ignore-scripts` y Playwright en `devDependencies` | P6 |
 
-**Decisiones:** D-117 y D-118 (usuario), D-119 a D-121 (Claude · pendiente). Siguen sin validar D-76, D-77, D-78, D-79,
-D-83, D-84, D-86, D-87 y D-102 (la nota de traspaso de P3 decía que no quedaba ninguna).
+**Decisiones:** D-117 y D-118 (usuario). D-119 a D-121 y las nueve de P0 y P2 que seguían pendientes (D-76 a D-79,
+D-83, D-84, D-86, D-87 y D-102) las validó el usuario el 2026-11-13, tras el cierre; PR #7 mergeada (`c5ae62d`).
 
 **Tiempo:** estimado 2,5 h (mi estimación con los pendientes de P3: 3,5 h) · real ≈ 1,5 h (09:27–10:55, hora de
 Canarias, con las correcciones de la revisión). La holgura del viernes queda casi entera.
@@ -539,7 +539,7 @@ Canarias, con las correcciones de la revisión). La holgura del viernes queda ca
 [`04-plan-implementacion.md`](04-plan-implementacion.md) y su §4. El usuario activa el modo plan y Claude presenta el plan.
 
 **Estado**
-- Hechas y mergeadas en `main`: P0 a P3; P4 en su PR (ver el estado de la rama).
+- Hechas y mergeadas en `main`: P0 a P4 (PR #7, merge `c5ae62d`). Sin decisiones pendientes de validar.
 - La API tiene el flujo completo de la porción vertical: alta y detalle de clientes, y creación, lectura e historial de
   simulaciones, con `openapi.json` al día. No existe aún `GET /customers` (P7) ni `GET /stats` (P10).
 - Para escribir módulos nuevos: `buildApiTestApp` (límites altos), `expectBody`/`expectProblem` y `api-helpers`
@@ -551,4 +551,4 @@ Canarias, con las correcciones de la revisión). La holgura del viernes queda ca
 últimos del UUID) y `strictTemplates` en `typecheck` (P5); SIGTERM, subred fija de Compose, `--ignore-scripts` y
 Playwright en `devDependencies` (P6).
 
-**Decisiones por validar:** D-119 a D-121 y las nueve de P0 y P2 que siguen en «Claude · pendiente».
+**Decisiones por validar:** ninguna.
