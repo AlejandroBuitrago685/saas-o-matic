@@ -1,0 +1,84 @@
+<section class="card flex flex-col gap-5" aria-labelledby="simulator-title">
+  <h2 id="simulator-title" class="section-title">Simulador</h2>
+
+  <div class="field">
+    <label id="users-label" class="label" for="users-number">Usuarios activos</label>
+    <app-users-slider
+      labelledBy="users-label"
+      [position]="store.sliderPosition()"
+      [users]="store.users()"
+      (positionChange)="store.setSliderPosition($event)"
+    />
+    <input
+      id="users-number"
+      class="input amount"
+      type="text"
+      inputmode="numeric"
+      autocomplete="off"
+      [value]="store.usersText()"
+      [attr.aria-invalid]="store.usersError() ? true : null"
+      aria-describedby="users-error"
+      (input)="store.setUsersText(inputValue($event))"
+    />
+    @if (store.usersError(); as message) {
+      <p id="users-error" class="field-error">{{ message }}</p>
+    }
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <div class="field">
+      <label class="label" for="storage-number">Almacenamiento (GB)</label>
+      <input
+        id="storage-number"
+        class="input amount"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        [value]="store.storageText()"
+        [attr.aria-invalid]="store.storageError() ? true : null"
+        aria-describedby="storage-hint storage-error"
+        (input)="store.storageText.set(inputValue($event))"
+      />
+      <p id="storage-hint" class="hint">Informativo, no afecta al precio</p>
+      @if (store.storageError(); as message) {
+        <p id="storage-error" class="field-error">{{ message }}</p>
+      }
+    </div>
+    <div class="field">
+      <label class="label" for="api-calls-number">Llamadas a la API al mes</label>
+      <input
+        id="api-calls-number"
+        class="input amount"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        [value]="store.apiCallsText()"
+        [attr.aria-invalid]="store.apiCallsError() ? true : null"
+        aria-describedby="api-calls-hint api-calls-error"
+        (input)="store.apiCallsText.set(inputValue($event))"
+      />
+      <p id="api-calls-hint" class="hint">Informativo, no afecta al precio</p>
+      @if (store.apiCallsError(); as message) {
+        <p id="api-calls-error" class="field-error">{{ message }}</p>
+      }
+    </div>
+  </div>
+
+  <app-projection-panel [pricing]="store.pricing()" [country]="customer().country" />
+
+  @if (store.saveError(); as message) {
+    <p role="alert" class="alert alert-danger font-semibold">{{ message }}</p>
+  }
+
+  <button
+    type="button"
+    class="btn btn-primary w-full sm:w-auto sm:self-start"
+    [disabled]="!store.canSave()"
+    (click)="onSave()"
+  >
+    @if (store.saving()) {
+      <app-spinner />
+    }
+    Guardar simulación
+  </button>
+</section>

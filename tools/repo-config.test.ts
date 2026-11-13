@@ -156,6 +156,43 @@ describe('D-77 packages are only imported through their index (package.json `exp
   });
 });
 
+describe('D-128 the web typecheck also checks templates (strictTemplates)', () => {
+  it('runs ngc, not tsc, on both web configs', () => {
+    const scripts = readJson('apps/web/package.json')['scripts'] as Record<string, string>;
+
+    expect(scripts['typecheck']).toBe(
+      'ngc -p tsconfig.app.json --noEmit && ngc -p tsconfig.spec.json --noEmit',
+    );
+  });
+
+  it('fails on a template that reads a missing property', () => {
+    // Own folder inside apps/web (it needs Angular from node_modules) with its own tsconfig, so the real
+    // typecheck of the web never sees the broken component.
+    const directory = join(REPO_ROOT, 'apps/web/__lint_fixture__template');
+    mkdirSync(directory, { recursive: true });
+    writeFileSync(
+      join(directory, 'tsconfig.json'),
+      JSON.stringify({ extends: '../tsconfig.json', compilerOptions: { types: [] }, files: ['x.ts'] }),
+    );
+    writeFileSync(
+      join(directory, 'x.ts'),
+      [
+        "import { Component } from '@angular/core';",
+        '',
+        "@Component({ selector: 'app-x', template: '{{ missing }}' })",
+        'export class X {}',
+        '',
+      ].join('\n'),
+    );
+    try {
+      // ngc colours its output; TS2339 = "Property 'missing' does not exist on type 'X'".
+      expect(npx(['ngc', '-p', directory, '--noEmit']).output).toMatch(/TS2339: .*'missing'/);
+    } finally {
+      rmSync(directory, { recursive: true, force: true });
+    }
+  });
+});
+
 describe('D-66 dependency-cruiser forbids cycles', () => {
   it('fails on a circular import', () => {
     const directory = join(REPO_ROOT, 'packages/domain/src/__cycle_fixture__');

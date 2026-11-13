@@ -1,0 +1,87 @@
+<form class="card flex flex-col gap-5" novalidate aria-label="Datos del cliente" (submit)="onSubmit($event)">
+  <div class="field">
+    <label class="label" for="customer-country">País</label>
+    <select id="customer-country" class="input" [formField]="customerForm.country">
+      @for (country of countries(); track country.code) {
+        <option [value]="country.code">{{ country.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="field">
+    <label class="label" for="customer-company">Nombre de empresa</label>
+    <input
+      id="customer-company"
+      class="input"
+      type="text"
+      autocomplete="organization"
+      [formField]="customerForm.companyName"
+      [attr.aria-invalid]="isShowingError(customerForm.companyName()) || null"
+      aria-describedby="customer-company-error"
+    />
+    <app-field-error [state]="customerForm.companyName()" errorId="customer-company-error" />
+  </div>
+
+  <div class="field">
+    <label class="label" for="customer-tax-id">{{ taxIdText().label }}</label>
+    <input
+      id="customer-tax-id"
+      class="input"
+      type="text"
+      autocomplete="off"
+      spellcheck="false"
+      [formField]="customerForm.taxId"
+      [attr.aria-invalid]="isShowingError(customerForm.taxId()) || null"
+      aria-describedby="customer-tax-id-hint customer-tax-id-error"
+    />
+    <p id="customer-tax-id-hint" class="hint">Ejemplo: {{ taxIdText().example }}</p>
+    <app-field-error [state]="customerForm.taxId()" errorId="customer-tax-id-error" />
+  </div>
+
+  <div class="field">
+    <label class="label" for="customer-email">Email de contacto</label>
+    <input
+      id="customer-email"
+      class="input"
+      type="email"
+      autocomplete="email"
+      [formField]="customerForm.contactEmail"
+      [attr.aria-invalid]="isShowingError(customerForm.contactEmail()) || null"
+      aria-describedby="customer-email-error"
+    />
+    <app-field-error [state]="customerForm.contactEmail()" errorId="customer-email-error" />
+  </div>
+
+  <div class="field">
+    <label class="label" for="customer-plan">Plan</label>
+    <select
+      id="customer-plan"
+      class="input"
+      [formField]="customerForm.plan"
+      [attr.aria-invalid]="isShowingError(customerForm.plan()) || null"
+      aria-describedby="customer-plan-error"
+    >
+      <option value="">Selecciona un plan</option>
+      @for (plan of plans(); track plan) {
+        <option [value]="plan">{{ plan }}</option>
+      }
+    </select>
+    <app-field-error [state]="customerForm.plan()" errorId="customer-plan-error" />
+  </div>
+
+  @if (notice(); as current) {
+    <div role="alert" class="alert alert-danger flex-col items-start sm:flex-row sm:items-center">
+      <p class="font-semibold">{{ current.message }}</p>
+      @if (current.existingCustomerId; as existingId) {
+        <a class="link" [routerLink]="['/customers', existingId]">Ver cliente</a>
+      }
+    </div>
+  }
+
+  <button type="submit" class="btn btn-primary self-start" [disabled]="customerForm().submitting()">
+    @if (customerForm().submitting()) {
+      <app-spinner />
+    }
+    Crear cliente
+  </button>
+</form>

@@ -1,0 +1,133 @@
+/*
+ * Base components (D-125). Global classes built only from the tokens, because Angular components cannot carry
+ * their own styles (CSP `style-src 'self'`, ADR-011). The patterns follow roams.es: lavender primary button,
+ * outlined secondary, soft tinted button, white cards with a soft centred shadow and a highlighted card with a
+ * 3 px lavender border. Controls are 48 px high (touch targets of at least 44 px, RNF-13).
+ */
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-sm px-5 text-body font-bold transition-colors;
+    @apply disabled:cursor-not-allowed aria-disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-on-primary hover:bg-primary-hover active:bg-primary-active;
+    @apply disabled:bg-surface-muted disabled:text-ink-disabled;
+  }
+
+  .btn-secondary {
+    @apply border border-ink bg-surface text-ink hover:bg-surface-muted;
+    @apply disabled:border-line disabled:text-ink-disabled disabled:hover:bg-surface;
+  }
+
+  .btn-soft {
+    @apply bg-primary-soft text-primary-ink hover:bg-primary-soft-hover;
+    @apply disabled:bg-surface-muted disabled:text-ink-disabled;
+  }
+
+  .link {
+    @apply font-semibold text-primary underline underline-offset-2 hover:text-primary-hover;
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-lg border border-line bg-surface p-4 shadow-card sm:p-6;
+  }
+
+  .card-highlight {
+    @apply rounded-lg border-3 border-primary bg-primary-tint p-4 sm:p-6;
+  }
+
+  /* Text roles */
+  .page-title {
+    @apply text-title-lg font-extrabold text-ink;
+  }
+
+  .section-title {
+    @apply text-title-sm font-extrabold text-ink;
+  }
+
+  /* Amounts never split between the number and the currency sign, and their digits line up in columns. */
+  .amount {
+    @apply whitespace-nowrap tabular-nums;
+  }
+
+  /* Form fields */
+  .field {
+    @apply flex flex-col gap-1;
+  }
+
+  .label {
+    @apply text-small font-semibold text-ink;
+  }
+
+  .hint {
+    @apply text-small text-ink-muted;
+  }
+
+  .input {
+    @apply min-h-12 w-full rounded-sm border border-line-control bg-surface px-4 text-body text-ink;
+    @apply placeholder:text-ink-muted aria-invalid:border-2 aria-invalid:border-danger-fg;
+    @apply disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-ink-disabled;
+  }
+
+  .field-error {
+    @apply text-small font-semibold text-danger-fg;
+  }
+
+  /* Small labels: plan, tax id type. Values, so at body-small size (user feedback at the visual checkpoint). */
+  .badge {
+    @apply inline-flex items-center rounded-full bg-primary-soft px-3 text-small font-semibold text-primary-ink;
+  }
+
+  /* Label/value lists (customer card, history): small muted label, value at body size in the normal text
+     colour. Stacked on phones, two columns from 640 px. Markup: <dl class="data-list"><div><dt/><dd/></div>. */
+  .data-list {
+    @apply flex flex-col gap-3;
+  }
+
+  .data-list > div {
+    @apply flex flex-col sm:flex-row sm:items-baseline sm:gap-4;
+  }
+
+  .data-list dt {
+    @apply text-small text-ink-muted sm:w-40 sm:shrink-0;
+  }
+
+  .data-list dd {
+    @apply text-body text-ink wrap-anywhere;
+  }
+
+  /* Header navigation link; the current section is marked with aria-current, never with colour alone. */
+  .nav-link {
+    @apply inline-flex min-h-11 items-center border-b-2 border-transparent px-1 text-body font-semibold text-ink-soft;
+    @apply hover:text-primary aria-[current=page]:border-primary aria-[current=page]:text-ink;
+  }
+
+  /* Alerts: icon + text + strong border, never colour alone (WCAG 1.4.1) */
+  .alert {
+    @apply flex items-start gap-3 rounded-md border p-4 text-small;
+  }
+
+  .alert-success {
+    @apply border-success-fg bg-success-bg text-success-fg;
+  }
+
+  .alert-warning {
+    @apply border-warning-fg bg-warning-bg text-warning-fg;
+  }
+
+  .alert-danger {
+    @apply border-danger-fg bg-danger-bg text-danger-fg;
+  }
+
+  .alert-info {
+    @apply border-info-fg bg-info-bg text-info-fg;
+  }
+
+  /* Loading placeholder */
+  .skeleton {
+    @apply animate-pulse rounded-sm bg-surface-muted;
+  }
+}

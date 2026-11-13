@@ -1,0 +1,39 @@
+<section class="flex flex-col gap-4" aria-labelledby="history-title">
+  <h2 id="history-title" class="section-title">Historial de simulaciones</h2>
+
+  @switch (store.historyStatus()) {
+    @case ('loading') {
+      <div class="card"><app-loading-block label="Cargando el historial…" /></div>
+    }
+    @case ('error') {
+      <app-error-state message="No se ha podido cargar el historial." (retry)="store.reloadHistory()" />
+    }
+    @case ('ready') {
+      @let simulations = store.simulations();
+      <ol class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3" aria-label="Simulaciones guardadas">
+        @for (simulation of simulations; track simulation.id) {
+          <li><app-simulation-card [simulation]="simulation" /></li>
+        } @empty {
+          <li class="card md:col-span-2 xl:col-span-3">
+            Aún no hay simulaciones. Usa el simulador para crear la primera.
+          </li>
+        }
+      </ol>
+      @if (store.loadMoreStatus() === 'error') {
+        <app-error-state message="No se han podido cargar más simulaciones." (retry)="store.loadMore()" />
+      } @else if (store.hasMore()) {
+        <button
+          type="button"
+          class="btn btn-secondary self-center"
+          [disabled]="store.loadMoreStatus() === 'loading'"
+          (click)="store.loadMore()"
+        >
+          @if (store.loadMoreStatus() === 'loading') {
+            <app-spinner />
+          }
+          Cargar más
+        </button>
+      }
+    }
+  }
+</section>

@@ -2,6 +2,8 @@
 /**
  * Fails if the repository contains patterns forbidden by the security rules:
  * - innerHTML / outerHTML / bypassSecurityTrust* in the web app, including templates (RNF-SEC-14, AC-56);
+ * - arbitrary colour values in Tailwind classes (`bg-[#fff]`, `text-[rgb(0,0,0)]`): colours only come from the
+ *   design tokens, whose contrast is tested (D-125, D-124);
  * - committed .env files other than .env.example (RNF-SEC-12, AC-55);
  * - invisible characters written literally in code or configuration (D-96): format characters such as zero-width
  *   spaces or bidirectional overrides ("Trojan Source"), line or paragraph separators and non-ASCII spaces. They
@@ -18,6 +20,10 @@ const WEB_SOURCE = /^apps\/web\/src\/.+\.(ts|html)$/;
 const FORBIDDEN_IN_WEB = [
   { pattern: /\b(innerHTML|outerHTML)\b/, rule: 'innerHTML/outerHTML (RNF-SEC-14)' },
   { pattern: /bypassSecurityTrust/, rule: 'bypassSecurityTrust* (RNF-SEC-14)' },
+  {
+    pattern: /-\[(?:color:)?(?:#|rgba?\(|hsla?\(|oklch\(|oklab\(|lab\(|lch\(|color\()/i,
+    rule: 'arbitrary colour value: use a design token (D-125)',
+  },
 ];
 const ENV_FILE = /^\.env(\..+)?$/;
 const CODE_OR_CONFIG = /\.(ts|js|mjs|cjs|html|css|json|ya?ml)$/;

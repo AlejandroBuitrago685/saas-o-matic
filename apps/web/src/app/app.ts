@@ -1,16 +1,18 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
+
+import { AppFooter } from './core/layout/app-footer';
+import { AppHeader } from './core/layout/app-header';
+import { ToastRegion } from './core/layout/toast-region';
 
 /**
- * Application shell. No component styles (styles / styleUrl) are allowed: Tailwind utilities only,
- * so the CSP can keep `style-src 'self'` (ADR-011, RNF-SEC-06).
+ * Application shell. No component styles (styles / styleUrl) are allowed: Tailwind utilities and the global
+ * classes of `styles/` only, so the CSP can keep `style-src 'self'` (ADR-011, RNF-SEC-06, D-125).
  */
 @Component({
   selector: 'app-root',
-  imports: [RouterLink, RouterOutlet],
+  imports: [RouterOutlet, AppHeader, AppFooter, ToastRegion],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App {
-  protected readonly appName = 'SaaS-O-Matic';
-}
+export class App {}
