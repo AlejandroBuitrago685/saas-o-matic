@@ -613,7 +613,7 @@ Playwright en `devDependencies` (P6).
 | Ruta `/` → dashboard (`TODO(P7)`, D-126) | P7 |
 | Selector de divisa e indicador de tipos en `header-tools`; conversión en `money` | P8 |
 
-**Decisiones:** D-122 (validada en el punto de control) y D-123 a D-129 (pendientes de validar).
+**Decisiones:** D-122 (validada en el punto de control) y D-123 a D-129, validadas por el usuario el 2026-11-13 tras el cierre.
 
 **Tiempo:** estimado 5,5 h (4,5 h + 1 h de dirección visual) · real ≈ 1 h de implementación (11:00–12:00, hora de
 Canarias) más el plan y el punto de control. La holgura del viernes sigue casi entera.
@@ -635,5 +635,5 @@ Canarias) más el plan y el punto de control. La holgura del viernes sigue casi 
 
 **Siguiente parte: P6 · Docker Compose, nginx y e2e de la porción vertical** (3 h).
 
-**Decisiones por validar:** D-123 a D-129.
+**Decisiones por validar:** ninguna.
 
