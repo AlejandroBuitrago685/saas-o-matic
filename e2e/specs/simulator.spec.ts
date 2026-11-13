@@ -105,6 +105,9 @@ test('AC-91 TV-SL-02 TV-SL-03 TV-SL-04 TV-SL-05: the keyboard reaches 10, 11, 50
   const simulator = await openSimulator(page, request);
   await simulator.slider.focus();
   await page.keyboard.press('Home');
+  // Without Zone.js the slider repaints after the key, not during it: reading at once could still see the 15 it opens
+  // with (D-160), skip every step and fail with «jumped over 10». Only the 1 of Home is a safe start.
+  await expect(simulator.slider).toHaveAttribute('aria-valuetext', '1 usuarios');
 
   await stepTo(page, simulator.slider, 10);
   await expect(simulator.slider).toHaveAttribute('aria-valuetext', '10 usuarios');
