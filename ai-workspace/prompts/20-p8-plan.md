@@ -24,3 +24,7 @@ Estoy en modo plan: preséntame el plan de P8. Protocolo de siempre al cerrar.
 ## Mensaje 3
 
 (Aprobación del plan en la interfaz de modo plan, sin texto.)
+
+## Mensaje 4 (tras el cierre)
+
+Apruebo D-145 y D-147. Hago yo el merge

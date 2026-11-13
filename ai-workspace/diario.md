@@ -929,7 +929,7 @@ para el sábado: el calendario va adelantado.
 - D-137, D-138, D-140 y D-141: validadas en el plan;
 - D-142 y D-143: del usuario;
 - D-144, D-146, D-148, D-149, D-150 y D-151: Claude;
-- D-145 y D-147: Claude · pendiente.
+- D-145 y D-147: Claude · validadas tras el cierre.
 
 **Tiempo:** estimado 3,5 h · real ≈ 40 min de implementación (17:15–17:55, hora de Canarias), más el plan, la
 revisión y el cierre.
@@ -952,4 +952,4 @@ revisión y el cierre.
 
 **Siguiente parte: P9 · Robustez** (3,5 h).
 
-**Decisiones por validar:** D-145 y D-147.
+**Decisiones por validar:** ninguna (D-145 y D-147 validadas al cerrar P8; el usuario hace el *merge*).
