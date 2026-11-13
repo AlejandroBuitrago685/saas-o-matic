@@ -1163,8 +1163,8 @@ Canarias), más el plan, las dos pilas de e2e, la revisión y el cierre.
 
 **Estado**
 - Hechas: P0 a P10. P10 está en la rama `feat/p10-should-could-ci`, con su PR.
-- `main` exige `quality` ×3, `audit` y `e2e`, y los 5 `smoke` en cuanto pasen una vez en verde (D-88; autorizado en el
-  prompt 22).
+- `main` exige 10 *checks*: `quality` ×3, `audit`, `e2e` y los 5 `smoke`. Los `smoke` los añadió Claude con `gh` tras
+  su primer verde en el PR #15 (D-88; autorizado en el prompt 22), y en Windows y macOS pasaron a la primera.
 - `npm run trace` ya bloquea (D-161). **P11 tiene que quitar `AC-61` de `PENDING_CRITERIA`** en
   `scripts/trace-tests.mjs` cuando su test exista: si no, el CI falla con «Declared pending but already tested».
 - Prueba de humo: `npm run e2e:smoke`, con los puertos 3000 y 4200 libres.

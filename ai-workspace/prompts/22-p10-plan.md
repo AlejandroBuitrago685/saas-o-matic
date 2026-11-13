@@ -31,3 +31,11 @@ Lo demás, aprobado, incluidas D-161 y D-162. Cuando los checks smoke hayan pasa
 ## Mensaje 4
 
 (Aprobación del plan en la interfaz de modo plan, sin texto.)
+
+## Mensaje 5 (Auto-fix)
+
+Sí, activa Auto-fix
+
+## Mensaje 6
+
+Checks en verde
