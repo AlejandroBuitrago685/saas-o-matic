@@ -470,8 +470,48 @@ el viernes gana 2 h de holgura (calendario actualizado).
 | Errores de la ruta, la consulta y el cuerpo juntos (04-contrato §2.3, punto 4): Fastify se para en la primera parte que falla. Validar las tres en un `preValidation` propio o registrar la limitación (revisor, P2-4). | P4 |
 | AC-58 con igualdad exacta, cuando estén todas las rutas. | P7 |
 
-**Decisiones:** D-105 a D-108 y D-110 (usuario), D-109 (usuario, tras la prueba), D-111 a D-116 (pendientes).
+**Decisiones:** D-105 a D-108 y D-110 (usuario), D-109 (usuario, tras la prueba), D-111 a D-116 (validadas el
+2026-11-13; D-113 con la condición de una lista estrecha: `loopback` y la subred de Docker de la demo).
 
 **Tiempo:** estimado 3,5 h · real ≈ 4,5 h hasta la primera revisión (21:20–01:50, hora de Canarias) y ≈ 1 h más
 para las correcciones de las dos revisiones (terminadas el viernes a las 09:15), con dos pausas por el límite de uso.
 La holgura del viernes absorbe la hora de más.
+
+## Nota de traspaso — 2026-11-13, tras P3
+
+**Para empezar una sesión nueva:** leer `CLAUDE.md` (protocolo y reglas de eficiencia), esta nota, la sección P4 de
+[`04-plan-implementacion.md`](04-plan-implementacion.md) y su §4 (protocolo de cada parte). El usuario activa el modo
+plan y Claude presenta el plan de P4.
+
+**Estado**
+- Hechas y mergeadas en `main`: P0, P1, P2 y P3 (PR #5, merge `372f7c5`). Sin decisiones pendientes de validar.
+- La API tiene la base completa: contrato (`packages/contract`), configuración validada, base de datos con
+  migraciones, seguridad HTTP, `GET /catalog`, `GET /health`, `openapi.json` versionado y `/docs` en desarrollo.
+- Para escribir rutas en P4:
+  - los casos de uso lanzan `AppError` (`apps/api/src/shared/app-error.ts`);
+  - los tests usan `buildTestApp` (`apps/api/test/build-test-app.ts`), con SQLite en memoria, reloj fijo e ids
+    deterministas;
+  - `npm run openapi -w @saas-o-matic/api` regenera `openapi.json`: un test falla si no está al día.
+- Calendario: P3 cerró el viernes a las 09:15, con ≈ 1 h más de lo estimado, absorbida por la holgura del viernes.
+
+**Siguiente parte: P4 · API de la porción vertical** (2,5 h). Alta y lectura de clientes, y creación y listado de
+simulaciones. AC y TV, en el plan.
+
+**Pendiente para P4**
+- **Errores de ruta, consulta y cuerpo juntos** (04-contrato §2.3, punto 4): Fastify valida params → body →
+  querystring y se para en la primera parte que falla. Validar las tres partes en un `preValidation` propio y unir
+  los `errors[]`, o registrar la limitación con una D-xx y ajustar §2.3. Decidirlo en el plan de P4.
+- **Respuestas de error en `openapi.json`:** hoy solo documenta los `2xx` y el `503` de `/health`. Añadir el `400`,
+  `404`, `409`, `413`, `415`, `422`, `429` y `500` con `problemSchema` en `application/problem+json`, con un *helper*
+  común para las rutas.
+- AC-54 completo (logs de un alta, una búsqueda con `q=Acme` y una simulación).
+- Citar AC-21 y AC-22 en los tests de `POST /customers` (hoy el mecanismo se prueba con una ruta solo de test).
+
+**Pendientes de otras partes:** en las tablas de pendientes de cada entrada de este diario. Las más próximas:
+- **P5:** la referencia de error, hoy los 8 primeros caracteres de `instance` (serían `urn:uuid`): usar los 8 últimos
+  del UUID. Y `strictTemplates` también en `typecheck`.
+- **P6:**
+  - cierre ordenado con SIGTERM, que se prueba en el contenedor;
+  - subred fija en la red de Compose, con `TRUST_PROXY` = `loopback` + esa subred, y nada más (D-113);
+  - `--ignore-scripts` en la imagen, y Playwright en `devDependencies`.
+

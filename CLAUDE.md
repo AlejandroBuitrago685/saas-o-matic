@@ -26,7 +26,12 @@ Documentos: `ai-workspace/` → `00-enunciado.md` · `01-analisis.md` · `02-esp
 7. **Decisiones:** en `decisiones.md`, con la alternativa descartada, el motivo y quién la toma. Las de Claude que
    necesitan validación se marcan `Claude · pendiente`.
 8. **Verificar antes de afirmar:** los datos externos se contrastan con su fuente y se citan; los vectores se
-   calculan con un script.
+   calculan con un script. **No se vuelven a verificar** fuentes ni vectores que ya están verificados en la
+   especificación, salvo que haya un riesgo real.
+9. **Eficiencia (consumo):**
+   - el revisor (`model: sonnet`) revisa solo el diff de la parte y los ficheros tocados, en una sola pasada;
+   - diario, trazabilidad y decisiones se actualizan **una sola vez**, al cerrar cada parte;
+   - los resúmenes de cierre son cortos: lo hecho, lo decidido y lo pendiente.
 
 ## Arquitectura
 
