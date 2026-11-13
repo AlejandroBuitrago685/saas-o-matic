@@ -4,7 +4,9 @@
   >Saltar al contenido</a
 >
 <div class="flex min-h-screen flex-col">
-  <app-header />
+  <!-- Sticky on the host: inside it, the <header> would only stick within its own height (D-51: the rates
+       indicator stays visible while scrolling). -->
+  <app-header class="sticky top-0 z-10" />
 
   <main id="main" tabindex="-1" class="mx-auto w-full max-w-app flex-1 px-4 py-6 sm:px-6 sm:py-8">
     <router-outlet />

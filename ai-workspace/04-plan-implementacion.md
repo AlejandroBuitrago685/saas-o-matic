@@ -204,7 +204,9 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
 ### P8 · Divisas · 3,5 h
 
 - **Objetivo:** selector, tipos con caché, indicador de estado siempre visible y conversión por partidas hoja.
-- **AC:** AC-79, AC-80, AC-81, AC-82, AC-83, AC-87, AC-88.
+- **Incluye también:** el arreglo de la cabecera *sticky* (D-150), que no se quedaba fija desde P5. El dashboard no
+  muestra importes hasta las métricas de P10, que usarán `convertAmount` y el pipe `money`.
+- **AC:** AC-79, AC-80, AC-81, AC-82, AC-83, AC-87, AC-88 (en «Refrescando», D-142).
 - **TV:** TV-FX-01…06.
 - **Módulos:** `packages/domain/currency`, `apps/web/core/currency`, `core/layout` (indicador y atribución), `shared/format`.
 - **Tests:**

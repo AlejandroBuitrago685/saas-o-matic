@@ -82,8 +82,9 @@ Principios:
 
 ## 4. Divisas y estado de la API externa (D-22, D-23, D-51)
 
-- **Divisa seleccionada:** `CurrencyStore.selected` (signal). Se mantiene al navegar. Recordarla tras recargar es
-  Could (`localStorage` con `try/catch`).
+- **Divisa seleccionada:** `CurrencyStore.chosen` (la última elegida) y `effective` (`computed`: la elegida si tiene
+  tipo válido, EUR si no; D-143). Se mantiene al navegar. Recordarla tras recargar es Could (`localStorage` con
+  `try/catch`).
 - **Tipos de cambio:** `ExchangeRatesStore`, una máquina de estados con un signal de tipo unión discriminada:
 
   ```text
@@ -99,11 +100,14 @@ Principios:
   - La respuesta se valida con un **parser propio** (`core/currency/exchange-rates.parser.ts`): las cuatro reglas de
     spec `05` §4.3 más la validación por divisa, sin Zod en el bundle. Su resultado es un `Result`.
   - Caché en `localStorage` (`{ fetchedAt, payload }`) con `try/catch`. Se considera vigente durante 1 h desde
-    `fetchedAt`; si el refresco falla, se usa durante un máximo de 48 h desde `updatedAt`.
+    `fetchedAt`; si el refresco falla, se usa durante un máximo de 48 h desde `updatedAt`. El *payload* se revalida
+    con el parser al leerlo y el bloqueo de un `429` sobrevive a la recarga (D-146).
+  - `fetch`, el reloj y el almacenamiento se inyectan (`rates-environment.ts`, D-148). Refresco automático al arrancar
+    y al volver a la pestaña con tipos de más de 1 h o desactualizados (D-147).
   - Tras un `429`, no hay intentos automáticos durante 20 min. `retry()` (el botón «Reintentar») siempre lanza la petición.
   - Las transiciones son funciones puras (`nextRatesState(estado, evento, ahora)`), así que la máquina se prueba sin
     Angular, con un reloj inyectado.
-- **Indicador:** `RatesStatusComponent` en `core/layout/header`, siempre presente en la cabecera. Lee
+- **Indicador:** `RatesStatus` dentro de `CurrencyBar` (`core/layout`, D-151), siempre presente en la cabecera, que es *sticky* en su anfitrión (D-150). Lee
   `ExchangeRatesStore.state` y muestra el texto, el indicador de actividad o el botón «Reintentar» de cada estado
   (spec `05` §4.4). Tiene `role="status"` con `aria-live="polite"`. No depende de la divisa seleccionada, así que el
   error se ve también en EUR (D-51).

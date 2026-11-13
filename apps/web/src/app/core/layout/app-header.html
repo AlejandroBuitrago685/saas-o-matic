@@ -1,6 +1,7 @@
-<header class="sticky top-0 z-10 bg-surface shadow-header">
-  <!-- Phones: wordmark and the primary action on the first row, navigation on its own row below.
-       From 640 px: one row. P8 adds the currency selector and the rates status to `header-tools`. -->
+<header class="bg-surface shadow-header">
+  <!-- Phones: wordmark and the primary action on the first row, navigation below, then the currency bar (rates
+       indicator and selector, spec 05 §4.4). From 640 px the first three share a row and the currency bar has its
+       own; from 1024 px everything fits in one row. -->
   <div class="mx-auto flex max-w-app flex-wrap items-center gap-x-6 px-4 sm:min-h-16 sm:px-6">
     <a
       routerLink="/"
@@ -20,9 +21,14 @@
       </ul>
     </nav>
 
+    <app-currency-bar
+      data-testid="currency-bar"
+      class="order-4 block w-full border-t border-line py-2 lg:order-3 lg:ml-auto lg:w-auto lg:border-0"
+    />
+
     <div
       data-testid="header-tools"
-      class="order-2 ml-auto flex flex-wrap items-center justify-end gap-3 sm:order-3"
+      class="order-2 ml-auto flex flex-wrap items-center justify-end gap-3 sm:order-3 lg:order-4 lg:ml-0"
     >
       <a routerLink="/customers/new" class="btn btn-primary min-h-11 px-4">Nuevo cliente</a>
     </div>

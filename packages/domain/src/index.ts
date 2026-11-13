@@ -28,6 +28,19 @@ export { validateTariff } from './pricing/validate-tariff.js';
 export type { TariffInput, TariffTierInput, ValidTariff } from './pricing/validate-tariff.js';
 export { MAX_TAX_RATE_BPS, MIN_TAX_RATE_BPS } from './tax/calculate-tax.js';
 
+export { CURRENCIES, CURRENCY_DECIMALS, FOREIGN_CURRENCIES, isCurrency } from './currency/currencies.js';
+export type { Currency, ForeignCurrency } from './currency/currencies.js';
+export { toExchangeRate } from './currency/exchange-rate.js';
+export type { ExchangeRate } from './currency/exchange-rate.js';
+export { convertAmount, convertPricing, EUR_TARGET } from './currency/convert-pricing.js';
+export type {
+  ConversionError,
+  ConversionTarget,
+  ConvertedPricing,
+  ConvertibleAmounts,
+  ForeignTarget,
+} from './currency/convert-pricing.js';
+
 export {
   MAX_SLIDER_POSITION,
   MIN_SLIDER_POSITION,
