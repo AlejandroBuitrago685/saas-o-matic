@@ -70,6 +70,9 @@ export default defineConfig(
         { type: 'attribute', prefix: 'app', style: 'camelCase' },
       ],
       '@angular-eslint/prefer-on-push-component-change-detection': 'error',
+      // A presentational component is a decorated class with no members (the header, the footer): that is how
+      // Angular declares it, not an extraneous class. Undecorated empty classes are still an error.
+      '@typescript-eslint/no-extraneous-class': ['error', { allowWithDecorator: true }],
     },
   },
   {

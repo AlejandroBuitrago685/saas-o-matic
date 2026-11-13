@@ -1,0 +1,37 @@
+/*
+ * Element defaults (D-122): typography, focus and reduced motion. No component styles exist (CSP `style-src
+ * 'self'`, ADR-011), so everything global lives in these files.
+ */
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-body text-ink-soft antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-extrabold text-ink;
+  }
+
+  /* The focus ring of the reference: dashed, brand colour, 2 px away from the element. */
+  :focus-visible {
+    outline: 2px dashed var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

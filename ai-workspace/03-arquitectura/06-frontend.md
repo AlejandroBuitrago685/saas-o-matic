@@ -9,10 +9,13 @@ Signal Forms (`form`, estable desde 22.0), `provideZonelessChangeDetection` (des
 
 - `provideZonelessChangeDetection()`: sin Zone.js. La detección de cambios la dirigen los signals.
 - `provideRouter(routes, withComponentInputBinding())`, con rutas cargadas de forma diferida (`loadComponent`) por feature.
-- `provideHttpClient(withFetch(), withInterceptors([apiBaseInterceptor, apiErrorInterceptor]))`. Todas las llamadas a
-  la API van a la ruta relativa `/api/…` (ADR-012).
+- `provideHttpClient(withInterceptors([apiBaseInterceptor, apiErrorInterceptor]))`. En Angular 22 el backend `fetch`
+  es el predeterminado y `withFetch()` está obsoleto (P5). Los stores piden las rutas del contrato (`/customers/…`) y
+  `apiBaseInterceptor` las envía a la ruta relativa `/api/…` (ADR-012).
 - **Sin estilos de componente**: no se usan `styles` ni `styleUrl`; solo utilidades de Tailwind y una hoja global.
-  Así la CSP puede ser `style-src 'self'` sin `unsafe-inline` (RNF-SEC-06, regla de lint en 09-calidad §3).
+  Así la CSP puede ser `style-src 'self'` sin `unsafe-inline` (RNF-SEC-06, regla de lint en 09-calidad §3). Los tokens
+  y los componentes base (`.btn`, `.card`, `.data-list`…) están en `src/styles/` y se describen en
+  [`10-diseno-visual.md`](10-diseno-visual.md) (D-122 a D-125).
 - **Build de producción con `optimization.styles.inlineCritical: false`** (D-70). Verificado el 2026-11-12 con una
   app nueva de Angular 22.2 compilada en producción:
   - Con el valor por defecto (`true`), el `index.html` lleva un `<style>` con el CSS crítico y la hoja global con
@@ -109,7 +112,8 @@ Principios:
 ## 5. Errores de la API → mensajes en español
 
 1. `apiErrorInterceptor` convierte cualquier respuesta de error en un `ApiError`:
-   `{ status, code, errors[], reference }`, con los tipos de `contract`. `reference` son los 8 primeros caracteres de `instance`.
+   `{ status, code, errors[], reference, retryAfterSeconds, existingCustomerId }`, con los tipos de `contract`.
+   `reference` son los **8 últimos** caracteres del UUID de `instance` (D-127).
    Un fallo de red o un cuerpo que no es Problem Details se convierte en `code: 'NETWORK_ERROR'` o `'UNKNOWN_ERROR'`.
 2. `core/errors/error-messages.ts` es un diccionario
    `satisfies Record<ProblemCode | FieldErrorCode | ClientErrorCode, MessageFn>`. Si se añade un código al contrato y
@@ -137,7 +141,9 @@ texto del campo ─► validación (entero, 1–10 000) ─► si es válido: us
 
 ## 7. Formularios
 
-- **Alta de cliente:** Signal Forms (`form()` de `@angular/forms`, estable en 22). Los límites vienen de
+- **Alta de cliente:** Signal Forms (`form()` y `[formField]` de `@angular/forms/signals`, estables en 22; verificado en
+  P5, sin plan B). Los errores del servidor (`400`/`422`) se devuelven desde la `action` de `submit()` asociados a su
+  campo y desaparecen al editarlo. Los límites vienen de
   `CatalogStore.limits`, y la etiqueta y el ejemplo del identificador cambian con el país (spec `05` §3.2).
 - **Simulador:** controles enlazados directamente a signals del store, sin formulario. Son tres campos con reglas
   simples.

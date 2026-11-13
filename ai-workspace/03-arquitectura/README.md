@@ -23,6 +23,7 @@ su ADR en [`adr/`](adr/) y su entrada `D-xx` en el registro.
 | [`07-tests.md`](07-tests.md) | Estrategia por niveles, aislamiento y trazabilidad hasta AC y TV. |
 | [`08-despliegue.md`](08-despliegue.md) | Arranque local, Docker Compose, pipeline de CI y opciones de hosting de la demo. |
 | [`09-calidad-y-automatizacion.md`](09-calidad-y-automatizacion.md) | Cómo se hacen cumplir las reglas de código con herramientas, hooks de Claude Code y subagente revisor. |
+| [`10-diseno-visual.md`](10-diseno-visual.md) | Dirección visual a partir de roams.es: tokens con su origen, contraste AA, componentes base, tipografía autoalojada y tono (P5). |
 | [`adr/`](adr/) | Un ADR por decisión con impacto (ADR-001…014). |
 
 ## Las cinco decisiones con más impacto

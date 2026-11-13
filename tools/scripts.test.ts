@@ -9,6 +9,7 @@ import {
   findForbiddenWebPatterns,
   findInvisibleCharacters,
 } from '../scripts/check-forbidden-patterns.mjs';
+import { API_DEV_PORT, PROCESSES } from '../scripts/dev.mjs';
 import { listTrackedFiles } from '../scripts/lib/repo.mjs';
 import { automatedCriteria, definedVectors, missingIds } from '../scripts/trace-tests.mjs';
 import { affectedAreas, needsWholeRepoChecks, verificationSteps } from '../scripts/verify-changed.mjs';
@@ -25,6 +26,36 @@ describe('AC-56 forbidden patterns in the web app (RNF-SEC-14)', () => {
     expect(findings).toHaveLength(2);
     expect(findings[0]).toContain('x.html');
     expect(findings[1]).toContain('y.ts');
+  });
+});
+
+describe('ADR-012 npm run dev keeps the API on the port the web proxy targets', () => {
+  it('forces PORT for the API child, whatever PORT the shell or a preview tool exports', () => {
+    const proxy = JSON.parse(readFileSync(join(REPO_ROOT, 'apps/web/proxy.conf.json'), 'utf8')) as {
+      '/api': { target: string };
+    };
+
+    expect(new URL(proxy['/api'].target).port).toBe(API_DEV_PORT);
+    expect(PROCESSES.find(({ name }) => name === 'api')?.env).toEqual({ PORT: API_DEV_PORT });
+  });
+});
+
+describe('D-125 colours only come from the design tokens', () => {
+  it.each([
+    ['a hex background', '<div class="bg-[#3838ec]"></div>'],
+    ['an rgb text colour', '<p class="p-2 text-[rgb(0,0,0)]"></p>'],
+    ['a typed arbitrary colour in a class binding', "[class.border-[color:#fff]]='isOn'"],
+    ['an oklch ring', "host: { class: 'ring-[oklch(0.5_0.2_270)]' }"],
+  ])('rejects %s', (_case, content) => {
+    expect(findForbiddenWebPatterns([{ path: 'apps/web/src/app/x.html', content }])).toEqual([
+      'apps/web/src/app/x.html: arbitrary colour value: use a design token (D-125)',
+    ]);
+  });
+
+  it('accepts token utilities and non-colour arbitrary values', () => {
+    const content = '<div class="bg-primary text-ink-muted w-[22rem] grid-cols-[1fr_auto]"></div>';
+
+    expect(findForbiddenWebPatterns([{ path: 'apps/web/src/app/ok.html', content }])).toEqual([]);
   });
 });
 

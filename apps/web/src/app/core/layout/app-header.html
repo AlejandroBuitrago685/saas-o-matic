@@ -1,0 +1,30 @@
+<header class="sticky top-0 z-10 bg-surface shadow-header">
+  <!-- Phones: wordmark and the primary action on the first row, navigation on its own row below.
+       From 640 px: one row. P8 adds the currency selector and the rates status to `header-tools`. -->
+  <div class="mx-auto flex max-w-app flex-wrap items-center gap-x-6 px-4 sm:min-h-16 sm:px-6">
+    <a
+      routerLink="/"
+      class="order-1 flex min-h-14 items-center rounded-sm text-title-sm font-extrabold text-ink"
+      aria-label="SaaS-O-Matic, inicio"
+    >
+      SaaS-<span class="text-primary">O-Matic</span>
+    </a>
+
+    <nav aria-label="Principal" class="order-3 w-full border-t border-line sm:order-2 sm:w-auto sm:border-0">
+      <ul class="flex gap-6">
+        <li>
+          <a routerLink="/" class="nav-link" [attr.aria-current]="isCustomersSection() ? 'page' : null"
+            >Clientes</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div
+      data-testid="header-tools"
+      class="order-2 ml-auto flex flex-wrap items-center justify-end gap-3 sm:order-3"
+    >
+      <a routerLink="/customers/new" class="btn btn-primary min-h-11 px-4">Nuevo cliente</a>
+    </div>
+  </div>
+</header>

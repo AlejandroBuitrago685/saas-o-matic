@@ -1,0 +1,36 @@
+/*
+ * Native range input of the users slider (D-124, spec 05 §3.4.1). It stays a native <input type="range">, so the
+ * keyboard (arrows, Home/End, PageUp/PageDown) and aria-valuetext work without JavaScript of our own.
+ * The reference's light lavender track (#B9B9F8) has 1.9:1 against white and fails WCAG 1.4.11; the track uses
+ * `--color-track` (3.6:1) and the thumb the primary colour (7.1:1) with a white ring. No progress fill: it would
+ * need an inline style.
+ */
+@layer components {
+  .range {
+    @apply h-11 w-full cursor-pointer appearance-none bg-transparent;
+  }
+
+  .range::-webkit-slider-runnable-track {
+    @apply h-1 rounded-full bg-track;
+  }
+
+  .range::-moz-range-track {
+    @apply h-1 rounded-full bg-track;
+  }
+
+  .range::-webkit-slider-thumb {
+    @apply -mt-2.5 size-6 appearance-none rounded-full border-3 border-surface bg-primary shadow-card;
+  }
+
+  .range::-moz-range-thumb {
+    @apply size-6 rounded-full border-3 border-surface bg-primary shadow-card;
+  }
+
+  .range:active::-webkit-slider-thumb {
+    @apply bg-primary-active;
+  }
+
+  .range:active::-moz-range-thumb {
+    @apply bg-primary-active;
+  }
+}

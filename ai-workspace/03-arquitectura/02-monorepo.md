@@ -130,6 +130,7 @@ publicación en npm, consultada el 2026-11-12). Cualquier dependencia nueva sigu
 | ~~`uuid`~~ | — | — | **Descartada en P3 (D-115):** su `v7()` dedica 32 bits al contador y deja 42 bits aleatorios en los ids del mismo milisegundo, y RNF-SEC-04 pide 62. El generador propio (`apps/api/src/shared/id-generator.ts`, método 1 de RFC 9562 §6.2) son unas 40 líneas con `node:crypto` y tests de cada rama. | — |
 | `@angular/*` | 22.2.x | 2026-11 | Interfaz (stack decidido). | — |
 | `tailwindcss` + `@tailwindcss/postcss` | 4.3.5 | 2026-11-11 | Estilos (stack decidido). | — |
+| `@fontsource-variable/montserrat` | 5.3.0 | 2026-07-19 | **(P5, D-123)** Montserrat, la tipografía de la referencia visual (OFL-1.1), autoalojada: CSS con `@font-face` y `.woff2` variables por subconjunto, sin JavaScript. Angular copia los ficheros al build con *hash* y los sirve desde el mismo origen (CSP sin CDN). Impacto: 375 KB en disco; el navegador solo descarga el subconjunto `latin` (38 KB). | Copiar los `.woff2` y la licencia a `public/` (binarios en git, actualización a mano, fuera de `npm audit`); Google Fonts o un CDN (la CSP lo impide). |
 
 El logger es `pino`, que ya viene con Fastify: no es una dependencia nueva.
 
@@ -138,6 +139,8 @@ El logger es `pino`, que ya viene con Fastify: no es una dependencia nueva.
 
 Las arrastra Angular (`ng new`) y son de mantenimiento mínimo: `rxjs` 7.8.2, `tslib` 2.9.1, `postcss` 8.5.32 y
 `jsdom` 30.1.3 (entorno de los tests de componentes; la rama 30 es la que propone el CLI, aunque ya exista la 31).
+
+**Instalado en P5:** `@fontsource-variable/montserrat` 5.3.0 (`save-exact`).
 
 **Instalado en P3:** `@fastify/helmet` 13.2.0, `@fastify/cors` 11.4.1 y `@fastify/rate-limit` 11.2.2, y
 `@fastify/swagger-ui` 6.1.3 como dependencia de desarrollo (§4.2). Todas son JavaScript puro, sin compilación nativa.

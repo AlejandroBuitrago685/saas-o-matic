@@ -123,3 +123,28 @@ describe('ADR-001 the shared domain stays pure', () => {
     expect(ruleIds(findings)).toContain('boundaries/dependencies');
   });
 });
+
+describe('D-125 presentational Angular components may be decorated empty classes', () => {
+  it('accepts a component class with no members', async () => {
+    const code = [
+      "import { ChangeDetectionStrategy, Component } from '@angular/core';",
+      '',
+      '@Component({',
+      "  selector: 'app-x',",
+      "  template: '<p>x</p>',",
+      '  changeDetection: ChangeDetectionStrategy.OnPush,',
+      '})',
+      'export class X {}',
+      '',
+    ].join('\n');
+    const findings = await lintFixture(`apps/web/src/app/${F}empty-component.ts`, code);
+
+    expect(ruleIds(findings)).not.toContain('@typescript-eslint/no-extraneous-class');
+  });
+
+  it('still rejects an undecorated empty class', async () => {
+    const findings = await lintFixture(`apps/web/src/app/${F}empty-class.ts`, 'export class X {}\n');
+
+    expect(ruleIds(findings)).toContain('@typescript-eslint/no-extraneous-class');
+  });
+});

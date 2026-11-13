@@ -296,4 +296,4 @@ Reglas de transición:
 | `CUSTOMER_ALREADY_EXISTS` | Ya existe un cliente con este identificador fiscal. |
 | `CUSTOMER_NOT_FOUND` | El cliente ya no existe. |
 | `RATE_LIMITED` | Demasiadas peticiones. Espera {Retry-After} s y vuelve a intentarlo. |
-| `INTERNAL_ERROR`, error de red u otro | Algo ha fallado. Inténtalo de nuevo. (Referencia: {8 primeros caracteres de `instance`}) |
+| `INTERNAL_ERROR`, error de red u otro | Algo ha fallado. Inténtalo de nuevo. (Referencia: {8 últimos caracteres del UUID de `instance`}, D-127) |

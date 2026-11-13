@@ -552,3 +552,88 @@ Canarias, con las correcciones de la revisión). La holgura del viernes queda ca
 Playwright en `devDependencies` (P6).
 
 **Decisiones por validar:** ninguna.
+
+## P5 · Web de la porción vertical — 2026-11-13 · rama `feat/p5-web-vertical`
+
+**Hecho**
+- **Dirección visual (antes de la primera pantalla):** análisis de roams.es leyendo su CSS servido (tiene su propio
+  sistema de tokens de dos capas). Tokens propios en `@theme` con la paleta por defecto de Tailwind vaciada,
+  Montserrat autoalojada, componentes base en `@layer components`, test de contraste AA de los tokens y guardia de
+  colores arbitrarios. Documento: [`03-arquitectura/10-diseno-visual.md`](03-arquitectura/10-diseno-visual.md).
+- **Punto de control visual** con una maqueta temporal (sin versionar, ya borrada) a 360 y 1280 px. El usuario la
+  validó con dos ajustes: valores de la tarjeta del cliente a 16 px en `ink` (`.data-list`) y cabecera con
+  «Clientes» a la izquierda y «Nuevo cliente» a la derecha, con hueco para P8 y recogida en móvil.
+- **`core`:** interceptores (`/api` y errores → `ApiError`), parser de Problem Details sin Zod, diccionario de mensajes
+  exhaustivo por tipos, `CatalogStore` (valida el catálogo con el dominio), cabecera, pie con la atribución (AC-83),
+  avisos de éxito y vista de no encontrado.
+- **Alta (V2)** con Signal Forms: validación del esquema en el navegador, errores del servidor bajo su campo, foco al
+  primer error, `409` con «Ver cliente», `429` y fallo con referencia (AC-72, AC-73, AC-74).
+- **Detalle (V3) y simulador (V4):** proyección `computed` con `calculatePricing` del dominio, slider nativo con
+  `aria-valuetext` y Re Pág/Av Pág de 10 posiciones, campos que nunca se corrigen solos, guardado único con doble clic,
+  historial con «Cargar más» y estados de carga, vacío y error (AC-75 a AC-78, AC-89, AC-91 E).
+- **Pendientes heredados:** `strictTemplates` en `typecheck` (D-128) y referencia de error (D-127).
+- `npm run verify` en verde: 855 tests de Node y 98 de la web; build inicial 300,6 kB (80 kB transferidos);
+  trazabilidad **AC 53/81 (+9) · TV 121/129 (+1)**.
+- Flujo real en el navegador contra la API: `12345678A` → error bajo el campo con foco; alta → detalle y «Cliente
+  creado»; 15 usuarios → 169,40 €; 51 usuarios y doble clic → una sola simulación de 425,00 + 89,25 = 514,25 €, también
+  tras recargar; `/customers/abc` → «Cliente no encontrado»; 360 px sin scroll horizontal; una única petición de fuente
+  (`latin`, mismo origen); 0 `<style>`/`<script>` en línea en el `index.html` de producción.
+
+**Falló o lo descubrí por el camino**
+- **`npm run dev` con `PORT` heredado:** la previsualización exporta `PORT=4200` y la API lo leía, así que ocupaba el
+  puerto de la web y el proxy apuntaba a la nada. Arreglo y test (D-129).
+- `withFetch()` está obsoleto en Angular 22 (fetch ya es el backend por defecto): no se usa.
+- El color `body` chocaba con el tamaño `text-body` en Tailwind: los colores de texto son `ink*`.
+- `shared` no puede importar `contract` (frontera): el fixture del catálogo vive en `core/testing/`, fuera del build.
+- En los tests, `whenStable()` espera a las peticiones aún sin responder (catálogo, historial) y las acciones de
+  `submit()` terminan en promesas que el *fixture* no sigue: los tests renderizan de forma síncrona y esperan una vuelta
+  de la cola.
+- Dos totales de un test escritos a mano estaban mal (121,00 y 130,68 €): ahora se calculan con el dominio.
+- A 360 px los importes se partían entre la cifra y el `€`: `.amount` no salta de línea.
+
+**Correcciones**
+- **Del usuario:** los dos ajustes del punto de control.
+- **Del revisor** (`sonnet`, una pasada): **NO APTO solo por documentación** (P1: dependencia y documento de diseño sin
+  registrar, que se cierran en este mismo cierre). Sin P0 ni P1 en el código.
+  - P2 corregidos: duplicado en el historial al reintentar tras guardar (deduplicación por `id` y `reloadHistory` que
+    empieza de cero; el test falló antes del arreglo); `created` se emite fuera del `try`; tests sin AC/TV/D en el
+    título.
+  - P3 corregidos: sin `as ApiError`; sin anuncio `aria-live` al montar el panel (test); una sola región `status` al
+    cargar el detalle; `TODO(P7)` en la redirección de `/`; límites de la guardia de colores documentados en D-125.
+  - P2 sin test de regresión, con motivo: el `emit` fuera del `try` no se puede provocar desde un test porque Angular
+    ya captura los errores de los *listeners* de un `output()` y los envía al `ErrorHandler`; el cambio es defensivo.
+  - Para P6, sin cambios ahora: la CSP de nginx debe permitir las fuentes (`font-src` cae en `default-src 'self'`) y
+    el foco al cambiar de vista no lo pide la spec.
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| e2e de AC-72 a AC-78, AC-83, AC-89, AC-90 y AC-91 contra Compose, y CSP real (fuentes incluidas) | P6 |
+| Ruta `/` → dashboard (`TODO(P7)`, D-126) | P7 |
+| Selector de divisa e indicador de tipos en `header-tools`; conversión en `money` | P8 |
+
+**Decisiones:** D-122 (validada en el punto de control) y D-123 a D-129 (pendientes de validar).
+
+**Tiempo:** estimado 5,5 h (4,5 h + 1 h de dirección visual) · real ≈ 1 h de implementación (11:00–12:00, hora de
+Canarias) más el plan y el punto de control. La holgura del viernes sigue casi entera.
+
+## Nota de traspaso — 2026-11-13, tras P5
+
+**Para empezar una sesión nueva:** leer `CLAUDE.md`, esta nota, la sección de la parte siguiente de
+[`04-plan-implementacion.md`](04-plan-implementacion.md) y su §4. El usuario activa el modo plan y Claude presenta el plan.
+
+**Estado**
+- Hechas: P0 a P5. P5 está en la rama `feat/p5-web-vertical`, pendiente de PR.
+- La web hace la porción vertical completa contra la API real. Dirección visual en
+  [`03-arquitectura/10-diseno-visual.md`](03-arquitectura/10-diseno-visual.md): usar solo los tokens y las clases de
+  `apps/web/src/styles/`; los colores arbitrarios y la paleta por defecto no existen.
+- Para escribir vistas: `CatalogStore.ready()`, `ApiError` y `problemMessage`/`fieldMessage`, `ToastStore`,
+  `app-loading-block`/`app-error-state`/`app-field-error`, y el fixture `core/testing/catalog.fixture.ts`. En los tests,
+  responder a todas las peticiones antes de `whenStable()`.
+- `npm run dev` arranca con `.claude/launch.json` («dev») en el panel del navegador.
+
+**Siguiente parte: P6 · Docker Compose, nginx y e2e de la porción vertical** (3 h).
+
+**Decisiones por validar:** D-123 a D-129.
+

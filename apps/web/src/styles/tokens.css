@@ -1,0 +1,82 @@
+/*
+ * Design tokens of SaaS-O-Matic (D-122). The values come from the public design system of roams.es, the company
+ * this internal tool belongs to; the names and structure are ours. The origin of every token and the reasons for
+ * each adjustment are in ai-workspace/03-arquitectura/10-diseno-visual.md.
+ *
+ * Tailwind's default palette, sizes, radii and shadows are removed: only these tokens generate utilities, so
+ * `bg-slate-50` or `rounded-xl` produce no CSS. tools/design-tokens.test.ts checks the WCAG AA contrast of every
+ * pair the interface uses (D-124).
+ */
+@theme {
+  --color-*: initial;
+  --font-*: initial;
+  --text-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+
+  /* Surfaces */
+  --color-canvas: #f5f7fb;
+  --color-surface: #ffffff;
+  --color-surface-muted: #eef0f6;
+
+  /* Text */
+  --color-ink: #0d0d1a;
+  --color-ink-soft: #4a4d56;
+  --color-ink-muted: #666972;
+  --color-ink-disabled: #a1a4ae;
+  --color-on-primary: #ffffff;
+
+  /* Brand and interaction: the only action colour */
+  --color-primary: #3838ec;
+  --color-primary-hover: #1515dd;
+  --color-primary-active: #0f0fa1;
+  --color-primary-soft: #e4e4fc;
+  --color-primary-soft-hover: #d3d3fb;
+  --color-primary-tint: #f7f7fe;
+  --color-primary-ink: #313087;
+
+  /* Lines */
+  --color-line: #e0e3ea;
+  --color-line-control: #666972;
+  --color-track: #83868f;
+
+  /* Status: the strong tone carries the meaning (text, icons, borders); the soft tone is only a background */
+  --color-success-fg: #047857;
+  --color-success-bg: #e8f8ee;
+  --color-warning-fg: #8a5a00;
+  --color-warning-bg: #fff3e0;
+  --color-danger-fg: #b00038;
+  --color-danger-bg: #fde7ed;
+  --color-info-fg: #0054c2;
+  --color-info-bg: #e3f4ff;
+
+  /* Typography: Montserrat, self-hosted (D-123) */
+  --font-sans: 'Montserrat Variable', 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5rem;
+  --text-body: 1rem;
+  --text-body--line-height: 1.5rem;
+  --text-title-sm: 1.125rem;
+  --text-title-sm--line-height: 1.625rem;
+  --text-title-lg: 1.5rem;
+  --text-title-lg--line-height: 2rem;
+  --text-display: 2.25rem;
+  --text-display--line-height: 2.75rem;
+
+  /* Shape and depth */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+
+  --shadow-card: 0 0 8px -1px rgb(13 13 26 / 0.12);
+  --shadow-raised: 0 0 18px -2px rgb(13 13 26 / 0.16);
+  --shadow-header: 0 10px 20px rgb(0 0 0 / 0.05);
+
+  /* Layout */
+  --container-app: 75rem;
+}
