@@ -1,5 +1,8 @@
 <section class="flex flex-col gap-4" aria-labelledby="history-title">
   <h2 id="history-title" class="section-title">Historial de simulaciones</h2>
+  <p data-testid="history-conversion-note" class="text-small text-ink-muted" [hidden]="!hasConversionNote()">
+    Convertido al tipo de cambio actual, no al de la fecha de la simulación.
+  </p>
 
   @switch (store.historyStatus()) {
     @case ('loading') {

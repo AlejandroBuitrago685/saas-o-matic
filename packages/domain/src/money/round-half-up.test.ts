@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { roundHalfUpDivide } from './round-half-up.js';
+import { roundHalfUpDivide, roundHalfUpDivideBig } from './round-half-up.js';
 
 describe('D-10 / D-91 commercial rounding with integers only (RNF-04)', () => {
   it.each([
@@ -36,5 +36,17 @@ describe('D-10 / D-91 commercial rounding with integers only (RNF-04)', () => {
     ['a negative denominator', 10, -2],
   ])('rejects %s: amounts are never negative', (_case, numerator, denominator) => {
     expect(roundHalfUpDivide(numerator, denominator)).toEqual({ ok: false, error: 'OUT_OF_RANGE' });
+  });
+});
+
+describe('D-144 the same rounding with bigint, beyond the safe integer range', () => {
+  it.each([
+    [34_425n, 10n, 3443n],
+    [34_424n, 10n, 3442n],
+    [0n, 7n, 0n],
+    // 2^64 + 1 halves up, where a float would already have lost the last unit.
+    [18_446_744_073_709_551_617n, 2n, 9_223_372_036_854_775_809n],
+  ])('%s / %s → %s', (numerator, denominator, expected) => {
+    expect(roundHalfUpDivideBig(numerator, denominator)).toBe(expected);
   });
 });

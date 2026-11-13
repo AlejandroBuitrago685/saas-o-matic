@@ -16,3 +16,13 @@ export function roundHalfUpDivide(numerator: number, denominator: number): Resul
   // `remainder >= denominator - remainder` is `2 × remainder >= denominator` without overflowing.
   return ok(remainder >= denominator - remainder ? quotient + 1 : quotient);
 }
+
+/**
+ * The same rounding for `bigint` (D-144): a conversion multiplies an amount by the digits of a rate, which can leave
+ * the safe integer range before the division brings it back. Callers pass a numerator ≥ 0 and a denominator > 0.
+ */
+export function roundHalfUpDivideBig(numerator: bigint, denominator: bigint): bigint {
+  const remainder = numerator % denominator;
+  const quotient = numerator / denominator;
+  return remainder >= denominator - remainder ? quotient + 1n : quotient;
+}

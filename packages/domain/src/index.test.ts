@@ -3,11 +3,19 @@ import { describe, expect, it } from 'vitest';
 import * as domain from './index.js';
 
 describe('ADR-001 public API of the domain: only what other packages need', () => {
-  it('exports the functions and constants of P1 and P2, and nothing internal (the tax id registry included)', () => {
+  it('exports the functions and constants of P1, P2, P7 and P8, and nothing internal (the tax id registry included)', () => {
     expect(Object.keys(domain).sort()).toEqual(
       [
         'CATALOG_LIMITS',
         'COUNTRIES',
+        'CURRENCIES',
+        'CURRENCY_DECIMALS',
+        'EUR_TARGET',
+        'FOREIGN_CURRENCIES',
+        'convertAmount',
+        'convertPricing',
+        'isCurrency',
+        'toExchangeRate',
         'DEFAULT_PAGE_SIZE',
         'MAX_API_CALLS_PER_MONTH',
         'MAX_CONTACT_EMAIL_LENGTH',
