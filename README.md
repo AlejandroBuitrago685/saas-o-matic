@@ -4,8 +4,9 @@ Herramienta interna para que el equipo comercial simule y presupueste suscripcio
 clientes corporativos: alta de clientes con validación fiscal, simulación por tramos con impuestos y conversión de
 divisas en tiempo real.
 
-> **Estado:** en construcción. Esta es la base del proyecto (parte P0: monorepo, herramientas de calidad y CI). Las
-> funcionalidades llegan en las partes siguientes del [plan de implementación](ai-workspace/04-plan-implementacion.md).
+> **Estado:** en construcción. Hechas las partes P0 a P3: monorepo, herramientas de calidad y CI, reglas de negocio
+> del dominio y base de la API (contrato, base de datos, seguridad HTTP, `GET /catalog` y `GET /health`). El resto
+> llega en las partes siguientes del [plan de implementación](ai-workspace/04-plan-implementacion.md).
 
 ## Requisitos
 
@@ -23,16 +24,26 @@ npm run dev
 - API: <http://localhost:3000/health>
 - Web: <http://localhost:4200> (reenvía `/api/*` a la API)
 
+## API
+
+- **Contrato:** [`04-contrato-api.md`](ai-workspace/02-especificacion/04-contrato-api.md), con los errores en formato
+  RFC 9457.
+- **OpenAPI:** [`apps/api/openapi.json`](apps/api/openapi.json), generado de los mismos esquemas Zod que validan las
+  peticiones. Se regenera con `npm run openapi -w @saas-o-matic/api`, y un test falla si no está al día.
+- **Swagger UI**, solo en local: con `npm run dev`, en <http://localhost:3000/docs>. Solo existe con
+  `NODE_ENV=development`; ni la demo ni la imagen de producción lo incluyen.
+
 ## Comandos
 
-| Comando             | Qué hace                                                                                                           |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `npm run dev`       | Paquetes en modo watch, API y web a la vez.                                                                        |
-| `npm test`          | Tests de dominio, contrato, API, herramientas y web (sin los barridos lentos, D-101).                              |
-| `npm run lint`      | ESLint estricto (límites de tamaño, fronteras entre capas, reglas de seguridad).                                   |
-| `npm run typecheck` | TypeScript estricto en todos los paquetes.                                                                         |
-| `npm run verify`    | Todo lo anterior más formato, comprobaciones del repo, cobertura y build (los pasos del trabajo `quality` del CI). |
-| `npm run build`     | Build de producción de paquetes, API y web.                                                                        |
+| Comando                                 | Qué hace                                                                                                           |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `npm run dev`                           | Paquetes en modo watch, API y web a la vez.                                                                        |
+| `npm test`                              | Tests de dominio, contrato, API, herramientas y web (sin los barridos lentos, D-101).                              |
+| `npm run lint`                          | ESLint estricto (límites de tamaño, fronteras entre capas, reglas de seguridad).                                   |
+| `npm run typecheck`                     | TypeScript estricto en todos los paquetes.                                                                         |
+| `npm run verify`                        | Todo lo anterior más formato, comprobaciones del repo, cobertura y build (los pasos del trabajo `quality` del CI). |
+| `npm run build`                         | Build de producción de paquetes, API y web.                                                                        |
+| `npm run db:check -w @saas-o-matic/api` | Comprueba que las migraciones versionadas coinciden con el esquema (lo ejecuta el CI).                             |
 
 ## Estructura
 

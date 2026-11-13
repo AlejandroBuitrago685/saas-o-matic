@@ -20,7 +20,9 @@ scaffolding ([ADR-013](adr/ADR-013-cumplimiento-automatico.md)).
 | Sin estilos de componente (CSP) | `no-restricted-syntax` sobre `styles`/`styleUrl` en `@Component` | Ídem |
 | Sin `console`, sin `process.env` fuera de `config/` | `no-console`, `no-restricted-properties` | Ídem |
 | Web sin valores de `contract` ni `zod` | `no-restricted-imports` + `@typescript-eslint/consistent-type-imports` | Ídem |
-| Migraciones aplicadas inmutables | Hook `PreToolUse` (§5). La comprobación en el CI («`drizzle-kit generate` no produce cambios») llega en P3, con el primer esquema. | Edición; CI desde P3 |
+| Migraciones aplicadas inmutables | Hook `PreToolUse` (§5). | Edición |
+| El esquema y las migraciones versionadas coinciden | `npm run db:check -w @saas-o-matic/api`: ejecuta `drizzle-kit generate` y falla si aparece o cambia un fichero, o si drizzle-kit no confirma «No schema changes» (sale con 0 incluso cuando un renombrado ambiguo le impide terminar). Probado a mano en P3 con los tres casos: sin cambios, renombrado e índice nuevo. | CI |
+| `openapi.json` al día con los esquemas (D-110) | Test `apps/api/test/openapi-document.test.ts`; se regenera con `npm run openapi -w @saas-o-matic/api` | Tests (CI, `verify`) |
 | Sin secretos | `.gitignore`, `check-forbidden-patterns` (`.env` versionados), permisos `deny` y hook `PreToolUse` | CI, sesión |
 | Sin caracteres invisibles literales en código y configuración (formato, bidi, separadores, controles, espacios no ASCII) | `check-forbidden-patterns` (D-96) | Hook `Stop`, CI |
 | Dependencias auditadas | `npm audit --audit-level=high`; las moderadas de desarrollo son riesgo aceptado (D-89) | CI |
@@ -100,7 +102,8 @@ Dos mecanismos, porque cada uno resuelve bien una cosa:
 | `api-module` | `api-module`, `api-db`, `api-shared`, `contract`, `domain` |
 | `api-db` | `api-db`, `api-shared`, `domain` |
 | `api-http` | `api-http`, `api-shared`, `contract`, `domain` |
-| `api-config` / `api-shared` | sí mismo, `api-shared`, `domain` |
+| `api-config` | `api-config`, `api-shared`, `domain` |
+| `api-shared` | `api-shared`, `contract`, `domain` (D-112: `AppError` usa los códigos del contrato) |
 | `api-composition` | Todo lo de la API, `contract`, `domain` |
 | `web-feature-X` | `web-feature-X`, `web-core`, `web-shared`, `domain`, `contract`; además, `customer-detail` → `simulator` |
 | `web-core` | `web-core`, `web-shared`, `domain`, `contract` |

@@ -127,7 +127,7 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
   - traducir los errores de Zod 4 a nuestros códigos;
   - interpolar constantes en los `CHECK` de Drizzle;
   - la migración personalizada con triggers;
-  - **la IP real del cliente** (D-99): en la demo hay Cloudflare y dos nginx delante de la API. `TRUST_PROXY` se configura por saltos o por direcciones de confianza, nunca con `true`, y un test con `X-Forwarded-For` encadenado comprueba qué IP usa el límite de peticiones.
+  - **la IP real del cliente** (D-99): en la demo hay Cloudflare y dos nginx delante de la API. `TRUST_PROXY` se configura por direcciones de confianza (D-113: Fastify 5.12 ya no admite saltos), nunca con `true`, y un test con `X-Forwarded-For` encadenado comprueba qué IP usa el límite de peticiones.
 - **Hecho cuando:** `GET /catalog` y `GET /health` responden según el contrato, todo error sale como RFC 9457 y el
   inventario OpenAPI coincide con las rutas registradas.
 
@@ -181,7 +181,8 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
 - **Riesgos:**
   - imagen de la API con workspaces y `better-sqlite3` sobre musl;
   - nginx sin root (puerto 8080, `tmpfs`);
-  - Compose dentro de GitHub Actions.
+  - Compose dentro de GitHub Actions;
+  - **la red de Compose con subred fija**, porque `TRUST_PROXY` confía en ella (D-113).
   - Fallback si se atasca: e2e contra los servidores de desarrollo (contingencia n.º 7).
 - **Hecho cuando:** `docker compose up` y `npm run e2e` pasan en local y en el CI, y no hay ninguna violación de CSP.
   **Hito: porción vertical completa.**
@@ -256,6 +257,8 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
   - Docker se salta UFW: los contenedores **solo escuchan en 127.0.0.1**, en el puerto 4010.
 - **Riesgos:**
   - **el plan de P11 se presenta y se aprueba antes de tocar el servidor** (instalar Docker incluido);
+  - **el fichero de sitio incluye explícitamente el snippet de Cloudflare** (no es global) y sustituye `X-Forwarded-For` por `$remote_addr` (D-105); `nginx -t` antes de recargar;
+  - **comprobación tras desplegar:** desde dos redes distintas, `x-ratelimit-remaining` baja de forma independiente; si bajan juntas, el despliegue no se da por bueno;
   - la IP real a través de Cloudflare y de dos nginx (ver P3);
   - la memoria disponible: límites de memoria en Compose y una sola réplica.
 - **Hecho cuando:** la URL responde, AC-61 pasa y el README la enlaza.

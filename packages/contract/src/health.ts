@@ -1,8 +1,10 @@
 import { z } from 'zod';
 
-/** Response of GET /health (spec 04 §3.9). Strict: anything not declared here cannot be returned. */
-export const healthResponseSchema = z.strictObject({
-  status: z.literal('ok'),
-});
+/** Response 200 of GET /health (04-contrato-api §3.9): the database answers. */
+export const healthResponseSchema = z.object({ status: z.literal('ok') });
+
+/** Response 503 of GET /health: no internal details (AC-48). */
+export const healthUnavailableResponseSchema = z.object({ status: z.literal('unavailable') });
 
 export type HealthResponse = z.output<typeof healthResponseSchema>;
+export type HealthUnavailableResponse = z.output<typeof healthUnavailableResponseSchema>;

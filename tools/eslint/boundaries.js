@@ -51,7 +51,8 @@ const policies = [
   allow('api-db', ['api-db', 'api-shared', 'domain']),
   allow('api-http', ['api-http', 'api-shared', 'contract', 'domain']),
   allow('api-config', ['api-config', 'api-shared', 'domain']),
-  allow('api-shared', ['api-shared', 'domain']),
+  // D-112: AppError uses the problem codes and FieldError of the contract.
+  allow('api-shared', ['api-shared', 'contract', 'domain']),
   allow('api-composition', [
     'api-composition',
     'api-module',

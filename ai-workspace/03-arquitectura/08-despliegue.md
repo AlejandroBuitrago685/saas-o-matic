@@ -28,7 +28,7 @@ services:
       HOST: 0.0.0.0
       DATABASE_PATH: /data/saas-o-matic.db
       CORS_ORIGINS: http://localhost:8080
-      TRUST_PROXY: "1"
+      TRUST_PROXY: "172.30.0.0/24"     # la subred de la red de Compose, fijada en P6 (D-113)
     volumes: [ "api-data:/data" ]
     user: "node"                      # sin root (RNF-SEC-16)
     read_only: true                   # solo lectura salvo /data y un tmpfs
@@ -36,7 +36,7 @@ services:
     cap_drop: [ "ALL" ]
     security_opt: [ "no-new-privileges:true" ]
     healthcheck: { test: ["CMD", "node", "dist/healthcheck.js"], interval: 10s, retries: 5 }
-    # entrypoint: migrar → (si DEMO_MODE, regenerar los datos) → arrancar
+    # entrypoint: (si DEMO_MODE, regenerar los datos) → arrancar; las migraciones se aplican al abrir la base (D-116)
   web:
     build: { context: ., dockerfile: apps/web/Dockerfile }   # multi-stage: ng build → nginx sin root (puerto 8080)
     ports: [ "8080:8080" ]
@@ -102,7 +102,14 @@ flowchart LR
 - Solo datos ficticios, con aviso visible.
 - Regeneración de datos periódica (≥ cada 24 h y en cada despliegue).
 - 5 escrituras por minuto e IP.
-- Proxy que pase la IP real (`TRUST_PROXY`).
+- Proxy que pase la IP real (`TRUST_PROXY`, D-105 y D-113). La cadena es cliente → Cloudflare → nginx del host →
+  nginx del contenedor → API:
+  - el sitio del nginx del host **incluye explícitamente el snippet de Cloudflare** (que restaura `$remote_addr`
+    desde `CF-Connecting-IP`, solo para los rangos de Cloudflare) y **sustituye** `X-Forwarded-For` por `$remote_addr`;
+  - el nginx del contenedor **añade** su salto (`$proxy_add_x_forwarded_for`);
+  - la API confía solo en las direcciones de la red de Docker y toma la primera IP, desde la derecha, que no es de un
+    proxy. Un prefijo falso del cliente no cambia nada, y quien conecte directo a la API no puede elegir su IP;
+  - tras desplegar, desde dos redes distintas, `x-ratelimit-remaining` debe bajar por separado (P11).
 
 **Mecanismo de regeneración, independiente del hosting:** con `DEMO_MODE=true`, el punto de entrada de la API
 borra el fichero de la base de datos, migra y siembra el perfil `demo` antes de arrancar. Así, **cada arranque

@@ -371,3 +371,107 @@ reloj por dos pausas: mi parada a mitad de turno y el límite de uso de la sesi�
 
 **Tiempo:** estimado 2 h · real ≈ 45 min (20:16–21:00, hora de Canarias), revisión incluida. Adelantada al jueves:
 el viernes gana 2 h de holgura (calendario actualizado).
+
+## P3 · Contrato y base de la API — 2026-11-12/13 · rama `feat/p3-api-base`
+
+**Hecho** (TDD en contrato y configuración; el resto, tests de integración con `app.inject()`)
+- **Dominio:** los límites que faltaban del catálogo, como constantes (D-108).
+- **Contrato:**
+  - códigos de problema y Problem Details (RFC 9457);
+  - esquemas estrictos de todas las peticiones y respuestas, y el inventario de rutas;
+  - `fieldErrorsOf` traduce los errores de Zod a los códigos del contrato, con `REQUIRED` e `INVALID_TYPE`
+    distinguidos mirando la petición (D-109). TV-NO-12, TV-PR-14 y TV-PR-15.
+- **Configuración:** todas las variables de 03-backend §5, validadas al arrancar, y el catálogo con
+  `validateCatalog` (AC-07, AC-55).
+- **Base de datos:**
+  - esquema Drizzle con los `CHECK` y las listas cerradas generados desde las constantes del dominio;
+  - triggers de solo inserción en una migración propia, pragmas de ADR-007;
+  - `db:check` en el CI y en `verify`.
+- **HTTP**, en el orden de 03-backend §3:
+  - el ID de petición lo genera el servidor (D-107);
+  - una línea de log por petición con el patrón de ruta, sin consulta, IP ni cuerpo;
+  - límite con dos contadores (D-114) y la IP real tras los proxies (D-105, D-113);
+  - cabeceras con helmet, CORS cerrado y parser JSON propio (D-106);
+  - manejador único de errores, con un test por cada código del contrato; `404`, `Cache-Control` y
+    `frameworkErrors`.
+- **Módulos:** `GET /catalog` (AC-34; el test compara con el ejemplo leído del propio contrato) y `GET /health`
+  (AC-48, `503` sin detalles).
+- **OpenAPI** versionado con un test que falla si no está al día; Swagger UI solo en desarrollo, como
+  devDependency cargada con `import()`, y un test de que con `production` no se importa (D-110).
+- `npm run verify` en verde:
+  - 680 tests de Node y cobertura del dominio al 100 %;
+  - trazabilidad: AC 30/81 (+9) · TV 120/129 (+3).
+- Prueba con el proceso real (`tsx` y `node dist/main.js`), en `production` y `development`.
+
+**Falló o lo descubrí por el camino**
+- **D-105 no se podía ejecutar tal como se aprobó.** Fastify 5.12.8 trata un `trustProxy` numérico como «no confiar
+  en nadie»: con `TRUST_PROXY=2`, todos los usuarios habrían compartido el cubo del límite.
+  - Lo vi porque el tipo de la opción ya no admite números, y lo confirmé en el código de Fastify.
+  - D-113 lo corrige: confianza por direcciones. Pendiente de tu validación.
+- **La configuración por ruta de `@fastify/rate-limit` sustituye al límite global**, no se suma (D-114).
+- **Fastify responde por su cuenta a una URL mal codificada**, sin hooks ni manejador y con la ruta dentro del cuerpo.
+  Ahora lo atiende `frameworkErrors`.
+- **CORS con una lista de orígenes** respondía al *preflight* de un origen no permitido con
+  `Access-Control-Allow-Methods`. Ahora el origen se resuelve con una función.
+- **`drizzle-kit generate` sale con 0 aunque no pueda terminar** (un renombrado necesita una respuesta interactiva).
+  Mi primer `db:check` fallaba abierto; lo descubrí con una prueba negativa manual. Ahora falla cerrado.
+- **El paquete de Zod une la ruta con `/` sin escapar y la raíz es `/`**, lo que daba punteros `//extra`. Lo cazó el
+  test de integración, no el unitario.
+- `disableRequestLogging` está obsoleto en Fastify 5.12: se usa `LogController`.
+- **Un test mío no probaba lo que decía:** «sin `Content-Type`» pasaba `undefined` a un parámetro con valor por
+  defecto, así que enviaba `application/json`. Corregido con `null`.
+- La afinidad de tipos de SQLite convierte el texto numérico: los tests de `CHECK` usan valores no convertibles.
+- Zod 4 ejecuta los `refine` aunque `z.url()` haya fallado: hace falta una guarda.
+- **Marqué D-102 como validada por error** (solo habías aprobado D-103 y D-104). Revertido.
+- Los tests del contrato citaban AC de nivel de integración: retitulados con D, RNF o RF.
+- **Python en Windows escribe `CRLF`:** los documentos de `ai-workspace/`, que Prettier no formatea, quedaron con
+  `CRLF`. Corregido; las ediciones con Python usan ahora `newline='
+'`.
+
+**Correcciones del usuario**
+- D-105: el snippet de Cloudflare no es global; el sitio de P11 lo incluye explícitamente, y se comprueba tras
+  desplegar con dos redes.
+- D-106: el test de `__proto__` comprueba también que `Object.prototype` sigue limpio.
+- D-110: `openapi.json` versionado y comprobado, `/docs` solo en desarrollo, enlazado desde el README.
+- `@fastify/swagger-ui` en `devDependencies`, con `import()` dinámico y un test.
+
+**Revisor**
+- **Primera pasada: NO APTO**, con 2 P1, 7 P2 y 8 P3. Confirmó en el código de Fastify y de los plugins D-113, D-114,
+  CORS con función y `frameworkErrors`.
+- **P1 corregidos, cada uno con un test que comprobé que falla sin el arreglo** (mutación manual):
+  - **el `429` del límite de escrituras salía sin cabeceras de seguridad ni CORS**, porque su hook iba antes que los
+    de helmet y CORS: la web no habría podido leer `Retry-After`. Ahora las cabeceras y CORS van primero;
+  - **el `v7()` de `uuid` no da los 62 bits aleatorios de RNF-SEC-04** dentro del mismo milisegundo (42). Generador
+    propio con el método 1 de RFC 9562 §6.2 y fuera la dependencia (D-115).
+- P2 corregidos, con test:
+  - los *preflight* no contaban para el límite global;
+  - una ruta inexistente parseaba el cuerpo antes del `404` (daba `415`, `413` o `400`): ahora responde en un
+    `onRequest`, en el orden de 04-contrato §2.3;
+  - un `POST` sin `Content-Type` ni cuerpo daba un error de esquema con *pointer* vacío: ahora `415`;
+  - `redact` no cubría los campos del primer nivel;
+  - migrar al abrir la base de datos era una decisión sin registrar (D-116).
+- P3 corregidos: HSTS también en los `404` anteriores al enrutado; `strictPreflight` desactivado (daba un `400` en
+  texto plano); fuera `uniquelocal` y `linklocal` de `TRUST_PROXY`; `isDemoMode`; código muerto y duplicado; un test
+  para `Content-Length` incoherente; documentación de CORS y de fronteras.
+- **Segunda pasada: APTO CON CAMBIOS**, sin P0 ni P1. Cinco P3 de documentación y comentarios, corregidos; uno de
+  ellos corrige el motivo que yo había escrito para no contar los `404` anteriores al enrutado.
+- No corregidos, con motivo: P2-4 y P2-7 dependen de las rutas de P4 (tabla de pendientes); contar para el límite los
+  `404` anteriores al enrutado (Fastify los crea con su `Request` base, cuya IP es la del socket: detrás de nginx irían todos al cubo del proxy, que comparten todos los usuarios); agrupar IPv6
+  por /56 (valorado en D-114); citar AC-21 y AC-22 en los tests del mecanismo, que se citarán con `POST /customers`.
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| `reference` son «los 8 primeros caracteres de `instance`» (05-frontend §6, 06-frontend): serían `urn:uuid`, y los primeros de un UUID v7 son el reloj. Propuesta: los 8 últimos del UUID. | P5 |
+| Cierre ordenado con SIGTERM: en Windows no se puede comprobar; se prueba en el contenedor. | P6 |
+| Subred fija de la red de Compose y el valor de `TRUST_PROXY` (D-113). | P6 |
+| AC-54 completo (alta, búsqueda con `q` y simulación) y los errores `4xx` documentados en `openapi.json`. | P4 |
+| Errores de la ruta, la consulta y el cuerpo juntos (04-contrato §2.3, punto 4): Fastify se para en la primera parte que falla. Validar las tres en un `preValidation` propio o registrar la limitación (revisor, P2-4). | P4 |
+| AC-58 con igualdad exacta, cuando estén todas las rutas. | P7 |
+
+**Decisiones:** D-105 a D-108 y D-110 (usuario), D-109 (usuario, tras la prueba), D-111 a D-116 (pendientes).
+
+**Tiempo:** estimado 3,5 h · real ≈ 4,5 h hasta la primera revisión (21:20–01:50, hora de Canarias) y ≈ 1 h más
+para las correcciones de las dos revisiones (terminadas el viernes a las 09:15), con dos pausas por el límite de uso.
+La holgura del viernes absorbe la hora de más.
