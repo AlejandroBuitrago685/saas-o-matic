@@ -294,10 +294,11 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
    - lint, tipos y tests de lo afectado (el hook `Stop` lo exige cuando esté activo);
    - los e2e de la parte, si los tiene;
    - el CI en verde tras el *push*.
-4. **Revisor:** subagente `revisor`, con la lista de ficheros, el diff, los AC y TV y el resultado de los tests.
-   - Se corrigen **todos** los P0 y P1, y se vuelve a pasar el revisor si hubo cambios relevantes.
-   - Los P2 y P3 se corrigen o se registran en el diario.
-5. **Documentación:**
+4. **Revisor:** subagente `revisor` (`model: sonnet`), con la lista de ficheros, el diff, los AC y TV y el resultado
+   de los tests. Revisa **solo el diff de la parte y los ficheros tocados, en una sola pasada**.
+   - Se corrigen **todos** los P0 y P1, cada uno con su test.
+   - Los P2 y P3 se corrigen si son baratos; si no, se registran en el diario con la parte en la que se resuelven.
+5. **Documentación, en una sola actualización al cerrar la parte** (no durante):
    - entrada en [`diario.md`](diario.md);
    - columna de tests de la matriz de trazabilidad (`trace-tests`);
    - decisiones nuevas en `decisiones.md`;
@@ -306,6 +307,12 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
 
 Plantilla de entrada del diario: **Hecho** · **Falló** · **Correcciones** (del usuario, del revisor o propias) ·
 **Decisiones** · **Tiempo** (estimado frente a real).
+
+**Eficiencia (desde P4, prompt 13):**
+- No se vuelven a verificar fuentes externas ni a recalcular vectores ya verificados en la especificación, salvo
+  riesgo real.
+- El resumen de cierre es corto: lo hecho, lo decidido y lo pendiente.
+- Cada sesión nueva empieza por la **nota de traspaso** más reciente del diario.
 
 ## 5. Contingencia
 
