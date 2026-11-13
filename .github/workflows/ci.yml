@@ -1,5 +1,6 @@
 # Pipeline (03-arquitectura/08-despliegue.md §3, D-52, D-53).
-# P0: `quality` (Node 22/24/26 matrix) and `audit`; P6: `e2e` (D-68); P10 adds the Windows/macOS smoke jobs.
+# P0: `quality` (Node 22/24/26 matrix) and `audit`; P6: `e2e` (D-68); P10: `smoke` (AC-95) and the traceability
+# check becomes blocking (D-161).
 name: CI
 
 on:
@@ -52,7 +53,7 @@ jobs:
         run: npm run test -w @saas-o-matic/web
       - name: Build
         run: npm run build
-      - name: Traceability report
+      - name: Traceability, blocking (every AC and TV has a test; only the declared pending ones are left, D-161)
         run: npm run trace
 
   audit:
@@ -110,3 +111,42 @@ jobs:
       - name: Stop the stack and delete its data
         if: always()
         run: npm run e2e:stack:down
+
+  # AC-95, D-53: the commands of the README in a clean checkout (install, migrate and seed, start), then the dashboard
+  # with the sample data in a browser. On Linux with every supported Node, and on Windows and macOS with `.nvmrc`.
+  smoke:
+    name: smoke (${{ matrix.os }}, Node ${{ matrix.node || '.nvmrc' }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, node: '22' }
+          - { os: ubuntu-latest, node: '24' }
+          - { os: ubuntu-latest, node: '26' }
+          # An empty `node` makes setup-node read `.nvmrc` (D-53), so the version is not repeated here.
+          - { os: windows-latest, node: '' }
+          - { os: macos-latest, node: '' }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+          node-version-file: .nvmrc
+          cache: npm
+      - name: README · install
+        run: npm ci
+      - name: README · migrate and seed (npm run setup)
+        run: npm run setup
+      # Linux runners may lack the system libraries of Chromium (like the `e2e` job); Windows and macOS do not need them.
+      - name: Install Chromium for Playwright (with its system libraries on Linux)
+        if: ${{ runner.os == 'Linux' }}
+        run: npx playwright install --with-deps chromium
+      - name: Install Chromium for Playwright
+        if: ${{ runner.os != 'Linux' }}
+        run: npx playwright install chromium
+      - name: README · start (npm run dev), GET /health and the dashboard with the sample data (AC-95)
+        run: npm run e2e:smoke

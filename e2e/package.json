@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "playwright test",
-    "test:dev": "playwright test -c playwright.dev.config.ts"
+    "test:dev": "playwright test -c playwright.dev.config.ts",
+    "test:smoke": "playwright test -c playwright.smoke.config.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",

@@ -29,9 +29,10 @@
     "check": "node scripts/check-filenames.mjs && node scripts/check-forbidden-patterns.mjs && depcruise packages apps/api/src apps/web/src e2e --config .dependency-cruiser.cjs",
     "test": "npm run build:packages && vitest run --project domain --project contract --project api --project tools && npm run test -w @saas-o-matic/web",
     "test:node": "vitest run",
-    "trace": "node scripts/trace-tests.mjs",
+    "trace": "node scripts/trace-tests.mjs --strict",
     "e2e": "npm run test -w @saas-o-matic/e2e",
     "e2e:dev": "npm run build:packages && npm run test:dev -w @saas-o-matic/e2e",
+    "e2e:smoke": "npm run test:smoke -w @saas-o-matic/e2e",
     "e2e:stack": "node scripts/e2e-stack.mjs up",
     "e2e:stack:down": "node scripts/e2e-stack.mjs down",
     "verify": "npm run format:check && npm run lint && npm run typecheck && npm run check && npm run db:check -w @saas-o-matic/api && npm run build:packages && vitest run --coverage && npm run test -w @saas-o-matic/web && npm run build && npm run trace",
@@ -56,5 +57,16 @@
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.2",
     "vitest": "5.1.0"
+  },
+  "overrides": {
+    "eslint": {
+      "minimatch": "11.0.8"
+    },
+    "@eslint/config-array": {
+      "minimatch": "11.0.8"
+    },
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.8"
+    }
   }
 }
