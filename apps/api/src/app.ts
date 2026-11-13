@@ -37,6 +37,7 @@ import {
   createSimulationsRepository,
   simulationsRoutes,
 } from './modules/simulations/index.js';
+import { createGetStats, createStatsRepository, statsRoutes } from './modules/stats/index.js';
 import type { Clock } from './shared/clock.js';
 import type { IdGenerator } from './shared/id-generator.js';
 
@@ -130,6 +131,7 @@ export async function buildApp(deps: AppDependencies): Promise<App> {
     getSimulation: createGetSimulation(simulations),
     listCustomerSimulations: createListCustomerSimulations({ customers, simulations }),
   });
+  await app.register(statsRoutes, { getStats: createGetStats(createStatsRepository(deps.database.db)) });
 
   return app;
 }
