@@ -4,10 +4,13 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { buildTestApp, type TestApp } from '../../test/build-test-app.js';
 import { registerTestRoutes } from '../../test/test-routes.js';
 
-/** The Docker network of the demo (P6): the container nginx and the host gateway live in it. */
-const DOCKER_NETWORK = '172.18.0.0/16';
-const CONTAINER_NGINX = '172.18.0.3';
-const HOST_GATEWAY = '172.18.0.1';
+/** The Compose network (D-130): the container nginx has a fixed address and the host enters through the gateway. */
+const CONTAINER_NGINX = '172.30.0.10';
+const HOST_GATEWAY = '172.30.0.1';
+/** D-130, demo: the gateway is the host nginx, which replaces X-Forwarded-For with the real client (D-105). */
+const DEMO_TRUST = ['loopback', HOST_GATEWAY, CONTAINER_NGINX];
+/** D-130, local Compose: the gateway is the user of the machine, not a proxy, so only the container nginx is trusted. */
+const LOCAL_TRUST = ['loopback', CONTAINER_NGINX];
 const CLIENT = '203.0.113.7';
 const OTHER_CLIENT = '198.51.100.20';
 
@@ -18,9 +21,13 @@ afterEach(async () => {
   testApp = undefined;
 });
 
-async function appWith(perMinute: number, writesPerMinute: number): Promise<TestApp> {
+async function appWith(
+  perMinute: number,
+  writesPerMinute: number,
+  trustProxy = DEMO_TRUST,
+): Promise<TestApp> {
   testApp = await buildTestApp({
-    config: { rateLimit: { perMinute, writesPerMinute }, trustProxy: [DOCKER_NETWORK] },
+    config: { rateLimit: { perMinute, writesPerMinute }, trustProxy },
     routes: registerTestRoutes,
   });
   return testApp;
@@ -128,5 +135,31 @@ describe('D-105 the API sees the real client IP behind the two nginx', () => {
 
     expect((await get(app, '/health', '2001:db8:1:1::3')).statusCode).toBe(429);
     expect((await get(app, '/health', '2001:db8:1:2::1')).statusCode).toBe(200);
+  });
+});
+
+describe('D-130 local Compose: only the container nginx is trusted', () => {
+  /** What the container nginx forwards when a local process sends its own X-Forwarded-For. */
+  const spoofing = (fakeIp: string) => ({
+    remoteAddress: CONTAINER_NGINX,
+    headers: { 'x-forwarded-for': `${fakeIp}, ${HOST_GATEWAY}` },
+  });
+
+  it('a fake X-Forwarded-For does not choose the IP: the client is the gateway', async () => {
+    const app = await appWith(100, 20, LOCAL_TRUST);
+
+    const reply = await app.app.inject({ method: 'GET', url: '/__test/whoami', ...spoofing('6.6.6.6') });
+
+    expect(reply.json<{ ip: string }>().ip).toBe(HOST_GATEWAY);
+  });
+
+  it('two different fake addresses share the bucket of the limit', async () => {
+    const app = await appWith(2, 20, LOCAL_TRUST);
+    await app.app.inject({ method: 'GET', url: '/health', ...spoofing('6.6.6.6') });
+    await app.app.inject({ method: 'GET', url: '/health', ...spoofing('7.7.7.7') });
+
+    const third = await app.app.inject({ method: 'GET', url: '/health', ...spoofing('8.8.8.8') });
+
+    expect(third.statusCode).toBe(429);
   });
 });

@@ -244,7 +244,7 @@ Estos criterios son la base de los tests: cada test citará su `AC-xx`.
 **AC-52 · Cabeceras** · Refs: RNF-SEC-06, RNF-SEC-21 · Nivel: I/E
 - Dado cualquier respuesta de la API y la página de la interfaz
 - Cuando se inspeccionan sus cabeceras
-- Entonces están las de RNF-SEC-06, no hay cabeceras que revelen la tecnología, todas llevan `Cache-Control: no-store` salvo `GET /catalog`, y la CSP de la interfaz no contiene `unsafe-eval` ni `unsafe-inline` en `script-src`.
+- Entonces están las de RNF-SEC-06, no hay cabeceras que revelen la tecnología (se admite `Server: nginx` sin versión, D-131), todas llevan `Cache-Control: no-store` salvo `GET /catalog`, y la CSP de la interfaz no contiene `unsafe-eval` ni `unsafe-inline` en `script-src`.
 
 **AC-53 · CORS** · Refs: RNF-SEC-07, CL-59 · Nivel: I
 - Dado un origen permitido y otro no permitido

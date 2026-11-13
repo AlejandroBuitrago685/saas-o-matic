@@ -124,7 +124,7 @@ Una parte está **hecha** cuando cumple **todo** esto:
 ⚙ = una herramienta configurada **y probada** lo comprueba (ESLint, `tsc`, scripts y hooks de Claude Code, cada uno con
 tests en `tools/`; la auditoría, en el CI de GitHub). ⏳ = configurado pero todavía no demostrado: la trazabilidad, que
 solo informa hasta P10 (D-86). `main` está protegida: solo se integra por PR
-con los 4 checks del CI en verde (D-88). Detalle en `03-arquitectura/09-calidad-y-automatizacion.md`.
+con los 5 checks del CI en verde (D-88; `e2e` desde P6). Detalle en `03-arquitectura/09-calidad-y-automatizacion.md`.
 
 ## Trazabilidad
 

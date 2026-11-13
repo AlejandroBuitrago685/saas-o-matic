@@ -1,0 +1,87 @@
+# Docker Compose stack (08-despliegue §2, RNF-20, AC-97): nginx serves the SPA and forwards /api to the API.
+#   docker compose up --build -d    → http://localhost:8080
+#   docker compose down             (add -v to delete the data volume)
+# Hardening (RNF-SEC-16, AC-60): no root, read-only file systems, no capabilities, and ports published on 127.0.0.1
+# only, because Docker bypasses the host firewall (D-99). The API publishes no port: only nginx reaches it.
+name: saas-o-matic
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: '3000'
+      DATABASE_PATH: /data/saas-o-matic.db
+      CORS_ORIGINS: http://localhost:8080,http://127.0.0.1:8080
+      # D-130: only the container nginx. The gateway is the user of this machine, not a proxy; the demo (P11) also
+      # trusts it, because there it is the host nginx.
+      TRUST_PROXY: loopback,172.30.0.10
+      LOG_LEVEL: info
+    volumes:
+      - api-data:/data
+    networks:
+      saas-o-matic:
+        ipv4_address: 172.30.0.20
+    init: true
+    user: node
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/health').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+      start_interval: 1s
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - 127.0.0.1:8080:8080
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      saas-o-matic:
+        ipv4_address: 172.30.0.10
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, 'http://127.0.0.1:8080/']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+      start_interval: 1s
+
+# D-130: fixed subnet, gateway and addresses, because TRUST_PROXY lists exact addresses of this network.
+networks:
+  saas-o-matic:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+          gateway: 172.30.0.1
+
+volumes:
+  api-data: {}

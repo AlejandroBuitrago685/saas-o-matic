@@ -44,18 +44,29 @@ hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel�
   Cualquier otra petición a un origen externo **hace fallar el test**, así que nunca se toca la red real.
 - **Tiempo:** `page.clock` de Playwright para la caducidad de la caché (30 min, 2 h, 3 días) en AC-82, y
   `localStorage` preparado antes de cargar la página.
-- **Datos:** la pila arranca con la base de datos del perfil `e2e`. Cada test crea sus propios clientes con
-  identificadores sintéticos únicos, así que no depende del orden ni de otros tests.
+- **Datos:** la pila de e2e (`npm run e2e:stack`, D-133) arranca siempre con la base de datos vacía. Cada test crea sus
+  propios clientes por la API, con NIF sintéticos únicos (`e2e/fixtures/customers.ts`), así que no depende del orden
+  ni de otros tests. El perfil `e2e` del *seed* llega en P7 (D-135), si algún test lo necesita.
   - Los estados que necesitan una base de datos vacía o un backend caído (AC-70, AC-85) se prueban interceptando `/api/**`.
 - **Producción realista en CI:** se ejecutan contra la pila de Docker Compose (nginx + API), lo que comprueba también
   la CSP y las cabeceras reales (AC-52), el proxy `/api` y que el contenedor no corre como root (AC-60).
-  - En local también se pueden ejecutar contra los servidores de desarrollo; los tests etiquetados `@prod-only` se omiten.
+  - Son dos proyectos de Playwright: `stack` (`npm run e2e`, el del CI) y `dev` (`npm run e2e:dev`, contra
+    `npm run dev`), que omite los tests etiquetados `@prod-only` (cabeceras, CSP, `index.html`, salud e IP real).
+  - El trabajo `e2e` del CI comprueba además los contenedores con `scripts/check-containers.mjs`: sin root, solo
+    lectura, sin *capabilities* y puertos solo en `127.0.0.1` (AC-60, D-130).
 - **Accesibilidad:** `@axe-core/playwright` en cada vista (AC-86). Ventana de 360 × 800 para AC-84.
 - **Detector de violaciones de CSP (AC-64, D-70):** un *fixture* automático de Playwright, activo en **todos** los
   tests que se ejecutan contra la pila de producción.
   - Registra los eventos `securitypolicyviolation` (con `page.addInitScript`) y los mensajes de consola de CSP.
   - Al terminar cada test, falla si ha registrado alguno.
   - Así, una violación de CSP hace fallar cualquier e2e, no solo uno dedicado.
+  - Está en `e2e/fixtures/test.ts`, junto con la guarda de red de RT-05; `e2e/specs/test-guards.spec.ts` demuestra
+    que las dos detectan lo que deben (un `<script>` inyectado y una navegación a otro origen).
+- **Latencia de AC-90:** se mide dentro de la página, desde el `keydown` en el slider hasta el *frame* siguiente al
+  cambio del total, así que no cuenta el tiempo del *runner*. Límite: 100 ms. Medido: 23–30 ms en local. El valor del
+  CI queda como anotación «AC-90 latency» en el informe HTML, que el trabajo `e2e` sube como artefacto en cada
+  ejecución. Margen: unos 70 ms.
+- **Sin reintentos:** un test que solo pasa a la segunda es un fallo que hay que investigar; su traza se conserva.
 
 ## 2. Trazabilidad test → AC / TV
 

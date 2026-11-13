@@ -1,7 +1,7 @@
 # 08 · Despliegue
 
-Esbozos de diseño. Los ficheros reales se escriben en el scaffolding; las versiones de las imágenes se fijarán por
-*digest* en ese momento.
+§1 a §3 describen lo construido: el arranque con npm (P0), Docker Compose y el trabajo `e2e` del CI (P6). Las imágenes
+base están fijadas por *digest* ([`02-monorepo.md`](02-monorepo.md) §4.3). §4, la demo, se completa en P11.
 
 ## 1. Arranque local con npm (camino principal, RNF-18)
 
@@ -18,45 +18,48 @@ npm run dev       # API en :3000 (tsx watch) y web en :4200 (ng serve, que reenv
 
 ## 2. Docker Compose (alternativa, RNF-20)
 
-```yaml
-# Esbozo: los valores definitivos se fijan en el scaffolding
-services:
-  api:
-    build: { context: ., dockerfile: apps/api/Dockerfile }   # multi-stage: build → runtime node:26-alpine (better-sqlite3 tiene binario musl)
-    environment:
-      NODE_ENV: production
-      HOST: 0.0.0.0
-      DATABASE_PATH: /data/saas-o-matic.db
-      CORS_ORIGINS: http://localhost:8080
-      TRUST_PROXY: "172.30.0.0/24"     # la subred de la red de Compose, fijada en P6 (D-113)
-    volumes: [ "api-data:/data" ]
-    user: "node"                      # sin root (RNF-SEC-16)
-    read_only: true                   # solo lectura salvo /data y un tmpfs
-    tmpfs: [ "/tmp" ]
-    cap_drop: [ "ALL" ]
-    security_opt: [ "no-new-privileges:true" ]
-    healthcheck: { test: ["CMD", "node", "dist/healthcheck.js"], interval: 10s, retries: 5 }
-    # entrypoint: (si DEMO_MODE, regenerar los datos) → arrancar; las migraciones se aplican al abrir la base (D-116)
-  web:
-    build: { context: ., dockerfile: apps/web/Dockerfile }   # multi-stage: ng build → nginx sin root (puerto 8080)
-    ports: [ "8080:8080" ]
-    depends_on: { api: { condition: service_healthy } }
-    read_only: true
-    tmpfs: [ "/tmp", "/var/cache/nginx" ]
-    cap_drop: [ "ALL" ]
-    security_opt: [ "no-new-privileges:true" ]
-volumes:
-  api-data: {}
-```
+Construido en P6. `docker compose up --build -d` deja la aplicación en <http://localhost:8080>, con la API en
+`/api` (AC-97). Ficheros: [`docker-compose.yml`](../../docker-compose.yml), [`apps/api/Dockerfile`](../../apps/api/Dockerfile),
+[`apps/web/Dockerfile`](../../apps/web/Dockerfile), [`apps/web/nginx/`](../../apps/web/nginx/) y
+[`.dockerignore`](../../.dockerignore).
 
-`nginx` (en el contenedor `web`):
+| Servicio | Imagen | Qué lleva | Red |
+|---|---|---|---|
+| `api` | `node:26.13.1-alpine3.24`, en tres etapas: `build` (todo el workspace), `deps` (`npm ci --omit=dev -w @saas-o-matic/api`) y `runtime` | `dist` de los paquetes y de la API, `drizzle/` y solo las dependencias de producción (74 MB, sin Angular ni herramientas de desarrollo). Código de `root` en solo lectura; usuario `node`. | `172.30.0.20`, **sin puertos publicados** |
+| `web` | `node:26.13.1-alpine3.24` (`ng build`) → `nginxinc/nginx-unprivileged:1.30.6-alpine3.24` (uid 101, puerto 8080) | El build de la SPA en `/srv/saas-o-matic` y nuestro `nginx.conf`. `nginx` se lanza directamente, sin los scripts del *entrypoint*, que intentan reescribir `/etc/nginx`. | `172.30.0.10`, `127.0.0.1:8080:8080` |
 
-- Sirve la SPA, con `try_files … /index.html` para las rutas del cliente.
-- `location /api/ { proxy_pass http://api:3000/; }`: la barra final quita el prefijo `/api`.
-- `client_max_body_size 16k`.
-- Cabeceras de la SPA: la CSP de RNF-SEC-06, `nosniff`, `Referrer-Policy` y `frame-ancestors 'none'`; HSTS solo
-  detrás de HTTPS.
-- Caché larga para los ficheros con hash y `no-cache` para `index.html`.
+- **Endurecimiento** (RNF-SEC-16, AC-60), en los dos servicios: `read_only`, `tmpfs /tmp`, `cap_drop: [ALL]`,
+  `no-new-privileges` y `restart: unless-stopped`. Además, `init: true` en la API, y comprobaciones de salud
+  (`fetch` a `/health` con Node; `wget` a `/` en nginx) para que `depends_on` y `--wait` esperen de verdad.
+  `scripts/check-containers.mjs` lo verifica sobre la pila en marcha.
+- **`npm ci --ignore-scripts`** en las imágenes: ninguna dependencia ejecuta código al instalarse, y better-sqlite3 no
+  lo necesita porque trae el binario musl dentro del paquete ([`05-driver-sqlite.md`](05-driver-sqlite.md)).
+- **Red e IP real (D-130):** subred `172.30.0.0/24`, pasarela `172.30.0.1` e IPs fijas, porque `TRUST_PROXY` lista
+  direcciones exactas.
+
+  | Topología | Quién entra por la pasarela | `TRUST_PROXY` |
+  |---|---|---|
+  | Compose local | El propio usuario de la máquina, que no es un proxy | `loopback,172.30.0.10` |
+  | Demo (P11) | El nginx del host, que sustituye `X-Forwarded-For` | `loopback,172.30.0.1,172.30.0.10` |
+
+  Con la subred entera, en local cualquier proceso elegiría su IP del límite con un `X-Forwarded-For` falso; el e2e
+  D-130 lo demuestra.
+- **Variables de la API:** `NODE_ENV=production`, `HOST=0.0.0.0` (dentro de su red; no se publica),
+  `DATABASE_PATH=/data/saas-o-matic.db` en el volumen `api-data`, y `CORS_ORIGINS` con `localhost` y `127.0.0.1` en el
+  puerto 8080. Los límites de peticiones son los de por defecto (D-44).
+
+`nginx` (en el contenedor `web`, [`nginx.conf`](../../apps/web/nginx/nginx.conf)):
+
+- Sirve la SPA con `try_files $uri /index.html`. Los ficheros con *hash* (`-XXXXXXXX.js|css|woff2`) llevan
+  `max-age=31536000, immutable`; `index.html` y las rutas del cliente, `no-cache`.
+- `location /api/ { proxy_pass http://api/; }`: la barra final quita el prefijo `/api`. Añade su salto a
+  `X-Forwarded-For` (D-105) y borra `X-Forwarded-Host`, `X-Forwarded-Proto` y `Forwarded`, que un cliente podría
+  falsear a través de un proxy de confianza. No añade cabeceras propias a las respuestas de la API.
+- `client_max_body_size 64k` (D-132), `server_tokens off` (D-131), sin `access_log` y `error_log` a stderr con nivel
+  `error` (D-134). `gzip` solo para CSS, JS y SVG.
+- Cabeceras de la SPA ([`security-headers.conf`](../../apps/web/nginx/security-headers.conf), con `always`): la CSP de
+  RNF-SEC-06 con `style-src 'self'` y `font-src 'self'` explícitos, `nosniff` y `Referrer-Policy: no-referrer`. HSTS
+  solo detrás de HTTPS: lo pone la API en producción, y en la demo el nginx del host.
 
 ## 3. Pipeline de CI (GitHub Actions, D-52 y D-53)
 
@@ -82,7 +85,7 @@ flowchart LR
 |---|---|---|---|
 | `quality` | ubuntu | 22, 24 y 26 (matriz) | `npm ci` → lint (ESLint + fronteras) → typecheck → ciclos (dependency-cruiser) → patrones prohibidos y nombres de fichero → migraciones sincronizadas → tests de dominio con cobertura → tests de la API → tests de componentes de la web → build de todo → inventario OpenAPI frente a contrato → trazabilidad (`trace-tests`) |
 | `audit` | ubuntu | `.nvmrc` | `npm ci` → `npm audit --audit-level=high` → comprobar que no hay `.env` versionados (AC-55, AC-57) |
-| `e2e` | ubuntu | `.nvmrc` | `docker compose up --build -d` → esperar al health → Playwright → comprobar usuario no root (AC-60) → guardar el informe y las trazas si falla |
+| `e2e` | ubuntu | `.nvmrc` | `npm ci` → `npm run e2e:stack` (pila nueva y `--wait`, D-133) → `check-containers` (AC-60, D-130) → Chromium → `npm run e2e` → si falla, informe, trazas y logs de la pila → siempre `e2e:stack:down` |
 | `smoke-windows` / `smoke-macos` | windows-latest / macos-latest | `.nvmrc` | `npm ci` (comprueba que no se compila) → `npm run build` → `npm run setup` → arrancar la API → `GET /health` = 200 → parar (AC-95, D-53) |
 
 - Concurrencia: un *push* nuevo cancela la ejecución anterior de la misma rama.

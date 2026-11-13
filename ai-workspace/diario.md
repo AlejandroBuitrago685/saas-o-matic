@@ -637,3 +637,105 @@ Canarias) más el plan y el punto de control. La holgura del viernes sigue casi 
 
 **Decisiones por validar:** ninguna.
 
+
+## P6 · Docker Compose, nginx y e2e de la porción vertical — 2026-11-13 · rama `feat/p6-compose-e2e`
+
+**Hecho**
+- **Imágenes** (08-despliegue §2):
+  - API en tres etapas sobre `node:26.13.1-alpine3.24`, con `npm ci --ignore-scripts` y solo las dependencias de
+    producción (74 MB, sin Angular ni herramientas de desarrollo);
+  - web: `ng build` → `nginxinc/nginx-unprivileged:1.30.6-alpine3.24`, las dos imágenes fijadas por *digest*;
+  - sin root, solo lectura salvo `/data`, sin *capabilities*, con `no-new-privileges` e `init`.
+- **nginx:**
+  - CSP de RNF-SEC-06 con `style-src` y `font-src 'self'` explícitos;
+  - `/api` con `^~`, añade su salto a `X-Forwarded-For` y borra `X-Forwarded-Host`, `X-Forwarded-Proto` y `Forwarded`;
+  - límite de cuerpo de 64 KiB (D-132) y sin log de acceso (D-134);
+  - caché larga solo para los ficheros con *hash*.
+- **Red e IP real (D-130):**
+  - IPs fijas; `TRUST_PROXY=loopback,172.30.0.10` en local (en la demo, también la pasarela);
+  - puerto solo en `127.0.0.1`, y la API sin puertos publicados;
+  - `scripts/check-containers.mjs` lo comprueba sobre la pila en marcha, junto con AC-60.
+- **SIGTERM en el contenedor** (pendiente de P4): `docker compose stop api` → la API se cierra en 0,8 s con código 0.
+- **e2e:**
+  - workspace `@saas-o-matic/e2e` con Playwright 1.65.0 y proyectos `stack` y `dev` (D-68);
+  - guardas automáticas de CSP y de red en todos los tests, con autotest;
+  - 23 tests: AC-52, AC-60 (CI), AC-64, AC-72 a AC-78, AC-83, AC-89, AC-90, AC-91 y AC-97, más D-130 (suplantación de IP);
+  - AC-73, AC-74 y AC-83 se adelantaron a P6 porque la interfaz ya existía.
+- **Pila de e2e** (`npm run e2e:stack`, D-133): proyecto aparte, base de datos vacía en cada arranque y límites altos.
+- **CI:**
+  - trabajo `e2e`: pila, `check-containers`, Chromium, Playwright, informe como artefacto y `down -v`;
+  - `e2e` añadido a los *checks* obligatorios de `main` tras su primer verde, con la autorización del usuario (ahora
+    son 5, D-88).
+- **Resultados:**
+  - `npm run verify` en verde: 880 tests de Node y 98 de la web;
+  - e2e: 23/23 contra la pila y 14/14 contra `npm run dev`;
+  - el CI de la PR #10, en verde a la primera;
+  - AC-90: 23–30 ms en local;
+  - trazabilidad **AC 58/81 (+5) · TV 121/129**.
+
+**Falló o lo descubrí por el camino**
+- **El *hook* `PreToolUse` bloquea cualquier comando que mencione `.env`**, también el *heredoc* que escribía
+  `.dockerignore`: ese fichero se escribe con la herramienta Write. Es el comportamiento correcto de la regla.
+- El *healthcheck* de Compose en una lista YAML sin comillas se rompía por el `: ` del ternario.
+- **En la pila, la propia CSP bloquea un `fetch` a otro origen antes que la guarda de red:** el autotest de la guarda
+  usa una navegación de nivel superior, que la CSP no cubre. La respuesta simulada de la API de tipos necesita
+  `access-control-allow-origin` para que el navegador la acepte.
+- Los textos de la interfaz llevan espacios alrededor (plantillas): el patrón de importes los admite.
+- `npm install -w` de un workspace recién añadido no lo encuentra en la misma orden: hay que repetirla.
+- Una variable de entorno en un script de npm no funciona en Windows: los destinos `stack` y `dev` son proyectos de
+  Playwright.
+- **Comprobado que el e2e de D-130 no pasa en falso:** con `TRUST_PROXY=loopback,172.30.0.0/24` falla (cubo nuevo con
+  4999), y con la configuración real pasa.
+
+**Correcciones**
+- **Del usuario (plan):** `TRUST_PROXY` de la demo con direcciones exactas en lugar de la subred; e2e de suplantación;
+  imagen oficial con AC-52 precisado (D-131); autorización para añadir `e2e` a los *checks* obligatorios.
+- **Del revisor** (`sonnet`, una pasada): **APTO CON CAMBIOS**, sin P0 ni P1.
+  - P2: el residuo de `error_log` (D-134) queda documentado en `06-seguridad` T-12. Hay que matizarlo: la dirección
+    que registra el nginx del contenedor es la de la pasarela, no la del cliente.
+  - P3 corregidos, cada uno con su test:
+    - `location ^~ /api/`: el test de regresión falló antes del arreglo (nginx devolvía su 404 HTML);
+    - `check-containers` también rechaza `privileged`, `cap_add` y los modos `host` de red y de PID (los 4 casos
+      fallaron antes);
+    - el e2e de D-130 prueba hasta tres pares de IPs falsas, por si se reinicia la ventana del límite;
+    - los globales de `window` se tipan una vez (`e2e/fixtures/page-globals.ts`), sin *casts*.
+- **Propias:**
+  - un comentario citaba RNF-SEC-17 en lugar de RNF-SEC-11;
+  - quité AC-54 del nombre de un paso del CI, porque `trace-tests` lo habría contado como cubierto;
+  - D-88, CLAUDE.md y 09-calidad hablaban de 4 *checks*.
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| *Seed* (`db:seed`, `npm run setup`, perfiles `demo` y `e2e`) y dashboard en el recorrido de AC-64 (D-135) | P7 |
+| `502`/`504` de nginx con respuesta propia cuando la API está caída (AC-85, residuo de T-12) | P9 |
+| *Override* de la demo: imágenes de GHCR, puerto 4010 con `!override`, `TRUST_PROXY` de D-130, `DEMO_MODE`, límites de memoria | P11 |
+| Valor de AC-90 en el CI: está en el artefacto `playwright-report` del trabajo `e2e` | P10 (revisión del CI) |
+
+**Decisiones:** D-130 a D-135, validadas por el usuario en el plan (D-132 a D-134 y D-135 en el mensaje 4).
+
+**Tiempo:** estimado 3 h · real ≈ 45 min de implementación (12:05–12:50, hora de Canarias), más el plan. P6 estaba prevista
+para el sábado: el calendario va adelantado.
+
+## Nota de traspaso — 2026-11-13, tras P6
+
+**Para empezar una sesión nueva:** leer `CLAUDE.md`, esta nota, la sección de la parte siguiente de
+[`04-plan-implementacion.md`](04-plan-implementacion.md) y su §4. El usuario activa el modo plan y Claude presenta el plan.
+
+**Estado**
+- Hechas: P0 a P6. P6 está en la rama `feat/p6-compose-e2e`, PR #10 con el CI en verde, pendiente de *merge*.
+  **Porción vertical completa (C2).**
+- `main` exige 5 *checks*: `quality` ×3, `audit` y `e2e`.
+- Para escribir e2e:
+  - importar `test` y `expect` de `e2e/fixtures/test.ts`, que trae las guardas de CSP y de red;
+  - crear los datos con `createCustomer` y `openSimulator`, y comparar importes con `euros()`;
+  - etiquetar `@prod-only` lo que solo sirve la pila;
+  - flujo: `npm run e2e:stack` → `npm run e2e` → `npm run e2e:stack:down`. No se puede levantar a la vez que
+    `docker compose up`.
+- Docker: `docker compose up --build -d` → <http://localhost:8080>. Las imágenes base se actualizan cambiando a la vez
+  la etiqueta y el *digest* (02-monorepo §4.3).
+
+**Siguiente parte: P7 · Búsqueda y dashboard** (3 h), que ahora incluye también el *seed* (D-135).
+
+**Decisiones por validar:** ninguna.

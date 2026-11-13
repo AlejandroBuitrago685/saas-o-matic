@@ -1,0 +1,26 @@
+# Build context of both images (repository root, 08-despliegue §2): only sources and manifests go in. Nothing local,
+# generated or secret: dependencies are installed inside the image from the lockfile.
+**/node_modules
+**/dist
+**/coverage
+**/.angular
+**/*.tsbuildinfo
+**/playwright-report
+**/test-results
+.git
+.github
+.claude
+ai-workspace
+tools
+scripts
+# Of the e2e workspace, only its manifest: npm ci checks the lockfile against every workspace.
+e2e/*
+!e2e/package.json
+apps/api/data
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/*.sqlite
+**/*.sqlite3
+.env
+.env.*

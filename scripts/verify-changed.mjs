@@ -30,10 +30,14 @@ const AREAS = [
     typecheck: [['npm', 'run', 'typecheck', '-w', '@saas-o-matic/web']],
     test: ['npm', 'run', 'test', '-w', '@saas-o-matic/web'],
   },
+  // Types only: the e2e tests need the Docker Compose stack or the dev servers (D-68), so they never run here.
+  { name: 'e2e', prefix: 'e2e/', typecheck: [['npx', 'tsc', '-p', 'e2e']] },
 ];
 const ALL_AREAS = AREAS.map((area) => area.name);
+/** Areas whose tests are not Vitest projects of the root configuration. */
+const NOT_NODE_PROJECTS = ['web', 'tools', 'e2e'];
 /** @type {Readonly<Record<string, readonly string[]>>} */
-const DEPENDENTS = { domain: ['contract', 'api', 'web'], contract: ['api', 'web'] };
+const DEPENDENTS = { domain: ['contract', 'api', 'web', 'e2e'], contract: ['api', 'web', 'e2e'] };
 
 /**
  * @param {readonly string[]} changedPaths changed, added or deleted paths
@@ -102,7 +106,7 @@ function fileSteps(existingFiles, wholeRepo) {
  */
 export function verificationSteps(areas, existingFiles, wholeRepo = false) {
   const selected = AREAS.filter((area) => areas.includes(area.name));
-  const nodeProjects = selected.filter((area) => !['web', 'tools'].includes(area.name)).map((a) => a.name);
+  const nodeProjects = selected.filter((area) => !NOT_NODE_PROJECTS.includes(area.name)).map((a) => a.name);
   return {
     parallel: [
       ...fileSteps(existingFiles, wholeRepo),
