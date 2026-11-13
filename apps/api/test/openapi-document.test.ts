@@ -32,6 +32,7 @@ const STATUSES: Readonly<Record<string, readonly number[]>> = {
   'GET /catalog': [200, 400, 429, 500],
   'GET /health': [200, 400, 429, 500, 503],
   'POST /customers': [201, 400, 409, 413, 415, 422, 429, 500],
+  'GET /customers': [200, 400, 429, 500],
   'GET /customers/:id': [200, 400, 404, 429, 500],
   'GET /customers/:id/simulations': [200, 400, 404, 429, 500],
   'POST /simulations': [201, 400, 413, 415, 422, 429, 500],

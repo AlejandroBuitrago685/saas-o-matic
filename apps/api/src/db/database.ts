@@ -15,6 +15,11 @@ export interface Database {
   /** True while the connection is open: `close()` can then be called once, from `main.ts` or a test. */
   readonly isOpen: () => boolean;
   readonly close: () => void;
+  /**
+   * Runs the work in one transaction of better-sqlite3: all of it or nothing. A Drizzle transaction inside it (the
+   * insert of a simulation and its lines) becomes a savepoint of this one.
+   */
+  readonly transaction: <T>(work: () => T) => T;
 }
 
 /** Applied on every connection (ADR-007): `foreign_keys` is off by default in SQLite and is not stored in the file. */
@@ -54,5 +59,6 @@ export function openDatabase(path: string): Database {
     close: () => {
       sqlite.close();
     },
+    transaction: (work) => sqlite.transaction(work)(),
   };
 }

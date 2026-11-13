@@ -35,6 +35,9 @@ async function runScenario(): Promise<number[]> {
   const simulated = await send('POST', '/simulations', simulationBody(customerId));
   await send('GET', `/customers/${customerId}`);
   await send('GET', `/customers/${customerId}/simulations`);
+  const searched = await send('GET', '/customers?q=Acme');
+  if (searched.json<{ page: { total: number } }>().page.total !== 1)
+    throw new Error('The search found nothing');
   return [created.statusCode, simulated.statusCode];
 }
 
@@ -50,8 +53,8 @@ const lines = (): LogLine[] =>
     .filter((line) => line !== '')
     .map((line) => JSON.parse(line) as LogLine);
 
-describe('AC-54 / RNF-SEC-11 the logs of a create, a read and a simulation hold no personal data', () => {
-  it('a customer, a business error, a duplicate, a simulation and a history leave no name, email, tax id or IP', () => {
+describe('AC-54 / RNF-SEC-11 the logs of a create, a search and a simulation hold no personal data', () => {
+  it('a customer, a business error, a duplicate, a simulation, a history and a search leave no name, email, tax id, q or IP', () => {
     expect(statuses).toEqual([201, 201]);
     expect(testApp.logs()).not.toMatch(PERSONAL_DATA);
   });
@@ -67,5 +70,6 @@ describe('AC-54 / RNF-SEC-11 the logs of a create, a read and a simulation hold 
       .map(({ route }) => route);
     expect(routes).toContain('/customers/:id');
     expect(routes).toContain('/customers/:id/simulations');
+    expect(routes).toContain('/customers');
   });
 });

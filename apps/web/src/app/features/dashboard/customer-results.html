@@ -1,0 +1,39 @@
+<!-- While a new search loads, the previous results stay dimmed: no skeleton and no jump of the layout. -->
+<ul
+  class="grid grid-cols-1 gap-4 transition-opacity sm:grid-cols-2 lg:grid-cols-3"
+  [class.opacity-60]="store.isRefreshing()"
+  [attr.aria-busy]="store.isRefreshing() || null"
+  aria-label="Clientes"
+>
+  @for (customer of store.items(); track customer.id) {
+    <li><app-customer-summary-card [customer]="customer" /></li>
+  }
+</ul>
+
+<!-- aria-disabled, not disabled: a disabled button loses the focus of whoever just pressed it (spec 05 §5). The
+     store ignores the click while it cannot go there. -->
+<nav aria-label="Paginación" class="mt-6 flex flex-wrap items-center justify-between gap-3">
+  <button
+    type="button"
+    class="btn btn-secondary"
+    [attr.aria-disabled]="!canGoBack()"
+    (click)="store.previous()"
+  >
+    Anterior
+  </button>
+  <p class="flex min-h-11 items-center gap-2 text-small text-ink-soft" aria-live="polite">
+    @if (store.isRefreshing()) {
+      <app-spinner /> Buscando…
+    } @else {
+      {{ rangeText() }}
+    }
+  </p>
+  <button
+    type="button"
+    class="btn btn-secondary"
+    [attr.aria-disabled]="!canGoForward()"
+    (click)="store.next()"
+  >
+    Siguiente
+  </button>
+</nav>

@@ -44,6 +44,7 @@ export type { CompanyNameError } from './text/normalize-company-name.js';
 export { normalizeForSearch } from './text/normalize-for-search.js';
 
 export { validateTaxId } from './tax-id/validate-tax-id.js';
+export { taxIdSearchTerm } from './tax-id/tax-id-search-term.js';
 export { MAX_TAX_ID_INPUT_LENGTH, MIN_TAX_ID_INPUT_LENGTH } from './tax-id/tax-id-validator.js';
 export type { TaxIdReason, ValidTaxId } from './tax-id/tax-id-validator.js';
 export { taxIdRulesFor } from './tax-id/registry.js';

@@ -26,6 +26,7 @@ import {
   createCreateCustomer,
   createCustomersRepository,
   createGetCustomer,
+  createSearchCustomers,
   customersRoutes,
 } from './modules/customers/index.js';
 import { createCheckHealth, createDatabaseProbe, healthRoutes } from './modules/health/index.js';
@@ -114,6 +115,7 @@ export async function buildApp(deps: AppDependencies): Promise<App> {
   await app.register(customersRoutes, {
     createCustomer: createCreateCustomer({ customers, clock: deps.clock, ids: deps.ids }),
     getCustomer: createGetCustomer(customers),
+    searchCustomers: createSearchCustomers(customers),
   });
   // The customers repository is the `CustomerLookup` the simulations ask for: the modules only meet here.
   const simulations = createSimulationsRepository(deps.database.db);

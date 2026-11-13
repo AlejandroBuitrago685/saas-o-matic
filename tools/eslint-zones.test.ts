@@ -183,6 +183,31 @@ describe('D-119 a module only reaches another module through its index.ts', () =
   });
 });
 
+describe('D-140 the seed is part of the composition root', () => {
+  it.each([
+    ['the internals of a module', "export * from '../modules/customers/customers.repository.js';\n"],
+    ['Drizzle', "import { sql } from 'drizzle-orm';\nexport const query = sql;\n"],
+    ['Fastify', "import Fastify from 'fastify';\nexport const server = Fastify;\n"],
+  ])('rejects the seed importing %s', async (_name, code) => {
+    const findings = await lintFixture(`apps/api/src/seed/${F}x.ts`, code);
+
+    expect(ruleIds(findings)).toContain('@typescript-eslint/no-restricted-imports');
+  });
+
+  it('allows the seed to import the index.ts of a module, the database and the shared code', async () => {
+    const code = [
+      "export * from '../modules/customers/index.js';",
+      "export * from '../db/database.js';",
+      "export * from '../shared/clock.js';",
+      '',
+    ].join('\n');
+    const findings = await lintFixture(`apps/api/src/seed/${F}ok.ts`, code);
+
+    expect(ruleIds(findings)).not.toContain(null);
+    expect(ruleIds(findings)).not.toContain('@typescript-eslint/no-restricted-imports');
+  });
+});
+
 describe('ADR-010 / D-83 API layers and configuration access', () => {
   it('rejects Drizzle inside a use case', async () => {
     const code = "import { sql } from 'drizzle-orm';\nexport const query = sql;\n";

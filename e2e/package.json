@@ -2,11 +2,11 @@
   "name": "@saas-o-matic/e2e",
   "version": "0.0.0",
   "private": true,
-  "description": "End-to-end tests (Playwright, Chromium) of the web app against the Docker Compose stack or the dev servers.",
+  "description": "End-to-end tests (Playwright, Chromium) of the web app against the Docker Compose stack or its own dev servers.",
   "type": "module",
   "scripts": {
-    "test": "playwright test --project=stack",
-    "test:dev": "playwright test --project=dev"
+    "test": "playwright test",
+    "test:dev": "playwright test -c playwright.dev.config.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.65.0",

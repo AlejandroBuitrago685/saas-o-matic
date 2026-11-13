@@ -4,9 +4,12 @@ const APP = 'SaaS-O-Matic';
 
 /** Routes of spec 05 §2. Every view is loaded lazily, one chunk per feature. */
 export const routes: Routes = [
-  // The dashboard (V1) needs GET /customers, which arrives in P7. Until then the start page is the creation form,
-  // instead of a provisional page that would be thrown away (D-126). TODO(P7): replace with the dashboard route.
-  { path: '', pathMatch: 'full', redirectTo: 'customers/new' },
+  {
+    path: '',
+    pathMatch: 'full',
+    title: `Clientes · ${APP}`,
+    loadComponent: () => import('./features/dashboard/dashboard.page').then((m) => m.DashboardPage),
+  },
   {
     path: 'customers/new',
     title: `Nuevo cliente · ${APP}`,

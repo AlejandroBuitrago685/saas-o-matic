@@ -18,6 +18,12 @@
     @apply font-extrabold text-ink;
   }
 
+  /* Search fields have their own «Borrar» button (spec 05 §3.1): the native cross of Chromium and Safari would be a
+     second one, and it cannot be reached with the keyboard. */
+  input[type='search']::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
   /* The focus ring of the reference: dashed, brand colour, 2 px away from the element. */
   :focus-visible {
     outline: 2px dashed var(--color-primary);
