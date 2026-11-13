@@ -14,6 +14,11 @@ interface Finding {
 
 /** Runs axe on the page as it is now and fails on any serious or critical violation (AC-86, D-156). */
 export async function expectNoSeriousA11yViolations(page: Page, view: string): Promise<void> {
+  // Colours are measured at rest: a button fading from disabled to primary (`transition-colors`) would fail the
+  // contrast rule mid-way (found in P9, on «Guardar simulación» right after saving).
+  await page.evaluate(async () => {
+    await Promise.allSettled(document.getAnimations().map((animation) => animation.finished));
+  });
   const { violations } = await new AxeBuilder({ page }).withTags(WCAG_21_AA).analyze();
   const findings: Finding[] = violations.map(({ id, impact, nodes }) => ({
     id,
