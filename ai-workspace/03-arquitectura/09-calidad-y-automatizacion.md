@@ -19,6 +19,7 @@ scaffolding ([ADR-013](adr/ADR-013-cumplimiento-automatico.md)).
 | Sin `innerHTML` ni `bypassSecurityTrust*` (RNF-SEC-14) | `no-restricted-syntax` en TS + `scripts/check-forbidden-patterns.mjs` para plantillas | CI, hook |
 | Sin estilos de componente (CSP) | `no-restricted-syntax` sobre `styles`/`styleUrl` en `@Component` | Ídem |
 | Sin `console`, sin `process.env` fuera de `config/` | `no-console`, `no-restricted-properties` | Ídem |
+| Backend sin clientes salientes (RNF-SEC-18, AC-59, D-154) | `no-restricted-imports` (`http`, `https`, `http2`, `tls`, `dgram`, `undici`… y lo que abre conexiones de `net`) y `no-restricted-globals` (`fetch`, `WebSocket`…) en `apps/api/src` | Ídem |
 | Web sin valores de `contract` ni `zod` | `no-restricted-imports` + `@typescript-eslint/consistent-type-imports` | Ídem |
 | Migraciones aplicadas inmutables | Hook `PreToolUse` (§5). | Edición |
 | El esquema y las migraciones versionadas coinciden | `npm run db:check -w @saas-o-matic/api`: ejecuta `drizzle-kit generate` y falla si aparece o cambia un fichero, o si drizzle-kit no confirma «No schema changes» (sale con 0 incluso cuando un renombrado ambiguo le impide terminar). Probado a mano en P3 con los tres casos: sin cambios, renombrado e índice nuevo. | CI |

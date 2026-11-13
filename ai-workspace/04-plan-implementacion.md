@@ -220,6 +220,8 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
 ### P9 · Robustez: seguridad, estados, responsive y accesibilidad · 3,5 h
 
 - **Objetivo:** cerrar los AC transversales que no han caído en las partes anteriores.
+- **Incluye también:** la respuesta propia de nginx con la API caída (D-152) y el log de `/api/` a `crit` (D-153),
+  que cierran el residuo de T-12.
 - **AC:** AC-51, AC-57, AC-59, AC-63, AC-73, AC-74, AC-84, AC-85, AC-86.
 - **TV:** TV-ES-04 (AC-73).
 - **Módulos:** transversal.

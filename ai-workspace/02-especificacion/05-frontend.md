@@ -39,7 +39,8 @@ Elementos comunes a todas las vistas:
   - **Should:** la búsqueda y la página se reflejan en la URL (`?q=…&page=…`), de modo que recargar o volver atrás conserva el estado.
   - Si llegan respuestas fuera de orden, solo se muestra la de la última búsqueda (CL-42).
 - **Listado:** tarjetas con nombre de empresa, identificador y tipo, país (nombre en español), plan y fecha de alta.
-  Cada tarjeta es un enlace accesible con teclado al detalle.
+  Cada tarjeta es un enlace accesible con teclado al detalle. El enlace es el nombre de la empresa, extendido a toda la
+  tarjeta, y los datos son su descripción (D-157).
 - **Paginación:** 20 por página, botones «Anterior» y «Siguiente» y texto del tipo «21–40 de 57».
 - **Acción principal:** botón «Nuevo cliente».
 
@@ -300,4 +301,5 @@ Reglas de transición:
 | `CUSTOMER_ALREADY_EXISTS` | Ya existe un cliente con este identificador fiscal. |
 | `CUSTOMER_NOT_FOUND` | El cliente ya no existe. |
 | `RATE_LIMITED` | Demasiadas peticiones. Espera {Retry-After} s y vuelve a intentarlo. |
+| `SERVICE_UNAVAILABLE` (nginx, D-152) | No se puede conectar con el servidor. Inténtalo de nuevo en unos minutos. |
 | `INTERNAL_ERROR`, error de red u otro | Algo ha fallado. Inténtalo de nuevo. (Referencia: {8 últimos caracteres del UUID de `instance`}, D-127) |

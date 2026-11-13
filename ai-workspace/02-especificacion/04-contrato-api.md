@@ -69,6 +69,7 @@ Fuera de esos rangos → `400`. Formato de la respuesta:
 | 422 | `BUSINESS_RULE_VIOLATION` | `/problems/business-rule-violation` | Cumple el esquema pero viola una regla de negocio (ver códigos por campo). |
 | 429 | `RATE_LIMITED` | `/problems/rate-limited` | Se ha superado el límite de peticiones. |
 | 500 | `INTERNAL_ERROR` | `/problems/internal-error` | Error no controlado. Respuesta genérica (RNF-SEC-10). |
+| 502, 504 | `SERVICE_UNAVAILABLE` | `/problems/service-unavailable` | **Lo emite nginx, no la API** (D-152): la API no responde (`502`) o tarda demasiado (`504`). Sin `instance`, porque la petición no llegó a la API. Con las cabeceras de la API (AC-52). Tipo `GatewayProblem` en `contract`; no está en el OpenAPI. |
 
 **Códigos por campo** (`errors[].code`):
 

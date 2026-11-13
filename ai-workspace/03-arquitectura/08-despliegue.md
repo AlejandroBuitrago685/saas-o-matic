@@ -60,8 +60,13 @@ Construido en P6. `docker compose up --build -d` deja la aplicación en <http://
 - `location /api/ { proxy_pass http://api/; }`: la barra final quita el prefijo `/api`. Añade su salto a
   `X-Forwarded-For` (D-105) y borra `X-Forwarded-Host`, `X-Forwarded-Proto` y `Forwarded`, que un cliente podría
   falsear a través de un proxy de confianza. No añade cabeceras propias a las respuestas de la API.
+- Si la API no responde, nginx contesta por ella (D-152, AC-85): `error_page 502` y `504` llevan a dos `location` con
+  nombre que devuelven un Problem `SERVICE_UNAVAILABLE` con el estado real. Esas respuestas llevan **solo** las
+  cabeceras de la API ([`api-error-headers.conf`](../../apps/web/nginx/api-error-headers.conf), con `always` y
+  `no-store`), nunca las de la SPA. En `/api/`, `error_log` baja a `crit` (D-153), para que esos fallos no dejen la
+  línea de la petición en el log (T-12).
 - `client_max_body_size 64k` (D-132), `server_tokens off` (D-131), sin `access_log` y `error_log` a stderr con nivel
-  `error` (D-134). `gzip` solo para CSS, JS y SVG.
+  `error` (D-134), salvo en `/api/` (D-153). `gzip` solo para CSS, JS y SVG.
 - Cabeceras de la SPA ([`security-headers.conf`](../../apps/web/nginx/security-headers.conf), con `always`): la CSP de
   RNF-SEC-06 con `style-src 'self'` y `font-src 'self'` explícitos, `nosniff` y `Referrer-Policy: no-referrer`. HSTS
   solo detrás de HTTPS: lo pone la API en producción, y en la demo el nginx del host.

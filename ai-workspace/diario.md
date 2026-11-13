@@ -953,3 +953,110 @@ revisión y el cierre.
 **Siguiente parte: P9 · Robustez** (3,5 h).
 
 **Decisiones por validar:** ninguna (D-145 y D-147 validadas al cerrar P8; el usuario hace el *merge*).
+
+## P9 · Robustez: seguridad, estados, responsive y accesibilidad — 2026-11-13 · rama `feat/p9-robustness`
+
+**Hecho**
+- **Ya cubiertos de antes** (sin tocar): AC-51, AC-57, AC-73, AC-74 y TV-ES-04; las vistas ya tenían sus estados de
+  carga, vacío y error con «Reintentar».
+- **AC-59, sin peticiones salientes** (D-154):
+  - guardián en `setupFiles`: los tests de la API pasan con la red bloqueada salvo *loopback* y conexiones por
+    `path`; tiene su propio test (9 casos, entre ellos una tubería de Windows);
+  - regla de ESLint en todas las zonas de `apps/api/src` contra `http`, `https`, `http2`, `tls`, `dgram`, `dns`,
+    `child_process`, `worker_threads`, `undici` y otras librerías, todo `net` salvo `isIP`, los globales `fetch`,
+    `WebSocket`… y sus vías indirectas (`import()` de esos módulos, `require`, `process.getBuiltinModule`,
+    `globalThis.fetch`), con 38 tests en `tools/`.
+- **AC-85, backend caído** (D-152, D-153, D-155):
+  - nginx contesta con un Problem `SERVICE_UNAVAILABLE` (`502`/`504`) y **solo** las cabeceras de la API
+    (`api-error-headers.conf`), y en `/api/` el log baja a `crit`;
+  - `GatewayProblem` en `contract`; la web muestra el mensaje nuevo en el alta y al guardar una simulación
+    (`hasActionableMessage`, compartido con el `429`);
+  - servicio `web-api-down` (`:8081`) en la pila de e2e; `check-containers` revisa ya cualquier contenedor del
+    proyecto;
+  - e2e en los dos destinos (dashboard, alta y detalle: error, «Reintentar» y recuperación; el alta conserva los datos)
+    y cuatro `@prod-only` contra el nginx sin API (cuerpo, una sola CSP, `no-store`, las tres vistas y el mensaje en
+    el formulario).
+- **AC-63, XSS:** `<img src=x onerror=alert(1)>` sale literal en el listado y el detalle, sin `img` ni `dialog`.
+- **AC-84, 360 px:** nombre de 200 caracteres sin espacios y email de 254 en el dashboard, el alta y el detalle con
+  historial. Los helpers de `fixtures/layout.ts` tienen su test de que fallan cuando deben.
+- **AC-86, accesibilidad** (D-156): `@axe-core/playwright` 4.14.0 en cada vista y estado a 1280 y 360 px; teclado del
+  slider (Re Pág, Av Pág, Inicio, Fin) y del alta con el tabulador (nombre y foco visible en cada parada).
+- **Resultados:**
+  - `npm run verify` en verde: 1039 tests de Node (+49) y 239 de la web (+9);
+  - e2e: 58/58 en `e2e:dev` y 71/71 contra la pila Docker; `check-containers` en verde con los 3 contenedores;
+    `nginx -t` correcto y **ninguna línea** en el log de `web-api-down` tras los `502`;
+  - trazabilidad **AC 77/81 (+5) · TV 126/129**; los 4 AC que faltan son de P10 y P11;
+  - comprobado en el navegador a 360 px: el alta sin API con su error, la tarjeta con el foco alrededor y el nombre
+    malicioso como texto; sin errores en la consola.
+
+**Falló o lo descubrí por el camino**
+- **axe encontró una infracción grave real** en las tarjetas del dashboard (`label-content-name-mismatch`, WCAG
+  2.5.3): el enlace se llamaba como la empresa pero su texto era la tarjeta entera. Pasa a enlace estirado (D-157). El
+  e2e falló antes del arreglo.
+- **El formulario y el guardado no usaban el mensaje del problema** salvo en `409`/`429`, así que el de D-152 no se
+  habría visto nunca. Los dos lo usan ahora, con tests que fallaron antes.
+- **Un test de teclado leía `aria-valuetext` justo después de pulsar** y falló con carga (21 en vez de 11). Ahora espera
+  el valor con `expect.poll`, y lo pasé 15 veces en paralelo.
+- Un *heredoc* largo de bash se cortó a mitad de fichero. Lo reescribí con el editor.
+- La app ya cabía en 360 px con los textos más largos: el trabajo de P5 a P8 aguantó.
+
+**Correcciones**
+- **Del usuario (plan):** las `location` del `502`/`504` sin `security-headers.conf` (una sola CSP, comprobada en un
+  e2e), `web-api-down` en una red *bridge* sin `depends_on`, y el guardián deja pasar las conexiones por `path`.
+- **Del revisor** (`sonnet`, una pasada): **APTO CON CAMBIOS**, sin P0 ni P1. Corregidos, con tests que fallaron
+  antes del arreglo salvo donde se indica:
+  - P2: `import net from 'node:net'` pasaba la regla (`importNames` no ve el import por defecto). Ahora todo `net`
+    está prohibido salvo `isIP` (`allowImportNames`);
+  - P2: faltaban vías de salida: `dns`, `child_process`, `worker_threads`, `cluster` y más librerías, más `import()`
+    de esos módulos, `require`, `process.getBuiltinModule` y `globalThis.fetch` (`no-restricted-syntax`). El
+    `import()` de Swagger UI (D-110) sigue permitido, con su test;
+  - P2: `dgram.connect` sin guardar. Ya lo paraba el guardián de `dns.lookup`, que `connect` usa por dentro, así que
+    su test pasó antes del arreglo; se envuelve igualmente para no depender de ese detalle;
+  - P3: solo `localhost` literal (un subdominio de `localhost` puede resolverse fuera), el guardián no se instala dos
+    veces y la cabecera declara lo que no cubre (`dns.resolve*`, procesos hijos e hilos);
+  - P3: el foco visible se comprueba comparando el elemento con y sin foco (una sombra fija ya no cuenta), y el
+    recorrido con el tabulador termina al volver al primer elemento, no al repetirse un nombre;
+  - P3: el detalle y el alta también se prueban a través del nginx sin API;
+  - P3: `check-containers` ordena igual en cualquier máquina y nombra `(unlabelled)` un contenedor sin etiqueta;
+  - P3: comentario largo reajustado, y nota en `components.css` sobre los controles dentro de una tarjeta.
+
+  Sin cambio:
+  - P3: `web-api-down` construye la imagen otra vez (en caché, segundos); compartir `image:` añadiría un nombre de
+    imagen a mantener;
+  - P3: el texto de la tarjeta no se puede seleccionar con el ratón: queda anotado en D-157;
+  - P3: el contraste del anillo de foco es el color `primary` de los tokens, cuyo contraste ya se prueba
+    (`design-tokens.test.ts`).
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| Un cuerpo de más de 64 KiB en `/api/` recibe el `413` HTML de nginx, no un Problem (el cliente nunca lo envía) | Sin parte: anotado |
+| Los de P7 y P8 (`q` en la URL, métricas, recordar la divisa, `DEMO_MODE`, AC-90 en el CI) siguen igual | P10–P11 |
+
+**Decisiones:**
+- D-152 y D-153: del usuario;
+- D-154, D-155 y D-156: Claude · validadas en el plan;
+- D-157: Claude · pendiente.
+
+**Tiempo:** estimado 3,5 h · real ≈ 30 min de implementación (18:25–18:55, hora de Canarias), más el plan, la
+revisión y el cierre.
+
+## Nota de traspaso — 2026-11-13, tras P9
+
+**Para empezar una sesión nueva:** leer `CLAUDE.md`, esta nota, la sección de la parte siguiente de
+[`04-plan-implementacion.md`](04-plan-implementacion.md) y su §4. El usuario activa el modo plan y Claude presenta el plan.
+
+**Estado**
+- Hechas: P0 a P9. P9 está en la rama `feat/p9-robustness`, rebasada sobre `main` (con P8 ya integrada), con su PR.
+- `main` exige 5 *checks*: `quality` ×3, `audit` y `e2e`.
+- Para escribir e2e:
+  - de accesibilidad: `expectNoSeriousA11yViolations(page, vista)` de `e2e/fixtures/a11y.ts`;
+  - de 360 px: `NARROW_VIEWPORT`, `expectNoHorizontalScroll` y `expectTextFullyVisible` de `e2e/fixtures/layout.ts`;
+  - con la API caída: `takeApiDown(page)` en los dos destinos, y `API_DOWN_WEB_URL` (`:8081`, solo `@prod-only`);
+  - el formulario de alta: `fillCustomerForm` de `e2e/fixtures/customer-form.ts`.
+- Los tests de la API no tienen red (D-154): un test que la necesite fallará con «outbound network is blocked».
+
+**Siguiente parte: P10 · Should/Could y CI completo** (2,5 h).
+
+**Decisiones por validar:** D-157.

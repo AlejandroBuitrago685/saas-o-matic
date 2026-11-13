@@ -63,7 +63,22 @@ hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel�
       `index.html`, salud e IP real).
   - El trabajo `e2e` del CI comprueba además los contenedores con `scripts/check-containers.mjs`: sin root, solo
     lectura, sin *capabilities* y puertos solo en `127.0.0.1` (AC-60, D-130).
-- **Accesibilidad:** `@axe-core/playwright` en cada vista (AC-86). Ventana de 360 × 800 para AC-84.
+- **Accesibilidad (AC-86, D-156):** `expectNoSeriousA11yViolations` (`e2e/fixtures/a11y.ts`) pasa axe con las reglas
+  de WCAG 2.1 A y AA y falla con impacto `serious` o `critical`; el resto se adjunta al informe. Se audita cada vista
+  y estado a 1280 y a 360 px. El teclado tiene su propio spec: el slider con Re Pág, Av Pág, Inicio y Fin, y el alta
+  recorrida con el tabulador, con nombre y foco visible en cada parada (el elemento tiene que verse distinto con foco
+  y sin él).
+- **360 px (AC-84):** `e2e/fixtures/layout.ts` comprueba que no hay desplazamiento horizontal y que ningún texto está
+  recortado. `test-guards.spec.ts` demuestra que las dos comprobaciones fallan cuando deben.
+- **API caída (AC-85, D-155):** en los dos destinos, `takeApiDown` corta `/api/` en el navegador. Contra la pila, el
+  servicio `web-api-down` de `docker-compose.e2e.yml` (`127.0.0.1:8081`) es la misma imagen web sin API: en su red
+  *bridge* propia es él mismo el host `api`, así que nginx da un `502` al momento. `check-containers` lo revisa
+  también.
+- **Sin red saliente (AC-59, D-154):** `apps/api/test/setup/no-outbound-network.ts`, en `setupFiles`, bloquea en
+  todos los tests de la API `fetch`, `net.Socket.connect`, `dns.lookup` y `dgram.send` salvo *loopback* y las
+  conexiones por `path` (sockets Unix y tuberías con nombre de Windows). Los procesos hijos (`tsx` en los tests del
+  seed) no heredan el guardián; tampoco hacen red, y la regla de lint de D-154 prohíbe los clientes salientes en
+  `apps/api/src`.
 - **Detector de violaciones de CSP (AC-64, D-70):** un *fixture* automático de Playwright, activo en **todos** los
   tests que se ejecutan contra la pila de producción.
   - Registra los eventos `securitypolicyviolation` (con `page.addInitScript`) y los mensajes de consola de CSP.
