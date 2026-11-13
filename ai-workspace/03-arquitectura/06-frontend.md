@@ -62,7 +62,9 @@ Principios:
    métodos de comando (`select(currency)`, `retry()`).
 2. Lo derivado siempre con `computed`, nunca copiado a mano.
 3. Las lecturas asíncronas, con `httpResource` / `resource` (estados `loading`, `error`, `value` y `reload()`).
-   Las escrituras, con `HttpClient`.
+   Las escrituras, con `HttpClient`. Un recurso olvida su valor en cuanto cambian sus parámetros: si una vista debe
+   seguir mostrando la respuesta anterior mientras carga la siguiente (la búsqueda del dashboard), se usa
+   `rxResource` y la respuesta se guarda en un signal al llegar (D-141).
 4. `linkedSignal` para estado que se reinicia cuando cambia su origen (p. ej. la página vuelve a 1 cuando cambia la búsqueda).
 5. `effect` **solo para efectos externos**: guardar en `localStorage` o anunciar a lectores de pantalla. Nunca para
    sincronizar un signal con otro.
@@ -74,7 +76,7 @@ Principios:
 | `CatalogStore` | root | `httpResource` de `/api/catalog`; `tariffFor(plan)`, `taxRateFor(country)`, `limits` |
 | `ExchangeRatesStore` | root | Máquina de estados de los tipos (§4) |
 | `CurrencyStore` | root | Divisa seleccionada (EUR por defecto) y divisas disponibles (`computed` a partir de los tipos) |
-| `CustomerSearchStore` | ruta `/` | `q` (sincronizado con la URL), página, resultado y métricas |
+| `CustomerSearchStore` | ruta `/` | Texto escrito y `q` aplicada (300 ms o Intro), página (`linkedSignal`), resultado (`rxResource`, D-141) y la última respuesta. En P10: `q` y página en la URL, y métricas |
 | `CustomerDetailStore` | ruta `/customers/:id` | Cliente e historial paginado (`Cargar más`) |
 | `SimulatorStore` | componente | `users`, texto en bruto del campo, almacenamiento, llamadas, proyección (`computed`) y estado del guardado |
 

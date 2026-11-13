@@ -44,14 +44,21 @@ hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel�
   Cualquier otra petición a un origen externo **hace fallar el test**, así que nunca se toca la red real.
 - **Tiempo:** `page.clock` de Playwright para la caducidad de la caché (30 min, 2 h, 3 días) en AC-82, y
   `localStorage` preparado antes de cargar la página.
-- **Datos:** la pila de e2e (`npm run e2e:stack`, D-133) arranca siempre con la base de datos vacía. Cada test crea sus
-  propios clientes por la API, con NIF sintéticos únicos (`e2e/fixtures/customers.ts`), así que no depende del orden
-  ni de otros tests. El perfil `e2e` del *seed* llega en P7 (D-135), si algún test lo necesita.
-  - Los estados que necesitan una base de datos vacía o un backend caído (AC-70, AC-85) se prueban interceptando `/api/**`.
+- **Datos:** la pila de e2e (`npm run e2e:stack`, D-133) arranca siempre con la base de datos vacía, y `e2e:dev`
+  usa SQLite en memoria (D-137). Cada test crea sus propios clientes por la API, con NIF sintéticos únicos
+  (`e2e/fixtures/customers.ts`), así que no depende del orden ni de otros tests. No hay perfil `e2e` del *seed*
+  (D-139).
+  - Los estados que necesitan una base de datos vacía, una cantidad exacta de clientes o un backend caído (AC-70,
+    AC-85) se prueban interceptando `/api/**` con respuestas tipadas por el contrato (`e2e/fixtures/customer-pages.ts`).
+  - AC-71 retrasa la respuesta de `ac` para comprobar que no sustituye a la de `acme`.
 - **Producción realista en CI:** se ejecutan contra la pila de Docker Compose (nginx + API), lo que comprueba también
   la CSP y las cabeceras reales (AC-52), el proxy `/api` y que el contenedor no corre como root (AC-60).
-  - Son dos proyectos de Playwright: `stack` (`npm run e2e`, el del CI) y `dev` (`npm run e2e:dev`, contra
-    `npm run dev`), que omite los tests etiquetados `@prod-only` (cabeceras, CSP, `index.html`, salud e IP real).
+  - Son dos configuraciones de Playwright con los ajustes comunes en `e2e/playwright.shared.ts`:
+    - `stack` (`npm run e2e`, la del CI): `playwright.config.ts`;
+    - `dev` (`npm run e2e:dev`): `playwright.dev.config.ts`. Arranca su propia API (:3100, `NODE_ENV=test`, SQLite en
+      memoria) y su propio `ng serve` (:4300) con `webServer` (D-137). Así no toca la base de desarrollo y puede
+      ejecutarse con `npm run dev` arrancado. Omite los tests etiquetados `@prod-only` (cabeceras, CSP,
+      `index.html`, salud e IP real).
   - El trabajo `e2e` del CI comprueba además los contenedores con `scripts/check-containers.mjs`: sin root, solo
     lectura, sin *capabilities* y puertos solo en `127.0.0.1` (AC-60, D-130).
 - **Accesibilidad:** `@axe-core/playwright` en cada vista (AC-86). Ventana de 360 × 800 para AC-84.

@@ -190,10 +190,19 @@ Un test comprueba que constante, catálogo, registro de validadores y `CHECK` co
 - El CI comprueba que el esquema y las migraciones están sincronizados (`npm run db:check -w @saas-o-matic/api`):
   `drizzle-kit generate` no debe producir cambios.
 
-**Datos de ejemplo** (`npm run db:seed`):
+**Datos de ejemplo** (P7, D-140): `npm run setup` y `npm run db:seed` siembran la base de `DATABASE_PATH`;
+`npm run db:reset` borra antes el fichero (D-138). Código en `apps/api/src/seed.ts` y `apps/api/src/seed/`.
 
-- Deterministas: reloj y generador de IDs fijos.
-- Idempotentes: si ya hay clientes, no hacen nada.
-- Unos 25 clientes ficticios que cubren todos los países y tipos de identificador, con los identificadores
-  **sintéticos** de los vectores de prueba (nunca reales), y algunas simulaciones por cliente.
-- Perfiles: `demo` (el del README y la demo pública) y `e2e` (datos mínimos y conocidos para los tests de extremo a extremo).
+- **Por los casos de uso reales:** cada cliente y cada simulación pasan por los esquemas del contrato y por los mismos
+  casos de uso que la API, así que la validación fiscal y los precios son los de producción.
+- **Deterministas:** el reloj avanza a pasos fijos desde el 2026-11-02 y los IDs v7 salen del generador real con
+  bytes derivados de un *hash* de un contador.
+- **Idempotentes:** si ya hay clientes, no hacen nada.
+- **En una transacción:** si algo falla, no se guarda nada.
+- **Perfil único, `demo`** (el del README y la demo pública): 25 clientes ficticios de los 7 países y los 5 tipos de
+  identificador, con los identificadores **sintéticos** de los vectores (nunca los reales: TV-ES-13 y TV-ES-31 a 34),
+  y entre 0 y 3 simulaciones cada uno. Con 25, el dashboard muestra «1–20 de 25».
+- **Sin perfil `e2e`** (D-139): ningún test lo necesita. Cada e2e crea sus datos, los estados globales se interceptan
+  y las dos bases de los e2e empiezan vacías: la pila (D-133) y la memoria de `e2e:dev` (D-137).
+- **Nunca en producción:** el comando se niega con `NODE_ENV=production`. La demo regenera sus datos en su propio
+  arranque (08-despliegue §4).

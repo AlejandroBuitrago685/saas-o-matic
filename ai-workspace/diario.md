@@ -739,3 +739,110 @@ para el sábado: el calendario va adelantado.
 **Siguiente parte: P7 · Búsqueda y dashboard** (3 h), que ahora incluye también el *seed* (D-135).
 
 **Decisiones por validar:** ninguna.
+
+## P7 · Búsqueda, dashboard y seed — 2026-11-13 · rama `feat/p7-search-dashboard`
+
+**Hecho**
+- **API, `GET /customers`** (AC-28 a AC-33):
+  - `taxIdSearchTerm` en `domain` (TDD), que comparte la limpieza de separadores con `validateTaxId`
+    (`strip-separators.ts`, sin duplicarla);
+  - `containsPattern` en `db/like-pattern.ts` escapa `!`, `%` y `_`; patrón y `ESCAPE` van como parámetros;
+  - caso de uso con D-136 y repositorio que no lee `contact_email`, ordenado por `company_name_search, id`;
+  - `openapi.json` regenerado;
+  - **AC-54 cerrado**: el escenario de logs incluye `GET /customers?q=Acme`, y la ruta aparece como patrón.
+- **Seed** (D-140, D-138, D-139):
+  - `npm run setup`, `npm run db:seed` y `npm run db:reset`; perfil único `demo`, con 25 clientes de los 7 países y
+    los 5 tipos, y 26 simulaciones;
+  - pasa por los esquemas del contrato y los casos de uso reales, es determinista, idempotente y va en una
+    transacción (`Database.transaction`);
+  - `db:reset` se niega en producción y con `:memory:`; con la API abierta, en Windows, sale una línea clara;
+  - `apps/api/src/seed/**` tiene las reglas de la raíz de composición, con test en `tools/`.
+- **`e2e:dev` con base propia** (D-137): `playwright.dev.config.ts` arranca la API en :3100 con SQLite en memoria y
+  `ng serve` en :4300. Comprobado con `npm run dev` arrancado: 23/23, la base de desarrollo igual antes y después
+  (9 clientes y 3 simulaciones) y sin procesos huérfanos.
+- **Web, dashboard (V1)** (AC-70, AC-71):
+  - `/` es el dashboard: fuera el `TODO(P7)`, D-126 cumplida, y «Clientes» lleva al listado;
+  - `CustomerSearchStore` con *debounce* de 300 ms o Intro, página en un `linkedSignal`, `rxResource` (D-141) y la
+    última respuesta atenuada mientras carga la siguiente;
+  - buscador, tarjetas-enlace, paginación «1–20 de 25» y los cinco estados de spec 05 §3.1.
+- **e2e:** `dashboard.spec.ts` con 9 tests:
+  - AC-70: vacío, 25 clientes, `500` y esqueleto, interceptando el listado con respuestas tipadas por el contrato;
+  - AC-71: una sola búsqueda y una respuesta lenta que no sustituye a la nueva;
+  - contra la API real: búsqueda por identificador con guion → detalle, «Limpiar búsqueda» y «Clientes» desde el
+    detalle;
+  - AC-64 recorre también el dashboard.
+- **Resultados:**
+  - `npm run verify` en verde: 948 tests de Node (+68) y 118 de la web (+20);
+  - e2e: 32/32 contra la pila y 23/23 en `e2e:dev`;
+  - trazabilidad **AC 66/81 (+8) · TV 121/129**;
+  - búsqueda de una página con los datos de ejemplo: unos 3 ms de extremo a extremo (criterio de P7: menos de 20 ms);
+  - comprobado en el navegador con el seed `demo`, a 800 y 360 px, con teclado y sin errores en la consola.
+
+**Falló o lo descubrí por el camino**
+- **Un recurso de Angular olvida su valor al cambiar los parámetros**: lo confirmé en el código de Angular 22.2. Un
+  `linkedSignal` encima solo recuerda lo que alguien ha leído. Un test del store lo demostró (`isRefreshing` en
+  `false`), así que pasé a `rxResource` y la respuesta se guarda al llegar (D-141).
+- La `.data-list` (etiqueta y valor en columnas desde 640 px) partía identificadores y planes en tarjetas de un tercio
+  de ancho («STARTE R»). Las tarjetas usan ahora una línea que se ajusta, con las etiquetas solo para lectores de
+  pantalla; solo «Alta» es visible.
+- Chromium pinta su propia «×» en los `type="search"`, que duplicaba «Borrar» y no se alcanza con el teclado. Se
+  oculta en `base.css`.
+- `expectOne` de `HttpTestingController` saca la petición de la cola: en dos tests la buscaba dos veces.
+- En un *heredoc* de Python, el texto con barras invertidas perdió un nivel de escape: rompió un regex de ESLint y un
+  test. Lo arreglé con el editor y lo dejé en la memoria del proyecto.
+- En la pila de e2e, el cliente recién creado puede no caer en la primera página, porque otros tests crean clientes
+  a la vez. El recorrido de AC-64 comprueba que hay alguna tarjeta, no una en concreto.
+- Por la especificación (04-contrato §3.3), buscar con el prefijo del país (`ES B1234`) no encuentra el CIF guardado
+  sin prefijo. No es un fallo, pero sí una limitación que conviene conocer.
+
+**Correcciones**
+- **Del usuario (plan):** sin perfil `e2e` (D-139), D-136, y que Claude reinicie la base de desarrollo al cerrar.
+- **Del revisor** (`sonnet`, una pasada): **APTO CON CAMBIOS**, sin P0 ni P1. Corregidos, cada uno con un test que
+  falló antes del arreglo:
+  - P2: «Borrar» y «Limpiar búsqueda» desaparecían con el foco puesto: ahora el foco vuelve al buscador;
+  - P2: «Anterior» y «Siguiente» se desactivaban con `disabled` y perdían el foco. Ahora usan `aria-disabled`, con su
+    estilo en `.btn-secondary`;
+  - P3: `next()` y `previous()` se ignoran mientras carga una página (dos clics rápidos ya no saltan una);
+  - P3: `db:reset` con la API abierta da una sola línea, sin traza, y se prueba en un proceso real;
+  - P3: `seed.test.ts` pasa de 5 a 3 arranques de `tsx` (2 fuera de Windows);
+  - P3: el e2e de CL-42 ya no hace `expect` dentro de un `catch`, sino que espera al `requestfailed` de la petición.
+- **Propias:** el test de AC-31 con `%` en el título rompía el formato de Vitest.
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| `q` y página en la URL, métricas del dashboard (RF-19, AC-92) | P10 |
+| `502`/`504` de nginx con respuesta propia cuando la API está caída (AC-85, residuo de T-12) | P9 |
+| *Override* de la demo, con `DEMO_MODE` que use `seedDatabase` y `removeDatabaseFiles` al arrancar | P11 |
+| Valor de AC-90 en el CI: está en el artefacto `playwright-report` del trabajo `e2e` | P10 (revisión del CI) |
+
+**Decisiones:**
+- D-136 y D-139: validadas en el plan;
+- D-137, D-138, D-140 y D-141: Claude · pendiente;
+- D-126: cumplida.
+
+**Tiempo:** estimado 3 h (unas 4 h con el seed, `e2e:dev` y `db:reset`) · real ≈ 45 min de implementación
+(16:04–16:49, hora de Canarias), más el plan y el cierre.
+
+## Nota de traspaso — 2026-11-13, tras P7
+
+**Para empezar una sesión nueva:** leer `CLAUDE.md`, esta nota, la sección de la parte siguiente de
+[`04-plan-implementacion.md`](04-plan-implementacion.md) y su §4. El usuario activa el modo plan y Claude presenta el plan.
+
+**Estado**
+- Hechas: P0 a P7. P7 está en la rama `feat/p7-search-dashboard`, con su PR.
+- `main` exige 5 *checks*: `quality` ×3, `audit` y `e2e`.
+- Datos locales:
+  - `npm run setup` crea la base de desarrollo con el seed `demo` (25 clientes);
+  - `npm run db:reset`, con `npm run dev` parado, vuelve a ese estado.
+- e2e:
+  - `npm run e2e:dev` ya no necesita `npm run dev`: arranca sus propios servidores (:3100 y :4300) con SQLite en
+    memoria;
+  - con Docker: `npm run e2e:stack` → `npm run e2e` → `npm run e2e:stack:down`;
+  - para escribir e2e, importar `test` y `expect` de `e2e/fixtures/test.ts`;
+  - los estados globales del listado se simulan con `e2e/fixtures/customer-pages.ts`.
+
+**Siguiente parte: P8 · Divisas** (3,5 h).
+
+**Decisiones por validar:** D-137, D-138, D-140 y D-141.

@@ -116,6 +116,11 @@ Dos mecanismos, porque cada uno resuelve bien una cosa:
 raíz), con tests positivos y negativos en `tools/eslint-zones.test.ts`. En la práctica los módulos no se importan entre
 sí: `simulations` declara el puerto `CustomerLookup` y `app.ts` le conecta el repositorio de `customers`.
 
+**El *seed* (P7, D-140)** también conecta casos de uso, como la raíz de composición. `seed.ts` está en la raíz, y
+`apps/api/src/seed/**` tiene sus mismas reglas: sin Drizzle ni Fastify, y los módulos solo por su `index.ts`
+(`../modules/<módulo>/<fichero que no sea index>` se rechaza). Tiene tests positivos y negativos en
+`tools/eslint-zones.test.ts`.
+
 ### 3.4 Cómo se ha probado (P0)
 
 Una regla solo lleva ⚙ en `CLAUDE.md` si tiene un test que demuestra que salta.
