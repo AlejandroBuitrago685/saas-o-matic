@@ -1,6 +1,8 @@
 <section class="flex flex-col gap-6" aria-labelledby="dashboard-title">
   <h1 id="dashboard-title" class="page-title">Clientes</h1>
 
+  <app-dashboard-metrics />
+
   <app-customer-search-box
     #searchBox
     [text]="store.input()"

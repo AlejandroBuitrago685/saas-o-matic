@@ -78,10 +78,11 @@ test('AC-86: Re Pág, Av Pág, Fin and Inicio move the slider as spec 05 §3.4.1
     await expect.poll(() => announcedUsers(slider), { message: `after ${key}` }).toBe(users);
   };
 
-  // Ten positions per page: 0 → 10 → 20 are 11 and 21 users; the ends are 1 and 10 000. At an end, nothing moves.
-  await pressAndExpect('PageUp', 11);
-  await pressAndExpect('PageUp', 21);
-  await pressAndExpect('PageDown', 11);
+  // Ten positions per page from the 15 users it opens with (position 14, D-160): 24 and 34 are 25 and 35 users; the
+  // ends are 1 and 10 000. At an end, nothing moves.
+  await pressAndExpect('PageUp', 25);
+  await pressAndExpect('PageUp', 35);
+  await pressAndExpect('PageDown', 25);
   await pressAndExpect('End', 10_000);
   await pressAndExpect('PageUp', 10_000);
   await pressAndExpect('Home', 1);

@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 
-/** The browser's storage as the rates cache uses it: the part of `Storage` it needs. */
-export type RatesStorage = Pick<Storage, 'getItem' | 'setItem'>;
+/** The browser's storage as the rates cache and the chosen currency use it: the part of `Storage` they need. */
+export type BrowserStorage = Pick<Storage, 'getItem' | 'setItem'>;
 
 /** Current time in ms. Injected so the unit tests of the rates control the clock (06-frontend §4). */
 export const NOW = new InjectionToken<() => number>('NOW', {
@@ -20,9 +20,10 @@ export const FETCH = new InjectionToken<typeof fetch>('FETCH', {
 
 /**
  * `localStorage`, or nothing when the browser denies it: reading the property itself throws in some private modes
- * and with storage blocked. Without storage the rates work the same, only without cache (D-146).
+ * and with storage blocked. Without storage everything works the same, only without cache (D-146) and without
+ * remembering the currency across reloads.
  */
-export const RATES_STORAGE = new InjectionToken<RatesStorage | undefined>('RATES_STORAGE', {
+export const BROWSER_STORAGE = new InjectionToken<BrowserStorage | undefined>('BROWSER_STORAGE', {
   providedIn: 'root',
   factory: () => {
     try {

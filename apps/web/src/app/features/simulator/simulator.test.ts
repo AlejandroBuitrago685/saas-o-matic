@@ -10,7 +10,8 @@ import { apiErrorInterceptor } from '../../core/api/api-error.interceptor';
 import type { ReadyCatalog } from '../../core/catalog/catalog.store';
 import { ToastStore } from '../../core/layout/toast.store';
 import { CATALOG_FIXTURE, CUSTOMER_FIXTURE, INSTANCE_FIXTURE } from '../../core/testing/catalog.fixture';
-import { ANNOUNCE_DELAY_MS, tierLabel } from './projection-panel';
+import { tierLabel } from '../../shared/format/tier-label';
+import { ANNOUNCE_DELAY_MS } from './projection-panel';
 import { Simulator } from './simulator';
 
 function readyCatalog(): ReadyCatalog {
@@ -76,10 +77,12 @@ describe('V4 simulator (spec 05 §3.4)', () => {
     await fixture.whenStable();
   }
 
-  it('AC-77 starts at 1 user, 0 GB and 0 API calls', () => {
-    expect(usersField().value).toBe('1');
-    expect(slider().value).toBe('0');
-    expect(total()).toBe('12,10 €');
+  it('D-160 / TV-PR-04 starts at 15 users (100 € + 40 € = 140 €), 0 GB and 0 API calls', () => {
+    expect(usersField().value).toBe('15');
+    expect(slider().value).toBe('14');
+    expect(slider().getAttribute('aria-valuetext')).toBe('15 usuarios');
+    expect(projection()).toContain(plain('Base mensual | 140,00 €'));
+    expect(total()).toBe('169,40 €');
   });
 
   it('AC-76 / TV-PR-04 / TV-FX-06 projects 15 users of a Spanish customer in EUR', async () => {
@@ -153,11 +156,12 @@ describe('V4 simulator (spec 05 §3.4)', () => {
   it('spec 05 §3.4.1 Re Pág / Av Pág move ten positions, within the ends', async () => {
     slider().dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', cancelable: true }));
     await fixture.whenStable();
-    expect(usersField().value).toBe('11');
+    expect(usersField().value).toBe('25');
 
-    slider().dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown', cancelable: true }));
-    slider().dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown', cancelable: true }));
-    await fixture.whenStable();
+    for (let press = 0; press < 3; press += 1) {
+      slider().dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown', cancelable: true }));
+      await fixture.whenStable();
+    }
     expect(usersField().value).toBe('1');
   });
 

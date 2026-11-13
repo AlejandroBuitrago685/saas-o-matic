@@ -3,10 +3,12 @@ import type { CustomerResponse } from '@saas-o-matic/contract';
 
 import { COUNTRY_NAMES } from '../../shared/format/country-text';
 import { DateTimePipe } from '../../shared/format/date-time.pipe';
+import { emailBreakSegments } from '../../shared/format/email-segments';
 
 /**
  * Customer data (spec 05 §3.3). Values at body size in the normal text colour, labels small and muted (feedback
- * at the visual checkpoint): `.data-list`.
+ * at the visual checkpoint): `.data-list`. The email is always shown whole (AC-84) and wraps only after its «@» and
+ * its dots (D-159); only a segment longer than the line, like a 64-character local part at 360 px, is cut inside.
  */
 @Component({
   selector: 'app-customer-card',
@@ -27,8 +29,10 @@ import { DateTimePipe } from '../../shared/format/date-time.pipe';
         </div>
         <div>
           <dt>Email</dt>
-          <dd>
-            <a class="link" [href]="'mailto:' + customer().contactEmail">{{ customer().contactEmail }}</a>
+          <dd class="min-w-0 break-words">
+            <!-- On one line: a line break here would become a space inside the address. -->
+            <!-- prettier-ignore -->
+            <a class="link" [href]="'mailto:' + customer().contactEmail">@for (segment of emailSegments(); track $index) {{{ segment }}<wbr />}</a>
           </dd>
         </div>
         <div>
@@ -50,4 +54,5 @@ export class CustomerCard {
   readonly customer = input.required<CustomerResponse>();
 
   protected readonly countryName = computed(() => COUNTRY_NAMES[this.customer().country]);
+  protected readonly emailSegments = computed(() => emailBreakSegments(this.customer().contactEmail));
 }

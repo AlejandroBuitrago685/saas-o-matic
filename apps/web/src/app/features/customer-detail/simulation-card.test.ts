@@ -64,4 +64,34 @@ describe('AC-87 history card in the selected currency (spec 05 §3.5)', () => {
 
     expect(plain(host.querySelector('p')?.textContent)).toBe(plain('Total mensual: 169,40 €'));
   });
+
+  const breakdown = (): string[] =>
+    [...host.querySelectorAll('details dl > div')].map(
+      (row) =>
+        `${plain(row.querySelector('dt')?.textContent)}: ${plain(row.querySelector('dd')?.textContent)}`,
+    );
+
+  it('spec 05 §3.5 (Should): the breakdown by tier is folded in a native disclosure, with the stored subtotals', async () => {
+    await fixture.whenStable();
+
+    expect(host.querySelector('details')?.open).toBe(false);
+    // The marker is decoration, hidden from screen readers: the summary is read as its text alone.
+    expect(plain(host.querySelector('summary [aria-hidden="true"]')?.textContent)).toBe('▸');
+    expect(plain(host.querySelector('summary')?.textContent)).toBe('▸ Desglose por tramo');
+    expect(breakdown()).toEqual([
+      plain('Tramo 1 · usuarios 1–10 · 10 × 10,00 €: 100,00 €'),
+      plain('Tramo 2 · usuarios 11–50 · 5 × 8,00 €: 40,00 €'),
+    ]);
+  });
+
+  it('AC-87: in USD the subtotals of the breakdown are the converted leaf items, which add up to the base', async () => {
+    await TestBed.inject(ExchangeRatesStore).start();
+    TestBed.inject(CurrencyStore).select('USD');
+    await fixture.whenStable();
+
+    expect(breakdown()).toEqual([
+      plain('Tramo 1 · usuarios 1–10 · 10 × 10,00 €: ≈ 111,13 US$'),
+      plain('Tramo 2 · usuarios 11–50 · 5 × 8,00 €: ≈ 44,45 US$'),
+    ]);
+  });
 });

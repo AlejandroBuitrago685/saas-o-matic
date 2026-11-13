@@ -3,21 +3,10 @@ import type { Country, Pricing, PricingLine } from '@saas-o-matic/domain';
 
 import { CurrencyStore } from '../../core/currency/currency.store';
 import { formatMoney, formatRatesDate, MoneyPipe, TaxRatePipe } from '../../shared/format/money.pipe';
+import { tierLabel } from '../../shared/format/tier-label';
 
 /** Screen readers hear the new total at most this often while the slider moves (06-frontend §6). */
 export const ANNOUNCE_DELAY_MS = 500;
-
-/**
- * «Tramo 2 · usuarios 11–50 · 5 × 8,00 €» (spec 05 §3.4): the tier's range, the users in it and the unit price,
- * always in EUR because it is the price of the tariff. The last tier has no upper limit.
- */
-export function tierLabel(line: PricingLine): string {
-  const users =
-    line.toUser === null
-      ? `desde ${String(line.fromUser)}`
-      : `${String(line.fromUser)}–${String(line.toUser)}`;
-  return `Tramo ${String(line.tier)} · usuarios ${users} · ${String(line.units)} × ${formatMoney(line.unitPriceCents)}`;
-}
 
 /** The converted subtotal of each tier, next to its label in EUR. Both lists come from the same pricing. */
 function tierRows(
