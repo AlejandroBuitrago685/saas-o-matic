@@ -49,6 +49,11 @@ export {
   simulationPageSchema,
   simulationSchema,
 } from './simulations.js';
-export type { CreateSimulationRequest, SimulationPage, SimulationResponse } from './simulations.js';
+export type {
+  CreateSimulationCommand,
+  CreateSimulationRequest,
+  SimulationPage,
+  SimulationResponse,
+} from './simulations.js';
 export { statsResponseSchema } from './stats.js';
 export type { StatsResponse } from './stats.js';

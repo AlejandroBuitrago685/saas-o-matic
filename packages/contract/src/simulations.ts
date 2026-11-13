@@ -60,5 +60,6 @@ export const simulationSchema = z.object({
 export const simulationPageSchema = pageOf(simulationSchema);
 
 export type CreateSimulationRequest = z.input<typeof createSimulationRequestSchema>;
+export type CreateSimulationCommand = z.output<typeof createSimulationRequestSchema>;
 export type SimulationResponse = z.output<typeof simulationSchema>;
 export type SimulationPage = z.output<typeof simulationPageSchema>;

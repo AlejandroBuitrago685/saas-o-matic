@@ -1,6 +1,7 @@
 import { healthResponseSchema, healthUnavailableResponseSchema, noQuerySchema } from '@saas-o-matic/contract';
 import type { FastifyPluginCallbackZod } from 'fastify-type-provider-zod';
 
+import { problemResponses, READ_PROBLEMS } from '../../shared/problem-responses.js';
 import type { CheckHealth } from './check-health.use-case.js';
 
 export interface HealthRoutesOptions {
@@ -14,7 +15,11 @@ export const healthRoutes: FastifyPluginCallbackZod<HealthRoutesOptions> = (app,
     {
       schema: {
         querystring: noQuerySchema,
-        response: { 200: healthResponseSchema, 503: healthUnavailableResponseSchema },
+        response: {
+          200: healthResponseSchema,
+          503: healthUnavailableResponseSchema,
+          ...problemResponses(...READ_PROBLEMS),
+        },
       },
     },
     (request, reply) => {
