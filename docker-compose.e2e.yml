@@ -1,0 +1,8 @@
+# e2e stack (D-133): docker-compose.yml with higher request limits and nothing else. Every e2e test reaches the API
+# from the same address (the Docker gateway), so the production limits would throttle the suite; the limit itself is
+# tested against the API (AC-51). Started by `npm run e2e:stack` as its own project, with its own data volume.
+services:
+  api:
+    environment:
+      RATE_LIMIT_PER_MINUTE: '5000'
+      RATE_LIMIT_WRITES_PER_MINUTE: '1000'

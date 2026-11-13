@@ -163,12 +163,13 @@ describe('D-86 traceability script (informative until P10)', () => {
 });
 
 describe('D-80 / D-86 verify:changed only checks what changed', () => {
-  const everything = ['domain', 'contract', 'api', 'tools', 'web'];
+  const everything = ['domain', 'contract', 'api', 'tools', 'web', 'e2e'];
 
   it.each([
-    [['packages/domain/src/money.ts'], ['domain', 'contract', 'api', 'web']],
-    [['packages/contract/src/x.ts'], ['contract', 'api', 'web']],
+    [['packages/domain/src/money.ts'], ['domain', 'contract', 'api', 'web', 'e2e']],
+    [['packages/contract/src/x.ts'], ['contract', 'api', 'web', 'e2e']],
     [['apps/api/src/app.ts'], ['api']],
+    [['e2e/specs/simulator.spec.ts'], ['e2e']],
     [['scripts/dev.mjs', 'tools/x.test.ts'], ['tools']],
     [['.claude/settings.json', '.github/workflows/ci.yml', '.nvmrc', 'lefthook.yml'], ['tools']],
     [['README.md', 'ai-workspace/diario.md'], []],
@@ -192,6 +193,13 @@ describe('D-80 / D-86 verify:changed only checks what changed', () => {
     expect(parallel.find((step) => step.label === 'lint')?.cmd).not.toContain('README.md');
     expect(parallel.find((step) => step.label === 'tests')?.cmd).not.toContain('tools');
     expect(afterwards.map((step) => step.label)).toEqual(['tests tools']);
+  });
+
+  it('D-68 typechecks the e2e workspace but never runs it: its tests need the Docker Compose stack', () => {
+    const { parallel } = verificationSteps(['e2e'], ['e2e/specs/simulator.spec.ts']);
+
+    expect(parallel.find((step) => step.label === 'typecheck e2e')?.cmd).toEqual(['npx', 'tsc', '-p', 'e2e']);
+    expect(parallel.map((step) => step.label)).not.toContain('tests');
   });
 
   it('formats and lints the whole repository when the lint or format configuration changes', () => {

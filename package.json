@@ -8,7 +8,8 @@
     "packages/domain",
     "packages/contract",
     "apps/api",
-    "apps/web"
+    "apps/web",
+    "e2e"
   ],
   "engines": {
     "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
@@ -18,14 +19,18 @@
     "dev": "node scripts/dev.mjs",
     "build": "npm run build:packages && npm run build -w @saas-o-matic/api && npm run build -w @saas-o-matic/web",
     "build:packages": "tsc -b packages/domain/tsconfig.build.json packages/contract/tsconfig.build.json",
-    "typecheck": "npm run build:packages && tsc -p packages/domain && tsc -p packages/contract && tsc -p apps/api && tsc -p tools && npm run typecheck -w @saas-o-matic/web",
+    "typecheck": "npm run build:packages && tsc -p packages/domain && tsc -p packages/contract && tsc -p apps/api && tsc -p tools && tsc -p e2e && npm run typecheck -w @saas-o-matic/web",
     "lint": "npm run build:packages && eslint . --max-warnings=0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "node scripts/check-filenames.mjs && node scripts/check-forbidden-patterns.mjs && depcruise packages apps/api/src apps/web/src --config .dependency-cruiser.cjs",
+    "check": "node scripts/check-filenames.mjs && node scripts/check-forbidden-patterns.mjs && depcruise packages apps/api/src apps/web/src e2e --config .dependency-cruiser.cjs",
     "test": "npm run build:packages && vitest run --project domain --project contract --project api --project tools && npm run test -w @saas-o-matic/web",
     "test:node": "vitest run",
     "trace": "node scripts/trace-tests.mjs",
+    "e2e": "npm run test -w @saas-o-matic/e2e",
+    "e2e:dev": "npm run test:dev -w @saas-o-matic/e2e",
+    "e2e:stack": "node scripts/e2e-stack.mjs up",
+    "e2e:stack:down": "node scripts/e2e-stack.mjs down",
     "verify": "npm run format:check && npm run lint && npm run typecheck && npm run check && npm run db:check -w @saas-o-matic/api && npm run build:packages && vitest run --coverage && npm run test -w @saas-o-matic/web && npm run build && npm run trace",
     "verify:changed": "node scripts/verify-changed.mjs"
   },

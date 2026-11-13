@@ -1,5 +1,5 @@
 # Pipeline (03-arquitectura/08-despliegue.md §3, D-52, D-53).
-# P0: `quality` (Node 22/24/26 matrix) and `audit`. P6 adds `e2e`; P10 adds the Windows/macOS smoke jobs.
+# P0: `quality` (Node 22/24/26 matrix) and `audit`; P6: `e2e` (D-68); P10 adds the Windows/macOS smoke jobs.
 name: CI
 
 on:
@@ -71,3 +71,41 @@ jobs:
         run: npm audit --audit-level=high
       - name: No committed .env files (AC-55)
         run: node scripts/check-forbidden-patterns.mjs
+
+  # D-68: the e2e run once (D-52), against the Docker Compose stack, so the real nginx, CSP and headers are tested.
+  e2e:
+    name: e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Start the Compose stack and wait until it is healthy (AC-97, D-133)
+        run: npm run e2e:stack
+      - name: Containers without root, read-only, ports on 127.0.0.1 only (AC-60, D-130)
+        run: node scripts/check-containers.mjs saas-o-matic-e2e
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: e2e against the Compose stack, real CSP and headers (AC-96, AC-64, AC-52)
+        run: npm run e2e
+      - name: Playwright report and traces
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-report
+          path: |
+            e2e/playwright-report/
+            e2e/test-results/
+          retention-days: 7
+      - name: Logs of the stack (the API logs carry no personal data)
+        if: failure()
+        run: docker compose -p saas-o-matic-e2e -f docker-compose.yml -f docker-compose.e2e.yml logs --no-color
+      - name: Stop the stack and delete its data
+        if: always()
+        run: npm run e2e:stack:down

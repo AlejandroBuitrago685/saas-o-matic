@@ -4,9 +4,10 @@ Herramienta interna para que el equipo comercial simule y presupueste suscripcio
 clientes corporativos: alta de clientes con validación fiscal, simulación por tramos con impuestos y conversión de
 divisas en tiempo real.
 
-> **Estado:** en construcción. Hechas las partes P0 a P3: monorepo, herramientas de calidad y CI, reglas de negocio
-> del dominio y base de la API (contrato, base de datos, seguridad HTTP, `GET /catalog` y `GET /health`). El resto
-> llega en las partes siguientes del [plan de implementación](ai-workspace/04-plan-implementacion.md).
+> **Estado:** en construcción. Hechas las partes P0 a P6: monorepo, herramientas de calidad y CI, reglas de negocio
+> del dominio, API y web de la porción vertical (alta de cliente → detalle → simulador → guardar → historial), y
+> Docker Compose con nginx y los e2e contra esa pila. El resto llega en las partes siguientes del
+> [plan de implementación](ai-workspace/04-plan-implementacion.md).
 
 ## Requisitos
 
@@ -23,6 +24,37 @@ npm run dev
 
 - API: <http://localhost:3000/health>
 - Web: <http://localhost:4200> (reenvía `/api/*` a la API)
+
+## Con Docker Compose
+
+Alternativa al arranque con npm: la misma aplicación servida como en producción, con nginx delante de la API.
+
+```bash
+docker compose up --build -d
+```
+
+- Aplicación: <http://localhost:8080> (la API, en <http://localhost:8080/api/health>).
+- Para pararla: `docker compose down` (con `-v` se borran también los datos).
+- Los contenedores no corren como root, tienen el sistema de ficheros en solo lectura salvo el volumen de datos, y
+  el puerto solo se publica en `127.0.0.1`. La API no publica ninguno: solo se llega a ella a través de nginx.
+- No puede estar levantada a la vez que la pila de e2e (`npm run e2e:stack`): las dos usan el puerto 8080 y la misma
+  subred fija de Docker.
+
+## e2e
+
+Con Docker en marcha:
+
+```bash
+npm run e2e:stack
+npm run e2e
+npm run e2e:stack:down
+```
+
+- `e2e:stack` levanta la pila de Compose como un proyecto aparte, con una base de datos vacía y límites de peticiones
+  más altos, y espera a que esté sana. `e2e` ejecuta Playwright (Chromium) contra ella, con la CSP real.
+- La primera vez, `npx playwright install chromium` descarga el navegador.
+- `npm run e2e:dev` ejecuta los mismos tests contra `npm run dev`, salvo los que solo tienen sentido contra la pila
+  (`@prod-only`: cabeceras, CSP e IP real).
 
 ## API
 
@@ -51,7 +83,8 @@ npm run dev
 packages/domain     reglas de negocio puras (sin dependencias)
 packages/contract   esquemas Zod del contrato de la API
 apps/api            API Fastify + SQLite (Drizzle)
-apps/web            Angular 22 + Tailwind 4
+apps/web            Angular 22 + Tailwind 4 (y su nginx, en apps/web/nginx)
+e2e                 tests de extremo a extremo con Playwright
 tools/, scripts/    configuración de lint, comprobaciones del repo y hooks
 ai-workspace/       proceso con IA: análisis, especificación, arquitectura, decisiones, prompts y diario
 ```

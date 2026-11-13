@@ -207,4 +207,31 @@ export const restrictionConfigs = [
     ignores: TESTS,
     rules: { '@typescript-eslint/no-restricted-imports': api([DRIZZLE, FASTIFY, DB]) },
   },
+  {
+    // The e2e tests are black-box (02-monorepo §2): Playwright and the types of the contract, nothing else of ours.
+    files: ['e2e/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@saas-o-matic/contract',
+              allowTypeImports: true,
+              message: 'Desde los e2e, solo import type.',
+            },
+            { name: 'zod', message: 'Los e2e no validan con Zod: solo usan los tipos del contrato.' },
+          ],
+          patterns: [
+            {
+              regex: '^@saas-o-matic/(?!contract$)',
+              message: 'Los e2e solo conocen los tipos del contrato.',
+            },
+            { regex: '^\\.{1,2}/(.*/)?apps/', message: 'Los e2e son de caja negra: nunca código de apps/*.' },
+            PACKAGE_INTERNALS,
+          ],
+        },
+      ],
+    },
+  },
 ];
