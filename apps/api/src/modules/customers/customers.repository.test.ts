@@ -83,3 +83,66 @@ describe('customers repository (D-17, RF-01)', () => {
     expect(thrown).not.toBeInstanceOf(ConflictError);
   });
 });
+
+const THIRD_ID = '019a7a3c-0000-7000-8000-000000000003';
+const FOURTH_ID = '019a7a3c-0000-7000-8000-000000000004';
+
+describe('AC-28 customers repository listing (04-base-de-datos §3)', () => {
+  beforeEach(() => {
+    repository.insert(
+      customer({
+        id: THIRD_ID,
+        companyName: 'Zeta S.A.',
+        companyNameSearch: 'zeta s.a.',
+        taxId: 'J0000000J',
+      }),
+    );
+    repository.insert(
+      customer({
+        id: SECOND_ID,
+        companyName: 'Ñandú S.L.',
+        companyNameSearch: 'nandu s.l.',
+        taxId: 'W1234567D',
+      }),
+    );
+    repository.insert(
+      customer({
+        id: FOURTH_ID,
+        companyName: 'Acme S.L.',
+        companyNameSearch: 'acme s.l.',
+        taxId: 'C12345674',
+      }),
+    );
+    repository.insert(customer({ id: FIRST_ID, companyName: 'ACME S.L.', companyNameSearch: 'acme s.l.' }));
+  });
+
+  const ids = (terms?: Parameters<CustomerRepository['list']>[1]) =>
+    repository.list({ limit: 10, offset: 0 }, terms).items.map(({ id }) => id);
+
+  it('orders by the search key (Ñ with the N) and, at the same key, by id', () => {
+    expect(ids()).toEqual([FIRST_ID, FOURTH_ID, SECOND_ID, THIRD_ID]);
+  });
+
+  it('pages with limit and offset, and the total counts every match', () => {
+    const page = repository.list({ limit: 2, offset: 1 });
+
+    expect(page.items.map(({ id }) => id)).toEqual([FOURTH_ID, SECOND_ID]);
+    expect(page.total).toBe(4);
+  });
+
+  it('matches the name term OR the tax id term', () => {
+    expect(ids({ name: 'zeta', taxId: 'W123' })).toEqual([SECOND_ID, THIRD_ID]);
+  });
+
+  it('a null term does not filter by its field (D-136)', () => {
+    expect(ids({ name: null, taxId: 'C1234' })).toEqual([FOURTH_ID]);
+    expect(ids({ name: 'nandu', taxId: null })).toEqual([SECOND_ID]);
+  });
+
+  it('AC-33 the items carry no email', () => {
+    for (const item of repository.list({ limit: 10, offset: 0 }).items) {
+      expect(item).not.toHaveProperty('contactEmail');
+      expect(item).not.toHaveProperty('companyNameSearch');
+    }
+  });
+});

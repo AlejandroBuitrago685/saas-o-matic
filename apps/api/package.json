@@ -8,6 +8,9 @@
     "dev": "tsx watch src/main.ts",
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/main.js",
+    "start:e2e": "tsx src/main.ts",
+    "db:seed": "tsx src/seed.ts",
+    "db:reset": "tsx src/seed.ts --reset",
     "openapi": "tsx scripts/write-openapi.ts",
     "db:generate": "drizzle-kit generate",
     "db:check": "tsx scripts/check-migrations.ts"

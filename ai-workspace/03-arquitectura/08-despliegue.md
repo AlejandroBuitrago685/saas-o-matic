@@ -7,9 +7,14 @@ base están fijadas por *digest* ([`02-monorepo.md`](02-monorepo.md) §4.3). §4
 
 ```bash
 npm ci            # instala todo; better-sqlite3 no compila (05-driver-sqlite)
-npm run setup     # migra y siembra la base de datos con datos de ejemplo (perfil demo)
+npm run setup     # migra y siembra la base de datos con datos de ejemplo (perfil demo; si ya tiene clientes, nada)
 npm run dev       # API en :3000 (tsx watch) y web en :4200 (ng serve, que reenvía /api → :3000)
 ```
+
+- `npm run db:reset` (P7, D-138), **con la API parada**: borra el fichero de la base de datos con su `-wal`, su `-shm`
+  y su `-journal`, y la vuelve a sembrar. No se borran filas, porque las tablas son de solo inserción (04-base-de-datos
+  §2.4). En Windows, con la API abierta, el sistema no deja borrar el fichero y el comando lo explica; en Linux y
+  macOS sí lo deja, y por eso hay que pararla antes. Ni `setup` ni `db:reset` funcionan con `NODE_ENV=production`.
 
 - `ng serve` usa un *proxy config* que reenvía `/api/*` a `http://localhost:3000` quitando el prefijo: la misma
   topología que en Docker (ADR-012).

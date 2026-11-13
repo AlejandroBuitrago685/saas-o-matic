@@ -19,6 +19,7 @@
   .btn-secondary {
     @apply border border-ink bg-surface text-ink hover:bg-surface-muted;
     @apply disabled:border-line disabled:text-ink-disabled disabled:hover:bg-surface;
+    @apply aria-disabled:border-line aria-disabled:text-ink-disabled aria-disabled:hover:bg-surface;
   }
 
   .btn-soft {

@@ -52,6 +52,11 @@ const ROOT_MODULE_INTERNALS = {
   regex: '^\\./modules/[^/]+/(?!index(\\.js)?$)',
   message: 'La raíz de composición solo usa un módulo por su index.ts (D-119).',
 };
+/** From the seed, part of the composition root (D-140): `../modules/<module>/<anything but index>`. */
+const SEED_MODULE_INTERNALS = {
+  regex: '^\\.\\./modules/[^/]+/(?!index(\\.js)?$)',
+  message: 'El seed solo usa un módulo por su index.ts, como la raíz de composición (D-119, D-140).',
+};
 const PACKAGE_INTERNALS = {
   regex: '^\\.{1,2}/(.*/)?packages/',
   message: 'Los paquetes se importan por su nombre (@saas-o-matic/…) y su index.ts, nunca por ruta.',
@@ -169,6 +174,12 @@ export const restrictionConfigs = [
     files: ['apps/api/src/*.ts'],
     ignores: TESTS,
     rules: { '@typescript-eslint/no-restricted-imports': api([DRIZZLE, ROOT_MODULE_INTERNALS]) },
+  },
+  {
+    // The seed wires use cases like the composition root, without serving HTTP (D-140).
+    files: ['apps/api/src/seed/**/*.ts'],
+    ignores: TESTS,
+    rules: { '@typescript-eslint/no-restricted-imports': api([DRIZZLE, FASTIFY, SEED_MODULE_INTERNALS]) },
   },
   {
     files: ['apps/api/src/db/**/*.ts'],

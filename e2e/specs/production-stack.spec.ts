@@ -116,13 +116,17 @@ test(
 );
 
 test(
-  'AC-64: the create form, the detail with the simulator and the not-found views raise no violation',
+  'AC-64: the dashboard, the create form, the detail with the simulator and the not-found views raise no violation',
   PROD_ONLY,
   async ({ page, request }) => {
+    // Other tests create customers at the same time: this one is only sure that the list has at least one card.
+    const customer = await createCustomer(request);
+    await page.goto('/');
+    await expect(page.getByRole('list', { name: 'Clientes' }).getByRole('link').first()).toBeVisible();
+
     await page.goto('/customers/new');
     await expect(page.getByRole('button', { name: 'Crear cliente' })).toBeVisible();
 
-    const customer = await createCustomer(request);
     await page.goto(`/customers/${customer.id}`);
     await page.getByRole('textbox', { name: 'Usuarios activos' }).fill('51');
     await expect(page.getByTestId('projection-total')).toContainText('514,25');

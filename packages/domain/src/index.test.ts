@@ -34,6 +34,7 @@ describe('ADR-001 public API of the domain: only what other packages need', () =
         'ok',
         'positionToUsers',
         'tariffForPlan',
+        'taxIdSearchTerm',
         'taxRateFor',
         'usersToPosition',
         'validateCatalog',

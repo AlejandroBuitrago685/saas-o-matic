@@ -1,0 +1,46 @@
+<section class="flex flex-col gap-6" aria-labelledby="dashboard-title">
+  <h1 id="dashboard-title" class="page-title">Clientes</h1>
+
+  <app-customer-search-box
+    #searchBox
+    [text]="store.input()"
+    (typed)="store.type($event)"
+    (submitted)="store.submit()"
+    (cleared)="store.clear()"
+  />
+
+  @switch (store.status()) {
+    @case ('loading') {
+      <div role="status" aria-busy="true">
+        <span class="sr-only">Cargando clientes…</span>
+        <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
+          @for (card of skeletonCards; track card) {
+            <li class="card" data-testid="customer-skeleton">
+              <app-loading-block [announce]="false" [lines]="4" />
+            </li>
+          }
+        </ul>
+      </div>
+    }
+    @case ('error') {
+      <app-error-state message="No se ha podido cargar el listado." (retry)="store.retry()" />
+    }
+    @case ('empty') {
+      <div role="status" class="card flex flex-col items-start gap-4">
+        <p class="section-title">Todavía no hay clientes</p>
+        <a routerLink="/customers/new" class="btn btn-primary">Crear el primer cliente</a>
+      </div>
+    }
+    @case ('no-matches') {
+      <div role="status" class="card flex flex-col items-start gap-4">
+        <p class="section-title break-words">No hay clientes que coincidan con «{{ store.shownQuery() }}»</p>
+        <button type="button" class="btn btn-secondary" (click)="store.clear(); searchBox.focus()">
+          Limpiar búsqueda
+        </button>
+      </div>
+    }
+    @case ('ready') {
+      <app-customer-results />
+    }
+  }
+</section>

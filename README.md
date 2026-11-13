@@ -4,10 +4,10 @@ Herramienta interna para que el equipo comercial simule y presupueste suscripcio
 clientes corporativos: alta de clientes con validación fiscal, simulación por tramos con impuestos y conversión de
 divisas en tiempo real.
 
-> **Estado:** en construcción. Hechas las partes P0 a P6: monorepo, herramientas de calidad y CI, reglas de negocio
-> del dominio, API y web de la porción vertical (alta de cliente → detalle → simulador → guardar → historial), y
-> Docker Compose con nginx y los e2e contra esa pila. El resto llega en las partes siguientes del
-> [plan de implementación](ai-workspace/04-plan-implementacion.md).
+> **Estado:** en construcción. Hechas las partes P0 a P7: monorepo, herramientas de calidad y CI, reglas de negocio
+> del dominio, API y web de la porción vertical (alta de cliente → detalle → simulador → guardar → historial), Docker
+> Compose con nginx y los e2e contra esa pila, y el dashboard con la búsqueda y los datos de ejemplo. El resto llega en
+> las partes siguientes del [plan de implementación](ai-workspace/04-plan-implementacion.md).
 
 ## Requisitos
 
@@ -19,11 +19,16 @@ divisas en tiempo real.
 
 ```bash
 npm ci
+npm run setup
 npm run dev
 ```
 
+- `setup` crea la base de datos local (`apps/api/data/`) con 25 clientes ficticios y sus simulaciones. Si ya tiene
+  clientes, no hace nada.
 - API: <http://localhost:3000/health>
 - Web: <http://localhost:4200> (reenvía `/api/*` a la API)
+- Para volver a los datos de ejemplo, **con `npm run dev` parado**: `npm run db:reset` (borra la base local y la
+  vuelve a sembrar). Ninguno de los dos comandos funciona con `NODE_ENV=production`.
 
 ## Con Docker Compose
 
@@ -53,8 +58,9 @@ npm run e2e:stack:down
 - `e2e:stack` levanta la pila de Compose como un proyecto aparte, con una base de datos vacía y límites de peticiones
   más altos, y espera a que esté sana. `e2e` ejecuta Playwright (Chromium) contra ella, con la CSP real.
 - La primera vez, `npx playwright install chromium` descarga el navegador.
-- `npm run e2e:dev` ejecuta los mismos tests contra `npm run dev`, salvo los que solo tienen sentido contra la pila
-  (`@prod-only`: cabeceras, CSP e IP real).
+- `npm run e2e:dev` ejecuta los mismos tests sin Docker, salvo los que solo tienen sentido contra la pila
+  (`@prod-only`: cabeceras, CSP e IP real). Playwright arranca su propia API (puerto 3100, con SQLite en memoria) y
+  su propio `ng serve` (puerto 4300): no toca la base de desarrollo y puede ejecutarse con `npm run dev` arrancado.
 
 ## API
 
@@ -69,7 +75,9 @@ npm run e2e:stack:down
 
 | Comando                                 | Qué hace                                                                                                           |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `npm run setup`                         | Crea la base de datos local con los datos de ejemplo (si está vacía).                                              |
 | `npm run dev`                           | Paquetes en modo watch, API y web a la vez.                                                                        |
+| `npm run db:reset`                      | Borra la base de datos local y la vuelve a sembrar (con la API parada).                                            |
 | `npm test`                              | Tests de dominio, contrato, API, herramientas y web (sin los barridos lentos, D-101).                              |
 | `npm run lint`                          | ESLint estricto (límites de tamaño, fronteras entre capas, reglas de seguridad).                                   |
 | `npm run typecheck`                     | TypeScript estricto en todos los paquetes.                                                                         |
