@@ -1174,3 +1174,51 @@ Canarias), más el plan, las dos pilas de e2e, la revisión y el cierre.
 **Siguiente parte: P11 · Demo pública** (3 h). Su plan se aprueba antes de tocar el servidor.
 
 **Decisiones por validar:** S-08.
+
+## Arreglo tras P10 · e2e inestable de AC-91 — 2026-11-13 · rama `fix/e2e-slider-initial-value`
+
+**Qué pasó:** el CI de `main` se puso en rojo tras fusionar la PR #15. El e2e de AC-91
+(`simulator.spec.ts`, «the slider jumped over 10», recibido 15) había pasado en la PR con el mismo código.
+
+**Causa:**
+- El test pulsaba Inicio y leía `aria-valuetext` enseguida. Sin Zone.js, y con el slider en `OnPush`, la vista se
+  repinta después de la tecla, no durante ella. A veces la lectura veía todavía el valor inicial: como 15 ≥ 10, el
+  bucle no daba ningún paso y la aserción fallaba con 15.
+- Hasta D-160 el valor inicial era 1, así que esa lectura obsoleta acertaba por casualidad. Es el mismo patrón que se
+  corrigió en P9 en el test de teclado de AC-86, que ya espera con `expect.poll`.
+
+**Arreglo** (solo tests, la web no cambia):
+- `openSimulator` da el simulador por listo cuando el slider anuncia «15 usuarios». Antes le bastaba con que fuera
+  visible.
+- AC-91 espera «1 usuarios» tras Inicio antes de subir con las flechas.
+- Revisados los demás e2e que suponen el valor inicial: el de teclado de AC-86 y el de AC-81 (→ de 15 a 16). Los dos
+  esperan ya con aserciones que reintentan, y ahora `openSimulator` les garantiza el punto de partida. Los que usan
+  `fill(...)` no dependen de él.
+
+**Evidencia** (pila del e2e en local, `--workers=4`):
+- antes del arreglo, AC-91 con `--repeat-each=100`: **6 de 100 fallan**, con el mismo error del CI;
+- después, AC-91 con `--repeat-each=100`: **100/100**;
+- después, `simulator.spec.ts`, `keyboard.spec.ts` y `exchange-rates.spec.ts` con `--repeat-each=50`: **850/850**;
+- la suite completa (`npm run e2e`): 83/83;
+- Prettier, ESLint y `tsc` del e2e en verde.
+
+**Revisor** (`sonnet`, una pasada): **APTO**, sin P0, P1 ni P2. Dos P3:
+- se ha completado esta entrada con la evidencia;
+- sin cambio: que el test de D-160 repita «15 usuarios» en lugar de usar la constante de la fixture. Ese test comprueba
+  el valor de la especificación, y por eso se escribe a mano.
+
+**Decisiones:** ninguna nueva. **Tiempo:** unos 25 min, la mayor parte en repeticiones de la pila.
+
+## Nota de traspaso — 2026-11-13, tras el arreglo de AC-91
+
+**Estado**
+- P0 a P10 fusionadas. Este arreglo va en su propia PR. Cuando se fusione, `main` debería volver a verde; hay que
+  comprobarlo antes de empezar P11.
+- El plan de P11 ya está aprobado (prompt 24, que se guarda al cerrar P11).
+  - El usuario validó D-169 a D-173, y autoriza a añadir el *check* `demo` a la protección de `main` tras su primer
+    verde.
+  - La numeración definitiva se fija al registrarlas.
+
+**Siguiente parte: P11 · Demo pública**, en la rama `feat/p11-demo`, desde `main` en verde.
+
+**Decisiones por validar:** S-08.

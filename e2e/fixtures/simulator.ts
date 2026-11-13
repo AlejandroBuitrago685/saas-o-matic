@@ -14,7 +14,13 @@ export interface Simulator {
   readonly projectionLine: (label: string | RegExp) => Locator;
 }
 
-/** A new Spanish customer, with its detail page open and the simulator ready. */
+/** The users the simulator opens with, the example of the statement (D-160): where every slider test starts. */
+const INITIAL_USERS = 15;
+
+/**
+ * A new Spanish customer, with its detail page open and the simulator ready: the slider announces the initial users.
+ * Visible is not enough to rely on its value (D-160 made a stale read wrong, see the AC-91 test).
+ */
 export async function openSimulator(page: Page, request: APIRequestContext): Promise<Simulator> {
   const customer = await createCustomer(request);
   await page.goto(`/customers/${customer.id}`);
@@ -28,7 +34,7 @@ export async function openSimulator(page: Page, request: APIRequestContext): Pro
     saveButton: page.getByRole('button', { name: 'Guardar simulación' }),
     projectionLine: (label) => panel.locator('dl > div').filter({ hasText: label }).locator('dd'),
   };
-  await expect(simulator.slider).toBeVisible();
+  await expect(simulator.slider).toHaveAttribute('aria-valuetext', `${String(INITIAL_USERS)} usuarios`);
   return simulator;
 }
 
