@@ -52,6 +52,7 @@ const PROBLEM_MESSAGES = {
   BUSINESS_RULE_VIOLATION: generic,
   RATE_LIMITED: rateLimited,
   INTERNAL_ERROR: generic,
+  SERVICE_UNAVAILABLE: () => 'No se puede conectar con el servidor. Inténtalo de nuevo en unos minutos.',
   NETWORK_ERROR: generic,
   UNKNOWN_ERROR: generic,
 } as const satisfies Record<ApiErrorCode, MessageFn>;
@@ -81,6 +82,14 @@ const FIELD_MESSAGES = {
 
 export function isApiErrorCode(code: unknown): code is ApiErrorCode {
   return typeof code === 'string' && Object.hasOwn(PROBLEM_MESSAGES, code);
+}
+
+/**
+ * Errors whose own message tells the user what to do (wait, or try again in a few minutes): a form or an action shows
+ * it instead of its generic notice (spec 05 §6, D-152).
+ */
+export function hasActionableMessage(error: ApiError): boolean {
+  return error.code === 'RATE_LIMITED' || error.code === 'SERVICE_UNAVAILABLE';
 }
 
 export function isFieldErrorCode(code: unknown): code is FieldErrorCode {

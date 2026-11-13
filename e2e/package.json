@@ -9,6 +9,7 @@
     "test:dev": "playwright test -c playwright.dev.config.ts"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@playwright/test": "1.65.0",
     "@saas-o-matic/contract": "0.0.0"
   }

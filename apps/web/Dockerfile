@@ -25,6 +25,7 @@ RUN npm run build:packages && npm run build -w @saas-o-matic/web
 FROM ${NGINX_IMAGE} AS runtime
 COPY apps/web/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY apps/web/nginx/security-headers.conf /etc/nginx/security-headers.conf
+COPY apps/web/nginx/api-error-headers.conf /etc/nginx/api-error-headers.conf
 COPY --from=build /app/apps/web/dist/web/browser /srv/saas-o-matic
 EXPOSE 8080
 # nginx directly, without the entrypoint scripts of the base image: they try to rewrite /etc/nginx, which is read-only.

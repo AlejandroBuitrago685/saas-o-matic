@@ -36,6 +36,23 @@
     @apply rounded-lg border border-line bg-surface p-4 shadow-card sm:p-6;
   }
 
+  /* The link of a card that opens as a whole (spec 05 §3.1, D-157): it is the title, and its ::after covers the card
+     (which is `relative`), so the accessible name is only the visible title. The focus ring goes round the card.
+     The ::after covers the whole card: a control added inside it needs `relative z-10` to stay clickable, and the
+     text of the card cannot be selected with the mouse (D-157). */
+  .card-link {
+    @apply after:absolute after:inset-0 after:rounded-lg after:content-[''];
+  }
+
+  .card-link:focus-visible {
+    outline: none;
+  }
+
+  .card-link:focus-visible::after {
+    outline: 2px dashed var(--color-primary);
+    outline-offset: 2px;
+  }
+
   .card-highlight {
     @apply rounded-lg border-3 border-primary bg-primary-tint p-4 sm:p-6;
   }

@@ -45,9 +45,16 @@ describe('06-frontend §5 / spec 05 §6 error messages in Spanish', () => {
     );
   });
 
+  it('AC-85 D-152 says the server cannot be reached when nginx answers for the API', () => {
+    expect(problemMessage(new ApiError({ status: 502, code: 'SERVICE_UNAVAILABLE' }))).toBe(
+      'No se puede conectar con el servidor. Inténtalo de nuevo en unos minutos.',
+    );
+  });
+
   it('recognises only the codes of the contract and of the client', () => {
     expect(isApiErrorCode('CUSTOMER_ALREADY_EXISTS')).toBe(true);
     expect(isApiErrorCode('NETWORK_ERROR')).toBe(true);
+    expect(isApiErrorCode('SERVICE_UNAVAILABLE')).toBe(true);
     expect(isApiErrorCode('toString')).toBe(false);
     expect(isFieldErrorCode('TAX_ID_INVALID_CHECK')).toBe(true);
     expect(isFieldErrorCode('constructor')).toBe(false);

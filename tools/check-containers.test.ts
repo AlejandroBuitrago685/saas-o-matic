@@ -100,6 +100,27 @@ describe('AC-60 containers run without root and with a read-only file system', (
   it('rejects a stack where a service is missing', () => {
     expect(findHardeningProblems([container('web')])).toEqual(['api: no running container found']);
   });
+
+  it('D-155 checks every other container of the project too, such as web-api-down of the e2e stack', () => {
+    const apiDown = container('web-api-down', {
+      config: { User: 'root' },
+      hostConfig: { ReadonlyRootfs: false },
+    });
+
+    expect(findHardeningProblems([...stack(), apiDown])).toEqual([
+      'web-api-down: runs as root (Config.User is "root")',
+      'web-api-down: the root file system is writable (read_only: true is missing)',
+    ]);
+    expect(findHardeningProblems([...stack(), container('web-api-down')])).toEqual([]);
+  });
+
+  it('names a container without the label of its service, instead of an empty name', () => {
+    const unlabelled = container('web', { config: { Labels: {}, User: 'root' } });
+
+    expect(findHardeningProblems([...stack(), unlabelled])).toEqual([
+      '(unlabelled): runs as root (Config.User is "root")',
+    ]);
+  });
 });
 
 describe('D-99 D-130 published ports listen only on 127.0.0.1', () => {

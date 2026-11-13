@@ -1,8 +1,9 @@
-import type { FieldError, ProblemCode } from '@saas-o-matic/contract';
+import type { FieldError, GatewayErrorCode, ProblemCode } from '@saas-o-matic/contract';
 
 /** Errors produced in the browser, without a Problem Details body (06-frontend §5). */
 export type ClientErrorCode = 'NETWORK_ERROR' | 'UNKNOWN_ERROR';
-export type ApiErrorCode = ProblemCode | ClientErrorCode;
+/** Codes of the API, of nginx when the API does not answer (D-152) and of the browser. */
+export type ApiErrorCode = ProblemCode | GatewayErrorCode | ClientErrorCode;
 
 export interface ApiErrorInit {
   readonly status: number;

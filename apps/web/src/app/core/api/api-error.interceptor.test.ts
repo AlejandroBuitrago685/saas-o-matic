@@ -109,6 +109,23 @@ describe('ADR-012 / 06-frontend §5 API interceptors', () => {
     expect(error).toMatchObject({ status: 502, code: 'UNKNOWN_ERROR', reference: null });
   });
 
+  it.each([502, 504])(
+    'AC-85 D-152 turns the Problem nginx sends with a %i into SERVICE_UNAVAILABLE',
+    async (status) => {
+      const body = {
+        type: '/problems/service-unavailable',
+        title: 'Service unavailable',
+        status,
+        detail: 'The API is not responding. Try again in a few minutes.',
+        code: 'SERVICE_UNAVAILABLE',
+      };
+
+      const error = await failWith(body, status, { 'content-type': 'application/problem+json' });
+
+      expect(error).toMatchObject({ status, code: 'SERVICE_UNAVAILABLE', reference: null, errors: [] });
+    },
+  );
+
   it('turns a request without an answer into NETWORK_ERROR', async () => {
     const call = firstValueFrom(http.get('/catalog')).catch((error: unknown) => error);
     controller.expectOne('/api/catalog').error(new ProgressEvent('error'), { status: 0 });
