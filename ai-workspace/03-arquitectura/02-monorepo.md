@@ -10,7 +10,9 @@ saas-o-matic/
 ├── tsconfig.base.json        # opciones estrictas comunes (09-calidad §2)
 ├── eslint.config.js          # configuración flat única, con reglas por zona (09-calidad §3)
 ├── lefthook.yml              # hooks de git: pre-commit (lint y formato), commit-msg (Conventional Commits)
-├── docker-compose.yml        # alternativa de arranque (RNF-20)
+├── docker-compose.yml        # alternativa de arranque (RNF-20, P6; 08-despliegue §2)
+├── docker-compose.e2e.yml    # override de la pila de e2e: solo límites de peticiones (D-133)
+├── .dockerignore             # contexto de build de las dos imágenes
 ├── .github/workflows/ci.yml  # pipeline (D-52, D-53)
 ├── .claude/
 │   ├── settings.json         # hooks de Claude Code (se configuran en el scaffolding)
@@ -47,14 +49,14 @@ saas-o-matic/
 │   │   │   ├── shared/       # AppError, Clock, IdGenerator, logger
 │   │   │   └── modules/      # customers/ simulations/ catalog/ stats/ health/
 │   │   └── test/             # helpers: buildTestApp, base de datos de test, builders de datos
-│   └── web/                  # @saas-o-matic/web: Angular 22 (06-frontend)
+│   └── web/                  # @saas-o-matic/web: Angular 22 (06-frontend); nginx/ y Dockerfile de la imagen
 │       └── src/app/
 │           ├── core/         # api, catalog, currency, errors, layout (cabecera, pie, aviso de demo)
 │           ├── shared/       # componentes de UI sin estado de negocio, pipes y formato
 │           └── features/     # dashboard/ customer-create/ customer-detail/ simulator/
-└── e2e/                      # @saas-o-matic/e2e: Playwright (07-tests)
-    ├── fixtures/             # tipos de cambio de referencia, datos de alta, builders
-    └── specs/                # un fichero por área, cada test con su AC
+└── e2e/                      # @saas-o-matic/e2e: Playwright (07-tests), proyectos `stack` y `dev`
+    ├── fixtures/             # test con las guardas de CSP y de red, tipos de referencia, clientes, simulador
+    └── specs/                # un fichero por área, cada test con su AC (`*.spec.ts`)
 ```
 
 ## 2. Paquetes y reglas de dependencia
@@ -173,5 +175,22 @@ Las arrastra Angular (`ng new`) y son de mantenimiento mínimo: `rxjs` 7.8.2, `t
 | `tsx` | 4.23.x | 2026-09-20 | Ejecutar TypeScript en desarrollo (API en modo `watch`, scripts de base de datos). |
 | `@fastify/swagger-ui` | 6.1.3 | 2026-11-03 | **(P3, D-110)** Swagger UI en `/docs`, **solo con `NODE_ENV=development`**: se carga con `import()` dinámico y, como es de desarrollo, la imagen de producción ni la contiene (un test comprueba que con `production` no se importa). Arrastra `@fastify/static`, `yaml`, `rfdc` y `openapi-types`; unos 3,4 MB en disco con `@fastify/static`, casi todo los ficheros de la UI, y nada en el *bundle*. Alternativas descartadas: no servir UI (los evaluadores tendrían que leer el JSON) o un visor externo (sacaría la API a un tercero). |
 
-La herramienta para lanzar API y web a la vez en desarrollo (`concurrently` o un script propio en `scripts/`) se
-decide en el scaffolding. Preferencia: script propio, sin dependencia.
+La herramienta para lanzar API y web a la vez en desarrollo es un script propio, sin dependencia
+(`scripts/dev.mjs`), en lugar de `concurrently`.
+
+**Instalado en P6:** `@playwright/test` 1.65.0 (`save-exact`), en el workspace `e2e`. Sin código nativo: los
+navegadores se descargan aparte con `npx playwright install chromium` (en el CI, `--with-deps`). `@axe-core/playwright`
+llega en P9.
+
+### 4.3 Imágenes de contenedor (P6)
+
+Fijadas por *digest* en los `Dockerfile` (un `ARG` por imagen); para actualizar una se cambian la etiqueta y el
+*digest* a la vez. Consultadas en Docker Hub el 2026-11-13.
+
+| Imagen | Etiqueta | Publicada | Para qué | Alternativa descartada |
+|---|---|---|---|---|
+| `node` | `26.13.1-alpine3.24` (`sha256:6bd9ab43…10bffb5`) | 2026-11-11 | Build de los paquetes, de la API y de la web, y ejecución de la API. Node de `.nvmrc`; Alpine porque better-sqlite3 trae el binario musl. | `node:26-bookworm-slim`: más pesada y sin ventaja, porque nada se compila. |
+| `nginxinc/nginx-unprivileged` | `1.30.6-alpine3.24` (`sha256:f5116ed4…130cdf03`) | 2026-10-19 | Servir la SPA y hacer de proxy de `/api`. Rama estable de nginx, sin root de serie (uid 101, puerto 8080). | `nginx:alpine` (arranca como root y escucha en el 80); imagen propia con `headers-more` (D-131). |
+
+Impacto: la imagen de la API pesa unos 350 MB sin comprimir (74 MB de `node_modules`, de los que 27 MB son los binarios
+precompilados de better-sqlite3 para todas las plataformas); la de la web, 91 MB.

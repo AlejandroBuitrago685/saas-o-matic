@@ -190,6 +190,8 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
 ### P7 · Búsqueda y dashboard · 3 h
 
 - **Objetivo:** listado paginado y búsqueda sin acentos ni mayúsculas, en la API y en la web.
+- **Incluye también (D-135):** el *seed* de datos de ejemplo (`npm run db:seed`, `npm run setup`, perfiles `demo` y
+  `e2e`; 04-base-de-datos §7), que no tenía parte asignada.
 - **AC:** AC-28, AC-29, AC-30, AC-31, AC-32, AC-33, AC-70, AC-71.
 - **TV:** —.
 - **Módulos:** `apps/api/modules/customers` (búsqueda), `apps/web/features/dashboard`.
