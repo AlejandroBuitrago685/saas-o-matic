@@ -3,7 +3,8 @@
  * Inspects the running Docker Compose stack and fails if a container is not hardened (AC-60, RNF-SEC-16, D-99, D-130):
  * - it runs as root;
  * - its root file system is writable, or it has a writable mount other than the data volume of the api;
- * - it keeps its Linux capabilities or can gain privileges;
+ * - it keeps or adds back Linux capabilities, runs privileged, shares the network or processes of the host, or can
+ *   gain privileges;
  * - it publishes a port on an address other than 127.0.0.1 (Docker bypasses the host firewall), or it is the api,
  *   which publishes none and is only reachable through nginx.
  * Usage: node scripts/check-containers.mjs [compose project, default saas-o-matic]
@@ -20,8 +21,12 @@ import { run } from './lib/repo.mjs';
  *   Config: { User: string, Labels: Record<string, string> },
  *   HostConfig: {
  *     ReadonlyRootfs: boolean,
+ *     Privileged: boolean,
+ *     CapAdd: string[] | null,
  *     CapDrop: string[] | null,
  *     SecurityOpt: string[] | null,
+ *     NetworkMode: string,
+ *     PidMode: string,
  *     PortBindings: Record<string, PortBinding[] | null> | null,
  *   },
  *   Mounts: Mount[],
@@ -34,24 +39,51 @@ const WRITABLE_MOUNTS = /** @type {const} */ ({ api: ['/data'], web: [] });
 const PRIVATE_SERVICES = ['api'];
 const LOOPBACK = '127.0.0.1';
 const ROOT_USER = /^(root|0)(:.*)?$/;
+const NO_NEW_PRIVILEGES = /^no-new-privileges(:true)?$/;
+
+/**
+ * What a container must not be able to do (RNF-SEC-16). `cap_drop: [ALL]` alone is not enough: `privileged`, `cap_add`
+ * or the namespaces of the host would give the power back (regression of the P6 review).
+ * @type {readonly { fails: (container: InspectedContainer) => boolean, problem: (container: InspectedContainer) => string }[]}
+ */
+const PRIVILEGE_RULES = [
+  {
+    fails: ({ Config }) => Config.User === '' || ROOT_USER.test(Config.User),
+    problem: ({ Config }) => `runs as root (Config.User is "${Config.User}")`,
+  },
+  { fails: ({ HostConfig }) => HostConfig.Privileged, problem: () => 'runs privileged (privileged: true)' },
+  {
+    fails: ({ HostConfig }) => (HostConfig.CapAdd ?? []).length > 0,
+    problem: ({ HostConfig }) => `adds capabilities back (cap_add: ${(HostConfig.CapAdd ?? []).join(', ')})`,
+  },
+  {
+    fails: ({ HostConfig }) => !(HostConfig.CapDrop ?? []).includes('ALL'),
+    problem: () => 'capabilities are not dropped (cap_drop: [ALL] is missing)',
+  },
+  {
+    fails: ({ HostConfig }) =>
+      !(HostConfig.SecurityOpt ?? []).some((option) => NO_NEW_PRIVILEGES.test(option)),
+    problem: () => 'no-new-privileges is not set',
+  },
+  {
+    fails: ({ HostConfig }) => HostConfig.NetworkMode === 'host',
+    problem: () => 'shares the network of the host',
+  },
+  {
+    fails: ({ HostConfig }) => HostConfig.PidMode === 'host',
+    problem: () => 'shares the processes of the host',
+  },
+];
 
 /**
  * @param {string} service
  * @param {InspectedContainer} container
  * @returns {string[]}
  */
-function privilegeProblems(service, { Config, HostConfig }) {
-  const problems = [];
-  if (Config.User === '' || ROOT_USER.test(Config.User)) {
-    problems.push(`${service}: runs as root (Config.User is "${Config.User}")`);
-  }
-  if (!(HostConfig.CapDrop ?? []).includes('ALL')) {
-    problems.push(`${service}: capabilities are not dropped (cap_drop: [ALL] is missing)`);
-  }
-  if (!(HostConfig.SecurityOpt ?? []).some((option) => /^no-new-privileges(:true)?$/.test(option))) {
-    problems.push(`${service}: no-new-privileges is not set`);
-  }
-  return problems;
+function privilegeProblems(service, container) {
+  return PRIVILEGE_RULES.filter((rule) => rule.fails(container)).map(
+    (rule) => `${service}: ${rule.problem(container)}`,
+  );
 }
 
 /**

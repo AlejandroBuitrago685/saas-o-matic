@@ -18,7 +18,11 @@ function container(
     },
     HostConfig: {
       ReadonlyRootfs: true,
+      Privileged: false,
+      CapAdd: null,
       CapDrop: ['ALL'],
+      NetworkMode: 'saas-o-matic_saas-o-matic',
+      PidMode: '',
       SecurityOpt: ['no-new-privileges:true'],
       PortBindings: service === 'web' ? { '8080/tcp': [{ HostIp: '127.0.0.1', HostPort: '8080' }] } : {},
       Tmpfs: { '/tmp': '' },
@@ -81,6 +85,16 @@ describe('AC-60 containers run without root and with a read-only file system', (
       'api: capabilities are not dropped (cap_drop: [ALL] is missing)',
       'api: no-new-privileges is not set',
     ]);
+  });
+
+  // Regression of the P6 review: cap_drop: [ALL] alone would still pass with these.
+  it.each([
+    ['is privileged', { Privileged: true }, 'api: runs privileged (privileged: true)'],
+    ['adds capabilities back', { CapAdd: ['NET_ADMIN'] }, 'api: adds capabilities back (cap_add: NET_ADMIN)'],
+    ['shares the network of the host', { NetworkMode: 'host' }, 'api: shares the network of the host'],
+    ['shares the processes of the host', { PidMode: 'host' }, 'api: shares the processes of the host'],
+  ])('rejects a container that %s', (_case, hostConfig, problem) => {
+    expect(findHardeningProblems(stack(container('api', { hostConfig })))).toEqual([problem]);
   });
 
   it('rejects a stack where a service is missing', () => {

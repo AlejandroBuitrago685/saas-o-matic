@@ -21,8 +21,10 @@ async function stepTo(page: Page, slider: Locator, target: number): Promise<void
  * the clock of the page, so the time of the test runner is not counted.
  */
 function installLatencyProbe(): void {
-  const total = document.querySelector('[data-testid="projection-total"]');
-  if (!(total instanceof HTMLElement)) throw new Error('the projection is not rendered');
+  const found = document.querySelector('[data-testid="projection-total"]');
+  if (!(found instanceof HTMLElement)) throw new Error('the projection is not rendered');
+  // A declaration keeps the narrowed type inside the nested function declarations below.
+  const total: HTMLElement = found;
   const before = total.textContent;
   let resolveLatency: (ms: number) => void = () => undefined;
   const latency = new Promise<number>((resolve) => {
@@ -31,16 +33,16 @@ function installLatencyProbe(): void {
   function onKeydown(event: KeyboardEvent): void {
     const observer = new MutationObserver(onMutation);
     function onMutation(): void {
-      if (total?.textContent === before) return;
+      if (total.textContent === before) return;
       observer.disconnect();
       requestAnimationFrame(() => {
         resolveLatency(performance.now() - event.timeStamp);
       });
     }
-    observer.observe(total as HTMLElement, { characterData: true, childList: true, subtree: true });
+    observer.observe(total, { characterData: true, childList: true, subtree: true });
   }
   document.addEventListener('keydown', onKeydown, { once: true, capture: true });
-  (window as unknown as { __latency: Promise<number> }).__latency = latency;
+  window.__latency = latency;
 }
 
 test('AC-76 TV-PR-04: 15 users in Spain project the tiers, the 21 % tax and 169,40 €', async ({
@@ -115,9 +117,8 @@ test('AC-90: the total follows a change of users in less than 100 ms', async ({ 
   await page.evaluate(installLatencyProbe);
 
   await page.keyboard.press('ArrowRight');
-  const latencyMs = await page.evaluate(
-    async () => (window as unknown as { __latency: Promise<number> }).__latency,
-  );
+  // NaN when the probe was not installed: the assertion below fails on it.
+  const latencyMs = (await page.evaluate(async () => window.__latency)) ?? Number.NaN;
 
   test.info().annotations.push({ type: 'AC-90 latency', description: `${latencyMs.toFixed(1)} ms` });
   expect(latencyMs).toBeLessThan(100);

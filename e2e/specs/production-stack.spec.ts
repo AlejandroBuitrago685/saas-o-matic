@@ -69,6 +69,19 @@ test(
   },
 );
 
+// Regression of the P6 review: a regex location of nginx would win over the plain /api/ prefix.
+test(
+  'AC-52: an /api/ path that looks like a hashed file still reaches the API',
+  PROD_ONLY,
+  async ({ request }) => {
+    const response = await request.get('/api/main-ABCDEFGH.js');
+
+    expect(response.status()).toBe(404);
+    expect(response.headers()['content-type']).toContain('application/problem+json');
+    expect(cspDirectives(response)).toEqual({ 'default-src': "'none'", 'frame-ancestors': "'none'" });
+  },
+);
+
 test(
   'AC-64: the served index.html has no inline script, style or event handler',
   PROD_ONLY,
@@ -138,11 +151,22 @@ test(
       return Number(response.headers()['x-ratelimit-remaining']);
     };
 
-    const first = await remainingWith('203.0.113.7');
-    const second = await remainingWith('198.51.100.20');
+    // If a fake address chose the bucket, every request below would start a full one and never see a decrease. Tests
+    // running in parallel share the real bucket and only lower `second`. A reset of the one-minute window between
+    // two requests would refill it, so a new pair of fake addresses is tried (regression of the P6 review).
+    const fakePairs = [
+      ['203.0.113.7', '198.51.100.20'],
+      ['203.0.113.8', '198.51.100.21'],
+      ['203.0.113.9', '198.51.100.22'],
+    ] as const;
+    let isSharedBucket = false;
+    for (const [firstIp, secondIp] of fakePairs) {
+      const first = await remainingWith(firstIp);
+      const second = await remainingWith(secondIp);
+      isSharedBucket = second < first;
+      if (isSharedBucket) break;
+    }
 
-    // If the fake address chose the bucket, the second one would start full. Other tests running in parallel share the
-    // bucket and only lower `second`, so the comparison holds.
-    expect(second).toBeLessThan(first);
+    expect(isSharedBucket, 'two fake X-Forwarded-For addresses got buckets of their own').toBe(true);
   },
 );

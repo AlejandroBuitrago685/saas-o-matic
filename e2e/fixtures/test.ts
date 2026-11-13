@@ -18,9 +18,9 @@ async function watchCsp(page: Page, violations: string[]): Promise<void> {
   await page.exposeFunction('__reportCspViolation', (text: string) => violations.push(text));
   await page.addInitScript(() => {
     document.addEventListener('securitypolicyviolation', (event) => {
-      const report = (window as unknown as { __reportCspViolation: (text: string) => void })
-        .__reportCspViolation;
-      report(`${event.effectiveDirective} blocked ${event.blockedURI || 'inline'} in ${event.documentURI}`);
+      window.__reportCspViolation?.(
+        `${event.effectiveDirective} blocked ${event.blockedURI || 'inline'} in ${event.documentURI}`,
+      );
     });
   });
   page.on('console', (message) => {
