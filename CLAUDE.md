@@ -47,7 +47,7 @@ Monorepo: `packages/domain` (reglas puras) · `packages/contract` (esquemas Zod)
 - API: `routes` → `use-case` → puertos ← `repository` → `db`.
   - **Ninguna regla de negocio en las rutas.**
   - Drizzle solo en `repository` y `db`; Fastify solo en `routes`, `http` y la raíz de composición.
-  - Un módulo solo usa otro por su `index.ts` ⏳ (la regla se añade en P4, cuando exista un segundo módulo).
+  - Un módulo solo usa otro por su `index.ts`, y la raíz de composición también ⚙ (D-119).
 - Web: `features` → `core`, `shared`; una feature no importa otra (excepción declarada: `simulator` ← `customer-detail`).
 
 ## Código
@@ -123,7 +123,7 @@ Una parte está **hecha** cuando cumple **todo** esto:
 
 ⚙ = una herramienta configurada **y probada** lo comprueba (ESLint, `tsc`, scripts y hooks de Claude Code, cada uno con
 tests en `tools/`; la auditoría, en el CI de GitHub). ⏳ = configurado pero todavía no demostrado: la trazabilidad, que
-solo informa hasta P10 (D-86), y la regla de módulos, que llega en P4. `main` está protegida: solo se integra por PR
+solo informa hasta P10 (D-86). `main` está protegida: solo se integra por PR
 con los 4 checks del CI en verde (D-88). Detalle en `03-arquitectura/09-calidad-y-automatizacion.md`.
 
 ## Trazabilidad

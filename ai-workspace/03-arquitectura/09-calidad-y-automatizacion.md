@@ -110,7 +110,11 @@ Dos mecanismos, porque cada uno resuelve bien una cosa:
 | `web-shared` | `web-shared`, `domain` |
 | `web-root` | Todas las features, `web-core`, `web-shared`, `domain`, `contract` |
 
-Que un módulo de la API solo use otro por su `index.ts` se añadirá en P4, cuando exista el segundo módulo.
+**Módulos de la API (P4, D-119).** Un módulo solo usa otro por su `index.ts`, y la raíz de composición (`app.ts`,
+`main.ts`) solo usa un módulo por su `index.ts`. Lo comprueba `no-restricted-imports` por patrones sobre la ruta
+(`../<otro>/<fichero que no sea index>` dentro de un módulo y `./modules/<módulo>/<fichero que no sea index>` en la
+raíz), con tests positivos y negativos en `tools/eslint-zones.test.ts`. En la práctica los módulos no se importan entre
+sí: `simulations` declara el puerto `CustomerLookup` y `app.ts` le conecta el repositorio de `customers`.
 
 ### 3.4 Cómo se ha probado (P0)
 

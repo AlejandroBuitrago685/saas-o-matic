@@ -1,6 +1,7 @@
 import { catalogResponseSchema, noQuerySchema } from '@saas-o-matic/contract';
 import type { FastifyPluginCallbackZod } from 'fastify-type-provider-zod';
 
+import { problemResponses, READ_PROBLEMS } from '../../shared/problem-responses.js';
 import type { GetCatalog } from './get-catalog.use-case.js';
 
 export interface CatalogRoutesOptions {
@@ -14,7 +15,10 @@ export const catalogRoutes: FastifyPluginCallbackZod<CatalogRoutesOptions> = (ap
   app.get(
     '/catalog',
     {
-      schema: { querystring: noQuerySchema, response: { 200: catalogResponseSchema } },
+      schema: {
+        querystring: noQuerySchema,
+        response: { 200: catalogResponseSchema, ...problemResponses(...READ_PROBLEMS) },
+      },
       config: { cacheMaxAgeSeconds: FIVE_MINUTES_SECONDS },
     },
     () => getCatalog(),

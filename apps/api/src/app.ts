@@ -21,11 +21,21 @@ import { registerRateLimit, registerWriteLimit } from './http/rate-limit.js';
 import { REQUEST_ID_OPTIONS, registerRequestTracing } from './http/request-tracing.js';
 import { registerRouteInventory } from './http/route-inventory.js';
 import { registerSecurityHeaders } from './http/security-headers.js';
-import { catalogRoutes } from './modules/catalog/catalog.routes.js';
-import { createGetCatalog } from './modules/catalog/get-catalog.use-case.js';
-import { createCheckHealth } from './modules/health/check-health.use-case.js';
-import { createDatabaseProbe } from './modules/health/health.repository.js';
-import { healthRoutes } from './modules/health/health.routes.js';
+import { catalogRoutes, createGetCatalog } from './modules/catalog/index.js';
+import {
+  createCreateCustomer,
+  createCustomersRepository,
+  createGetCustomer,
+  customersRoutes,
+} from './modules/customers/index.js';
+import { createCheckHealth, createDatabaseProbe, healthRoutes } from './modules/health/index.js';
+import {
+  createCreateSimulation,
+  createGetSimulation,
+  createListCustomerSimulations,
+  createSimulationsRepository,
+  simulationsRoutes,
+} from './modules/simulations/index.js';
 import type { Clock } from './shared/clock.js';
 import type { IdGenerator } from './shared/id-generator.js';
 
@@ -95,9 +105,28 @@ export async function buildApp(deps: AppDependencies): Promise<App> {
   await registerPlatform(server, deps.config);
   const app = server.withTypeProvider<ZodTypeProvider>();
 
+  const customers = createCustomersRepository(deps.database.db);
+
   await app.register(catalogRoutes, { getCatalog: createGetCatalog(deps.catalog) });
   await app.register(healthRoutes, {
     checkHealth: createCheckHealth(createDatabaseProbe(deps.database.db)),
+  });
+  await app.register(customersRoutes, {
+    createCustomer: createCreateCustomer({ customers, clock: deps.clock, ids: deps.ids }),
+    getCustomer: createGetCustomer(customers),
+  });
+  // The customers repository is the `CustomerLookup` the simulations ask for: the modules only meet here.
+  const simulations = createSimulationsRepository(deps.database.db);
+  await app.register(simulationsRoutes, {
+    createSimulation: createCreateSimulation({
+      customers,
+      simulations,
+      catalog: deps.catalog,
+      clock: deps.clock,
+      ids: deps.ids,
+    }),
+    getSimulation: createGetSimulation(simulations),
+    listCustomerSimulations: createListCustomerSimulations({ customers, simulations }),
   });
 
   return app;

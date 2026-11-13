@@ -477,41 +477,78 @@ el viernes gana 2 h de holgura (calendario actualizado).
 para las correcciones de las dos revisiones (terminadas el viernes a las 09:15), con dos pausas por el límite de uso.
 La holgura del viernes absorbe la hora de más.
 
-## Nota de traspaso — 2026-11-13, tras P3
+## P4 · API de la porción vertical — 2026-11-13 · rama `feat/p4-api-vertical`
 
-**Para empezar una sesión nueva:** leer `CLAUDE.md` (protocolo y reglas de eficiencia), esta nota, la sección P4 de
-[`04-plan-implementacion.md`](04-plan-implementacion.md) y su §4 (protocolo de cada parte). El usuario activa el modo
-plan y Claude presenta el plan de P4.
+**Hecho** (tests de integración con `app.inject()` por AC, escritos antes que el código de cada módulo)
+- **`customers`:** `POST /customers` (`201` + `Location`) y `GET /customers/:id`. La unicidad la decide el índice
+  único: se traduce su violación a `409` con el id existente (D-120). AC-20, 21, 22, 25, 26, 27.
+- **`simulations`:** `POST /simulations`, `GET /simulations/:id` y `GET /customers/:id/simulations`. La simulación y
+  sus tramos se guardan en una transacción; el historial lee los tramos con una sola consulta. El precio sale de
+  `calculatePricing` con la tarifa del plan y el impuesto del país del cliente. AC-40 a 46; TV-PR-01…15 de punta a punta.
+  `simulations` no importa a `customers`: declara el puerto `CustomerLookup` y `app.ts` le conecta el repositorio (D-119).
+- **Regla de módulos (⏳ → ⚙):** un módulo solo usa otro por su `index.ts`, y la raíz de composición también, con tests
+  positivos y negativos. `catalog` y `health` ganan su `index.ts`.
+- **OpenAPI:** las siete rutas documentan sus estados de error como `application/problem+json` y un test comprueba los
+  estados de cada operación (D-121).
+- **AC-54** para el alta, un error de negocio, un duplicado, la simulación y las lecturas (D-118).
+- **Tests de contrato:** cada éxito se parsea con el esquema de respuesta y cada error con `problemSchema`
+  (`expectBody`, `expectProblem`); los ejemplos de AC-20 y AC-40 se leen del propio `04-contrato-api.md`.
+- `npm run verify` en verde: 244 tests de la API, trazabilidad AC 44/81 (+14) · TV 120/129.
+- Prueba con el proceso real (`node dist/main.js`, SQLite en fichero): alta, simulación, duplicado `409`, historial
+  tras reiniciar y logs sin datos personales.
+
+**Falló o lo descubrí por el camino**
+- **Los módulos no pueden importar `http/`** (boundaries): `problemResponses` vive en `shared/`.
+- **`@fastify/swagger` documenta todo como `application/json`:** hizo falta un `transformObject`; mi primera versión
+  movía también el `503` de `/health`, que no es un Problem. Ahora decide por el esquema.
+- **El mapper no puede importar el esquema de Drizzle** (capas): define la forma de la fila por su cuenta.
+- **Quitar `desc(id)` del `ORDER BY` no rompe el test de desempate**: el índice `simulations_customer_created_idx` ya
+  devuelve ese orden. Sin mutación posible; lo dejo anotado.
+- Mi primer `taskkill` para parar la API de la prueba era demasiado amplio y se denegó; paré solo el proceso por su PID.
+
+**Correcciones**
+- **Del usuario:** D-117 y D-118 (opciones recomendadas del plan).
+- **Del revisor** (`sonnet`, una pasada): **APTO CON CAMBIOS, sin P0 ni P1.**
+  - P2 corregidos, con test: la regla de módulos no detectaba `../../modules/<otro>/<fichero>` (falso negativo; el test
+    falló antes del arreglo); el segundo test de logs dependía del primero (ahora un escenario en `beforeAll`);
+    D-117 a D-119 sin registrar.
+  - P3 corregidos: una simulación sin tramos al leerla es un error y no un precio vacío (test); el comando de simulación
+    usa `z.output` como el de clientes; tests de `415`/`413`/`400` en las rutas reales (AC-23, AC-24) y de la consulta
+    en las rutas `GET`; título de AC-46; comentario del bloque `shared`/`config`.
+  - Sin corregir, con motivo: el desempate por `id` en el repositorio (el índice lo hace inevitable); la dependencia del
+    `createdAt` del ejemplo del contrato con `FIXED_NOW` (documentada en `contract-examples.ts`).
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| AC-54 con `q=Acme` (búsqueda) | P7 |
+| AC-58 con igualdad exacta de rutas (hoy el test compara las registradas) | P7 |
+| `reference` de errores: los 8 últimos caracteres del UUID, no los 8 primeros de `instance` | P5 |
+| Cierre ordenado con SIGTERM; subred fija de Compose y `TRUST_PROXY` (D-113); `--ignore-scripts` y Playwright en `devDependencies` | P6 |
+
+**Decisiones:** D-117 y D-118 (usuario), D-119 a D-121 (Claude · pendiente). Siguen sin validar D-76, D-77, D-78, D-79,
+D-83, D-84, D-86, D-87 y D-102 (la nota de traspaso de P3 decía que no quedaba ninguna).
+
+**Tiempo:** estimado 2,5 h (mi estimación con los pendientes de P3: 3,5 h) · real ≈ 1,5 h (09:27–10:55, hora de
+Canarias, con las correcciones de la revisión). La holgura del viernes queda casi entera.
+
+## Nota de traspaso — 2026-11-13, tras P4
+
+**Para empezar una sesión nueva:** leer `CLAUDE.md`, esta nota, la sección de la parte siguiente de
+[`04-plan-implementacion.md`](04-plan-implementacion.md) y su §4. El usuario activa el modo plan y Claude presenta el plan.
 
 **Estado**
-- Hechas y mergeadas en `main`: P0, P1, P2 y P3 (PR #5, merge `372f7c5`). Sin decisiones pendientes de validar.
-- La API tiene la base completa: contrato (`packages/contract`), configuración validada, base de datos con
-  migraciones, seguridad HTTP, `GET /catalog`, `GET /health`, `openapi.json` versionado y `/docs` en desarrollo.
-- Para escribir rutas en P4:
-  - los casos de uso lanzan `AppError` (`apps/api/src/shared/app-error.ts`);
-  - los tests usan `buildTestApp` (`apps/api/test/build-test-app.ts`), con SQLite en memoria, reloj fijo e ids
-    deterministas;
-  - `npm run openapi -w @saas-o-matic/api` regenera `openapi.json`: un test falla si no está al día.
-- Calendario: P3 cerró el viernes a las 09:15, con ≈ 1 h más de lo estimado, absorbida por la holgura del viernes.
+- Hechas y mergeadas en `main`: P0 a P3; P4 en su PR (ver el estado de la rama).
+- La API tiene el flujo completo de la porción vertical: alta y detalle de clientes, y creación, lectura e historial de
+  simulaciones, con `openapi.json` al día. No existe aún `GET /customers` (P7) ni `GET /stats` (P10).
+- Para escribir módulos nuevos: `buildApiTestApp` (límites altos), `expectBody`/`expectProblem` y `api-helpers`
+  en `apps/api/test/`; un módulo solo se usa por su `index.ts`.
 
-**Siguiente parte: P4 · API de la porción vertical** (2,5 h). Alta y lectura de clientes, y creación y listado de
-simulaciones. AC y TV, en el plan.
+**Siguiente parte: P5 · Web de la porción vertical** (4,5 h): el contrato y la API ya están; ver el plan.
 
-**Pendiente para P4**
-- **Errores de ruta, consulta y cuerpo juntos** (04-contrato §2.3, punto 4): Fastify valida params → body →
-  querystring y se para en la primera parte que falla. Validar las tres partes en un `preValidation` propio y unir
-  los `errors[]`, o registrar la limitación con una D-xx y ajustar §2.3. Decidirlo en el plan de P4.
-- **Respuestas de error en `openapi.json`:** hoy solo documenta los `2xx` y el `503` de `/health`. Añadir el `400`,
-  `404`, `409`, `413`, `415`, `422`, `429` y `500` con `problemSchema` en `application/problem+json`, con un *helper*
-  común para las rutas.
-- AC-54 completo (logs de un alta, una búsqueda con `q=Acme` y una simulación).
-- Citar AC-21 y AC-22 en los tests de `POST /customers` (hoy el mecanismo se prueba con una ruta solo de test).
+**Pendiente para P5 y P6:** las tablas de pendientes de las entradas P3 y P4. En especial: la referencia de error (8
+últimos del UUID) y `strictTemplates` en `typecheck` (P5); SIGTERM, subred fija de Compose, `--ignore-scripts` y
+Playwright en `devDependencies` (P6).
 
-**Pendientes de otras partes:** en las tablas de pendientes de cada entrada de este diario. Las más próximas:
-- **P5:** la referencia de error, hoy los 8 primeros caracteres de `instance` (serían `urn:uuid`): usar los 8 últimos
-  del UUID. Y `strictTemplates` también en `typecheck`.
-- **P6:**
-  - cierre ordenado con SIGTERM, que se prueba en el contenedor;
-  - subred fija en la red de Compose, con `TRUST_PROXY` = `loopback` + esa subred, y nada más (D-113);
-  - `--ignore-scripts` en la imagen, y Playwright en `devDependencies`.
-
+**Decisiones por validar:** D-119 a D-121 y las nueve de P0 y P2 que siguen en «Claude · pendiente».

@@ -82,7 +82,9 @@ Fuera de esos rangos → `400`. Formato de la respuesta:
 1. Ruta y método → `404`.
 2. Límite de peticiones → `429`.
 3. Peticiones con cuerpo: `Content-Type` → `415`; tamaño → `413`; JSON → `400 MALFORMED_JSON`.
-4. Esquema de la ruta, la consulta y el cuerpo → `400 VALIDATION_ERROR` (todos los errores juntos).
+4. Esquema de la ruta, el cuerpo y la consulta → `400 VALIDATION_ERROR`. Se devuelven **todos** los errores de la
+   misma parte a la vez; si fallan varias partes, se responde con la primera que falla, en el orden ruta → cuerpo →
+   consulta (D-117). Solo afecta a `GET /customers/{id}/simulations`, la única ruta con parámetros de ruta y de consulta.
 5. Normalización y reglas de negocio → `422`.
 6. Unicidad → `409`.
 7. Recursos de la URL → `404`.

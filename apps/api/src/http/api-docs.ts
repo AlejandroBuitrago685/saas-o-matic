@@ -2,6 +2,8 @@ import swagger from '@fastify/swagger';
 import type { FastifyInstance } from 'fastify';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
 
+import { documentProblemMediaType } from './openapi-problems.js';
+
 /**
  * OpenAPI generated from the same Zod schemas that validate the requests (D-110). `@fastify/swagger` only collects
  * the routes: it serves nothing, so it is registered everywhere and `npm run openapi` writes `apps/api/openapi.json`.
@@ -18,6 +20,9 @@ export async function registerApiDocs(app: FastifyInstance, isDevelopment: boole
       },
     },
     transform: jsonSchemaTransform,
+    // This API only generates OpenAPI 3.1, never Swagger 2.0.
+    transformObject: (document) =>
+      'openapiObject' in document ? documentProblemMediaType(document.openapiObject) : document.swaggerObject,
   });
   if (!isDevelopment) return;
   // Swagger UI at /docs, only in development (RNF-SEC-17). It is a devDependency loaded on demand, so the production

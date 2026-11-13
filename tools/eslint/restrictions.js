@@ -38,6 +38,20 @@ const DB = {
   regex: '^\\.{1,2}/(.*/)?db(/|$)',
   message: 'La base de datos solo desde *.repository.ts y la raíz de composición (capas).',
 };
+/**
+ * From inside a module: `../<other module>/<anything but index>`, or the same through `modules/` with any number of
+ * `../` (`../../modules/<other>/<file>`). `../../shared/x.js` matches neither (`..` has dots, and it has no
+ * `modules/`). Not covered: dynamic `import()` and `require`, and a module with subfolders (none has them).
+ */
+const MODULE_INTERNALS = {
+  regex: '^(\\.\\./[^/.]+/|(\\.\\./)+modules/[^/]+/)(?!index(\\.js)?$)',
+  message: 'Un módulo solo usa otro por su index.ts (D-119).',
+};
+/** From the composition root: `./modules/<module>/<anything but index>`. */
+const ROOT_MODULE_INTERNALS = {
+  regex: '^\\./modules/[^/]+/(?!index(\\.js)?$)',
+  message: 'La raíz de composición solo usa un módulo por su index.ts (D-119).',
+};
 const PACKAGE_INTERNALS = {
   regex: '^\\.{1,2}/(.*/)?packages/',
   message: 'Los paquetes se importan por su nombre (@saas-o-matic/…) y su index.ts, nunca por ruta.',
@@ -142,36 +156,55 @@ export const restrictionConfigs = [
   },
   {
     files: ['apps/api/src/**/*.routes.ts'],
-    rules: { '@typescript-eslint/no-restricted-imports': api([DRIZZLE, NO_REPOSITORY, DB]) },
+    rules: {
+      '@typescript-eslint/no-restricted-imports': api([DRIZZLE, NO_REPOSITORY, DB, MODULE_INTERNALS]),
+    },
   },
   {
     files: ['apps/api/src/http/**/*.ts'],
     rules: { '@typescript-eslint/no-restricted-imports': api([DRIZZLE, DB]) },
   },
   {
-    files: ['apps/api/src/app.ts', 'apps/api/src/main.ts'],
-    rules: { '@typescript-eslint/no-restricted-imports': api([DRIZZLE]) },
+    // The composition root: every file at the top of src/ (app.ts, main.ts).
+    files: ['apps/api/src/*.ts'],
+    ignores: TESTS,
+    rules: { '@typescript-eslint/no-restricted-imports': api([DRIZZLE, ROOT_MODULE_INTERNALS]) },
   },
   {
-    files: ['apps/api/src/db/**/*.ts', 'apps/api/src/**/*.repository.ts'],
+    files: ['apps/api/src/db/**/*.ts'],
     rules: { '@typescript-eslint/no-restricted-imports': api([FASTIFY]) },
   },
   {
-    files: ['apps/api/src/**/*.use-case.ts'],
-    rules: { '@typescript-eslint/no-restricted-imports': api([DRIZZLE, FASTIFY, NO_REPOSITORY, DB]) },
+    files: ['apps/api/src/**/*.repository.ts'],
+    rules: { '@typescript-eslint/no-restricted-imports': api([FASTIFY, MODULE_INTERNALS]) },
   },
   {
-    files: ['apps/api/src/**/*.ts'],
+    files: ['apps/api/src/**/*.use-case.ts'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': api([
+        DRIZZLE,
+        FASTIFY,
+        NO_REPOSITORY,
+        DB,
+        MODULE_INTERNALS,
+      ]),
+    },
+  },
+  {
+    // The rest of a module (mappers, types, index.ts).
+    files: ['apps/api/src/modules/**/*.ts'],
     ignores: [
       ...TESTS,
       'apps/api/src/**/*.routes.ts',
       'apps/api/src/**/*.repository.ts',
       'apps/api/src/**/*.use-case.ts',
-      'apps/api/src/http/**',
-      'apps/api/src/db/**',
-      'apps/api/src/app.ts',
-      'apps/api/src/main.ts',
     ],
+    rules: { '@typescript-eslint/no-restricted-imports': api([DRIZZLE, FASTIFY, DB, MODULE_INTERNALS]) },
+  },
+  {
+    // Shared code and configuration: no database, no framework. That they use no module is `boundaries`' job.
+    files: ['apps/api/src/shared/**/*.ts', 'apps/api/src/config/**/*.ts'],
+    ignores: TESTS,
     rules: { '@typescript-eslint/no-restricted-imports': api([DRIZZLE, FASTIFY, DB]) },
   },
 ];

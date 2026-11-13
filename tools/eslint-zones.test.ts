@@ -120,6 +120,69 @@ describe('D-112 API shared code may use the contract, but never a module or the 
   });
 });
 
+describe('D-119 a module only reaches another module through its index.ts', () => {
+  const ADAPTERS = ['routes', 'use-case', 'repository', 'mapper', 'types'];
+
+  it.each(ADAPTERS)('rejects a %s file importing the internals of another module', async (role) => {
+    const code = "export type * from '../customers/customers.types.js';\n";
+    const findings = await lintFixture(`apps/api/src/modules/health/${F}x.${role}.ts`, code);
+
+    expect(ruleIds(findings)).toContain('@typescript-eslint/no-restricted-imports');
+  });
+
+  it.each(ADAPTERS)('allows a %s file to import the index.ts of another module', async (role) => {
+    const code = "export type * from '../customers/index.js';\n";
+    const findings = await lintFixture(`apps/api/src/modules/health/${F}y.${role}.ts`, code);
+
+    expect(ruleIds(findings)).not.toContain(null);
+    expect(ruleIds(findings)).not.toContain('@typescript-eslint/no-restricted-imports');
+  });
+
+  it('rejects reaching the internals of another module by a longer path (../../modules/<other>/<file>)', async () => {
+    const code = "export * from '../../modules/customers/customers.repository.js';\n";
+    const findings = await lintFixture(`apps/api/src/modules/health/${F}long.mapper.ts`, code);
+
+    expect(ruleIds(findings)).toContain('@typescript-eslint/no-restricted-imports');
+  });
+
+  it('allows the index.ts of another module by that longer path', async () => {
+    const code = "export * from '../../modules/customers/index.js';\n";
+    const findings = await lintFixture(`apps/api/src/modules/health/${F}long-ok.mapper.ts`, code);
+
+    expect(ruleIds(findings)).not.toContain(null);
+    expect(ruleIds(findings)).not.toContain('@typescript-eslint/no-restricted-imports');
+  });
+
+  it('allows a module file to import its own files and the shared and database folders it is allowed to', async () => {
+    const code = [
+      "export * from './check-health.use-case.js';",
+      "export * from '../../shared/clock.js';",
+      '',
+    ].join('\n');
+    const findings = await lintFixture(`apps/api/src/modules/health/${F}own.use-case.ts`, code);
+
+    expect(ruleIds(findings)).not.toContain(null);
+    expect(ruleIds(findings)).not.toContain('@typescript-eslint/no-restricted-imports');
+  });
+
+  it('rejects the composition root importing the internals of a module', async () => {
+    const code = "export * from './modules/customers/customers.repository.js';\n";
+    const findings = await lintFixture(`apps/api/src/${F}root.ts`, code);
+
+    expect(ruleIds(findings)).toContain('@typescript-eslint/no-restricted-imports');
+  });
+
+  it('allows the composition root to import the index.ts of a module', async () => {
+    const findings = await lintFixture(
+      `apps/api/src/${F}root-ok.ts`,
+      "export * from './modules/customers/index.js';\n",
+    );
+
+    expect(ruleIds(findings)).not.toContain(null);
+    expect(ruleIds(findings)).not.toContain('@typescript-eslint/no-restricted-imports');
+  });
+});
+
 describe('ADR-010 / D-83 API layers and configuration access', () => {
   it('rejects Drizzle inside a use case', async () => {
     const code = "import { sql } from 'drizzle-orm';\nexport const query = sql;\n";
