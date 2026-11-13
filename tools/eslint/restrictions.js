@@ -7,7 +7,7 @@
  */
 const TESTS = ['**/*.test.ts'];
 
-/** @typedef {{ regex: string, message: string }} ImportPattern */
+/** @typedef {{ regex: string, message: string, allowImportNames?: string[] }} ImportPattern */
 
 /**
  * @param {ImportPattern[]} patterns
@@ -62,12 +62,34 @@ const PACKAGE_INTERNALS = {
   message: 'Los paquetes se importan por su nombre (@saas-o-matic/…) y su index.ts, nunca por ruta.',
 };
 const ZOD_SUBPATH = { regex: '^zod/', message: 'Zod no se empaqueta en la web (ADR-002).' };
+const NO_OUTBOUND = 'El backend no hace peticiones salientes (RNF-SEC-18, AC-59, D-154).';
+/**
+ * Every way out of the process: HTTP, TLS and UDP clients, DNS (its `resolve*` sends its own queries), other processes
+ * and threads (they would not inherit the test guard), and the usual HTTP client and proxy libraries.
+ */
+const OUTBOUND_SOURCE =
+  '^((node:)?(http|https|http2|tls|dgram|dns|child_process|worker_threads|cluster)|undici|axios|node-fetch|' +
+  'cross-fetch|got|ky|superagent|needle|request|socks|@fastify/(reply-from|http-proxy))(/|$)';
+const OUTBOUND_MODULES = { regex: OUTBOUND_SOURCE, message: NO_OUTBOUND };
+/** From `node:net` only `isIP` (trust-proxy.ts): a default or namespace import would reach `connect` (P9 review). */
+const OUTBOUND_SOCKETS = { regex: '^(node:)?net$', allowImportNames: ['isIP'], message: NO_OUTBOUND };
+/**
+ * What `no-restricted-imports` cannot see: a dynamic import of one of those modules, `require`, `getBuiltinModule` and
+ * the global clients reached through `globalThis`. A dynamic import of anything else stays allowed (Swagger UI, D-110).
+ */
+const OUTBOUND_SYNTAX = [
+  `ImportExpression[source.value=/${OUTBOUND_SOURCE.replaceAll('/', '\\/')}/]`,
+  "CallExpression[callee.name='require']",
+  "MemberExpression[object.name='process'][property.name='getBuiltinModule']",
+  'MemberExpression[object.name=/^(globalThis|global|self)$/][property.name=/^(fetch|WebSocket|XMLHttpRequest|EventSource)$/]',
+].map((selector) => ({ selector, message: NO_OUTBOUND }));
 
 /**
- * Restrictions of an API zone; every zone also forbids reaching into packages/ by path.
+ * Restrictions of an API zone; every zone also forbids reaching into packages/ by path and any outbound client.
  * @param {ImportPattern[]} patterns
  */
-const api = (patterns) => restrictImports([...patterns, PACKAGE_INTERNALS]);
+const api = (patterns) =>
+  restrictImports([...patterns, PACKAGE_INTERNALS, OUTBOUND_MODULES, OUTBOUND_SOCKETS]);
 
 const PURE = 'El dominio es puro: sin I/O ni APIs del entorno (ADR-001).';
 const ENV_GLOBALS = [
@@ -217,6 +239,20 @@ export const restrictionConfigs = [
     files: ['apps/api/src/shared/**/*.ts', 'apps/api/src/config/**/*.ts'],
     ignores: TESTS,
     rules: { '@typescript-eslint/no-restricted-imports': api([DRIZZLE, FASTIFY, DB]) },
+  },
+  {
+    // AC-59: no global client either, tests included (their outbound network is also blocked at run time, D-154).
+    files: ['apps/api/src/**/*.ts'],
+    rules: {
+      'no-restricted-globals': [
+        'error',
+        ...['fetch', 'WebSocket', 'XMLHttpRequest', 'EventSource'].map((name) => ({
+          name,
+          message: NO_OUTBOUND,
+        })),
+      ],
+      'no-restricted-syntax': ['error', ...OUTBOUND_SYNTAX],
+    },
   },
   {
     // The e2e tests are black-box (02-monorepo §2): Playwright and the types of the contract, nothing else of ours.

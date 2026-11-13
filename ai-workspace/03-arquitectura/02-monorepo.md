@@ -179,8 +179,10 @@ La herramienta para lanzar API y web a la vez en desarrollo es un script propio,
 (`scripts/dev.mjs`), en lugar de `concurrently`.
 
 **Instalado en P6:** `@playwright/test` 1.65.0 (`save-exact`), en el workspace `e2e`. Sin código nativo: los
-navegadores se descargan aparte con `npx playwright install chromium` (en el CI, `--with-deps`). `@axe-core/playwright`
-llega en P9.
+navegadores se descargan aparte con `npx playwright install chromium` (en el CI, `--with-deps`).
+
+**Instalado en P9:** `@axe-core/playwright` 4.14.0 (`save-exact`), en el workspace `e2e`. Sigue siendo la última
+versión publicada (comprobado con `npm view` el 13/11). Solo añade `axe-core` 4.14.0, sin código nativo.
 
 ### 4.3 Imágenes de contenedor (P6)
 

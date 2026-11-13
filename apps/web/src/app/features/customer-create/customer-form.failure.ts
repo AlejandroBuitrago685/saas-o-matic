@@ -1,5 +1,10 @@
 import { ApiError } from '../../core/api/api-error';
-import { fieldMessage, type MessageParams, problemMessage } from '../../core/errors/error-messages';
+import {
+  fieldMessage,
+  hasActionableMessage,
+  type MessageParams,
+  problemMessage,
+} from '../../core/errors/error-messages';
 import { CUSTOMER_FIELDS, type CustomerField } from './customer-form.schema';
 
 /** Error shown above the submit button, outside any field. */
@@ -41,8 +46,8 @@ function fieldFailures(error: ApiError, params: (field: CustomerField) => Messag
 
 /**
  * What the form shows for a failed POST /customers (spec 05 §3.2): 400 and 422 under their fields, 409 with a
- * link to the existing customer, 429 with its wait, and anything else as «No se ha podido crear el cliente»
- * with the reference. The typed data is always kept.
+ * link to the existing customer, 429 with its wait, the 502/504 of nginx with its own message (D-152), and anything
+ * else as «No se ha podido crear el cliente» with the reference. The typed data is always kept.
  */
 export function describeFailure(
   error: unknown,
@@ -55,7 +60,7 @@ export function describeFailure(
       notice: { message: problemMessage(error), existingCustomerId: error.existingCustomerId },
     };
   }
-  if (error.code === 'RATE_LIMITED') {
+  if (hasActionableMessage(error)) {
     return { fieldErrors: [], notice: { message: problemMessage(error), existingCustomerId: null } };
   }
   const fieldErrors = fieldFailures(error, params);

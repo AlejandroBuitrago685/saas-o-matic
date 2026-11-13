@@ -1,8 +1,39 @@
-# e2e stack (D-133): docker-compose.yml with higher request limits and nothing else. Every e2e test reaches the API
-# from the same address (the Docker gateway), so the production limits would throttle the suite; the limit itself is
-# tested against the API (AC-51). Started by `npm run e2e:stack` as its own project, with its own data volume.
+# e2e stack (D-133): docker-compose.yml with higher request limits, plus a web without API. Every e2e test reaches the
+# API from the same address (the Docker gateway), so the production limits would throttle the suite; the limit itself
+# is tested against the API (AC-51). Started by `npm run e2e:stack` as its own project, with its own data volume.
 services:
   api:
     environment:
       RATE_LIMIT_PER_MINUTE: '5000'
       RATE_LIMIT_WRITES_PER_MINUTE: '1000'
+
+  # D-155, AC-85: the same web image with the API down, so that the answer of nginx itself is tested while the rest of
+  # the suite keeps its API. On its own bridge network it is also the `api` host, where nothing listens on port 3000:
+  # every /api/ request is a 502 at once. Not `internal: true`, which would stop Docker publishing the port.
+  web-api-down:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - 127.0.0.1:8081:8080
+    networks:
+      api-down:
+        aliases:
+          - api
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, 'http://127.0.0.1:8080/']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+      start_interval: 1s
+
+networks:
+  api-down: {}

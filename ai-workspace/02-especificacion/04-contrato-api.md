@@ -64,11 +64,12 @@ Fuera de esos rangos → `400`. Formato de la respuesta:
 | 400 | `VALIDATION_ERROR` | `/problems/validation-error` | Incumple el esquema: tipos, campos obligatorios, longitudes, rangos, enumerados, formato de email o UUID, campos desconocidos (D-32). |
 | 404 | `NOT_FOUND` | `/problems/not-found` | El recurso de la URL no existe, o la ruta o el método no están en el contrato. |
 | 409 | `CUSTOMER_ALREADY_EXISTS` | `/problems/customer-already-exists` | Ya existe un cliente con el mismo (`country`, `taxId` normalizado). Incluye `existingCustomerId`. |
-| 413 | `PAYLOAD_TOO_LARGE` | `/problems/payload-too-large` | El cuerpo supera 16 KiB. |
+| 413 | `PAYLOAD_TOO_LARGE` | `/problems/payload-too-large` | El cuerpo supera 16 KiB. Por encima de 64 KiB **lo emite nginx** (D-158), porque la petición no llega a la API: el mismo cuerpo, sin `instance` y con las cabeceras de la API. |
 | 415 | `UNSUPPORTED_MEDIA_TYPE` | `/problems/unsupported-media-type` | La petición con cuerpo no es `application/json`. |
 | 422 | `BUSINESS_RULE_VIOLATION` | `/problems/business-rule-violation` | Cumple el esquema pero viola una regla de negocio (ver códigos por campo). |
 | 429 | `RATE_LIMITED` | `/problems/rate-limited` | Se ha superado el límite de peticiones. |
 | 500 | `INTERNAL_ERROR` | `/problems/internal-error` | Error no controlado. Respuesta genérica (RNF-SEC-10). |
+| 502, 504 | `SERVICE_UNAVAILABLE` | `/problems/service-unavailable` | **Lo emite nginx, no la API** (D-152): la API no responde (`502`) o tarda demasiado (`504`). Sin `instance`, porque la petición no llegó a la API. Con las cabeceras de la API (AC-52). Tipo `GatewayProblem` en `contract`; no está en el OpenAPI. |
 
 **Códigos por campo** (`errors[].code`):
 

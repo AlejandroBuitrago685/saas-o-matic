@@ -1,16 +1,6 @@
-import type { Page } from '@playwright/test';
-import type { CreateCustomerRequest } from '@saas-o-matic/contract';
-
+import { fillCustomerForm } from '../fixtures/customer-form.js';
 import { createCustomer, newCustomer } from '../fixtures/customers.js';
 import { expect, test } from '../fixtures/test.js';
-
-async function fillCustomerForm(page: Page, customer: CreateCustomerRequest): Promise<void> {
-  await page.getByLabel('País').selectOption(customer.country);
-  await page.getByLabel('Nombre de empresa').fill(customer.companyName);
-  await page.locator('#customer-tax-id').fill(customer.taxId);
-  await page.getByLabel('Email de contacto').fill(customer.contactEmail);
-  await page.getByLabel('Plan').selectOption(customer.plan);
-}
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/customers/new');

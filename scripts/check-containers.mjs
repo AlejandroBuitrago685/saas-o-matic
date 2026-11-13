@@ -34,7 +34,9 @@ import { run } from './lib/repo.mjs';
  */
 
 /** The only writable mounts of each service of docker-compose.yml; `tmpfs` mounts live in memory and are not listed. */
-const WRITABLE_MOUNTS = /** @type {const} */ ({ api: ['/data'], web: [] });
+const WRITABLE_MOUNTS = /** @type {Readonly<Record<string, readonly string[]>>} */ ({ api: ['/data'] });
+/** Services every stack runs. Any other container of the project (`web-api-down` of the e2e stack) is checked too. */
+const REQUIRED_SERVICES = ['api', 'web'];
 /** Services that publish no port at all. */
 const PRIVATE_SERVICES = ['api'];
 const LOOPBACK = '127.0.0.1';
@@ -87,12 +89,12 @@ function privilegeProblems(service, container) {
 }
 
 /**
- * @param {keyof typeof WRITABLE_MOUNTS} service
+ * @param {string} service
  * @param {InspectedContainer} container
  * @returns {string[]}
  */
 function fileSystemProblems(service, { HostConfig, Mounts }) {
-  const allowed = /** @type {readonly string[]} */ (WRITABLE_MOUNTS[service]);
+  const allowed = WRITABLE_MOUNTS[service] ?? [];
   const problems = HostConfig.ReadonlyRootfs
     ? []
     : [`${service}: the root file system is writable (read_only: true is missing)`];
@@ -128,20 +130,31 @@ function portProblems(service, { HostConfig }) {
 
 /**
  * @param {readonly InspectedContainer[]} containers what `docker inspect` returns for the containers of the stack
- * @returns {string[]} one line per problem, in service order; empty when the stack is hardened
+ * @returns {string[]} one line per problem: missing services first, then by service name; empty when hardened
  */
 export function findHardeningProblems(containers) {
-  return /** @type {(keyof typeof WRITABLE_MOUNTS)[]} */ (Object.keys(WRITABLE_MOUNTS)).flatMap((service) => {
-    const container = containers.find(
-      ({ Config }) => Config.Labels['com.docker.compose.service'] === service,
-    );
-    if (container === undefined) return [`${service}: no running container found`];
-    return [
-      ...privilegeProblems(service, container),
-      ...fileSystemProblems(service, container),
-      ...portProblems(service, container),
-    ];
-  });
+  /** A container without the label of its service is reported as such, never with an empty name. */
+  const serviceOf = (/** @type {InspectedContainer} */ { Config }) =>
+    Config.Labels['com.docker.compose.service'] ?? '(unlabelled)';
+  const services = new Set(containers.map(serviceOf));
+  const missing = REQUIRED_SERVICES.filter((service) => !services.has(service)).map(
+    (service) => `${service}: no running container found`,
+  );
+  // Code-point order, the same on every machine (P9 review: localeCompare depends on the locale).
+  const ordered = [...containers].sort((a, b) =>
+    serviceOf(a) < serviceOf(b) ? -1 : Number(serviceOf(a) > serviceOf(b)),
+  );
+  return [
+    ...missing,
+    ...ordered.flatMap((container) => {
+      const service = serviceOf(container);
+      return [
+        ...privilegeProblems(service, container),
+        ...fileSystemProblems(service, container),
+        ...portProblems(service, container),
+      ];
+    }),
+  ];
 }
 
 /**

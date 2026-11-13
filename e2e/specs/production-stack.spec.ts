@@ -1,6 +1,6 @@
 import type { APIResponse } from '@playwright/test';
 
-import { createCustomer } from '../fixtures/customers.js';
+import { createCustomer, newCustomer } from '../fixtures/customers.js';
 import { expect, test } from '../fixtures/test.js';
 
 /** What only the Docker Compose stack serves: nginx, its headers and its CSP (D-68). */
@@ -172,5 +172,33 @@ test(
     }
 
     expect(isSharedBucket, 'two fake X-Forwarded-For addresses got buckets of their own').toBe(true);
+  },
+);
+
+// D-158: above the 64 KiB of nginx (D-132) the request never reaches the API, so nginx answers in RFC 9457 itself.
+test(
+  'D-158 ADR-009: a body above 64 KiB gets the 413 Problem of the API from nginx, with only the API headers',
+  PROD_ONLY,
+  async ({ request }) => {
+    const data = newCustomer({ companyName: 'X'.repeat(70 * 1024) });
+
+    const response = await request.post('/api/customers', { data });
+
+    expect(response.status()).toBe(413);
+    expect(response.headers()['content-type']).toBe('application/problem+json');
+    expect(await response.json()).toEqual({
+      type: '/problems/payload-too-large',
+      title: 'Payload too large',
+      status: 413,
+      detail: 'The request body exceeds 16 KiB.',
+      code: 'PAYLOAD_TOO_LARGE',
+    });
+    const valuesOf = (name: string): string[] =>
+      response
+        .headersArray()
+        .filter((header) => header.name.toLowerCase() === name)
+        .map((header) => header.value);
+    expect(valuesOf('content-security-policy')).toEqual(["default-src 'none';frame-ancestors 'none'"]);
+    expect(valuesOf('cache-control')).toEqual(['no-store']);
   },
 );

@@ -22,6 +22,7 @@ export type { SchemaIssue } from './field-errors.js';
 export { healthResponseSchema, healthUnavailableResponseSchema } from './health.js';
 export type { HealthResponse, HealthUnavailableResponse } from './health.js';
 export { pageOf, pageSchema, paginationQuerySchema } from './pagination.js';
+export type { GatewayErrorCode, GatewayProblem } from './gateway-problem.js';
 export type { Page, PaginationQuery } from './pagination.js';
 export {
   BUSINESS_ERROR_CODES,

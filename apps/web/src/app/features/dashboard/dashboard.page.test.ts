@@ -98,7 +98,10 @@ describe('AC-70 V1 dashboard states (spec 05 §3.1)', () => {
     const cards = host.querySelectorAll<HTMLAnchorElement>('ul[aria-label="Clientes"] a');
     expect(cards).toHaveLength(20);
     expect(cards[0]?.getAttribute('href')).toBe(`/customers/${summary(1).id}`);
-    expect(plain(cards[0]?.textContent)).toContain('España');
+    // D-157: the link is the company name; the data of the card are its description.
+    expect(plain(cards[0]?.textContent)).toBe(summary(1).companyName);
+    const description = host.querySelector(`#${cards[0]?.getAttribute('aria-describedby') ?? ''}`);
+    expect(plain(description?.textContent)).toContain('España');
     expect(plain(host.querySelector('nav[aria-label="Paginación"] p')?.textContent)).toBe('1–20 de 25');
     expect(button('Anterior').getAttribute('aria-disabled')).toBe('true');
     expect(button('Siguiente').getAttribute('aria-disabled')).toBe('false');
