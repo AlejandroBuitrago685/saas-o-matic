@@ -4,10 +4,18 @@ Herramienta interna para que el equipo comercial simule y presupueste suscripcio
 clientes corporativos: alta de clientes con validación fiscal, simulación por tramos con impuestos y conversión de
 divisas en tiempo real.
 
-> **Estado:** en construcción. Hechas las partes P0 a P7: monorepo, herramientas de calidad y CI, reglas de negocio
-> del dominio, API y web de la porción vertical (alta de cliente → detalle → simulador → guardar → historial), Docker
-> Compose con nginx y los e2e contra esa pila, y el dashboard con la búsqueda y los datos de ejemplo. El resto llega en
-> las partes siguientes del [plan de implementación](ai-workspace/04-plan-implementacion.md).
+> **Estado:** funcionalidad completa; falta la entrega. Hechas las partes P0 a P10:
+>
+> - monorepo, herramientas de calidad y CI;
+> - reglas de negocio del dominio: precios por tramos, impuestos, identificador fiscal y conversión de divisas;
+> - API y web: alta de cliente → detalle → simulador → guardar → historial (con el desglose por tramo);
+> - dashboard con métricas, búsqueda y paginación (las dos en la URL) y datos de ejemplo;
+> - divisas con caché, indicador de estado y la elegida recordada al recargar;
+> - robustez: seguridad, estados de error, 360 px y accesibilidad;
+> - Docker Compose con nginx, e2e contra esa pila y prueba de humo del arranque en Linux, Windows y macOS.
+>
+> Faltan la demo pública (P11) y el cierre: README final, prueba desde un clon limpio y revisión (P12). Detalle en el
+> [plan de implementación](ai-workspace/04-plan-implementacion.md).
 
 ## Requisitos
 
@@ -61,6 +69,9 @@ npm run e2e:stack:down
 - `npm run e2e:dev` ejecuta los mismos tests sin Docker, salvo los que solo tienen sentido contra la pila
   (`@prod-only`: cabeceras, CSP e IP real). Playwright arranca su propia API (puerto 3100, con SQLite en memoria) y
   su propio `ng serve` (puerto 4300): no toca la base de desarrollo y puede ejecutarse con `npm run dev` arrancado.
+- `npm run e2e:smoke` es la prueba de humo del arranque (AC-95): lanza `npm run dev` y comprueba `GET /health` y el
+  dashboard con los datos de ejemplo. Necesita los puertos 3000 y 4200 libres y la base recién creada con
+  `npm run setup`.
 
 ## API
 

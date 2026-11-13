@@ -85,25 +85,30 @@ flowchart LR
   end
   AUD["audit · Node .nvmrc"]
   E2E["e2e · Node .nvmrc<br/>Compose + Playwright"]
-  SW["smoke-windows · Node .nvmrc"]
-  SM["smoke-macos · Node .nvmrc"]
+  subgraph S["smoke · arranque del README (P10)"]
+    SL["ubuntu · Node 22, 24 y 26"]
+    SW["windows · Node .nvmrc"]
+    SM["macos · Node .nvmrc"]
+  end
   push["push / PR"] --> Q
   push --> AUD
   push --> E2E
-  push --> SW
-  push --> SM
+  push --> S
 ```
 
 | Trabajo | Dónde | Node | Pasos |
 |---|---|---|---|
-| `quality` | ubuntu | 22, 24 y 26 (matriz) | `npm ci` → lint (ESLint + fronteras) → typecheck → ciclos (dependency-cruiser) → patrones prohibidos y nombres de fichero → migraciones sincronizadas → tests de dominio con cobertura → tests de la API → tests de componentes de la web → build de todo → inventario OpenAPI frente a contrato → trazabilidad (`trace-tests`) |
+| `quality` | ubuntu | 22, 24 y 26 (matriz) | `npm ci` → lint (ESLint + fronteras) → typecheck → ciclos (dependency-cruiser) → patrones prohibidos y nombres de fichero → migraciones sincronizadas → tests de dominio con cobertura → tests de la API → tests de componentes de la web → build de todo → inventario OpenAPI frente a contrato → trazabilidad **bloqueante** desde P10 (`trace-tests --strict`, con los pendientes declarados del plan, D-161) |
 | `audit` | ubuntu | `.nvmrc` | `npm ci` → `npm audit --audit-level=high` → comprobar que no hay `.env` versionados (AC-55, AC-57) |
 | `e2e` | ubuntu | `.nvmrc` | `npm ci` → `npm run e2e:stack` (pila nueva y `--wait`, D-133) → `check-containers` (AC-60, D-130) → Chromium → `npm run e2e` → si falla, informe, trazas y logs de la pila → siempre `e2e:stack:down` |
-| `smoke-windows` / `smoke-macos` | windows-latest / macos-latest | `.nvmrc` | `npm ci` (comprueba que no se compila) → `npm run build` → `npm run setup` → arrancar la API → `GET /health` = 200 → parar (AC-95, D-53) |
+| `smoke` (matriz de 5) | ubuntu (Node 22, 24 y 26), windows-latest y macos-latest (`.nvmrc`) | según la fila | Checkout limpio con los comandos del README: `npm ci` (comprueba que no se compila nada) → `npm run setup` → Chromium → `npm run e2e:smoke`, que lanza `npm run dev` y comprueba `GET /health` = 200 y el dashboard con los 25 clientes de ejemplo; Playwright para todo el árbol de procesos al terminar (AC-95, D-53) |
 
 - Concurrencia: un *push* nuevo cancela la ejecución anterior de la misma rama.
 - Caché de npm con `actions/setup-node`.
-- Los trabajos `e2e` y `smoke-*` usan `node-version-file: .nvmrc`.
+- Los trabajos `audit` y `e2e` usan `node-version-file: .nvmrc`; `smoke` también en Windows y macOS (con `node`
+  vacío en la matriz, setup-node lee `.nvmrc`), así la versión no se repite en el workflow.
+- La latencia de AC-90 no se publica aparte: el e2e falla en el CI si pasa de 100 ms, y el valor medido queda en la
+  anotación del test dentro del artefacto `playwright-report` (pendiente de P7, cerrado en P10 sin código).
 - Todos los trabajos son obligatorios para integrar en `main`.
 
 ## 4. Demo pública (RNF-22, D-47)

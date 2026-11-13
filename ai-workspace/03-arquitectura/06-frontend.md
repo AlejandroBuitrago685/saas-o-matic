@@ -65,7 +65,8 @@ Principios:
    Las escrituras, con `HttpClient`. Un recurso olvida su valor en cuanto cambian sus parámetros: si una vista debe
    seguir mostrando la respuesta anterior mientras carga la siguiente (la búsqueda del dashboard), se usa
    `rxResource` y la respuesta se guarda en un signal al llegar (D-141).
-4. `linkedSignal` para estado que se reinicia cuando cambia su origen (p. ej. la página vuelve a 1 cuando cambia la búsqueda).
+4. `linkedSignal` para estado que se reinicia cuando cambia su origen. La página del dashboard ya no lo usa desde
+   P10: también la escribe la URL, así que vuelve a 1 de forma explícita al aplicar otra búsqueda (D-163).
 5. `effect` **solo para efectos externos**: guardar en `localStorage` o anunciar a lectores de pantalla. Nunca para
    sincronizar un signal con otro.
 6. Los *stores* son servicios inyectables. Los globales se proveen en `root`; los de una feature, en la ruta o el
@@ -76,15 +77,17 @@ Principios:
 | `CatalogStore` | root | `httpResource` de `/api/catalog`; `tariffFor(plan)`, `taxRateFor(country)`, `limits` |
 | `ExchangeRatesStore` | root | Máquina de estados de los tipos (§4) |
 | `CurrencyStore` | root | Divisa seleccionada (EUR por defecto) y divisas disponibles (`computed` a partir de los tipos) |
-| `CustomerSearchStore` | ruta `/` | Texto escrito y `q` aplicada (300 ms o Intro), página (`linkedSignal`), resultado (`rxResource`, D-141) y la última respuesta. En P10: `q` y página en la URL, y métricas |
+| `CustomerSearchStore` | ruta `/` | Texto escrito y `q` aplicada (300 ms o Intro), página, resultado (`rxResource`, D-141) y la última respuesta. Desde P10, `q` y página también en la URL (`?q=…&page=…`, D-163): los signals responden al momento y la URL los sigue con `replaceUrl`; un cambio de la URL desde fuera se adopta y una URL inválida se corrige (`search-url.ts`) |
+| `DashboardStatsStore` | ruta `/` | Métricas de `GET /stats` (`httpResource`), aparte del listado para que un fallo no lo toque (D-162). El importe medio se convierte con `CurrencyStore.convertAmount` |
 | `CustomerDetailStore` | ruta `/customers/:id` | Cliente e historial paginado (`Cargar más`) |
 | `SimulatorStore` | componente | `users`, texto en bruto del campo, almacenamiento, llamadas, proyección (`computed`) y estado del guardado |
 
 ## 4. Divisas y estado de la API externa (D-22, D-23, D-51)
 
 - **Divisa seleccionada:** `CurrencyStore.chosen` (la última elegida) y `effective` (`computed`: la elegida si tiene
-  tipo válido, EUR si no; D-143). Se mantiene al navegar. Recordarla tras recargar es Could (`localStorage` con
-  `try/catch`).
+  tipo válido, EUR si no; D-143). Se mantiene al navegar y, desde P10, también al recargar (Could): `select()` la
+  guarda en `localStorage` (`saas-o-matic.currency.v1`, `chosen-currency.storage.ts`, con `try/catch`), y al arrancar
+  solo se acepta un código de la lista. Hasta que llegan los tipos, la efectiva es EUR.
 - **Tipos de cambio:** `ExchangeRatesStore`, una máquina de estados con un signal de tipo unión discriminada:
 
   ```text
