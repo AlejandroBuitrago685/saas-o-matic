@@ -143,3 +143,32 @@ test('AC-88 / CL-33 / D-142 GBP and then JPY during a refresh: JPY with the new 
   await expect(header.select).toHaveValue('JPY');
   await expect(total).toHaveText(amount('30.023', 'JPY')); // TV-FX-04
 });
+
+test('spec 05 §4.1 (Could): the chosen currency is remembered after a reload, and EUR until the rates arrive', async ({
+  page,
+  request,
+}) => {
+  const simulator = await openSimulator(page, request);
+  await simulateRatesApi(page);
+  const header = currencyHeader(page);
+  await page.reload();
+  await expectReferenceRates(header);
+  await header.select.selectOption('USD');
+  await expect(simulator.total).toHaveText(amount('188,25', 'USD'));
+
+  const rates = await simulateRatesApi(page, 'server-error');
+  await page.evaluate(() => {
+    localStorage.removeItem('saas-o-matic.exchange-rates.v1');
+  });
+  await page.reload();
+
+  // Without rates the amounts stay in EUR, and the choice is kept (D-143)…
+  await expect(header.status).toContainText('No se han podido obtener los tipos de cambio');
+  await expect(simulator.total).toHaveText(amount('169,40', 'EUR'));
+  rates.serve('reference');
+  await header.retry.click();
+
+  // …so USD comes back as soon as there are rates, without choosing it again.
+  await expect(header.select).toHaveValue('USD');
+  await expect(simulator.total).toHaveText(amount('188,25', 'USD'));
+});

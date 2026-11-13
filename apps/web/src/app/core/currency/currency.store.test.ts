@@ -7,6 +7,7 @@ import {
   REFERENCE_UPDATED_AT,
 } from '../testing/exchange-rates.fixture';
 import { ratesEnvironment, type RatesEnvironment } from '../testing/rates-environment.fixture';
+import { CHOSEN_CURRENCY_KEY } from './chosen-currency.storage';
 import { CurrencyStore } from './currency.store';
 import { RATES_CACHE_KEY } from './exchange-rates.cache';
 import { ExchangeRatesStore } from './exchange-rates.store';
@@ -100,6 +101,48 @@ describe('D-143 CurrencyStore: chosen and effective currency (spec 05 §4.1)', (
       pricing: { currency: 'EUR', tierSubtotals: [10_000, 4000], base: 14_000, tax: 2940, total: 16_940 },
       ratesUpdatedAt: undefined,
     });
+  });
+
+  it('AC-92: convertAmount converts one leaf amount with the same rule, and marks when the rates are from', async () => {
+    expect(currency.convertAmount(12_400)).toEqual({
+      amount: 12_400,
+      currency: 'EUR',
+      ratesUpdatedAt: undefined,
+    });
+
+    await rates.start();
+    currency.select('USD');
+
+    // 124,00 € × 1,111287 = 137,7996 → 137,80 $, half up (the reference rates of the fixture).
+    expect(currency.convertAmount(12_400)).toEqual({
+      amount: 13_780,
+      currency: 'USD',
+      ratesUpdatedAt: REFERENCE_UPDATED_AT,
+    });
+  });
+
+  it('AC-92: convertAmount falls back to EUR like convert (D-91), and gives nothing for an invalid amount', async () => {
+    env.fetch.mockResolvedValueOnce(
+      ratesResponse({ ...REFERENCE_RATES_PAYLOAD, rates: { ...REFERENCE_RATES_PAYLOAD.rates, JPY: 1e300 } }),
+    );
+    await rates.start();
+    currency.select('JPY');
+
+    expect(currency.convertAmount(12_400)).toEqual({
+      amount: 12_400,
+      currency: 'EUR',
+      ratesUpdatedAt: undefined,
+    });
+    expect(currency.convertAmount(-1)).toBeUndefined();
+  });
+
+  it('spec 05 §4.1 (Could): a choice is saved, and a new store starts with it', () => {
+    currency.select('CHF');
+
+    expect(env.storage.items.get(CHOSEN_CURRENCY_KEY)).toBe('CHF');
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: env.providers });
+    expect(TestBed.inject(CurrencyStore).chosen()).toBe('CHF');
   });
 
   it('gives no amounts only when even EUR leaves the safe range (D-91)', () => {

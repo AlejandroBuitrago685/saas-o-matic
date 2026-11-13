@@ -1,12 +1,12 @@
 import { isRecord, parseExchangeRates } from './exchange-rates.parser';
-import type { RatesStorage } from './rates-environment';
+import type { BrowserStorage } from './rates-environment';
 import { RATE_LIMIT_COOLDOWN_MS, type RatesSnapshot } from './rates-state';
 
 /** Versioned keys: a change of format only needs a new version, and an old entry is simply ignored. */
 export const RATES_CACHE_KEY = 'saas-o-matic.exchange-rates.v1';
 export const RATE_LIMITED_UNTIL_KEY = 'saas-o-matic.exchange-rates.rate-limited-until.v1';
 
-function readItem(storage: RatesStorage | undefined, key: string): unknown {
+function readItem(storage: BrowserStorage | undefined, key: string): unknown {
   try {
     const text = storage?.getItem(key) ?? null;
     return text === null ? undefined : (JSON.parse(text) as unknown);
@@ -15,7 +15,7 @@ function readItem(storage: RatesStorage | undefined, key: string): unknown {
   }
 }
 
-function writeItem(storage: RatesStorage | undefined, key: string, value: unknown): void {
+function writeItem(storage: BrowserStorage | undefined, key: string, value: unknown): void {
   try {
     storage?.setItem(key, JSON.stringify(value));
   } catch {
@@ -32,7 +32,7 @@ function isTimeUpTo(value: unknown, latest: number): value is number {
  * parser as a fresh one, and a `fetchedAt` or an `updatedAt` in the future (which would keep it «current» or
  * «usable» forever) is rejected.
  */
-export function readCachedRates(storage: RatesStorage | undefined, now: number): RatesSnapshot | undefined {
+export function readCachedRates(storage: BrowserStorage | undefined, now: number): RatesSnapshot | undefined {
   const entry = readItem(storage, RATES_CACHE_KEY);
   if (!isRecord(entry)) return undefined;
   const { fetchedAt, payload } = entry;
@@ -44,7 +44,7 @@ export function readCachedRates(storage: RatesStorage | undefined, now: number):
 
 /** Saves the answer as it came, so reading it back goes through the parser again. */
 export function writeCachedRates(
-  storage: RatesStorage | undefined,
+  storage: BrowserStorage | undefined,
   fetchedAt: number,
   payload: unknown,
 ): void {
@@ -52,12 +52,12 @@ export function writeCachedRates(
 }
 
 /** Whether a 429 still blocks automatic attempts. An end further away than the 20 min is not believed. */
-export function isRateLimited(storage: RatesStorage | undefined, now: number): boolean {
+export function isRateLimited(storage: BrowserStorage | undefined, now: number): boolean {
   const until = readItem(storage, RATE_LIMITED_UNTIL_KEY);
   return isTimeUpTo(until, now + RATE_LIMIT_COOLDOWN_MS) && until > now;
 }
 
 /** After a 429, kept across reloads so a reload cannot skip the provider's block (D-146). */
-export function saveRateLimit(storage: RatesStorage | undefined, now: number): void {
+export function saveRateLimit(storage: BrowserStorage | undefined, now: number): void {
   writeItem(storage, RATE_LIMITED_UNTIL_KEY, now + RATE_LIMIT_COOLDOWN_MS);
 }

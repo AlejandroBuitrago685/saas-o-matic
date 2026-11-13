@@ -26,7 +26,7 @@ const documented = async (): Promise<OpenApi> => JSON.parse(await openApiDocumen
 /**
  * The statuses each operation documents (04-contrato-api §2.3 and §3): the success, the errors of the schema (400), of
  * the body (413, 415), of the business rules (422), of the resource (404), of the duplicates (409), the limit (429)
- * and the generic 500. `GET /stats` is a Could of P10 and is not registered yet.
+ * and the generic 500.
  */
 const STATUSES: Readonly<Record<string, readonly number[]>> = {
   'GET /catalog': [200, 400, 429, 500],
@@ -37,6 +37,7 @@ const STATUSES: Readonly<Record<string, readonly number[]>> = {
   'GET /customers/:id/simulations': [200, 400, 404, 429, 500],
   'POST /simulations': [201, 400, 413, 415, 422, 429, 500],
   'GET /simulations/:id': [200, 400, 404, 429, 500],
+  'GET /stats': [200, 400, 429, 500],
 };
 
 describe('D-110 the versioned OpenAPI document matches the schemas', () => {

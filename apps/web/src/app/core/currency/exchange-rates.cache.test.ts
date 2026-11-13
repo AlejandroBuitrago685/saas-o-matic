@@ -9,12 +9,14 @@ import {
   saveRateLimit,
   writeCachedRates,
 } from './exchange-rates.cache';
-import type { RatesStorage } from './rates-environment';
+import type { BrowserStorage } from './rates-environment';
 import { RATE_LIMIT_COOLDOWN_MS } from './rates-state';
 
 const NOW = REFERENCE_UPDATED_AT + 60_000;
 
-function memoryStorage(initial: Record<string, string> = {}): RatesStorage & { items: Map<string, string> } {
+function memoryStorage(
+  initial: Record<string, string> = {},
+): BrowserStorage & { items: Map<string, string> } {
   const items = new Map(Object.entries(initial));
   return {
     items,
@@ -25,7 +27,7 @@ function memoryStorage(initial: Record<string, string> = {}): RatesStorage & { i
   };
 }
 
-const throwing: RatesStorage = {
+const throwing: BrowserStorage = {
   getItem: () => {
     throw new DOMException('denied', 'SecurityError');
   },

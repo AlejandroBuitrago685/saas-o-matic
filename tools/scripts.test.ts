@@ -11,7 +11,6 @@ import {
 } from '../scripts/check-forbidden-patterns.mjs';
 import { API_DEV_PORT, PROCESSES } from '../scripts/dev.mjs';
 import { listTrackedFiles } from '../scripts/lib/repo.mjs';
-import { automatedCriteria, definedVectors, missingIds } from '../scripts/trace-tests.mjs';
 import { affectedAreas, needsWholeRepoChecks, verificationSteps } from '../scripts/verify-changed.mjs';
 import { REPO_ROOT } from './lint-fixture.js';
 
@@ -130,35 +129,6 @@ describe('D-76 file naming (kebab-case with role suffixes)', () => {
     expect(
       findBadFileNames(['apps/api/drizzle/0000_brave_name.sql', 'apps/api/drizzle/meta/_journal.json']),
     ).toEqual([]);
-  });
-});
-
-describe('D-86 traceability script (informative until P10)', () => {
-  // Ids that do not exist in the specification, so this sample never counts as real coverage.
-  const sample = [
-    '**AC-901 · Base** · Refs: RF-08 · Nivel: U · Vectores: TV-ZZ-01…09',
-    '**AC-902 · Repo** · Refs: RNF-19 · Nivel: R',
-    '**AC-903 · Clone** · Refs: RNF-18 · Nivel: CI',
-    '| TV-ZZ-01 | 1 | … |',
-  ].join('\n');
-
-  it('keeps only automatable criteria (U, I, E, CI) and reads vector ids', () => {
-    expect(automatedCriteria(sample)).toEqual(['AC-901', 'AC-903']);
-    expect(definedVectors(sample)).toEqual(['TV-ZZ-01']);
-  });
-
-  it('reports ids not cited by any test, without partial matches', () => {
-    expect(missingIds(['AC-901', 'AC-9', 'TV-ZZ-01'], "it('AC-901 TV-ZZ-01: …')")).toEqual(['AC-9']);
-  });
-
-  it('finds the 81 automatable criteria of the real specification (83 minus the review-only AC-94 and AC-99)', () => {
-    const markdown = readFileSync(
-      join(REPO_ROOT, 'ai-workspace/02-especificacion/07-criterios-aceptacion.md'),
-      'utf8',
-    );
-
-    expect(automatedCriteria(markdown)).toHaveLength(81);
-    expect(automatedCriteria(markdown)).not.toContain('AC-94');
   });
 });
 

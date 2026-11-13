@@ -102,8 +102,8 @@ Versión exacta. Sin dependencias que compilen código nativo (RT-06).
 ## Tests
 
 - **TDD en `domain`:** primero el test con los vectores de la spec; cobertura del 100 % ⚙.
-- Cada test cita en su título su `AC-xx` y/o `TV-…`; los de infraestructura, su `D-xx` o ADR ⏳
-  (`scripts/trace-tests.mjs` solo informa hasta P10, donde pasa a bloquear).
+- Cada test cita en su título su `AC-xx` y/o `TV-…`; los de infraestructura, su `D-xx` o ADR ⚙
+  (`scripts/trace-tests.mjs --strict` bloquea desde P10; solo admite los pendientes que declara el plan, D-161).
 - Cada bug lleva un test de regresión que falla antes del arreglo.
 - Integración de la API con `app.inject()` y SQLite en memoria. e2e con la API externa siempre simulada.
   Estrategia completa en `03-arquitectura/07-tests.md`.
@@ -122,9 +122,8 @@ Una parte está **hecha** cuando cumple **todo** esto:
 7. Commit en Conventional Commits.
 
 ⚙ = una herramienta configurada **y probada** lo comprueba (ESLint, `tsc`, scripts y hooks de Claude Code, cada uno con
-tests en `tools/`; la auditoría, en el CI de GitHub). ⏳ = configurado pero todavía no demostrado: la trazabilidad, que
-solo informa hasta P10 (D-86). `main` está protegida: solo se integra por PR
-con los 5 checks del CI en verde (D-88; `e2e` desde P6). Detalle en `03-arquitectura/09-calidad-y-automatizacion.md`.
+tests en `tools/`; la auditoría, en el CI de GitHub). `main` está protegida: solo se integra por PR con los checks del
+CI en verde (D-88; `e2e` desde P6 y los 5 `smoke` desde P10). Detalle en `03-arquitectura/09-calidad-y-automatizacion.md`.
 
 ## Trazabilidad
 

@@ -184,6 +184,28 @@ navegadores se descargan aparte con `npx playwright install chromium` (en el CI,
 **Instalado en P9:** `@axe-core/playwright` 4.14.0 (`save-exact`), en el workspace `e2e`. Sigue siendo la última
 versión publicada (comprobado con `npm view` el 13/11). Solo añade `axe-core` 4.14.0, sin código nativo.
 
+**`overrides` en P10 (D-164, revisión de D-89):** `minimatch` 11.0.8 para `eslint`, `@eslint/config-array` y
+`@typescript-eslint/typescript-estree`, que piden `^10` y arrastraban GHSA-g3hv-75wg-m249 (afecta a `>=7 <11.0.1`).
+
+- **Para qué:** quitar 14 de las 18 vulnerabilidades moderadas de desarrollo sin bajar de versión mayor ninguna
+  herramienta. `npm audit` pasa de 18 a 4.
+- **Alternativas:**
+  - no hacer nada (riesgo aceptado, como hasta ahora);
+  - ESLint 10.15.0, que ya pide `minimatch ^11.0.5`. Salió el 13/11, el mismo día de la revisión, así que se espera
+    a que lleve unos días publicada, y además no arregla typescript-eslint, cuya última versión, la 8.72.2, sigue
+    pidiendo `^10.2.2`;
+  - el «arreglo» de npm, que baja de versión mayor ESLint, typescript-eslint y angular-eslint.
+- **Versión y fecha:** 11.0.8, publicada el 11/11/2026. **Ya estaba en el lockfile**, porque la usa `glob` dentro de
+  `@fastify/static`, así que no entra ningún paquete nuevo y queda una sola copia. Requiere Node 20 o ≥ 22, y nuestro
+  mínimo es 22.22.
+- **Impacto:** ninguno en el *bundle* ni en producción; la instalación tiene un paquete menos. ESLint 10.15 confirma
+  que la API que usa ESLint es compatible, y el lint completo y los tests de las reglas en `tools/` pasan.
+- **Se quita** cuando typescript-eslint y ESLint pidan `minimatch` 11 por sí mismos.
+- **Sigue aceptado:** `esbuild` 0.18.20 (GHSA-67mh-4wv8-2f99, el servidor de desarrollo de esbuild), que llega por
+  `@esbuild-kit/*` dentro de drizzle-kit 0.31.11, la última versión. Ese servidor no se arranca nunca: drizzle-kit
+  solo lo usa para cargar su configuración. Forzar esbuild 0.25 dentro de un paquete abandonado (`@esbuild-kit`) es
+  más arriesgado que la vulnerabilidad.
+
 ### 4.3 Imágenes de contenedor (P6)
 
 Fijadas por *digest* en los `Dockerfile` (un `ARG` por imagen); para actualizar una se cambian la etiqueta y el

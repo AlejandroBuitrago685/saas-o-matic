@@ -26,9 +26,9 @@ scaffolding ([ADR-013](adr/ADR-013-cumplimiento-automatico.md)).
 | `openapi.json` al día con los esquemas (D-110) | Test `apps/api/test/openapi-document.test.ts`; se regenera con `npm run openapi -w @saas-o-matic/api` | Tests (CI, `verify`) |
 | Sin secretos | `.gitignore`, `check-forbidden-patterns` (`.env` versionados), permisos `deny` y hook `PreToolUse` | CI, sesión |
 | Sin caracteres invisibles literales en código y configuración (formato, bidi, separadores, controles, espacios no ASCII) | `check-forbidden-patterns` (D-96) | Hook `Stop`, CI |
-| Dependencias auditadas | `npm audit --audit-level=high`; las moderadas de desarrollo son riesgo aceptado (D-89) | CI |
-| Nada se integra con el CI en rojo | Protección de `main` en GitHub: PR obligatoria y los 5 checks del CI (D-88; `e2e` desde P6) | Merge |
-| Cada test cita su AC o TV (los de infraestructura, su D o ADR) | `scripts/trace-tests.mjs`: informa en el CI; con `--strict` bloquea desde P10 | CI |
+| Dependencias auditadas | `npm audit --audit-level=high`; las 4 moderadas que quedan, de drizzle-kit (esbuild 0.18), son riesgo aceptado (D-89, revisada en D-164) | CI |
+| Nada se integra con el CI en rojo | Protección de `main` en GitHub: PR obligatoria y los checks del CI (D-88; `e2e` desde P6, los 5 `smoke` desde P10) | Merge |
+| Cada test cita su AC o TV (los de infraestructura, su D o ADR) | `scripts/trace-tests.mjs --strict` (`npm run trace`): **bloquea desde P10** en el CI y en `verify`. Solo admite los pendientes que declara el plan (`PENDING_CRITERIA`, hoy AC-61 → P11), y un pendiente que ya tiene test también falla (D-161). Probado en `tools/trace-tests.test.ts` | CI, `verify` |
 | Cobertura del dominio al 100 % | Umbrales de Vitest | CI |
 | «Hecho» = tests en verde | Hook `Stop` (§5) | Al terminar cada tarea |
 

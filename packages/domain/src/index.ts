@@ -41,6 +41,9 @@ export type {
   ForeignTarget,
 } from './currency/convert-pricing.js';
 
+export { averageBaseCents } from './stats/average-base-cents.js';
+export type { StatsError } from './stats/average-base-cents.js';
+
 export {
   MAX_SLIDER_POSITION,
   MIN_SLIDER_POSITION,

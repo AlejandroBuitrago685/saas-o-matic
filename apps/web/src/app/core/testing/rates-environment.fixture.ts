@@ -1,14 +1,14 @@
 import type { Provider } from '@angular/core';
 import { vi } from 'vitest';
 
-import { FETCH, NOW, RATES_STORAGE, type RatesStorage } from '../currency/rates-environment';
+import { BROWSER_STORAGE, FETCH, NOW, type BrowserStorage } from '../currency/rates-environment';
 import { ratesResponse, REFERENCE_UPDATED_AT } from './exchange-rates.fixture';
 
 /** A controllable clock, a `fetch` that answers with the reference rates and a storage in memory. */
 export interface RatesEnvironment {
   readonly clock: { now: number };
   readonly fetch: ReturnType<typeof vi.fn<typeof fetch>>;
-  readonly storage: RatesStorage & { readonly items: Map<string, string> };
+  readonly storage: BrowserStorage & { readonly items: Map<string, string> };
   readonly providers: Provider[];
 }
 
@@ -31,7 +31,7 @@ export function ratesEnvironment(now = REFERENCE_UPDATED_AT + 60_000): RatesEnvi
     providers: [
       { provide: NOW, useValue: () => clock.now },
       { provide: FETCH, useValue: fetchFn },
-      { provide: RATES_STORAGE, useValue: storage },
+      { provide: BROWSER_STORAGE, useValue: storage },
     ],
   };
 }

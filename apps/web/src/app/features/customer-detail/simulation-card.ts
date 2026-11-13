@@ -6,11 +6,14 @@ import { CurrencyStore } from '../../core/currency/currency.store';
 import { DateTimePipe } from '../../shared/format/date-time.pipe';
 import { IntegerPipe } from '../../shared/format/integer.pipe';
 import { MoneyPipe, TaxRatePipe } from '../../shared/format/money.pipe';
+import { tierLabel } from '../../shared/format/tier-label';
 
 /**
  * One saved simulation (spec 05 §3.5): date and time in the browser's zone, the inputs, and the amounts the
  * server stored, with the tax rate **of that day** (`pricing.taxRateBps`), never today's. The amounts follow the
  * selected currency with the same leaf-item rule as the projection (D-20, AC-87); EUR stays the source of truth.
+ * The breakdown by tier folds in a native `<details>` (spec 05 §3.5, Should): keyboard and screen readers get it
+ * without code, and the card stays short in a long history.
  */
 @Component({
   selector: 'app-simulation-card',
@@ -47,6 +50,23 @@ import { MoneyPipe, TaxRatePipe } from '../../shared/format/money.pipe';
           <dd class="amount">{{ amounts().tax | money: amounts().currency }}</dd>
         </div>
       </dl>
+      <details class="group border-t border-line pt-3">
+        <!-- A flex summary loses the native marker, so it draws its own: it turns when the breakdown opens. -->
+        <summary
+          class="inline-flex min-h-11 cursor-pointer list-none items-center gap-2 text-small font-semibold text-primary [&::-webkit-details-marker]:hidden"
+        >
+          <span aria-hidden="true" class="inline-block transition-transform group-open:rotate-90">▸</span>
+          Desglose por tramo
+        </summary>
+        <dl class="flex flex-col gap-1 pt-2 text-small">
+          @for (row of tierRows(); track row.tier) {
+            <div class="flex justify-between gap-4">
+              <dt>{{ row.label }}</dt>
+              <dd class="amount text-ink">{{ row.amount | money: amounts().currency }}</dd>
+            </div>
+          }
+        </dl>
+      </details>
     </article>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -66,10 +86,21 @@ export class SimulationCard {
     return (
       shown?.pricing ?? {
         currency: 'EUR' as const,
+        tierSubtotals: pricing.tiers.map(({ subtotalCents }) => subtotalCents),
         base: pricing.baseCents,
         tax: pricing.taxCents,
         total: pricing.totalCents,
       }
     );
+  });
+
+  /** Each stored tier with its label in EUR (the tariff) and its subtotal in the currency of the card. */
+  protected readonly tierRows = computed(() => {
+    const { tierSubtotals } = this.amounts();
+    return this.simulation().pricing.tiers.map((line, index) => {
+      const amount = tierSubtotals[index];
+      if (amount === undefined) throw new Error('the converted pricing lost a tier');
+      return { tier: line.tier, label: tierLabel(line), amount };
+    });
   });
 }

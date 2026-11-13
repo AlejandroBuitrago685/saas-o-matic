@@ -26,6 +26,12 @@ function fieldError(text: string, range: IntegerRange): string | null {
 }
 
 /**
+ * The simulator opens on the example of the statement (D-160, spec 05 §3.4): 15 users, 100 € + 40 € = 140 € of base
+ * (TV-PR-04), so the first view already shows two tiers. 15 is an exact position of the slider (14).
+ */
+export const INITIAL_ACTIVE_USERS = 15;
+
+/**
  * State of the simulator (06-frontend §3 and §6), one per simulator component. The projection is a `computed` over
  * the same domain function the API runs when saving (ADR-008): moving the slider never calls the network (RNF-09).
  */
@@ -35,11 +41,11 @@ export class SimulatorStore {
   private source: (() => SimulatorContext) | undefined;
 
   /** Raw text of each field: an invalid value stays visible with its error, never corrected silently. */
-  readonly usersText = signal('1');
+  readonly usersText = signal(String(INITIAL_ACTIVE_USERS));
   readonly storageText = signal('0');
   readonly apiCallsText = signal('0');
   /** Last valid number of users: what the projection and the slider show. */
-  private readonly lastValidUsers = signal(1);
+  private readonly lastValidUsers = signal(INITIAL_ACTIVE_USERS);
   readonly users: Signal<number> = this.lastValidUsers.asReadonly();
 
   private readonly isSaving = signal(false);

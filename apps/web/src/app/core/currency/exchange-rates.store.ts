@@ -3,7 +3,7 @@ import { DestroyRef, inject, Injectable, signal, type Signal } from '@angular/co
 
 import { isRateLimited, readCachedRates, saveRateLimit, writeCachedRates } from './exchange-rates.cache';
 import { fetchExchangeRates } from './exchange-rates.client';
-import { FETCH, NOW, RATES_STORAGE } from './rates-environment';
+import { BROWSER_STORAGE, FETCH, NOW } from './rates-environment';
 import { isFresh, isRequesting, nextRatesState, type RatesEvent, type RatesState } from './rates-state';
 
 /**
@@ -16,7 +16,7 @@ import { isFresh, isRequesting, nextRatesState, type RatesEvent, type RatesState
 export class ExchangeRatesStore {
   private readonly now = inject(NOW);
   private readonly fetchFn = inject(FETCH);
-  private readonly storage = inject(RATES_STORAGE);
+  private readonly storage = inject(BROWSER_STORAGE);
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
 

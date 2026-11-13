@@ -33,7 +33,8 @@ Elementos comunes a todas las vistas:
 ### 3.1 V1 · Dashboard (`/`)
 
 - **Métricas** (RF-19, Could): tres tarjetas, «Clientes», «Simulaciones» e «Importe medio simulado (sin impuestos)»,
-  esta última en la divisa seleccionada. Si fallan, muestran «—» con un aviso discreto; no bloquean el listado.
+  esta última en la divisa seleccionada. Si fallan, muestran «—» con un aviso discreto; no bloquean el listado. Sin
+  simulaciones, el importe medio muestra «—» y «Aún no hay simulaciones» (S-08).
 - **Buscador:** campo de búsqueda con etiqueta «Buscar por empresa o identificador fiscal», 100 caracteres como máximo.
   - Busca 300 ms después de la última pulsación, o al momento con Intro. Tiene un botón para borrar la búsqueda.
   - **Should:** la búsqueda y la página se reflejan en la URL (`?q=…&page=…`), de modo que recargar o volver atrás conserva el estado.
@@ -112,7 +113,7 @@ Comportamiento:
 
 | Control | Regla |
 |---|---|
-| Usuarios activos | Slider y campo numérico sincronizados (D-04), de 1 a 10 000, valor inicial 1. El slider usa la escala de §3.4.1; el campo numérico admite cualquier entero del rango y, si el valor no cae en una posición del slider, este se coloca en la más cercana sin cambiar el valor. |
+| Usuarios activos | Slider y campo numérico sincronizados (D-04), de 1 a 10 000, valor inicial **15** (el ejemplo del enunciado, TV-PR-04: 100 € + 40 € = 140 €; D-160). El slider usa la escala de §3.4.1; el campo numérico admite cualquier entero del rango y, si el valor no cae en una posición del slider, este se coloca en la más cercana sin cambiar el valor. |
 | Almacenamiento (GB) | Campo numérico, de 0 a 100 000, valor inicial 0. Etiqueta «informativo, no afecta al precio». |
 | Llamadas a la API al mes | Campo numérico, de 0 a 1 000 000 000, valor inicial 0. La misma etiqueta. |
 

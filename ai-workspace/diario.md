@@ -1078,3 +1078,99 @@ revisión y el cierre.
 **Siguiente parte: P10 · Should/Could y CI completo** (2,5 h).
 
 **Decisiones por validar:** ninguna (D-157 validada; D-158 es del usuario).
+
+## P10 · Should/Could y CI completo — 2026-11-13 · rama `feat/p10-should-could-ci`
+
+**Hecho**
+- **Métricas (AC-47, AC-92, TV-ST-01…03):**
+  - dominio: `averageBaseCents` con TDD;
+  - API: módulo `stats` (`GET /stats`), con una sola sentencia SQL para que los tres números salgan de la misma foto;
+  - web: `DashboardStatsStore` y `app-dashboard-metrics`. El importe medio es una partida hoja convertida con
+    `CurrencyStore.convertAmount` (D-20 y D-91). Si `/stats` falla, «—» y un aviso discreto, y el listado no se
+    entera (D-162).
+- **Búsqueda y página en la URL** (Should, D-163): `?q=…&page=…` con `replaceUrl`. La URL se lee al entrar y cuando
+  cambia desde fuera, y la inválida se corrige. Los tests de AC-70 y AC-71 pasan sin cambios.
+- **Desglose desplegable del historial** (Should): `<details>` nativo; `tierLabel` pasa a `shared/format`.
+- **Divisa recordada** (Could): `localStorage` validado (`chosen-currency.storage.ts`); hasta que llegan los tipos,
+  la divisa efectiva es EUR (D-143). El token pasa a llamarse `BROWSER_STORAGE`.
+- **Ajustes pedidos:**
+  - email del detalle entero y partido solo tras «@» y los puntos (D-159);
+  - simulador en 15 usuarios, 140 € de base (D-160).
+- **CI completo:**
+  - trabajo `smoke` (AC-95) en Linux con Node 22, 24 y 26, y en Windows y macOS con `.nvmrc`: los comandos del
+    README y Playwright sobre `npm run dev`;
+  - trazabilidad bloqueante con pendientes declarados (D-161).
+- **D-89 revisada** (D-164): `overrides` de `minimatch` 11.0.8, y `npm audit` pasa de 18 moderadas a 4.
+- **README:** bloque «Estado» (P0 a P10) y `npm run e2e:smoke`.
+- **Resultados:**
+  - `npm run verify` en verde: 1064 tests de Node (+22) y 287 de la web (+48), con la cobertura del dominio al 100 %;
+  - e2e: 69/69 en `e2e:dev` y 83/83 contra la pila Docker, con `check-containers` en verde;
+  - trazabilidad estricta **AC 80/81 · TV 129/129** (+3 AC, +3 TV), con AC-61 como único pendiente declarado;
+  - `npm audit`: 4 moderadas (antes 18), 0 altas o críticas;
+  - comprobado en el navegador contra la pila, a 1280 y a 360 px: las métricas en EUR y USD, la recarga con
+    `?q=…&page=2` y USD, el desglose abierto, el email y el simulador en 15. Sin errores en la consola y sin
+    desplazamiento horizontal.
+
+**Falló o lo descubrí por el camino**
+- **El email en una línea con «…» chocaba con AC-84.** Lo avisé en el plan, y el usuario prefirió mantener AC-84 y
+  partir solo por puntos naturales. En escritorio la columna del valor admite unos 38 caracteres: un email más largo
+  sigue ocupando dos líneas, pero ahora se parte por un «.», nunca en mitad de una palabra.
+- **Prettier partía en varias líneas el `@for` del email,** y Angular convertía ese salto en espacios dentro de la
+  dirección. Ahora va en una línea con `prettier-ignore`, y lo protege un test de componente (`textContent` exacto).
+- **Un test de la trazabilidad citaba «AC-61» en su título** y lo daba por cubierto. Lo reescribí sin nombrarlo.
+- **Tres tests suponían el arranque en 1 usuario:** el de teclado de AC-86, el de AC-81 (24,20 €) y el de Re Pág de
+  la web. Se ajustaron a 15.
+- **`expectOne` saca la petición de la lista de abiertas:** un test la pedía dos veces. Era un fallo del test.
+- **La prueba de humo no se pudo ejecutar en local:** el puerto 4200 estaba ocupado por un `ng serve` ajeno a esta
+  sesión. La valida el CI.
+
+**Correcciones**
+- **Del usuario (plan):** el email, sin «…» y sin tocar AC-84 (D-159); `replaceUrl`; el `overrides`; autoriza a
+  Claude a añadir los checks `smoke` a la protección de `main`.
+- **Del revisor** (`sonnet`, una pasada): **APTO CON CAMBIOS**, sin P0 ni P1. Corregidos:
+  - P2: el store ignoraba cualquier cambio de la URL mientras tuviera una navegación propia en vuelo (un contador), así
+    que en teoría una navegación externa podía perderse. Ahora se compara por estado: solo se ignora una emisión igual
+    a una escritura propia anterior (D-163). El test de la carrera (Intro y enseguida otra URL) **pasó también antes
+    del arreglo**: en este router, la navegación cancelada resuelve su promesa antes de que la nueva emita. Se queda
+    como guarda, y el diseño ya no depende de ese detalle;
+  - P2: `smoke` instala Chromium con `--with-deps` en Linux, como `e2e`;
+  - P3: el JSDoc de `SimulatorStore` había quedado separado de su clase; el orden de los imports tras el renombrado;
+    un test unitario de `getStats` con totales imposibles (→ error, `500`).
+
+  Sin cambio:
+  - P3: un `<wbr>` también tras el último segmento del email. Es inocuo, y el test de componente lo fija.
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| AC-61 (demo pública, `DEMO_MODE`) | P11 |
+| Quitar el `overrides` de `minimatch` cuando ESLint y typescript-eslint pidan la 11 | Cuando salgan |
+
+**Decisiones:**
+- D-159, D-160 y D-163 (`replaceUrl`): del usuario;
+- D-161 y D-162: Claude · validadas en el plan;
+- D-164: opción del usuario y versión de Claude;
+- S-08: pendiente de validar.
+
+**Tiempo:** estimado 2,5 h (unas 4 h con lo añadido) · real ≈ 30 min de implementación (21:46–22:17, hora de
+Canarias), más el plan, las dos pilas de e2e, la revisión y el cierre.
+
+## Nota de traspaso — 2026-11-13, tras P10
+
+**Para empezar una sesión nueva:** leer `CLAUDE.md`, esta nota, la sección de la parte siguiente de
+[`04-plan-implementacion.md`](04-plan-implementacion.md) y su §4. El usuario activa el modo plan y Claude presenta el plan.
+
+**Estado**
+- Hechas: P0 a P10. P10 está en la rama `feat/p10-should-could-ci`, con su PR.
+- `main` exige `quality` ×3, `audit` y `e2e`, y los 5 `smoke` en cuanto pasen una vez en verde (D-88; autorizado en el
+  prompt 22).
+- `npm run trace` ya bloquea (D-161). **P11 tiene que quitar `AC-61` de `PENDING_CRITERIA`** en
+  `scripts/trace-tests.mjs` cuando su test exista: si no, el CI falla con «Declared pending but already tested».
+- Prueba de humo: `npm run e2e:smoke`, con los puertos 3000 y 4200 libres.
+- El dashboard: el store de la búsqueda escribe la URL con `replaceUrl`, y las métricas están en `DashboardStatsStore`.
+  Para convertir un importe suelto, `CurrencyStore.convertAmount`.
+
+**Siguiente parte: P11 · Demo pública** (3 h). Su plan se aprueba antes de tocar el servidor.
+
+**Decisiones por validar:** S-08.

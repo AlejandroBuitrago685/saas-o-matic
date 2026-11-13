@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import * as domain from './index.js';
 
 describe('ADR-001 public API of the domain: only what other packages need', () => {
-  it('exports the functions and constants of P1, P2, P7 and P8, and nothing internal (the tax id registry included)', () => {
+  it('exports the functions and constants of P1, P2, P7, P8 and P10, and nothing internal (the tax id registry included)', () => {
     expect(Object.keys(domain).sort()).toEqual(
       [
         'CATALOG_LIMITS',
@@ -35,6 +35,7 @@ describe('ADR-001 public API of the domain: only what other packages need', () =
         'MIN_TAX_RATE_BPS',
         'PLANS',
         'TAX_ID_TYPES',
+        'averageBaseCents',
         'calculatePricing',
         'err',
         'normalizeCompanyName',

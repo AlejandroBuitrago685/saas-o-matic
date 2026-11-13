@@ -45,6 +45,18 @@ function installLatencyProbe(): void {
   window.__latency = latency;
 }
 
+test('D-160 TV-PR-04: the simulator opens at 15 users, the example of the statement (100 € + 40 € = 140 €)', async ({
+  page,
+  request,
+}) => {
+  const simulator = await openSimulator(page, request);
+
+  await expect(simulator.usersField).toHaveValue('15');
+  await expect(simulator.slider).toHaveAttribute('aria-valuetext', '15 usuarios');
+  await expect(simulator.projectionLine('Base mensual')).toHaveText(euros('140,00'));
+  await expect(simulator.total).toHaveText(euros('169,40'));
+});
+
 test('AC-76 TV-PR-04: 15 users in Spain project the tiers, the 21 % tax and 169,40 €', async ({
   page,
   request,

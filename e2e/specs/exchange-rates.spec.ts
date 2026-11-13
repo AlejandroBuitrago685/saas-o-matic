@@ -66,8 +66,9 @@ test('AC-81 / CL-32 a slow provider: «Cargando…» from the first moment, and 
   await expect(header.status.locator('app-spinner')).toBeVisible();
   expect(await header.enabledCurrencies()).toEqual(['EUR']);
   await simulator.slider.focus();
+  // From the 15 users it opens with (D-160) to 16: 100 € + 6 × 8 € = 148 €, plus 21 % → 179,08 €.
   await page.keyboard.press('ArrowRight');
-  await expect(simulator.total).toHaveText(euros('24,20'));
+  await expect(simulator.total).toHaveText(euros('179,08'));
 
   slow.release();
   await expectReferenceRates(header);

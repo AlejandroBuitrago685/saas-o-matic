@@ -54,9 +54,8 @@ test('AC-82 / CL-60 rates of 2 h, updated 20 h ago, and a failed refresh: stale,
 
   await expect(header.status).toHaveText('Tipos desactualizados del 12/11/2026');
   await expect(header.retry).toBeVisible();
-  // Remembering the currency across a reload is a Could of P10: USD is chosen again after it.
   await header.select.selectOption('USD');
-  await page.getByRole('textbox', { name: 'Usuarios activos' }).fill('15');
+  // The simulator opens at 15 users (D-160).
   await expect(page.getByTestId('projection-total')).toHaveText(amount('188,25', 'USD'));
 });
 
