@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { lintFixture, ruleIds } from './lint-fixture.js';
 
-const F = '__lint_fixture__';
+// A prefix of its own: other files of tools/ lint fixtures at the same paths in parallel (CI failure of P9).
+const F = '__lint_fixture__outbound_';
 
 /** One file per API zone: every one forbids an outbound client (each zone has its own `no-restricted-imports`). */
 const API_ZONES = [

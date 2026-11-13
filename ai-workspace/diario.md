@@ -1053,6 +1053,9 @@ revisión y el cierre.
   transición de deshabilitado a primario. No es un fallo de contraste en reposo. La fixture espera ahora a que
   terminen las animaciones (`document.getAnimations()`) antes de auditar: 40/40 en cinco repeticiones. Va en un commit
   `test:` aparte.
+- **El CI del PR falló en `quality (Node 24)`:** `eslint-outbound-network.test.ts` y `eslint-zones.test.ts` creaban y
+  borraban a la vez el mismo fichero temporal (`apps/api/src/__lint_fixture__root.ts`). En local no salió por el
+  orden de ejecución. El test nuevo usa ahora su propio prefijo (`__lint_fixture__outbound_`).
 - **Resultados:** `verify` en verde (1042 tests de Node y 239 de la web), e2e 58/58 en `e2e:dev` y 72/72 contra la
   pila.
 
