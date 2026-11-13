@@ -411,6 +411,7 @@ Estos criterios son la base de los tests: cada test citará su `AC-xx`.
 - Dado que los tipos están cargando
 - Cuando se selecciona GBP y luego JPY antes de que lleguen
 - Entonces, al llegar, los importes se muestran en JPY.
+- *Aclaración (D-142):* «cargando» es el estado **Refrescando** de spec [`05-frontend.md`](05-frontend.md) §4.4 (tipos caducados en caché y un refresco en curso), porque en **Cargando** solo hay EUR. Al llegar, los importes se muestran en JPY con los tipos nuevos.
 
 **AC-89 · Doble clic en guardar** · Refs: RF-17, CL-45 · Nivel: E
 - Dado el simulador con valores válidos

@@ -254,6 +254,10 @@ Reglas de transición:
   a los intentos automáticos). Mientras dura, el indicador pasa a «Cargando…» o «Actualizando…». Si va bien → Vigentes;
   si falla → vuelve a Error o a Desactualizados con el mismo aviso.
 - Si se cambia de divisa con una petición en curso, se muestra la última divisa elegida en cuanto haya tipos (CL-33).
+- **Divisa elegida y divisa efectiva (D-143):** se guarda la última divisa elegida; la que se muestra es esa si tiene un
+  tipo válido, y EUR si no. Tras un error, en cuanto vuelve a haber tipos, los importes vuelven solos a la elegida.
+- La fecha de los tipos es el día UTC del proveedor (D-145). Refresco automático: al arrancar y al volver a la pestaña
+  con tipos de más de 1 h o desactualizados (D-147).
 - Cada estado (Cargando, Error y Desactualizados) tiene su propio test e2e con la API simulada (AC-80, AC-81, AC-82).
 
 ### 4.5 Conversión y formato (D-20)

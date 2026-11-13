@@ -846,3 +846,110 @@ para el sábado: el calendario va adelantado.
 **Siguiente parte: P8 · Divisas** (3,5 h).
 
 **Decisiones por validar:** D-137, D-138, D-140 y D-141.
+
+## P8 · Divisas — 2026-11-13 · rama `feat/p8-currency`
+
+**Hecho**
+- **Dominio, `currency/`** (TDD, cobertura del 100 %):
+  - `CURRENCIES`, `FOREIGN_CURRENCIES` y los decimales ISO 4217;
+  - `toExchangeRate`, que lee el tipo como decimal exacto (D-144);
+  - `convertAmount` y `convertPricing` con la regla de partidas hoja (D-20), calculadas con `BigInt` y
+    `roundHalfUpDivideBig`;
+  - TV-FX-01…06 y un caso que con `Math.round` saldría mal (100 × 1,005).
+- **Web, `core/currency`:**
+  - parser propio de spec 05 §4.3, sin Zod;
+  - cliente `fetch` (D-148);
+  - caché revalidada al leerla, con el bloqueo del `429` persistente (D-146);
+  - máquina de estados pura `nextRatesState` con reloj inyectado;
+  - `ExchangeRatesStore` (arranca con `provideAppInitializer` sin esperar a la respuesta, una petición a la vez y
+    refresco al volver a la pestaña, D-147);
+  - `CurrencyStore`, con la divisa elegida y la efectiva (D-143).
+- **Interfaz:**
+  - `app-currency-bar` en la cabecera (D-151): indicador con `role="status"`, icono además del color y «Reintentar»
+    fuera de la región viva, que deja el foco en el selector; el selector nativo deshabilita las divisas sin tipo;
+  - pipe `money` con la divisa y `≈`, y la fecha de los tipos en UTC (D-145);
+  - simulador: desglose convertido, precio unitario en EUR y nota «Importes orientativos…»;
+  - historial: tarjetas convertidas (en EUR, los importes guardados tal cual) y la nota «Convertido al tipo de
+    cambio actual…».
+- **e2e (16 nuevos):**
+  - `exchange-rates.spec.ts`: AC-80 con los cinco fallos y la recuperación, sin GBP, AC-81, la cabecera fija y
+    AC-83;
+  - `exchange-rates-cache.spec.ts`: AC-82 y «Actualizando…» con `page.clock` (D-149);
+  - `currency-conversion.spec.ts`: AC-79 en las seis divisas, AC-87 y AC-88 (D-142).
+
+  La API de tipos se simula con `e2e/fixtures/exchange-rates-api.ts`: comportamientos intercambiables, respuestas
+  retenidas y un contador.
+- **Resultados:**
+  - `npm run verify` en verde: 990 tests de Node (+42) y 230 de la web (+112);
+  - e2e: 39/39 en `e2e:dev` y 48/48 contra la pila Docker, sin violaciones de CSP ni peticiones a la API real;
+  - trazabilidad **AC 72/81 (+6; AC-83 ya tenía tests) · TV 126/129 (+5)**;
+  - comprobado en el navegador con los tipos reales, a 800 y 360 px, sin desplazamiento horizontal.
+
+**Falló o lo descubrí por el camino**
+- **La cabecera no era *sticky* desde P5** (D-150): el `<header>` era *sticky* dentro de su anfitrión, que medía lo
+  mismo, así que el indicador se iba al desplazarse. Lo vi en el navegador. El *sticky* pasa al anfitrión, con un
+  e2e que falla sin el arreglo («viewport ratio 0»).
+- **La spec se contradecía** entre §4.4 y AC-88. El usuario lo resolvió en el plan (D-142).
+- El elemento `app-currency-bar` es *inline*, así que `w-full` no hacía nada: lleva `block`.
+- **En EUR, el historial recalculaba la base** sumando los tramos en vez de mostrar el importe guardado. Lo detectó
+  un test de AC-78 con datos de prueba incoherentes. En EUR se muestra la instantánea del servidor (D-19).
+- **`-g` tras `npm run e2e:dev --` lo interpreta npm**, no Playwright: para filtrar hay que llamar a `playwright`
+  directamente desde `e2e/`.
+- **Un *heredoc* volvió a comerse un nivel de escape** en una expresión regular (ya estaba en la memoria del
+  proyecto). Lo corregí con el editor.
+- **El dashboard no tiene importes hasta las métricas de P10.** P8 deja `convertAmount` y el pipe listos.
+
+**Correcciones**
+- **Del usuario (plan):** AC-88 en «Refrescando» (D-142) y la vuelta a la divisa elegida (D-143).
+- **Del revisor** (`sonnet`, una pasada): **APTO CON CAMBIOS**, sin P0 ni P1. Corregidos, cada uno con un test que
+  falló antes del arreglo:
+  - P2: un tipo válido pero absurdo (`1e300`) dejaba el simulador sin proyección. Ahora `CurrencyStore.convert` cae
+    a EUR en un solo sitio;
+  - P2: en una pestaña abierta varios días, los tipos «desactualizados» de más de 48 h seguían en uso. Al volver a la
+    pestaña se reevalúa también `stale`, y durante el bloqueo de un `429` se aplica el fallo sin pedir nada (D-147
+    ampliada);
+  - P3: un *timeout* al leer el cuerpo salía como `INVALID_RESPONSE`; ahora sale como `TIMEOUT`;
+  - P3: una caché con `updatedAt` en el futuro se rechaza;
+  - P3: la caché ya no hace *cast* sin validar (`isRecord`).
+
+  Sin cambio:
+  - P3 `[hidden]` en la nota del historial: con `@if`, la plantilla pasa del límite de complejidad (7 > 6, lo dio el
+    lint);
+  - P3 `catch` sin aviso al escribir la caché: queda como excepción deliberada en D-146.
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| Recordar la divisa tras recargar (Could): el e2e de CL-60 elige USD después de recargar | P10 |
+| Importes de las métricas del dashboard en la divisa elegida (`convertAmount`) | P10 |
+| Los de P7 (`q` en la URL, `502`/`504` de nginx, `DEMO_MODE`, AC-90 en el CI) siguen igual | P9–P11 |
+
+**Decisiones:**
+- D-137, D-138, D-140 y D-141: validadas en el plan;
+- D-142 y D-143: del usuario;
+- D-144, D-146, D-148, D-149, D-150 y D-151: Claude;
+- D-145 y D-147: Claude · pendiente.
+
+**Tiempo:** estimado 3,5 h · real ≈ 40 min de implementación (17:15–17:55, hora de Canarias), más el plan, la
+revisión y el cierre.
+
+## Nota de traspaso — 2026-11-13, tras P8
+
+**Para empezar una sesión nueva:** leer `CLAUDE.md`, esta nota, la sección de la parte siguiente de
+[`04-plan-implementacion.md`](04-plan-implementacion.md) y su §4. El usuario activa el modo plan y Claude presenta el plan.
+
+**Estado**
+- Hechas: P0 a P8. P8 está en la rama `feat/p8-currency`, con su PR.
+- `main` exige 5 *checks*: `quality` ×3, `audit` y `e2e`.
+- Divisas:
+  - el estado de los tipos vive en `ExchangeRatesStore` y la divisa en `CurrencyStore`, que expone `convert()` para
+    cualquier vista nueva;
+  - para escribir e2e de tipos, usar `simulateRatesApi`, `currencyHeader` y `firstVisit` de
+    `e2e/fixtures/exchange-rates-api.ts`, y `amount()` de `e2e/fixtures/amounts.ts`.
+- Datos locales y e2e: como tras P7 (`npm run setup`, `npm run db:reset`, `npm run e2e:dev`, la pila con
+  `npm run e2e:stack`).
+
+**Siguiente parte: P9 · Robustez** (3,5 h).
+
+**Decisiones por validar:** D-145 y D-147.

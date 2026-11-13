@@ -40,10 +40,12 @@ hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel�
 
 - **Aislamiento de la API externa (RT-05):** todas las pruebas interceptan `https://open.er-api.com/**` con
   `page.route`. Por defecto devuelve los tipos de referencia (spec `02` §4.1); cada test de estados (AC-80…82) fuerza
-  su caso: error de red, `500`, `429`, `result: "error"`, `base_code` erróneo, retraso de 3 s, respuesta sin GBP.
+  su caso con `e2e/fixtures/exchange-rates-api.ts`: error de red, `500`, `429`, `result: "error"`, `base_code`
+  erróneo, respuesta sin GBP, o una respuesta retenida hasta que el test la suelta (el proveedor lento, sin esperar
+  segundos reales; D-149).
   Cualquier otra petición a un origen externo **hace fallar el test**, así que nunca se toca la red real.
-- **Tiempo:** `page.clock` de Playwright para la caducidad de la caché (30 min, 2 h, 3 días) en AC-82, y
-  `localStorage` preparado antes de cargar la página.
+- **Tiempo:** `page.clock` de Playwright para la caducidad de la caché (30 min, 2 h, 3 días) en AC-82. La caché la
+  llena la propia aplicación en una primera visita; el test adelanta el reloj y recarga (D-149).
 - **Datos:** la pila de e2e (`npm run e2e:stack`, D-133) arranca siempre con la base de datos vacía, y `e2e:dev`
   usa SQLite en memoria (D-137). Cada test crea sus propios clientes por la API, con NIF sintéticos únicos
   (`e2e/fixtures/customers.ts`), así que no depende del orden ni de otros tests. No hay perfil `e2e` del *seed*
