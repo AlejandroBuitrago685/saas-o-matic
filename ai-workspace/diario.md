@@ -1065,7 +1065,8 @@ revisión y el cierre.
 [`04-plan-implementacion.md`](04-plan-implementacion.md) y su §4. El usuario activa el modo plan y Claude presenta el plan.
 
 **Estado**
-- Hechas: P0 a P9. P9 está en la rama `feat/p9-robustness`, rebasada sobre `main` (con P8 ya integrada), con su PR.
+- Hechas: P0 a P9, todas integradas en `main`. P9 entró con el PR #13 (merge `4765d30`), que incluye D-158 y la
+  validación de D-157.
 - `main` exige 5 *checks*: `quality` ×3, `audit` y `e2e`.
 - Para escribir e2e:
   - de accesibilidad: `expectNoSeriousA11yViolations(page, vista)` de `e2e/fixtures/a11y.ts`;
