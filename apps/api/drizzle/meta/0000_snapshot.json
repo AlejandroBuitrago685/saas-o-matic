@@ -1,0 +1,436 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "c1ff7f47-273e-4ff5-96ad-592029bbf7a2",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "customers": {
+      "name": "customers",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "company_name": {
+          "name": "company_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "company_name_search": {
+          "name": "company_name_search",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tax_id": {
+          "name": "tax_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tax_id_type": {
+          "name": "tax_id_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "contact_email": {
+          "name": "contact_email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "plan": {
+          "name": "plan",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "customers_country_tax_id_uq": {
+          "name": "customers_country_tax_id_uq",
+          "columns": [
+            "country",
+            "tax_id"
+          ],
+          "isUnique": true
+        },
+        "customers_name_search_idx": {
+          "name": "customers_name_search_idx",
+          "columns": [
+            "company_name_search",
+            "id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "customers_id_ck": {
+          "name": "customers_id_ck",
+          "value": "length(\"customers\".\"id\") = 36 AND \"customers\".\"id\" = lower(\"customers\".\"id\")"
+        },
+        "customers_company_name_ck": {
+          "name": "customers_company_name_ck",
+          "value": "length(\"customers\".\"company_name\") BETWEEN 2 AND 200"
+        },
+        "customers_company_name_search_ck": {
+          "name": "customers_company_name_search_ck",
+          "value": "length(\"customers\".\"company_name_search\") <= 1000"
+        },
+        "customers_tax_id_ck": {
+          "name": "customers_tax_id_ck",
+          "value": "length(\"customers\".\"tax_id\") BETWEEN 1 AND 32 AND \"customers\".\"tax_id\" NOT GLOB '*[^A-Z0-9]*'"
+        },
+        "customers_tax_id_type_ck": {
+          "name": "customers_tax_id_type_ck",
+          "value": "\"customers\".\"tax_id_type\" IN ('DNI', 'NIE', 'CIF', 'VAT', 'EIN')"
+        },
+        "customers_country_ck": {
+          "name": "customers_country_ck",
+          "value": "\"customers\".\"country\" IN ('ES', 'PT', 'FR', 'DE', 'IT', 'GB', 'US')"
+        },
+        "customers_contact_email_ck": {
+          "name": "customers_contact_email_ck",
+          "value": "length(\"customers\".\"contact_email\") <= 254 AND \"customers\".\"contact_email\" = lower(\"customers\".\"contact_email\")"
+        },
+        "customers_plan_ck": {
+          "name": "customers_plan_ck",
+          "value": "\"customers\".\"plan\" IN ('STARTER', 'BUSINESS', 'ENTERPRISE')"
+        },
+        "customers_created_at_ck": {
+          "name": "customers_created_at_ck",
+          "value": "typeof(\"customers\".\"created_at\") = 'integer' AND \"customers\".\"created_at\" > 0"
+        }
+      }
+    },
+    "simulation_tiers": {
+      "name": "simulation_tiers",
+      "columns": {
+        "simulation_id": {
+          "name": "simulation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tier": {
+          "name": "tier",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "from_user": {
+          "name": "from_user",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "to_user": {
+          "name": "to_user",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "units": {
+          "name": "units",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "unit_price_cents": {
+          "name": "unit_price_cents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "subtotal_cents": {
+          "name": "subtotal_cents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "simulation_tiers_simulation_id_simulations_id_fk": {
+          "name": "simulation_tiers_simulation_id_simulations_id_fk",
+          "tableFrom": "simulation_tiers",
+          "tableTo": "simulations",
+          "columnsFrom": [
+            "simulation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        }
+      },
+      "compositePrimaryKeys": {
+        "simulation_tiers_pk": {
+          "columns": [
+            "simulation_id",
+            "tier"
+          ],
+          "name": "simulation_tiers_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "simulation_tiers_tier_ck": {
+          "name": "simulation_tiers_tier_ck",
+          "value": "typeof(\"simulation_tiers\".\"tier\") = 'integer' AND \"simulation_tiers\".\"tier\" >= 1"
+        },
+        "simulation_tiers_from_user_ck": {
+          "name": "simulation_tiers_from_user_ck",
+          "value": "typeof(\"simulation_tiers\".\"from_user\") = 'integer' AND \"simulation_tiers\".\"from_user\" >= 1"
+        },
+        "simulation_tiers_to_user_ck": {
+          "name": "simulation_tiers_to_user_ck",
+          "value": "\"simulation_tiers\".\"to_user\" IS NULL OR (typeof(\"simulation_tiers\".\"to_user\") = 'integer' AND \"simulation_tiers\".\"to_user\" >= \"simulation_tiers\".\"from_user\")"
+        },
+        "simulation_tiers_units_ck": {
+          "name": "simulation_tiers_units_ck",
+          "value": "typeof(\"simulation_tiers\".\"units\") = 'integer' AND \"simulation_tiers\".\"units\" > 0"
+        },
+        "simulation_tiers_unit_price_cents_ck": {
+          "name": "simulation_tiers_unit_price_cents_ck",
+          "value": "typeof(\"simulation_tiers\".\"unit_price_cents\") = 'integer' AND \"simulation_tiers\".\"unit_price_cents\" > 0"
+        },
+        "simulation_tiers_subtotal_cents_ck": {
+          "name": "simulation_tiers_subtotal_cents_ck",
+          "value": "\"simulation_tiers\".\"subtotal_cents\" = \"simulation_tiers\".\"units\" * \"simulation_tiers\".\"unit_price_cents\""
+        }
+      }
+    },
+    "simulations": {
+      "name": "simulations",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "active_users": {
+          "name": "active_users",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "storage_gb": {
+          "name": "storage_gb",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "api_calls_per_month": {
+          "name": "api_calls_per_month",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "currency": {
+          "name": "currency",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tariff_code": {
+          "name": "tariff_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "base_cents": {
+          "name": "base_cents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tax_country": {
+          "name": "tax_country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tax_rate_bps": {
+          "name": "tax_rate_bps",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tax_cents": {
+          "name": "tax_cents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "total_cents": {
+          "name": "total_cents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "simulations_customer_created_idx": {
+          "name": "simulations_customer_created_idx",
+          "columns": [
+            "customer_id",
+            "\"created_at\" desc",
+            "\"id\" desc"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "simulations_customer_id_customers_id_fk": {
+          "name": "simulations_customer_id_customers_id_fk",
+          "tableFrom": "simulations",
+          "tableTo": "customers",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "simulations_id_ck": {
+          "name": "simulations_id_ck",
+          "value": "length(\"simulations\".\"id\") = 36 AND \"simulations\".\"id\" = lower(\"simulations\".\"id\")"
+        },
+        "simulations_active_users_ck": {
+          "name": "simulations_active_users_ck",
+          "value": "typeof(\"simulations\".\"active_users\") = 'integer' AND \"simulations\".\"active_users\" BETWEEN 1 AND 10000"
+        },
+        "simulations_storage_gb_ck": {
+          "name": "simulations_storage_gb_ck",
+          "value": "typeof(\"simulations\".\"storage_gb\") = 'integer' AND \"simulations\".\"storage_gb\" BETWEEN 0 AND 100000"
+        },
+        "simulations_api_calls_per_month_ck": {
+          "name": "simulations_api_calls_per_month_ck",
+          "value": "typeof(\"simulations\".\"api_calls_per_month\") = 'integer' AND \"simulations\".\"api_calls_per_month\" BETWEEN 0 AND 1000000000"
+        },
+        "simulations_currency_ck": {
+          "name": "simulations_currency_ck",
+          "value": "\"simulations\".\"currency\" = 'EUR'"
+        },
+        "simulations_tariff_code_ck": {
+          "name": "simulations_tariff_code_ck",
+          "value": "length(\"simulations\".\"tariff_code\") BETWEEN 1 AND 50"
+        },
+        "simulations_base_cents_ck": {
+          "name": "simulations_base_cents_ck",
+          "value": "typeof(\"simulations\".\"base_cents\") = 'integer' AND \"simulations\".\"base_cents\" >= 0"
+        },
+        "simulations_tax_country_ck": {
+          "name": "simulations_tax_country_ck",
+          "value": "\"simulations\".\"tax_country\" IN ('ES', 'PT', 'FR', 'DE', 'IT', 'GB', 'US')"
+        },
+        "simulations_tax_rate_bps_ck": {
+          "name": "simulations_tax_rate_bps_ck",
+          "value": "typeof(\"simulations\".\"tax_rate_bps\") = 'integer' AND \"simulations\".\"tax_rate_bps\" BETWEEN 0 AND 10000"
+        },
+        "simulations_tax_cents_ck": {
+          "name": "simulations_tax_cents_ck",
+          "value": "typeof(\"simulations\".\"tax_cents\") = 'integer' AND \"simulations\".\"tax_cents\" >= 0"
+        },
+        "simulations_total_cents_ck": {
+          "name": "simulations_total_cents_ck",
+          "value": "\"simulations\".\"total_cents\" = \"simulations\".\"base_cents\" + \"simulations\".\"tax_cents\""
+        },
+        "simulations_created_at_ck": {
+          "name": "simulations_created_at_ck",
+          "value": "typeof(\"simulations\".\"created_at\") = 'integer' AND \"simulations\".\"created_at\" > 0"
+        }
+      }
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {
+      "simulations_customer_created_idx": {
+        "columns": {
+          "\"created_at\" desc": {
+            "isExpression": true
+          },
+          "\"id\" desc": {
+            "isExpression": true
+          }
+        }
+      }
+    }
+  }
+}

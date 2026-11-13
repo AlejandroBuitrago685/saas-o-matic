@@ -61,7 +61,7 @@ Todas las columnas son `NOT NULL` salvo `simulation_tiers.to_user`. `CK` = `CHEC
 |---|---|---|---|
 | `id` | TEXT | PK · CK `length(id) = 36 AND id = lower(id)` | UUID v7 canónico. |
 | `company_name` | TEXT | CK `length BETWEEN 2 AND 200` | Ya normalizado (D-34). |
-| `company_name_search` | TEXT | CK `length BETWEEN 2 AND 200` | Clave de búsqueda y orden (§4). |
+| `company_name_search` | TEXT | CK `length <= 1000` (D-111: la clave de búsqueda puede crecer o encoger respecto al nombre) | Clave de búsqueda y orden (§4). |
 | `tax_id` | TEXT | CK `length BETWEEN 1 AND 32 AND tax_id NOT GLOB '*[^A-Z0-9]*'` | Normalizado (spec `03` §2). |
 | `tax_id_type` | TEXT | CK `IN ('DNI','NIE','CIF','VAT','EIN')` | Derivado de la validación. |
 | `country` | TEXT | CK `IN ('ES','PT','FR','DE','IT','GB','US')` | Lista cerrada (§6). |
@@ -184,10 +184,11 @@ Un test comprueba que constante, catálogo, registro de validadores y `CHECK` co
   aplicada nunca se edita**: se añade otra (un hook lo impide, ver 09-calidad §5).
 - Los triggers de §2.4 van en una migración personalizada (`drizzle-kit generate --custom`).
 - `drizzle-kit push` está **prohibido**: no deja rastro revisable.
-- Para aplicarlas: `npm run db:migrate`, que usa el *migrator* de `drizzle-orm` sin necesidad de `drizzle-kit` en
-  ejecución. En Docker, el punto de entrada migra antes de arrancar.
-- El CI comprueba que el esquema y las migraciones están sincronizados: `drizzle-kit generate` no debe producir
-  cambios.
+- Se aplican **al abrir la base de datos** (`openDatabase`, D-116), con el *migrator* de `drizzle-orm` y sin
+  `drizzle-kit` en ejecución: la API, los tests y el *seed* parten siempre del esquema al día. Si una migración falla,
+  la conexión se cierra y el servicio no arranca. No hay un `db:migrate` aparte.
+- El CI comprueba que el esquema y las migraciones están sincronizados (`npm run db:check -w @saas-o-matic/api`):
+  `drizzle-kit generate` no debe producir cambios.
 
 **Datos de ejemplo** (`npm run db:seed`):
 

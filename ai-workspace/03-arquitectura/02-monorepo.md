@@ -119,15 +119,15 @@ publicación en npm, consultada el 2026-11-12). Cualquier dependencia nueva sigu
 | Paquete | Versión | Último publish | Para qué | Alternativa descartada |
 |---|---|---|---|---|
 | `fastify` | 5.12.8 | 2026-11-02 | Servidor HTTP (stack decidido). | — |
-| `@fastify/helmet` | 13.2.0 | 2026-10-18 | Cabeceras de seguridad (RNF-SEC-06). | Hook propio: más código que mantener. |
+| `@fastify/helmet` | 13.2.0 | 2026-10-13 | Cabeceras de seguridad (RNF-SEC-06). | Hook propio: más código que mantener. |
 | `@fastify/cors` | 11.4.1 | 2026-11-05 | CORS con lista cerrada (RNF-SEC-07). | Hook propio. |
 | `@fastify/rate-limit` | 11.2.2 | 2026-11-02 | Límite de peticiones (RNF-SEC-08). | Delegarlo en el proxy: no cubre el arranque con npm. |
 | `fastify-type-provider-zod` | 7.0.0 | 2026-06-24 | Usar los esquemas Zod como validación y serialización de Fastify. | Adaptador propio (unas 40 líneas). Se elige el paquete porque está mantenido y lo usa mucha gente. Arrastra `@fastify/swagger` como *peer*, que aprovechamos para generar el inventario OpenAPI (RNF-SEC-17). |
-| `@fastify/swagger` | 9.9.3 | 2026-11-01 | Generar `openapi.json` en build y tests. No se sirve en producción. | — |
+| `@fastify/swagger` | 9.9.3 | 2026-11-01 | Generar `apps/api/openapi.json` (`npm run openapi`), versionado y comprobado por un test (D-110). Solo recoge las rutas: no sirve nada por sí mismo. | — |
 | `zod` | 4.6.x | 2026-10-12 | Esquemas del contrato y del entorno (stack decidido). | — |
 | `drizzle-orm` | 0.45.4 | 2026-10-21 | ORM (stack decidido). | — |
 | `better-sqlite3` | 13.1.1 | 2026-11-11 | Driver de SQLite ([`05-driver-sqlite.md`](05-driver-sqlite.md)). | `@libsql/client`, `sql.js`, `node:sqlite`. |
-| `uuid` | 14.x | 2026-10-10 | UUID v7 (RFC 9562). Node solo trae v4 (`crypto.randomUUID`). | Implementarlo a mano: es código delicado (monotonía, bits de versión y variante) que no aporta valor. |
+| ~~`uuid`~~ | — | — | **Descartada en P3 (D-115):** su `v7()` dedica 32 bits al contador y deja 42 bits aleatorios en los ids del mismo milisegundo, y RNF-SEC-04 pide 62. El generador propio (`apps/api/src/shared/id-generator.ts`, método 1 de RFC 9562 §6.2) son unas 40 líneas con `node:crypto` y tests de cada rama. | — |
 | `@angular/*` | 22.2.x | 2026-11 | Interfaz (stack decidido). | — |
 | `tailwindcss` + `@tailwindcss/postcss` | 4.3.5 | 2026-11-11 | Estilos (stack decidido). | — |
 
@@ -139,7 +139,8 @@ El logger es `pino`, que ya viene con Fastify: no es una dependencia nueva.
 Las arrastra Angular (`ng new`) y son de mantenimiento mínimo: `rxjs` 7.8.2, `tslib` 2.9.1, `postcss` 8.5.32 y
 `jsdom` 30.1.3 (entorno de los tests de componentes; la rama 30 es la que propone el CLI, aunque ya exista la 31).
 
-`@fastify/helmet`, `@fastify/cors`, `@fastify/rate-limit` y `uuid` se instalan en P3, cuando se usan.
+**Instalado en P3:** `@fastify/helmet` 13.2.0, `@fastify/cors` 11.4.1 y `@fastify/rate-limit` 11.2.2, y
+`@fastify/swagger-ui` 6.1.3 como dependencia de desarrollo (§4.2). Todas son JavaScript puro, sin compilación nativa.
 
 ### 4.2 Desarrollo y CI
 
@@ -167,6 +168,7 @@ Las arrastra Angular (`ng new`) y son de mantenimiento mínimo: `rxjs` 7.8.2, `t
 | `@commitlint/cli` | 21.2.4 | 2026-10-18 | Comprobar Conventional Commits en el hook `commit-msg`. |
 | `pino-pretty` | 13.2.0 | 2026-10-04 | Logs legibles solo en desarrollo. |
 | `tsx` | 4.23.x | 2026-09-20 | Ejecutar TypeScript en desarrollo (API en modo `watch`, scripts de base de datos). |
+| `@fastify/swagger-ui` | 6.1.3 | 2026-11-03 | **(P3, D-110)** Swagger UI en `/docs`, **solo con `NODE_ENV=development`**: se carga con `import()` dinámico y, como es de desarrollo, la imagen de producción ni la contiene (un test comprueba que con `production` no se importa). Arrastra `@fastify/static`, `yaml`, `rfdc` y `openapi-types`; unos 3,4 MB en disco con `@fastify/static`, casi todo los ficheros de la UI, y nada en el *bundle*. Alternativas descartadas: no servir UI (los evaluadores tendrían que leer el JSON) o un visor externo (sacaría la API a un tercero). |
 
 La herramienta para lanzar API y web a la vez en desarrollo (`concurrently` o un script propio en `scripts/`) se
 decide en el scaffolding. Preferencia: script propio, sin dependencia.

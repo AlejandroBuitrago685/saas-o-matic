@@ -72,15 +72,23 @@ Todo se comprueba con eslint-plugin-boundaries ([`09-calidad-y-automatizacion.md
 main.ts (raíz de composición, sin lógica)
   1. config  = loadConfig(process.env)             → termina con código ≠ 0 si no es válida (RNF-SEC-12)
   2. catalog = loadCatalog()                       → validateCatalog del dominio + coherencia con validadores y CHECK
-  3. db      = openDatabase(config.databasePath)   → pragmas (04-base-de-datos §5)
+  3. db      = openDatabase(config.databasePath)   → pragmas (04-base-de-datos §5) y migraciones pendientes (D-116)
   4. app     = buildApp({ config, catalog, db, clock: systemClock, ids: uuidV7Generator, logger })
   5. await app.listen({ host, port })
 ```
 
 - `buildApp(deps)` **construye y devuelve** la instancia de Fastify sin escuchar. Registra, en este orden:
-  request-id → logger → límite de peticiones → cabeceras de seguridad → CORS → parser de contenido (solo
-  `application/json`, `bodyLimit` 16 KiB) → proveedor de tipos Zod → manejador de errores → manejador de 404 → hook
-  de `Cache-Control` → módulos.
+  inventario de rutas (AC-58) → request-id y línea de log → cabeceras de seguridad → límite global (y el de los
+  *preflight*) → CORS → 404 → límite de escrituras → parser de contenido (solo `application/json`, `bodyLimit`
+  16 KiB, y `415` para un `POST` sin `Content-Type`) → proveedor de tipos Zod → manejador de errores → hook de
+  `Cache-Control` → OpenAPI (y Swagger UI solo en desarrollo, D-110) → módulos.
+  - Los hooks de la instancia corren en orden de registro y un error corta los siguientes: por eso las cabeceras y
+    CORS van antes de todo lo que puede responder pronto, y un `429` las lleva igual que cualquier otra respuesta.
+  - El orden de evaluación es el de 04-contrato §2.3: el `404` se responde en un `onRequest`, antes del límite (aunque
+    cuenta para él) y sin parsear el cuerpo.
+  Los errores que Fastify detecta antes de enrutar (una ruta que no es *percent-encoding* válido, un parámetro de más
+  de 100 caracteres) no pasan por ningún hook: los atiende `frameworkErrors` con la misma respuesta `404`, las mismas
+  cabeceras y `no-store`.
 - **Inyección de dependencias manual** en `buildApp`: crea los repositorios con `db` y los casos de uso con
   repositorios, catálogo, `Clock` e `IdGenerator`, y pasa los casos de uso a los plugins de rutas. No hay contenedor
   de inyección ([ADR-010](adr/ADR-010-app-por-factoria.md)).
@@ -103,8 +111,9 @@ main.ts (raíz de composición, sin lógica)
 | `ConflictError` | 409 | `CUSTOMER_ALREADY_EXISTS` | `existingCustomerId` |
 | `NotFoundError` | 404 | `NOT_FOUND` | — |
 
-- Un **único manejador** (`setErrorHandler`) construye todas las respuestas `application/problem+json`, y
-  `setNotFoundHandler` cubre las rutas inexistentes. Ninguna ruta da formato a errores por su cuenta.
+- Un **único manejador** (`setErrorHandler`) construye todas las respuestas `application/problem+json`. Las rutas
+  inexistentes las responde un `onRequest` (`http/not-found.ts`), antes de parsear el cuerpo; `setNotFoundHandler`
+  queda de respaldo para `reply.callNotFound()`. Ninguna ruta da formato a errores por su cuenta.
 
 ### 4.2 Traducción de errores al contrato
 
@@ -115,6 +124,7 @@ main.ts (raíz de composición, sin lógica)
 | Error de Fastify por cuerpo demasiado grande | `413 PAYLOAD_TOO_LARGE` |
 | Error de Fastify por tipo de contenido no admitido | `415 UNSUPPORTED_MEDIA_TYPE` |
 | Error del límite de peticiones | `429 RATE_LIMITED` + `Retry-After` |
+| Ruta inexistente, petición previa CORS de un origen no permitido o ruta rechazada antes de enrutar | `404 NOT_FOUND` |
 | `AppError` | Su estado y su `code` |
 | Cualquier otra cosa (incluidas las violaciones de `CHECK`) | `500 INTERNAL_ERROR` genérico. El log sí guarda la traza y el código de SQLite, pero nunca la petición. |
 
@@ -132,9 +142,9 @@ Variables de entorno validadas con Zod al arrancar (`loadConfig`). Se versiona `
 | `DATABASE_PATH` | Ruta, o `:memory:` solo en `test` | `./data/saas-o-matic.db` | Fichero de SQLite. |
 | `CORS_ORIGINS` | Lista de URLs separadas por comas, sin `*` | `http://localhost:4200` | RNF-SEC-07. |
 | `RATE_LIMIT_PER_MINUTE` / `RATE_LIMIT_WRITES_PER_MINUTE` | Enteros > 0 | `100` / `20` | D-44; en la demo, 5 escrituras (RNF-SEC-20). |
-| `TRUST_PROXY` | Booleano o número de saltos | `false` | Detrás del proxy, para que la IP del límite de peticiones sea la real. |
+| `TRUST_PROXY` | `false`, o lista de direcciones o rangos CIDR de los proxies (o `loopback`); nunca `true`, ni saltos, ni `/0`, ni los rangos privados enteros `uniquelocal` y `linklocal` (D-113) | `false` | Detrás de los proxies, para que la IP del límite de peticiones sea la real (D-105). En Docker, la subred de su red. |
 | `LOG_LEVEL` | Nivel de pino | `info` | — |
-| `DEMO_MODE` | Booleano | `false` | Activa los límites de la demo y la regeneración de datos al arrancar (08-despliegue §4). |
+| `DEMO_MODE` | Booleano | `false` | Regenera los datos al arrancar (08-despliegue §4, desde P11). Los límites de la demo se fijan con `RATE_LIMIT_*`. |
 
 Los **datos del catálogo** (países y tipos, planes, tarifas y su asociación) son código tipado en
 `src/config/catalog.data.ts`. Al arrancar se validan con `validateCatalog` de `domain`. Que coincidan con el registro de
@@ -143,11 +153,13 @@ validadores fiscales lo garantiza su tipo, que no compila sin un validador por p
 
 ## 6. Logs
 
-- **pino**, el logger que ya trae Fastify: JSON en producción y `pino-pretty` solo en desarrollo.
+- **pino**, el logger que ya trae Fastify: JSON en producción y `pino-pretty` solo en desarrollo. Las líneas de
+  petición propias de Fastify están desactivadas (`LogController`), porque llevarían la URL con su consulta.
 - **Una línea por petición**: `reqId`, método, **patrón de ruta** (`/customers/:id`, nunca la URL real con sus
   parámetros ni la cadena de consulta), estado y duración.
 - Los serializadores de petición y respuesta son propios: no incluyen cabeceras, cuerpo, consulta ni IP
-  (RNF-SEC-11). Además, `redact` cubre `*.contactEmail`, `*.taxId` y `*.companyName` como red de seguridad.
+  (RNF-SEC-11). Además, `redact` cubre `contactEmail`, `taxId`, `companyName` y `q`, en el primer nivel y en el
+  segundo (`*.campo`), como red de seguridad.
 - Errores `500`: nivel `error`, con `reqId`, código y traza. Errores `4xx`: nivel `info`, solo con `code`.
 - Los eventos de negocio (`customer.created`, `simulation.created`) se registran solo con el ID.
 - No hay `console.*` en el código (regla de lint).
@@ -158,10 +170,10 @@ validadores fiscales lo garantiza su tipo, que no compila sin un validador por p
 |---|---|---|
 | Cabeceras | `@fastify/helmet` con CSP `default-src 'none'; frame-ancestors 'none'`, `nosniff`, `no-referrer` y `CORP same-site`; HSTS solo en producción. | RNF-SEC-06 |
 | `Cache-Control` | Hook `onSend`: `no-store`, salvo `GET /catalog` (`max-age=300`). | RNF-SEC-21 |
-| CORS | `@fastify/cors` con `origin` = lista de `CORS_ORIGINS` y sin credenciales. | RNF-SEC-07 |
+| CORS | `@fastify/cors` sin credenciales y con `origin` resuelto por una **función** sobre `CORS_ORIGINS`: con `false` el plugin no añade ninguna cabecera y el *preflight* acaba en `404`, mientras que con una lista respondería igualmente con `Access-Control-Allow-Methods`. Sin `strictPreflight`, para que un `OPTIONS` incompleto no reciba un `400` en texto plano. | RNF-SEC-07 |
 | Tipo de contenido y tamaño | Se elimina el parser por defecto de `text/plain`; solo queda `application/json`; `bodyLimit: 16384`. | RNF-SEC-01, T-07 |
-| Límite de peticiones | `@fastify/rate-limit` en memoria (una sola instancia), global y por ruta de escritura. | RNF-SEC-08 |
-| Inventario | `@fastify/swagger` genera `openapi.json` a partir de los esquemas en build y tests; un test compara las rutas registradas con el contrato (AC-58). No se sirve en producción. | RNF-SEC-17 |
+| Límite de peticiones | `@fastify/rate-limit` en memoria (una sola instancia): un contador global y otro de escrituras para cada `POST`, que se suman (D-114); los `404` también cuentan y las IPv6 se agrupan por /64. La IP es la real tras los proxies (D-105, D-113). | RNF-SEC-08 |
+| Inventario | `@fastify/swagger` genera `apps/api/openapi.json` a partir de los esquemas (`npm run openapi`); se versiona y un test falla si no está al día. Otro test compara las rutas registradas con el contrato (AC-58). **Swagger UI en `/docs` solo con `NODE_ENV=development`**, cargado bajo demanda y con su propia CSP solo en esas rutas (D-110). | RNF-SEC-17 |
 | Sin salida a la red | El backend no tiene cliente HTTP; AC-59 ejecuta los tests con la red saliente bloqueada. | RNF-SEC-18 |
 
 ## 8. Notas de rendimiento

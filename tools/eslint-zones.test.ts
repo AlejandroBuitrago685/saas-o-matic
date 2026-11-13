@@ -102,6 +102,24 @@ describe('RNF-SEC-14 / ADR-011 forbidden patterns in the web app', () => {
   });
 });
 
+describe('D-112 API shared code may use the contract, but never a module or the database', () => {
+  it('allows shared → contract', async () => {
+    const code =
+      "import type { FieldError } from '@saas-o-matic/contract';\nexport type Errors = FieldError[];\n";
+    const findings = await lintFixture(`apps/api/src/shared/${F}x.ts`, code);
+
+    expect(ruleIds(findings)).not.toContain(null);
+    expect(ruleIds(findings)).not.toContain('boundaries/dependencies');
+  });
+
+  it('rejects shared → a module', async () => {
+    const code = "export * from '../modules/health/health.routes.js';\n";
+    const findings = await lintFixture(`apps/api/src/shared/${F}y.ts`, code);
+
+    expect(ruleIds(findings)).toContain('boundaries/dependencies');
+  });
+});
+
 describe('ADR-010 / D-83 API layers and configuration access', () => {
   it('rejects Drizzle inside a use case', async () => {
     const code = "import { sql } from 'drizzle-orm';\nexport const query = sql;\n";

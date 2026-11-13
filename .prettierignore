@@ -5,6 +5,7 @@ coverage/
 .angular/
 package-lock.json
 apps/api/drizzle/meta/
+apps/api/openapi.json
 
 # Hand-written documentation with aligned Markdown tables: formatting it would only add noise
 ai-workspace/

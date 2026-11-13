@@ -44,6 +44,8 @@ jobs:
         run: npm run typecheck
       - name: File names, forbidden patterns and dependency cycles
         run: npm run check
+      - name: Migrations match the schema (db:check)
+        run: npm run db:check -w @saas-o-matic/api
       - name: Node tests (domain coverage 100 %)
         run: npx vitest run --coverage
       - name: Web unit tests

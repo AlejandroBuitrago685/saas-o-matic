@@ -7,6 +7,18 @@ export type { ConfigIssue } from './shared/config-issue.js';
 export { COUNTRIES, PLANS, TAX_ID_TYPES } from './catalog/constants.js';
 export type { Country, Plan, TaxIdType } from './catalog/constants.js';
 export { tariffForPlan, taxRateFor, validateCatalog } from './catalog/validate-catalog.js';
+export {
+  CATALOG_LIMITS,
+  DEFAULT_PAGE_SIZE,
+  MAX_API_CALLS_PER_MONTH,
+  MAX_CONTACT_EMAIL_LENGTH,
+  MAX_PAGE_OFFSET,
+  MAX_PAGE_SIZE,
+  MAX_SEARCH_QUERY_LENGTH,
+  MAX_STORAGE_GB,
+  MIN_API_CALLS_PER_MONTH,
+  MIN_STORAGE_GB,
+} from './catalog/limits.js';
 export type { Catalog, CatalogInput } from './catalog/validate-catalog.js';
 
 export { MAX_ACTIVE_USERS, MIN_ACTIVE_USERS } from './pricing/active-users.js';
