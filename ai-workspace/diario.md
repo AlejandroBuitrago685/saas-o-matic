@@ -1031,16 +1031,30 @@ revisión y el cierre.
 
 | Pendiente | Parte |
 |---|---|
-| Un cuerpo de más de 64 KiB en `/api/` recibe el `413` HTML de nginx, no un Problem (el cliente nunca lo envía) | Sin parte: anotado |
+| ~~Un cuerpo de más de 64 KiB en `/api/` recibe el `413` HTML de nginx, no un Problem~~ | **Resuelto en P9** (D-158), ver abajo |
 | Los de P7 y P8 (`q` en la URL, métricas, recordar la divisa, `DEMO_MODE`, AC-90 en el CI) siguen igual | P10–P11 |
 
 **Decisiones:**
 - D-152 y D-153: del usuario;
 - D-154, D-155 y D-156: Claude · validadas en el plan;
-- D-157: Claude · pendiente.
+- D-157: Claude · validada por el usuario tras el cierre;
+- D-158: del usuario, tras la revisión de P9.
 
 **Tiempo:** estimado 3,5 h · real ≈ 30 min de implementación (18:25–18:55, hora de Canarias), más el plan, la
 revisión y el cierre.
+
+**Tras el cierre, en el mismo PR (mensaje 5 del prompt 21):**
+- **D-157 validada** por el usuario.
+- **`413` de nginx en RFC 9457 (D-158):** el e2e `@prod-only` de `production-stack.spec.ts` (`POST` de 70 KiB) falló
+  antes del arreglo (`text/html`) y pasa después: `PAYLOAD_TOO_LARGE` sin `instance`, una sola CSP, la de la API, y
+  `no-store`. `nginx-problems.test.ts` (en la API) ata los cuerpos de `nginx.conf` a `problemOf`; lo escribí después
+  del arreglo, así que no lo vi fallar. Con un cuerpo de 30 KiB, el `413` sigue viniendo de la API (D-132).
+- **Un test de axe falló una vez contra la pila:** `color-contrast` en «Guardar simulación», medido a mitad de la
+  transición de deshabilitado a primario. No es un fallo de contraste en reposo. La fixture espera ahora a que
+  terminen las animaciones (`document.getAnimations()`) antes de auditar: 40/40 en cinco repeticiones. Va en un commit
+  `test:` aparte.
+- **Resultados:** `verify` en verde (1042 tests de Node y 239 de la web), e2e 58/58 en `e2e:dev` y 72/72 contra la
+  pila.
 
 ## Nota de traspaso — 2026-11-13, tras P9
 
@@ -1059,4 +1073,4 @@ revisión y el cierre.
 
 **Siguiente parte: P10 · Should/Could y CI completo** (2,5 h).
 
-**Decisiones por validar:** D-157.
+**Decisiones por validar:** ninguna (D-157 validada; D-158 es del usuario).

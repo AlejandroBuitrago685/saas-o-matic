@@ -65,6 +65,9 @@ Construido en P6. `docker compose up --build -d` deja la aplicación en <http://
   cabeceras de la API ([`api-error-headers.conf`](../../apps/web/nginx/api-error-headers.conf), con `always` y
   `no-store`), nunca las de la SPA. En `/api/`, `error_log` baja a `crit` (D-153), para que esos fallos no dejen la
   línea de la petición en el log (T-12).
+- Con un cuerpo de más de 64 KiB, `error_page 413` lleva a `@api_too_large`, que devuelve el `PAYLOAD_TOO_LARGE` de
+  la API sin `instance`, con las mismas cabeceras (D-158, ADR-009). Entre 16 y 64 KiB sigue respondiendo la API
+  (D-132). Un test de la API compara los cuerpos de `nginx.conf` con los suyos.
 - `client_max_body_size 64k` (D-132), `server_tokens off` (D-131), sin `access_log` y `error_log` a stderr con nivel
   `error` (D-134), salvo en `/api/` (D-153). `gzip` solo para CSS, JS y SVG.
 - Cabeceras de la SPA ([`security-headers.conf`](../../apps/web/nginx/security-headers.conf), con `always`): la CSP de

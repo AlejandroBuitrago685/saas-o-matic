@@ -28,3 +28,16 @@ Valido D-154, D-155 y D-156 tal como están en el plan. Regístralas como valida
 ## Mensaje 4
 
 (Aprobación del plan en la interfaz de modo plan, sin texto.)
+
+## Mensaje 5 (tras el cierre)
+
+Revisada P9: está bien. Antes del merge, dos cosas en este mismo PR:
+
+1. Valido D-157 tal como está. Regístrala como validada por el usuario.
+
+2. Cierra el pendiente del 413 HTML de nginx, para que se cumpla el formato único RFC 9457 de ADR-009:
+   - Primero el test que falla: un e2e @prod-only contra la pila hace POST /api/customers con un cuerpo de más de 64 KiB. Comprueba que la respuesta es 413 en application/problem+json, con type /problems/payload-too-large, code PAYLOAD_TOO_LARGE y sin instance; una sola cabecera Content-Security-Policy, la de la API; y Cache-Control: no-store. Comprueba que falla antes del arreglo.
+   - nginx: en location ^~ /api/, `error_page 413 @api_too_large;`, con el mismo patrón que @api_unreachable (include de api-error-headers.conf, default_type application/problem+json y `return 413 '<json>'`). Usa el type, el title y el code que ya tiene PAYLOAD_TOO_LARGE en packages/contract/src/problem.ts, para que el cuerpo sea igual que el 413 de la API salvo el instance.
+   - Entre 16 y 64 KiB sigue respondiendo la API (D-132). No cambies client_max_body_size.
+   - Documentación, una sola vez: la fila del 413 en 04-contrato-api §2.2 (la emite nginx por encima de 64 KiB), 08-despliegue, una decisión nueva D-158 en decisiones.md y, en el diario, el pendiente pasa a resuelto.
+   - Pasa verify, e2e:dev y e2e contra la pila. Haz un commit `fix:` aparte y súbelo al PR #13.
