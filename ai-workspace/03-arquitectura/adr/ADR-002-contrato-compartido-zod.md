@@ -1,6 +1,6 @@
 # ADR-002 · Contrato compartido con Zod; la web solo importa tipos
 
-- **Estado:** propuesta (D-55) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-55, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 

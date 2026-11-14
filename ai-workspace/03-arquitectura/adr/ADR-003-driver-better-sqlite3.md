@@ -1,6 +1,6 @@
 # ADR-003 · Driver `better-sqlite3`
 
-- **Estado:** propuesta (D-56) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-56, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 

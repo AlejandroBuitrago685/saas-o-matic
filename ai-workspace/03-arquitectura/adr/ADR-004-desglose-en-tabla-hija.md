@@ -1,6 +1,6 @@
 # ADR-004 · Desglose por tramo en tabla hija; tablas de solo inserción
 
-- **Estado:** propuesta (D-57) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-57, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 

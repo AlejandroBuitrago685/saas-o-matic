@@ -1327,3 +1327,143 @@ endurecimiento de un servidor; el detalle no se publica (D-175):
 **Siguiente parte: P12 · Cierre:** README final, prueba desde un clon limpio y revisión final.
 
 **Decisiones por validar:** S-08.
+
+## P12 · Cierre — 2026-11-14 · rama `docs/p12-cierre`
+
+**Hecho**
+- **Capturas** (D-180): `npm run capturas` regenera tres WebP en `docs/capturas` (dashboard, simulador con los tres
+  tramos y el total en GBP, simulador a 360 px; de 31 a 57 KB). Playwright arranca la API en `DEMO_MODE` con la base en
+  memoria y `ng serve`, y simula los tipos de cambio de referencia: salen iguales en cualquier máquina y no tocan la base
+  de desarrollo.
+- **Documentación para evaluadores** (D-182): README en el orden pedido, con la línea «Estado: completo» y el bloque de
+  proceso tras el arranque rápido; `GUIA-EVALUADOR.md` con los recorridos de 5, 15 y 60 minutos y una tabla de 20 filas
+  sacada de la matriz de trazabilidad; `ai-workspace/README.md` con el mapa de carpetas, «Cómo he trabajado con la IA»,
+  «Dónde intervine yo» (10 momentos, en primera persona) y la sección de producción.
+- **Comprobaciones de documentación** (D-181): `scripts/check-markdown-links.mjs`, dentro de `npm run check`, y los tests
+  de la tabla de la guía y de las capturas. Cada pieza tiene su test. El de la tabla se probó con tres mutaciones de la
+  guía, y falla en las tres como debe.
+- **Cabeceras de la demo** (D-179): documentadas en 08-despliegue §4.2, con `curl -I` en vivo y sin datos del servidor.
+- **Registro:** S-08 validado, D-178 a D-182, P13 en el plan (unas 3 h, con la etiqueta de la entrega), D-75 marcada
+  como sustituida y los 14 ADR pasan de «propuesta» a «aceptada» (los validó el usuario el 2026-11-12; seguían sin
+  actualizarse).
+
+**Comprobación en vivo** (https://saas-o-matic.codeserviceapi.es)
+- **Analítica de Cloudflare:** **resuelta en el panel de Cloudflare**, con una *Configuration Rule* solo para el
+  subdominio de la demo, sin cambios en la CSP. El HTML recién pedido no incluye `beacon.min.js`, y una pestaña nueva
+  carga sin errores en la consola. Mi primera pestaña los seguía mostrando porque conservaba el HTML anterior en caché.
+- **Cabeceras:** Cloudflare añade `X-Frame-Options: SAMEORIGIN`, `X-XSS-Protection` y `Expect-CT`, y cambia
+  `Referrer-Policy` a `same-origin`, en la web y en la API (D-179).
+
+**Prueba desde un clon limpio** (clon de la rama desde GitHub en una carpeta temporal fuera del proyecto, con la caché
+de npm y la de Playwright vacías; Windows 11, Node 22.23.4)
+
+| Paso del README | Resultado | Tiempo |
+|---|---|---|
+| `git clone` | bien | 2 s |
+| `npm ci` | bien | 59 s |
+| `npm run setup` | bien, 25 clientes | 4 s |
+| `npm run dev` | API y web arriba; `/api/customers` responde con los datos de ejemplo | listo en 7 s |
+| `npx playwright install chromium` | bien, con la carpeta de navegadores vacía | 21 s |
+| `npm run e2e:smoke` | 1 de 1 | 11 s |
+| `docker compose up --build -d` | `/api/health` y `/` en 200; `down -v` limpio | 42 s (con capas de Docker ya en caché en el equipo) |
+| `npm test` y `npm run trace` (de la guía) | 1 085 + 293 tests; AC 81/81 y TV 129/129 | 37 s y 1 s |
+
+- `npm ci`, `setup` y `npm test` suman unos 2 minutos: los 15 minutos de la guía son holgados, y la guía lo dice.
+- **El README no decía que `e2e:smoke` necesita Chromium** (solo lo decía para los e2e en general). Corregido: la línea
+  vale ahora para todos los e2e, la prueba de humo incluida.
+- **El README ya decía que `e2e:smoke` necesita los puertos 3000 y 4200 libres, y la prueba lo confirmó dos veces:** un
+  `ng serve` huérfano de la tarde anterior (13/11 20:55, de una sesión previa) ocupaba el 4200, y lo paré con
+  autorización del usuario; después, la primera ejecución del humo falló porque mi propio `npm run dev` del clon no se
+  había parado del todo. No son fallos del README.
+- El usuario pidió dejar los requisitos de Node en un solo sitio: ahora solo están en «Arranque rápido».
+- No hubo ningún otro paso que fallara ni que el README no dijera.
+
+**Falló o lo descubrí por el camino**
+- **El DNI de ejemplo de la guía, `12345678Z`, ya está en los datos de la demo** y daría «duplicado». Lo detecté antes de
+  publicarla; ahora usa `11111111H`, validado con el dominio.
+- **Mi suposición sobre MDN era falsa:** MDN no dice que `frame-ancestors` anule a `X-Frame-Options`. Lo dice la
+  especificación de CSP (Level 2, §7.7.1), y D-179 cita esa.
+- **Dos veces, una barra de escape se perdió al escribir una expresión regular en un *heredoc*** (en el comprobador de
+  enlaces y en un test). La primera la delató el propio comprobador, que no encontraba ningún enlace; la segunda, una
+  lectura del fichero. Desde entonces, los cambios de expresiones regulares van con `Edit`.
+- **El comprobador descartaba el código en línea de los títulos**, y GitHub lo conserva en el ancla
+  (`feat/p11-demo` → `featp11-demo`). Corregido con un test.
+- **Los ADR seguían «propuesta»** tras su validación (ver Hecho).
+
+**Correcciones**
+- **Del usuario** (al aprobar el plan): analítica de Cloudflare ya resuelta; el detalle de IA va en
+  `ai-workspace/README.md` y el README solo lleva un bloque corto; de la sesión asesora, una línea neutra; los momentos de
+  «Dónde intervine yo»; P13 dura unas 3 h. Después: mantiene la línea de las dos cuentas y las tres debilidades de la
+  sección de producción, da por bueno el prompt 26 literal y pide los requisitos de Node en un solo sitio.
+- **Del revisor** (`sonnet`, una pasada, sobre todo el diff): **APTO CON CAMBIOS**, sin P0 ni P1. Corregidos:
+  - P2: «Node 22.22.3 o superior» era falso (`engine-strict` con tres rangos) y «nada se compila» también;
+  - P2: lo que decía de `open.er-api.com` (SLA, una consulta por hora) no tenía fuente: se reduce a lo comprobado en el
+    análisis §9;
+  - P2: el momento 8 de «Dónde intervine yo» exageraba: lo detectó Claude y el usuario eligió entre sus opciones;
+  - P2: el test de la tabla de la guía prometía más de lo que comprobaba: ahora exige una fila para cada requisito del
+    enunciado, «AC-xx: revisión» para cada criterio con nivel de revisión, y que una fila sin test solo tenga criterios
+    que son únicamente de revisión;
+  - P2: `decodeURIComponent` abortaba el comprobador de enlaces con un `%` mal formado: ahora es un enlace roto más;
+  - P3: enlaces anidados y atributos HTML (`src`, `href`) en el comprobador, con sus limitaciones documentadas; matices
+    de los momentos 5 y 6; la confusión entre la parte P0 y los hallazgos P0; la cita exacta de CSP2 en D-179; D-75
+    marcada y D-182 en el plan; el bloque del README, de 11 a unas 6 líneas; `try/finally` en la captura; filas
+    «Extra» en la guía.
+  - Sin cambio, por decisión del usuario: las tres debilidades de la sección de producción, aunque D-175 omite las del
+    servidor (son decisiones de diseño ya registradas en D-171, D-173 y D-176).
+  - Sin cambio: una nota en 06-seguridad sobre el `same-origin` del borde; D-179 ya lo cubre y la enlaza 08-despliegue.
+  - Sin cambio: el script de capturas no corre en el CI (queda dicho en D-180).
+
+**Cobertura del enunciado:** no queda ningún requisito sin cubrir. AC-94 y AC-99 son solo de revisión, y AC-93 y AC-61
+tienen además una parte de revisión: la guía lo dice así.
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| Página HTML interactiva «Recorrido visual para los evaluadores» y etiqueta de la entrega | P13 |
+| Quitar el `overrides` de `minimatch` cuando ESLint y typescript-eslint pidan la 11 | Cuando salgan |
+| Licencia del repositorio (sin declarar, D-176) | Decisión del usuario |
+
+**Decisiones:** D-178, D-179 y D-182: del usuario; D-181: validada («los dos tests me parecen bien»); **D-180: Claude ·
+pendiente** (formato de las capturas y script).
+
+**Tiempo:** estimado 2,5 h. Real: unas 1 h 10 min de trabajo con el revisor y la prueba del clon, y algunos minutos
+más de espera por el CI y por el puerto 4200.
+
+## Nota de traspaso — 2026-11-14, tras P12
+
+**Estado**
+- P0 a P12 hechas. P12 va en la rama `docs/p12-cierre` (PR pendiente de abrir y fusionar). La demo no cambia: sigue en
+  `sha-ab4960e…`.
+- `main` exige 11 *checks*: `quality` ×3, `audit`, `e2e`, los 5 `smoke` y `demo`.
+- Nada de lo que escribe P13 puede incluir datos del servidor (D-99, D-175).
+
+**Siguiente parte: P13 · Recorrido visual para los evaluadores** (unas 3 h, en una sesión nueva, cuando P12 esté
+fusionada). Es una página HTML interactiva; la etiqueta de la entrega se pone al cerrarla.
+
+**Lo que P13 recibe**
+- **Capturas:** `docs/capturas/dashboard.webp`, `simulador.webp` y `movil-360.webp`. Su script es
+  `e2e/capturas/capturas.spec.ts` con `e2e/playwright.capturas.config.ts`, y `npm run capturas` las regenera (usa los
+  puertos 3100 y 4300, así que no puede correr a la vez que `e2e:dev`). Para otra captura, se añade un test al mismo
+  *spec*; la codificación a WebP está en `e2e/capturas/webp-encoder.ts`.
+- **Lista final de «Dónde intervine yo»** (con sus enlaces, en `ai-workspace/README.md`):
+  1. validación fiscal estricta (D-15);
+  2. seguridad con método, OWASP y STRIDE (D-40);
+  3. un *fallback* que no esconde el error (D-51);
+  4. la CSP, comprobada (D-70);
+  5. el flujo de trabajo: rama y PR por parte, hooks rápidos y permisos (D-80, D-82, D-85);
+  6. la IP real, sin atajos (D-113, D-130);
+  7. el diseño como extensión visual de roams.es (D-122);
+  8. una contradicción de la especificación (D-142, D-143);
+  9. no enmendar un criterio para facilitar el código (D-159);
+  10. parar la línea cuando el CI se pone rojo (arreglo de AC-91).
+- **Tabla de requisitos:** `GUIA-EVALUADOR.md`, sección «Requisitos del enunciado, dónde se ven y qué test los cubre»,
+  con 20 filas. Sale de la matriz de trazabilidad y `tools/evaluator-guide.test.ts` la comprueba: si P13 la reutiliza,
+  que lea esa tabla y no la copie a mano. Los criterios solo de revisión son AC-94 y AC-99.
+- **Datos medidos del clon limpio** (útiles para la página): `npm ci` 59 s, `setup` 4 s, `dev` listo en 7 s,
+  `npm test` 37 s (1 085 + 293 tests), `docker compose up --build` 42 s.
+- **Para enlazar la página:** el comprobador de enlaces (`npm run check`) lee `src` y `href` de HTML y falla con un enlace
+  roto; si la página vive en el repositorio y enlaza con otros ficheros, conviene que cumpla esa comprobación o se
+  amplíe su alcance (D-181).
+
+**Decisiones por validar:** D-180.

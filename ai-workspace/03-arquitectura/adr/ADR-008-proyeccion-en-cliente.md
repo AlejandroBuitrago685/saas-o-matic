@@ -1,6 +1,6 @@
 # ADR-008 · Proyección calculada en el navegador con el dominio compartido
 
-- **Estado:** propuesta (D-61) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-61, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 

@@ -1,6 +1,6 @@
 # ADR-007 · Representación de datos y pragmas de SQLite
 
-- **Estado:** propuesta (D-60) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-60, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 

@@ -172,6 +172,40 @@ rutas del host ni IPs (salvo `127.0.0.1` y la red de D-130) y que el *override* 
 | HTTPS con HSTS | Cloudflare y el certificado de certbot; la única cabecera HSTS la pone el nginx del host. | `demo-deploy.test.ts`; en vivo |
 | La IP real del cliente | El snippet de Cloudflare, `X-Forwarded-For $remote_addr` y el `TRUST_PROXY` de D-130. | `demo-deploy.test.ts`; e2e de la demo (un cubo por cliente); en vivo, desde dos redes |
 
+#### Cabeceras que añade Cloudflare en la demo (D-179)
+
+La zona tiene activada la opción «Add security headers» de los *Managed Transforms* de Cloudflare. Comprobado con
+`curl -I` en vivo el 2026-11-14, tanto en la web como en la API, la demo responde además con:
+
+| Cabecera | Lo que envía Cloudflare | Lo que envían nuestros nginx y la API |
+|---|---|---|
+| `X-Frame-Options` | `SAMEORIGIN` | no la envían |
+| `X-XSS-Protection` | `1; mode=block` | no la envían |
+| `Expect-CT` | `max-age=86400, enforce` | no la envían |
+| `Referrer-Policy` | `same-origin` | `no-referrer` (Cloudflare lo cambia) |
+
+Cloudflare documenta que esa opción añade cinco cabeceras: las cuatro de arriba y `X-Content-Type-Options: nosniff`
+([Managed Transforms](https://developers.cloudflare.com/rules/transform/managed-transforms/reference/), consultada el
+2026-11-14), que ya enviamos con el mismo valor. Se mantiene activada y **no es una debilidad**:
+
+- **`X-Frame-Options: SAMEORIGIN` no abre nada que la CSP cierre.** La CSP de la web y la de la API llevan
+  `frame-ancestors 'none'`, que no admite ningún incrustador. La especificación de CSP dice que `frame-ancestors`
+  «obsoletes the X-Frame-Options header» y que, si un recurso tiene las dos políticas, la de `frame-ancestors` debe
+  aplicarse (SHOULD) y la cabecera, ignorarse ([CSP Level 2, §7.7.1](https://www.w3.org/TR/CSP2/), Recomendación
+  del W3C de 2016, leída el 2026-11-14).
+  Y aunque un navegador antiguo sin CSP aplicara solo la cabecera, `SAMEORIGIN` solo permite incrustar la página en
+  el propio origen, que no tiene ninguna página que lo haga.
+- **`Referrer-Policy: same-origin` no envía el *referer* a otros orígenes.** Solo lo envía en las peticiones al mismo
+  origen ([MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Referrer-Policy)), así que no
+  revela más que `no-referrer` hacia terceros. La única petición a un tercero, la de los tipos de cambio, ya pide
+  `referrerPolicy: 'no-referrer'` en su propio `fetch` (D-148).
+- **`X-XSS-Protection` y `Expect-CT` son cabeceras obsoletas**, marcadas como *Deprecated* en MDN. No aportan
+  protección ni quitan la que damos con la CSP; son ruido que añade Cloudflare.
+
+Consecuencia para los tests: la pila de Compose y los e2e comprueban las cabeceras que envía **nuestro** nginx
+(`no-referrer` incluido), no las del borde de Cloudflare. En la demo, el valor final de `Referrer-Policy` es
+`same-origin`.
+
 ### 4.3 Imágenes (D-170)
 
 - El trabajo `demo` del CI construye las dos imágenes:

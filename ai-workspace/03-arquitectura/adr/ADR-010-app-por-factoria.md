@@ -1,6 +1,6 @@
 # ADR-010 · `buildApp(deps)` con inyección manual de dependencias
 
-- **Estado:** propuesta (D-63) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-63, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 
