@@ -1606,5 +1606,44 @@ la última tabla de este tipo del diario.
   - pide que las omisiones no dependan de una revisión manual;
   - después, el criterio estricto (D-175 y D-189).
 
+- **Del usuario, al revisar el resultado:** omitir una frase de la conversación de P12 que nombraba lo que tapaba la
+  marca, y ampliar las frases prohibidas del escáner.
+- **Del revisor** (`sonnet`, una pasada): **NO APTO**, con dos P1 de privacidad y ninguno en el código. Corregidos:
+  - P1: tres líneas de la conversación de P3 describían la configuración del servidor. Se omiten por línea, y la nota
+    de D-105 sobre el mismo punto se reescribe en las decisiones y en el diario;
+  - P1: D-165, 08-despliegue §4.4 y el diario decían de dónde se instala Docker, el tipo de certificado y un incidente
+    del reto ACME. Ahora D-165 dice solo que el servidor necesita Docker y Compose;
+  - P2: más frases prohibidas; las secciones omitidas de un plan se identifican por el *hash* de su título; en P12 se
+    omite también la frase siguiente; las marcas seguidas se escriben como una sola, para que su número no diga nada;
+  - P3: `isInside` con un hijo llamado `..foo` y con una carpeta que aún no existe; el escáner cubre también las
+    plantillas del recorrido; D-189 dice qué no se garantiza; título neutro en el mensaje 2 del prompt 10.
+
+  Sin cambio:
+  - certbot y el *timer* de systemd en 08-despliegue §4.4 y en D-167. Son el diseño del TLS y del reinicio diario, que
+    ya están en las plantillas de `deploy/`;
+  - la regla de Cloudflare y su panel en la conversación de P12. Es la configuración de la CDN, no del servidor.
+- **Una fila de tabla omitida rompía la tabla:** ahora la marca ocupa una fila con el mismo número de columnas.
+
 **Decisiones:** D-188 y D-189, validadas con el plan (el criterio es del usuario y el mecanismo, de Claude). D-175,
 reescrita por el usuario.
+
+**Tiempo:** unas 5 h 20 min (13:12–18:35, hora de Canarias), con una pausa por el límite de uso. El cambio de criterio a
+mitad de la parte rehízo la revisión de todo lo entregable.
+
+## Prueba del clon limpio del cierre — 2026-11-14 · rama `docs/conversaciones` en `5d55fe5`
+
+Clon de la rama en una carpeta temporal fuera del proyecto, con la caché de npm vacía. Windows 11 y Node 22.23.4. **Es
+la medición vigente**: la anterior se tomó antes de los tests de esta parte.
+
+| Paso del README | Resultado | Tiempo |
+|---|---|---|
+| `git clone` | bien | 2 s |
+| `npm ci` | bien, con la caché vacía | 46 s |
+| `npm run setup` | bien | 3 s |
+| `npm run dev` | API y web en 200; `/customers` responde con los datos de ejemplo | listo en 7 s |
+| `npm test` | 1 260 + 293 tests (Node y web), 1 553 en total, todos en verde | 39 s |
+
+- Junto al clon no está el fichero privado, así que la parte local de `tools/privacy.test.ts` se salta, como en el CI.
+  Es el único test que no corre.
+- No se repitieron la descarga de Chromium, `e2e:smoke` ni Docker: siguen valiendo los de P12.
+- `npm ci`, `setup` y `npm test` suman 88 s: los «unos 2 minutos» de la guía siguen siendo ciertos.

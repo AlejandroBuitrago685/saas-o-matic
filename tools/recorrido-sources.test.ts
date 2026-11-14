@@ -109,9 +109,9 @@ describe('D-183 D-181 the walkthrough reads the documents, never a copy of them'
   it('takes the times and the test counts of the most recent clean clone, not the first one', () => {
     const { heading, steps } = cleanCloneTimes(read(DIARY_FILE));
 
-    expect(heading).toMatch(/^Prueba del clon limpio tras P13/);
-    expect(steps.find(({ step }) => step === '`npm ci`')?.time).toBe('53 s');
-    expect(measuredTestCounts(steps)).toEqual({ node: 1222, web: 293 });
+    expect(heading).toMatch(/^Prueba del clon limpio del cierre/);
+    expect(steps.find(({ step }) => step === '`npm ci`')?.time).toBe('46 s');
+    expect(measuredTestCounts(steps)).toEqual({ node: 1260, web: 293 });
     expect(() => measuredTestCounts([])).toThrow(/no `npm test` row/);
   });
 
