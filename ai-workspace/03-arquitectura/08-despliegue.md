@@ -107,7 +107,7 @@ flowchart LR
 | `audit` | ubuntu | `.nvmrc` | `npm ci` → `npm audit --audit-level=high` → comprobar que no hay `.env` versionados (AC-55, AC-57) |
 | `e2e` | ubuntu | `.nvmrc` | `npm ci` → `npm run e2e:stack` (pila nueva y `--wait`, D-133) → `check-containers` (AC-60, D-130) → Chromium → `npm run e2e` → si falla, informe, trazas y logs de la pila → siempre `e2e:stack:down` |
 | `smoke` (matriz de 5) | ubuntu (Node 22, 24 y 26), windows-latest y macos-latest (`.nvmrc`) | según la fila | Checkout limpio con los comandos del README: `npm ci` (comprueba que no se compila nada) → `npm run setup` → Chromium → `npm run e2e:smoke`, que lanza `npm run dev` y comprueba `GET /health` = 200 y el dashboard con los 25 clientes de ejemplo; Playwright para todo el árbol de procesos al terminar (AC-95, D-53) |
-| `demo` (P11) | ubuntu | `.nvmrc` | `npm ci` → construir las imágenes de la demo (la web con el build `demo`, D-169) → la pila de §4.1 con ellas y `--wait` → `check-containers saas-o-matic-demo` → Chromium → `npm run e2e:demo` (AC-61) → informe → en `main`, guardar las imágenes como artefacto → siempre, bajar la pila (D-170) |
+| `demo` (P11) | ubuntu | `.nvmrc` | `npm ci` → construir las imágenes de la demo (la web con el build `demo`, D-169; las etiquetas OCI de cada build, como argumentos, D-176) → la pila de §4.1 con ellas y `--wait` → `check-containers saas-o-matic-demo` → Chromium → `npm run e2e:demo` (AC-61) → informe → en `main`, guardar las imágenes como artefacto → siempre, bajar la pila (D-170) |
 | `publish` (P11) | ubuntu | — | Solo en un *push* a `main` y tras los cinco trabajos anteriores en verde, con `packages: write`: cargar las imágenes que probó `demo` → `docker login` con `GITHUB_TOKEN` → publicar `sha-<commit>` y `main` en GHCR → `docker logout` (D-170) |
 
 - Concurrencia: un *push* nuevo cancela la ejecución anterior de la misma rama.
@@ -189,7 +189,12 @@ rutas del host ni IPs (salvo `127.0.0.1` y la red de D-130) y que el *override* 
 Lo ejecuta el operador por SSH. Cada cambio de nginx pasa por `nginx -t` antes de recargar, y no se toca ningún otro
 sitio.
 
-1. **Docker** (D-165), desde el archivo de Ubuntu: `apt install docker.io docker-compose-v2`.
+1. **Docker** (D-165), desde el archivo de Ubuntu:
+   `NEEDRESTART_SUSPEND=1 apt-get install --no-install-recommends docker.io docker-compose-v2`. Antes, la misma orden
+   con `-s` enseña qué entra: deben ser paquetes nuevos, sin actualizar ni quitar ninguno. `NEEDRESTART_SUSPEND` evita
+   que `needrestart` reinicie por su cuenta servicios de otras aplicaciones. Docker añade sus cadenas en `FORWARD` y
+   activa `ip_forward`, pero no toca `INPUT` ni UFW. Se comprueba con una foto de `iptables -S` y de los puertos que
+   escuchan, antes y después, con una sesión SSH de reserva abierta.
 2. **Despliegue**, en el directorio de la demo, con una copia de `docker-compose.yml` y de
    `deploy/demo/docker-compose.demo.yml`:
 
@@ -204,12 +209,16 @@ sitio.
      `systemctl reload nginx`;
    - `certbot certonly --nginx -d saas-o-matic.codeserviceapi.es --deploy-hook "systemctl reload nginx"`.
 
-   `certonly` no edita el fichero, y el *deploy hook* recarga nginx en cada renovación de `certbot.timer`.
+   `certonly` no edita el fichero, y el *deploy hook* recarga nginx en cada renovación de `certbot.timer`. Aunque la
+   zona de Cloudflare fuerce HTTPS, Cloudflare no redirige `/.well-known/acme-challenge/`, así que el reto llega al
+   puerto 80 del origen. Después, `certbot renew --dry-run --cert-name saas-o-matic.codeserviceapi.es` comprueba la
+   renovación, y el fichero del sitio sigue igual.
 4. **Sitio completo:** el mismo fichero pasa a tener las dos plantillas, una tras otra, con los tres marcadores
    sustituidos por las rutas del servidor (el snippet de Cloudflare, `fullchain.pem` y `privkey.pem`). Después,
    `nginx -t && systemctl reload nginx`.
 5. **Reinicio diario:** las dos unidades se copian al directorio de unidades del sistema. Después,
-   `systemctl daemon-reload` y `systemctl enable --now saas-o-matic-demo-reset.timer`.
+   `systemctl daemon-reload` y `systemctl enable --now saas-o-matic-demo-reset.timer`. Antes,
+   `systemd-analyze verify` sobre las dos. `systemctl start saas-o-matic-demo-reset.service` lo prueba en el momento.
 6. **Vuelta atrás:**
    - `docker compose … down`;
    - borrar el fichero del sitio y `systemctl reload nginx`;
@@ -223,8 +232,9 @@ sitio.
 - solo están los 25 clientes de ejemplo;
 - la sexta escritura en un minuto da `429`;
 - un `X-Forwarded-For` falso no abre un cubo nuevo;
-- desde dos redes distintas, `x-ratelimit-remaining` baja por separado. Si bajan juntos, el despliegue no se da por
-  bueno;
+- desde dos direcciones de cliente distintas, `x-ratelimit-remaining` baja por separado. Si bajan juntos, el
+  despliegue no se da por bueno. Valen dos redes o, en un mismo equipo, IPv4 e IPv6, porque Cloudflare las envía como
+  dos clientes;
 - el *timer* aparece en `systemctl list-timers`;
 - tras un reinicio, los datos vuelven a ser los de ejemplo;
 - los demás sitios del servidor responden igual.
