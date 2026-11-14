@@ -1536,13 +1536,13 @@ pendiente**.
 ## Nota de traspaso — 2026-11-14, tras P13
 
 **Estado**
-- P0 a P13 hechas. P13 va en la rama `feat/p13-recorrido` (PR pendiente de abrir).
+- P0 a P13 hechas. P13 va en la rama `feat/p13-recorrido` (PR #21).
 - Tras el *merge*: el usuario activa Pages (Settings → Pages → Source: GitHub Actions); el workflow `Pages` publica al
   terminar el CI de `main` (o a mano con *Run workflow*). URL:
   <https://alejandrobuitrago685.github.io/saas-o-matic/recorrido/>.
 - Después: proponer la etiqueta `v1.0.0` y una release de GitHub con los enlaces a la demo y al recorrido, sin crearla
   sin la aprobación del usuario.
-- La tabla «Partes y PR» del plan tiene la fila de P13 sin número: se completa con la PR de esta parte.
+- La tabla «Partes y PR» del plan ya tiene la PR de P13 (#21).
 
 **Cómo se mantiene la página**
 - Cualquier cambio en las fuentes (plan, decisiones, diario, guía, especificación, `ci.yml`, tests, capturas) se

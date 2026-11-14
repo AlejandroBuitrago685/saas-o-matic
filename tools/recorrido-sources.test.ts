@@ -103,7 +103,7 @@ describe('D-183 D-181 the walkthrough reads the documents, never a copy of them'
     expect(parts.map(({ id }) => id)).toEqual(Array.from({ length: 14 }, (_, index) => `P${String(index)}`));
     expect(parts.every(({ objective }) => objective.length > 10)).toBe(true);
     expect(pullRequests.get('P1')).toEqual(['2', '3']);
-    expect(pullRequests.get('P13')).toEqual([]);
+    expect(pullRequests.get('P0')).toEqual(['1']);
   });
 
   it('takes the times and the test counts measured in the clean clone of P12', () => {

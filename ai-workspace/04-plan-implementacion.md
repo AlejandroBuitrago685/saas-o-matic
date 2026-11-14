@@ -405,4 +405,4 @@ recorrido visual (P13) lee esta tabla: el CI no tiene el historial de git.
 | P10 | #15 y #16 (arreglo del e2e de AC-91) |
 | P11 | #17, #18 (cierre) y #19 (aprobaciones) |
 | P12 | #20 |
-| P13 | La PR de esta parte |
+| P13 | #21 |
