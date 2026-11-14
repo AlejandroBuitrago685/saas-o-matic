@@ -106,12 +106,38 @@ describe('D-183 D-181 the walkthrough reads the documents, never a copy of them'
     expect(pullRequests.get('P0')).toEqual(['1']);
   });
 
-  it('takes the times and the test counts measured in the clean clone of P12', () => {
-    const steps = cleanCloneTimes(read(DIARY_FILE));
+  it('takes the times and the test counts of the most recent clean clone, not the first one', () => {
+    const { heading, steps } = cleanCloneTimes(read(DIARY_FILE));
 
-    expect(steps.find(({ step }) => step === '`npm ci`')?.time).toBe('59 s');
-    expect(measuredTestCounts(steps)).toEqual({ node: 1085, web: 293 });
+    expect(heading).toMatch(/^Prueba del clon limpio tras P13/);
+    expect(steps.find(({ step }) => step === '`npm ci`')?.time).toBe('53 s');
+    expect(measuredTestCounts(steps)).toEqual({ node: 1222, web: 293 });
     expect(() => measuredTestCounts([])).toThrow(/no `npm test` row/);
+  });
+
+  it('reads the last table of clean-clone steps of the diary, under its own heading', () => {
+    const table = (time: string): string =>
+      ['| Paso del README | Resultado | Tiempo |', '|---|---|---|', `| \`npm ci\` | bien | ${time} |`].join(
+        '\n',
+      );
+    const diary = [
+      '## P12 · Cierre',
+      '',
+      table('59 s'),
+      '',
+      '## Prueba nueva',
+      '',
+      table('53 s'),
+      '',
+      '## P14',
+      'texto',
+    ];
+
+    expect(cleanCloneTimes(diary.join('\n'))).toEqual({
+      heading: 'Prueba nueva',
+      steps: [{ step: '`npm ci`', result: 'bien', time: '53 s' }],
+    });
+    expect(() => cleanCloneTimes('## Sin tablas')).toThrow(/no clean-clone table/);
   });
 
   it('counts 83 criteria: 81 with a test and AC-94 and AC-99 only reviewed, as the guide says', () => {

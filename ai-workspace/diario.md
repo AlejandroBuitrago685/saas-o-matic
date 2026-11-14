@@ -1550,3 +1550,20 @@ tras el *merge*.
 - Las capturas, con `npm run capturas` (puertos 3100 y 4300).
 
 **Decisiones por validar:** ninguna.
+
+## Prueba del clon limpio tras P13 — 2026-11-14 · `main` en `c1c9890`
+
+La repitió el usuario, fuera de esta sesión, en un clon limpio de `main` tras fusionar P13 y siguiendo el README. **Es
+la medición vigente**: la de P12 (más arriba) se tomó antes de los tests que añadió P13. El recorrido visual lee siempre
+la última tabla de este tipo del diario.
+
+| Paso del README | Resultado | Tiempo |
+|---|---|---|
+| `git clone` | bien | 2 s |
+| `npm ci` | bien | 53 s |
+| `npm run setup` | bien | 6 s |
+| `npm run dev` | API y web en 200; el dashboard, sin errores en la consola | listo en 13 s |
+| `npm test` | 1 222 + 293 tests (Node y web), 1 515 en total, todos en verde | 44 s |
+
+- No se repitieron la descarga de Chromium, `e2e:smoke`, Docker ni `npm run trace`: siguen valiendo los de P12.
+- `npm ci`, `setup` y `npm test` suman 103 s: los «unos 2 minutos» de la guía siguen siendo ciertos.

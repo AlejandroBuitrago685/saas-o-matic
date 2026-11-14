@@ -86,7 +86,7 @@ export async function loadData() {
   const flow = await flowData(await examples.loadCatalogInput());
   const cleanClone = workflow.cleanCloneTimes(read(workflow.DIARY_FILE));
   const guide = read(GUIDE_FILE);
-  const qualityFigures = qualityData(workflow.measuredTestCounts(cleanClone));
+  const qualityFigures = qualityData(workflow.measuredTestCounts(cleanClone.steps));
   const { criteria, vectors, tests } = qualityFigures;
   return {
     hero: {

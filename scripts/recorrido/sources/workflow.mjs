@@ -66,15 +66,28 @@ export function decisionLeads(decisions) {
   );
 }
 
+/** The header of every clean-clone table of the diary (P12, and each later repetition). */
+const CLEAN_CLONE_HEADER = '| Paso del README | Resultado | Tiempo |';
+
 /**
  * @param {string} diary the text of diario.md
- * @returns {MeasuredStep[]} the rows of the clean-clone check of P12 (step of the README, result, time)
+ * @returns {{ heading: string, steps: MeasuredStep[] }} the most recent clean-clone check: the last table of README
+ * steps of the diary (it is written in order) and the heading of its section, so the page links to it
  */
 export function cleanCloneTimes(diary) {
-  const p12 = sectionOf(diary, /^P12 · Cierre/);
-  return tableRows(p12)
+  const lines = diary.split('\n');
+  const start = lines.lastIndexOf(CLEAN_CLONE_HEADER);
+  if (start === -1) throw new Error('cleanCloneTimes: the diary has no clean-clone table');
+  const end = lines.findIndex((line, index) => index > start && !line.startsWith('|'));
+  const table = lines.slice(start, end === -1 ? undefined : end).join('\n');
+  const heading = lines
+    .slice(0, start)
+    .findLast((line) => line.startsWith('## '))
+    ?.replace(/^##\s+/, '');
+  const steps = tableRows(table)
     .filter((cells) => cells.length === 3)
     .map(([step = '', result = '', time = '']) => ({ step, result, time }));
+  return { heading: heading ?? '', steps };
 }
 
 /**

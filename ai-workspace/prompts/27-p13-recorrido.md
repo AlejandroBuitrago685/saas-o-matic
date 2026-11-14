@@ -90,3 +90,15 @@ Sí, Auto-fix
 ## Mensaje 8
 
 Pages ya está activado y publicado: el asesor ha comprobado la URL, la redirección de la raíz, las capturas y el simulador en vivo, sin errores de consola. Apruebo D-186 y D-187: regístralas. Completa la fila de P13 en la tabla «Partes y PR» con la PR #21. Después, propónme la etiqueta v1.0.0 y el texto de la release (enlaces a la demo, al recorrido y a la guía del evaluador) antes de crearlas.
+
+## Mensaje 9
+
+Antes de la PR, una corrección. El número de tests está desactualizado: la release y la portada del recorrido dicen 1 378 (1 085 de Node y 293 de la web), que es la medición de P12, antes de los tests que añadió P13.
+
+El asesor ha repetido la prueba en un clon limpio de main (c1c9890), siguiendo el README: git clone 2 s, npm ci 53 s, npm run setup 6 s, npm run dev listo en 13 s (API y web en 200 y el dashboard sin errores de consola), y npm test en 44 s con 1 222 tests de Node y 293 de la web, 1 515 en total, todos en verde.
+
+1) Registra esa comprobación en el diario como la medición vigente del clon limpio, junto a la de P12.
+2) Haz que el recorrido lea las cifras de la medición más reciente y no de la de P12, regenera la página y comprueba que su test de frescura pasa. Revisa si la guía o el README citan también 1 378 o 1 085 y corrígelo.
+3) En el texto de la release, pon 1 515 tests (1 222 de Node y 293 de la web).
+
+Con eso, apruebo el texto de la release y la etiqueta v1.0.0 sobre el commit que deje el merge de esta PR. Pídeme el merge con el CI en verde; la etiqueta y la release, créalas después.
