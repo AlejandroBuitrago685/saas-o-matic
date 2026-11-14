@@ -23,13 +23,31 @@ const typescriptRules = {
 
 export default defineConfig(
   {
-    ignores: ['**/node_modules/**', '**/dist/**', '**/coverage/**', '**/.angular/**', 'apps/api/drizzle/**'],
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/coverage/**',
+      '**/.angular/**',
+      'apps/api/drizzle/**',
+      'docs/recorrido/domain/**',
+    ],
   },
   {
     files: ['**/*.{js,mjs,cjs}'],
     extends: [js.configs.recommended],
     languageOptions: { globals: globals.node },
     rules: jsLimits,
+  },
+  {
+    // The evaluator walkthrough runs in the browser (D-183): its page script is classic, so it also loads from
+    // file://; the tier simulator is a module that imports the compiled domain (D-184).
+    files: ['docs/recorrido/*.js'],
+    ignores: ['docs/recorrido/simulador.js'],
+    languageOptions: { globals: globals.browser, sourceType: 'script' },
+  },
+  {
+    files: ['docs/recorrido/simulador.js'],
+    languageOptions: { globals: globals.browser, sourceType: 'module' },
   },
   {
     files: ['**/*.ts'],

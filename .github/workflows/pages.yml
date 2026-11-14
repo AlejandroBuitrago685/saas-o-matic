@@ -1,0 +1,67 @@
+# D-185: publishes the evaluator walkthrough (`docs/`: the page and the screenshots it shows) on GitHub Pages. Only
+# from main, and only after the CI of that very commit has passed; the page is checked against the repository before
+# it is published. The Pages permissions live in the `deploy` job alone.
+name: Pages
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  # A publication in progress always finishes; the next one waits.
+  cancel-in-progress: false
+
+env:
+  LEFTHOOK: '0'
+
+jobs:
+  build:
+    name: build
+    # A push to main whose CI is green, or a manual run on main.
+    if: >-
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push') ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The commit whose CI passed, not whatever main points to now.
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Generate the walkthrough and copy the compiled domain package (D-183, D-184)
+        run: npm run recorrido
+      - name: The committed walkthrough is the one the repository generates
+        run: |
+          changes="$(git status --porcelain -- docs)"
+          if [ -n "$changes" ]; then echo "$changes"; echo 'Run npm run recorrido and commit the result.'; exit 1; fi
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: docs
+
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}recorrido/
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

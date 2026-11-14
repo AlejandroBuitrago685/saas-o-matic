@@ -1,7 +1,8 @@
 // @ts-check
 /**
  * Fails if the repository contains patterns forbidden by the security rules:
- * - innerHTML / outerHTML / bypassSecurityTrust* in the web app, including templates (RNF-SEC-14, AC-56);
+ * - innerHTML / outerHTML / bypassSecurityTrust* in the web app, including templates, and in the scripts of the
+ *   evaluator walkthrough (RNF-SEC-14, AC-56, D-183);
  * - arbitrary colour values in Tailwind classes (`bg-[#fff]`, `text-[rgb(0,0,0)]`): colours only come from the
  *   design tokens, whose contrast is tested (D-125, D-124);
  * - committed .env files other than .env.example (RNF-SEC-12, AC-55);
@@ -17,6 +18,11 @@ import { pathToFileURL } from 'node:url';
 import { listRepoFiles, listTrackedFiles, REPO_ROOT } from './lib/repo.mjs';
 
 const WEB_SOURCE = /^apps\/web\/src\/.+\.(ts|html)$/;
+/**
+ * The walkthrough's own scripts. Not `domain/`, the compiled package copied there (D-184), nor the generated HTML,
+ * which names these APIs in its text and is built by an escaping builder with its own tests (D-183).
+ */
+const WALKTHROUGH_SOURCE = /^docs\/recorrido\/(?!domain\/).+\.js$/;
 const FORBIDDEN_IN_WEB = [
   { pattern: /\b(innerHTML|outerHTML)\b/, rule: 'innerHTML/outerHTML (RNF-SEC-14)' },
   { pattern: /bypassSecurityTrust/, rule: 'bypassSecurityTrust* (RNF-SEC-14)' },
@@ -51,6 +57,14 @@ export function findInvisibleCharacters(files) {
 }
 
 /**
+ * @param {string} path repository-relative path
+ * @returns {boolean} whether the browser-side rules (no HTML injection, no arbitrary colours) apply to the file
+ */
+export function isWebSource(path) {
+  return WEB_SOURCE.test(path) || WALKTHROUGH_SOURCE.test(path);
+}
+
+/**
  * @param {readonly { path: string, content: string }[]} webFiles
  * @returns {string[]} one line per violation
  */
@@ -77,7 +91,7 @@ const readAll = (paths) =>
 
 function main() {
   const repoFiles = listRepoFiles().filter((path) => existsSync(join(REPO_ROOT, path)));
-  const webFiles = readAll(repoFiles.filter((path) => WEB_SOURCE.test(path)));
+  const webFiles = readAll(repoFiles.filter(isWebSource));
   const envFiles = findCommittedEnvFiles(listTrackedFiles()).map(
     (path) => `${path}: committed .env file (RNF-SEC-12)`,
   );

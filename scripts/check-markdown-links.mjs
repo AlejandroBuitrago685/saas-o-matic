@@ -6,7 +6,10 @@
  * External links are not followed: the checks never use the network. The literal prompts (`ai-workspace/prompts/`)
  * are records of what was written and are never edited, so they are not checked.
  * It reads inline links and images (also nested, as in a badge), reference definitions and the `src` and `href`
- * attributes of HTML. Not covered: `?query` strings, setext headings (underlined with `===`) and `id` anchors of HTML.
+ * attributes of HTML. Not covered: `?query` strings and setext headings (underlined with `===`).
+ * D-183: it also checks the HTML pages of `docs/` (the evaluator walkthrough): their `src` and `href` attributes and
+ * their `#id` anchors. And a link to this repository on GitHub (`…/blob/main/<path>` or `…/tree/main/<path>`), in
+ * Markdown or HTML, must name a path that exists and, for Markdown with a `#fragment`, a heading of it.
  * Usage: node scripts/check-markdown-links.mjs
  */
 import { readFileSync } from 'node:fs';
@@ -16,7 +19,11 @@ import { pathToFileURL } from 'node:url';
 import { listRepoFiles, REPO_ROOT } from './lib/repo.mjs';
 
 const SKIPPED_PREFIXES = ['ai-workspace/prompts/'];
+/** The HTML pages that are checked: the published site of the evaluator walkthrough (D-183). */
+const HTML_PAGES = /^docs\/.+\.html$/;
 const EXTERNAL = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
+const OWN_REPOSITORY =
+  /^https:\/\/github\.com\/AlejandroBuitrago685\/saas-o-matic\/(?:blob|tree)\/main\/([^#?]*)(?:#(.*))?$/;
 const INLINE_LINK = /\]\(\s*(<[^>]*>|[^)\s]*)(?:\s+(?:"[^"]*"|'[^']*'))?\s*\)/g;
 const HTML_ATTRIBUTE = /\b(?:src|href)\s*=\s*"([^"]*)"/g;
 const REFERENCE_DEFINITION = /^ {0,3}\[[^\]]+\]:\s*(<[^>]*>|\S+)/gm;
@@ -85,6 +92,22 @@ export function linkTargets(markdown) {
 }
 
 /**
+ * @param {string} page an HTML page
+ * @returns {string[]} the targets of its `src` and `href` attributes (the text of the page is not Markdown)
+ */
+export function htmlLinkTargets(page) {
+  return [...page.matchAll(HTML_ATTRIBUTE)].map((match) => match[1] ?? '').filter((target) => target !== '');
+}
+
+/**
+ * @param {string} page an HTML page
+ * @returns {Set<string>} the anchors it offers: the `id` of its elements
+ */
+export function htmlIdsOf(page) {
+  return new Set([...page.matchAll(/\sid\s*=\s*"([^"]+)"/g)].map((match) => match[1] ?? ''));
+}
+
+/**
  * @param {string} text
  * @returns {string | undefined} the text with its percent-encoding decoded, or undefined when it is malformed
  */
@@ -103,8 +126,20 @@ function decodePercent(text) {
  * malformed percent-encoding, which is reported as a broken link and never aborts the check
  */
 function resolveTarget(from, target) {
+  const own = OWN_REPOSITORY.exec(target);
+  if (own !== null) return decodedTarget(`/${own[1] ?? ''}`, own[2] ?? '', from);
   if (EXTERNAL.test(target)) return 'external';
   const [rawPath = '', rawFragment = ''] = target.split('#', 2);
+  return decodedTarget(rawPath, rawFragment, from);
+}
+
+/**
+ * @param {string} rawPath the path as written, percent-encoded; a leading `/` is the repository root
+ * @param {string} rawFragment
+ * @param {string} from repository-relative path of the file with the link
+ * @returns {{ path: string, fragment: string } | 'invalid'}
+ */
+function decodedTarget(rawPath, rawFragment, from) {
   const path = decodePercent(rawPath);
   const fragment = decodePercent(rawFragment);
   if (path === undefined || fragment === undefined) return 'invalid';
@@ -121,7 +156,7 @@ function resolveTarget(from, target) {
  */
 export function findBrokenLinks(markdownFiles, existing, readTarget) {
   return markdownFiles.flatMap(({ path, content }) =>
-    linkTargets(content).flatMap((target) => {
+    (path.endsWith('.html') ? htmlLinkTargets(content) : linkTargets(content)).flatMap((target) => {
       const problem = problemOf(path, target, { existing, readTarget });
       return problem === undefined ? [] : [`${path}: ${target} (${problem})`];
     }),
@@ -139,9 +174,21 @@ function problemOf(from, target, repository) {
   if (resolved === 'external') return undefined;
   if (resolved === 'invalid') return 'invalid percent-encoding';
   if (!repository.existing.has(resolved.path)) return 'no such file or folder';
-  if (resolved.fragment === '' || !resolved.path.endsWith('.md')) return undefined;
-  const anchors = anchorsOf(repository.readTarget(resolved.path) ?? '');
-  return anchors.has(resolved.fragment.toLowerCase()) ? undefined : 'no such heading';
+  return fragmentProblem(resolved, repository.readTarget);
+}
+
+/**
+ * @param {{ path: string, fragment: string }} resolved the target of a link, which exists
+ * @param {(path: string) => string | undefined} readTarget
+ * @returns {string | undefined} what is wrong with its `#fragment`: an `id` of an HTML page or a heading of a
+ * Markdown file that does not exist; other targets are not checked
+ */
+function fragmentProblem({ path, fragment }, readTarget) {
+  if (fragment === '') return undefined;
+  if (path.endsWith('.html'))
+    return htmlIdsOf(readTarget(path) ?? '').has(fragment) ? undefined : 'no such anchor';
+  if (!path.endsWith('.md')) return undefined;
+  return anchorsOf(readTarget(path) ?? '').has(fragment.toLowerCase()) ? undefined : 'no such heading';
 }
 
 /**
@@ -160,9 +207,10 @@ export function withFolders(files) {
 function main() {
   const files = listRepoFiles();
   const read = (/** @type {string} */ path) => readFileSync(`${REPO_ROOT}/${path}`, 'utf8');
-  const markdown = files
-    .filter((path) => path.endsWith('.md') && !SKIPPED_PREFIXES.some((prefix) => path.startsWith(prefix)))
-    .map((path) => ({ path, content: read(path) }));
+  const isChecked = (/** @type {string} */ path) =>
+    (path.endsWith('.md') && !SKIPPED_PREFIXES.some((prefix) => path.startsWith(prefix))) ||
+    HTML_PAGES.test(path);
+  const markdown = files.filter(isChecked).map((path) => ({ path, content: read(path) }));
   const problems = findBrokenLinks(markdown, withFolders(files), read);
   if (problems.length > 0) {
     process.stderr.write(`Broken Markdown links:\n${problems.map((p) => `  - ${p}`).join('\n')}\n`);

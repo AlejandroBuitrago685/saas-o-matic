@@ -3,6 +3,7 @@ import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import { requirementRows } from '../scripts/recorrido/sources/guide.mjs';
 import { REPO_ROOT } from './lint-fixture.js';
 
 const GUIDE = 'GUIA-EVALUADOR.md';
@@ -32,20 +33,17 @@ interface Row {
   readonly text: string;
 }
 
-/** The rows of the requirements table: requirement of the statement | where it is seen | criteria | tests. */
+/**
+ * The rows of the requirements table: requirement of the statement | where it is seen | criteria | tests. Read with
+ * the same reader as the evaluator walkthrough (D-183), so the page and this test see the same rows.
+ */
 function tableRows(): Row[] {
-  return read(GUIDE)
-    .split('\n')
-    .filter((line) => /^\| .*\b(?:RF|RNF)-\d+/.test(line))
-    .map((line) => {
-      const [, requirementCell = '', , criteriaCell = '', testsCell = ''] = line.split('|');
-      return {
-        requirements: [...idsOf(requirementCell, 'RF'), ...idsOf(requirementCell, 'RNF')],
-        criteria: idsOf(criteriaCell, 'AC'),
-        testFiles: [...testsCell.matchAll(TEST_LINK)].map((match) => match[1] ?? ''),
-        text: line,
-      };
-    });
+  return requirementRows(read(GUIDE)).map((row) => ({
+    requirements: [...idsOf(row.requirement, 'RF'), ...idsOf(row.requirement, 'RNF')],
+    criteria: idsOf(row.criteria, 'AC'),
+    testFiles: [...row.tests.matchAll(TEST_LINK)].map((match) => match[1] ?? ''),
+    text: Object.values(row).join(' | '),
+  }));
 }
 
 /** Requirement → criteria, straight from the traceability matrix (sections 1 and 2). */

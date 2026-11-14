@@ -4,6 +4,8 @@ node_modules/
 # Build output
 dist/
 .angular/
+# The compiled domain package the walkthrough imports, copied by `npm run recorrido` (D-184)
+/docs/recorrido/domain/
 
 # TypeScript incremental build info
 *.tsbuildinfo
