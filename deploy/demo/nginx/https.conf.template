@@ -1,0 +1,38 @@
+# nginx of the host · HTTPS of the public demo (08-despliegue §4, D-99, D-105, D-172). A template: its three
+# placeholders are paths of the server, filled in there and never in the repository. It goes in the same file as
+# http.conf.template, once the certificate exists. The chain: client → Cloudflare → this nginx → nginx of the web
+# container (127.0.0.1:4010) → API.
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name saas-o-matic.codeserviceapi.es;
+
+    ssl_certificate __TLS_CERTIFICATE__;
+    ssl_certificate_key __TLS_CERTIFICATE_KEY__;
+    # Explicit, so the site does not depend on what the http block of the host sets.
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    # D-105: the snippet is not global. It restores $remote_addr from CF-Connecting-IP, and only when the connection
+    # comes from a range of Cloudflare; it also replaces the private ranges the http block of the host trusts.
+    include __CLOUDFLARE_REALIP_SNIPPET__;
+
+    # D-134, RNF-SEC-11: the access log would keep the IP of every visitor.
+    access_log off;
+    # D-158: above the 64 KiB of the container, so that its nginx answers 413 with the Problem of the API.
+    client_max_body_size 128k;
+
+    # RNF-SEC-20: one HSTS header, with the value of the API, on every response (the SPA and the API). The API already
+    # sends it in production, so its copy is hidden. Only here: an add_header in a location would drop this one.
+    proxy_hide_header Strict-Transport-Security;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    location / {
+        proxy_pass http://127.0.0.1:4010;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header Host $host;
+        # D-105: replaced, never appended. Whatever the client sent is dropped; the container nginx adds its own hop.
+        proxy_set_header X-Forwarded-For $remote_addr;
+    }
+}

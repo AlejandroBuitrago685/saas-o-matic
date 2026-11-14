@@ -54,6 +54,15 @@ src/app/
 `simulator` se monta dentro de `customer-detail` (spec `05` §3.3). Es la única dependencia entre features permitida
 y la regla de fronteras la declara de forma explícita.
 
+**Aviso de demo** (`core/layout/demo-banner.ts`, P11):
+- Está **arriba de todas las vistas**, antes de la cabecera *sticky*. No se puede cerrar y se desplaza con la página
+  (D-168): pegado a la cabecera, a 360 px dejaría poca pantalla.
+- Se decide **al compilar** (D-169). El token `IS_DEMO_BUILD` lee la constante de `demo-build.ts` (`false`), y la
+  configuración `demo` de `angular.json` sustituye ese fichero por `demo-build.demo.ts` (`true`).
+- La imagen de la demo se construye con `--configuration production,demo` (el `ARG WEB_BUILD_CONFIGURATION` del
+  Dockerfile). La herramienta interna no lleva el aviso, y los tests eligen el valor del token.
+- Así no hay petición al arrancar, ni parpadeo, ni un fallo que esconda el aviso.
+
 ## 3. Estado con signals
 
 Principios:

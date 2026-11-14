@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { App } from './app';
+import { IS_DEMO_BUILD } from './core/layout/demo-banner';
 
 async function renderShell(): Promise<HTMLElement> {
   const fixture = TestBed.createComponent(App);
@@ -39,10 +40,32 @@ describe('D-122 application shell', () => {
     expect(host.querySelector('header')?.textContent).not.toContain('Roams');
   });
 
+  it('AC-61 D-168 shows no demo notice in the internal tool', async () => {
+    expect((await renderShell()).querySelector('aside[aria-label="Aviso de demostración"]')).toBeNull();
+  });
+
   it('AC-83 links the exchange rate attribution in the footer (RF-18)', async () => {
     const attribution = (await renderShell()).querySelector<HTMLAnchorElement>('footer a');
 
     expect(attribution?.textContent.trim()).toBe('Rates By Exchange Rate API');
     expect(attribution?.href).toBe('https://www.exchangerate-api.com/');
+  });
+});
+
+describe('AC-61 D-168 application shell of the demo build', () => {
+  it('puts the demo notice above the header, outside the sticky part, so it scrolls with the page', async () => {
+    await TestBed.configureTestingModule({
+      imports: [App],
+      providers: [provideRouter([]), { provide: IS_DEMO_BUILD, useValue: true }],
+    }).compileComponents();
+    const host = await renderShell();
+
+    const notice = host.querySelector('aside[aria-label="Aviso de demostración"]');
+    const header = host.querySelector('app-header');
+    expect(notice).not.toBeNull();
+    expect(header).not.toBeNull();
+    if (notice === null || header === null) return;
+    expect(notice.compareDocumentPosition(header) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(notice.closest('.sticky')).toBeNull();
   });
 });

@@ -20,7 +20,10 @@ COPY tsconfig.base.json ./
 COPY packages/domain packages/domain
 COPY packages/contract packages/contract
 COPY apps/web apps/web
-RUN npm run build:packages && npm run build -w @saas-o-matic/web
+# D-169: `production` for the internal tool; the CI builds the public demo with `production,demo`, which adds its
+# notice (spec 05 §2).
+ARG WEB_BUILD_CONFIGURATION=production
+RUN npm run build:packages && npm run build -w @saas-o-matic/web -- --configuration "${WEB_BUILD_CONFIGURATION}"
 
 FROM ${NGINX_IMAGE} AS runtime
 COPY apps/web/nginx/nginx.conf /etc/nginx/nginx.conf

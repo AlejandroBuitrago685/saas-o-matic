@@ -63,6 +63,31 @@ hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel�
       `index.html`, salud e IP real).
   - El trabajo `e2e` del CI comprueba además los contenedores con `scripts/check-containers.mjs`: sin root, solo
     lectura, sin *capabilities* y puertos solo en `127.0.0.1` (AC-60, D-130).
+- **La demo pública (AC-61, P11):** `demo` (`npm run e2e:demo`, `playwright.demo.config.ts`) prueba `e2e/demo/` contra
+  la pila de la demo, en `127.0.0.1:4010`. En el CI, el trabajo `demo` la levanta con las mismas imágenes que publica
+  (D-170).
+  - Cada test es un cliente propio: envía el `X-Forwarded-For` que pone el nginx del host, porque en la demo la
+    pasarela es de confianza (D-130).
+  - Comprueba:
+    - el aviso, en todas las vistas, a 360 px y con axe;
+    - los 25 clientes de ejemplo;
+    - la sexta escritura en un minuto → `429`;
+    - un cubo del límite por cliente;
+    - el reinicio del contenedor de la API, que devuelve los datos de ejemplo. Lo hace con `docker restart`, así que
+      un solo *worker* y en orden.
+  - En local, primero se construyen las dos imágenes con la etiqueta `local` y se levanta la pila. Antes hay que bajar
+    la del e2e, porque las dos usan la subred fija de D-130.
+
+    ```bash
+    docker build -f apps/api/Dockerfile -t ghcr.io/alejandrobuitrago685/saas-o-matic-api:local .
+    docker build -f apps/web/Dockerfile --build-arg WEB_BUILD_CONFIGURATION=production,demo -t ghcr.io/alejandrobuitrago685/saas-o-matic-web-demo:local .
+    SAAS_O_MATIC_TAG=local docker compose -f docker-compose.yml -f deploy/demo/docker-compose.demo.yml up -d --wait
+    npm run e2e:demo
+    ```
+  - Si una ejecución falla a medias, la pila queda con datos y cubos gastados: hay que bajarla y volver a levantarla
+    antes de repetir (`… down`, y después `… up -d --wait`).
+  - Lo que solo puede verse en la URL pública (HTTPS, HSTS, Cloudflare, el *timer*) se comprueba a mano tras
+    desplegar (08-despliegue §4.4).
 - **Accesibilidad (AC-86, D-156):** `expectNoSeriousA11yViolations` (`e2e/fixtures/a11y.ts`) pasa axe con las reglas
   de WCAG 2.1 A y AA y falla con impacto `serious` o `critical`; el resto se adjunta al informe. Se audita cada vista
   y estado a 1280 y a 360 px. El teclado tiene su propio spec: el slider con Re Pág, Av Pág, Inicio y Fin, y el alta

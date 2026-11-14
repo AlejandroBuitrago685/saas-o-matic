@@ -1,0 +1,46 @@
+# Public demo (08-despliegue §4, D-47, D-99, D-130, D-171): an override of the docker-compose.yml of the repository,
+# with the images the CI tested and published in GHCR (D-170). On the server, next to a copy of docker-compose.yml:
+#   export SAAS_O_MATIC_TAG=sha-<commit>
+#   docker compose -f docker-compose.yml -f docker-compose.demo.yml pull
+#   docker compose -f docker-compose.yml -f docker-compose.demo.yml up -d --wait --force-recreate
+# Every start of the API regenerates the sample data (DEMO_MODE, AC-61), so a deployment and the daily restart of
+# systemd/ reset it. The hardening of the base file (no root, read-only, no capabilities) is kept as it is.
+name: saas-o-matic-demo
+
+services:
+  api:
+    image: ghcr.io/alejandrobuitrago685/saas-o-matic-api:${SAAS_O_MATIC_TAG:?set the image tag, sha-<commit>}
+    build: !reset null
+    environment:
+      DEMO_MODE: 'true'
+      # RNF-SEC-20, D-173: the API refuses to start in demo mode with more.
+      RATE_LIMIT_WRITES_PER_MINUTE: '5'
+      CORS_ORIGINS: https://saas-o-matic.codeserviceapi.es
+      # D-130: the gateway is the host nginx, which replaces X-Forwarded-For (D-105); never the whole subnet.
+      TRUST_PROXY: loopback,172.30.0.1,172.30.0.10
+    # The data lives only as long as the container (it is regenerated on every start): in memory, and bounded.
+    volumes: !reset []
+    tmpfs: !override
+      - /tmp
+      - /data:size=32m,uid=1000,gid=1000,mode=0700
+    # A small server shared with other applications: one replica, bounded memory, CPU and processes.
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 64
+    logging: &logging
+      driver: local
+      options:
+        max-size: 10m
+        max-file: '3'
+
+  web:
+    # The demo build of the SPA, with the notice of spec 05 §2 (D-169).
+    image: ghcr.io/alejandrobuitrago685/saas-o-matic-web-demo:${SAAS_O_MATIC_TAG:?set the image tag, sha-<commit>}
+    build: !reset null
+    # D-99: Docker bypasses the firewall, so only loopback; the host nginx forwards to this port.
+    ports: !override
+      - 127.0.0.1:4010:8080
+    mem_limit: 64m
+    cpus: 0.25
+    pids_limit: 32
+    logging: *logging

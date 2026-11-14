@@ -72,6 +72,9 @@ npm run e2e:stack:down
 - `npm run e2e:smoke` es la prueba de humo del arranque (AC-95): lanza `npm run dev` y comprueba `GET /health` y el
   dashboard con los datos de ejemplo. Necesita los puertos 3000 y 4200 libres y la base recién creada con
   `npm run setup`.
+- `npm run e2e:demo` prueba la pila de la demo pública (AC-61: aviso, datos de ejemplo, límite de escrituras y
+  reinicio) en el puerto 4010. Cómo levantarla:
+  [`07-tests.md`](ai-workspace/03-arquitectura/07-tests.md).
 
 ## API
 

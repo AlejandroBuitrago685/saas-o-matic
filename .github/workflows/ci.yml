@@ -1,6 +1,6 @@
 # Pipeline (03-arquitectura/08-despliegue.md §3, D-52, D-53).
 # P0: `quality` (Node 22/24/26 matrix) and `audit`; P6: `e2e` (D-68); P10: `smoke` (AC-95) and the traceability
-# check becomes blocking (D-161).
+# check becomes blocking (D-161); P11: `demo` and, on main only, `publish` (D-170).
 name: CI
 
 on:
@@ -13,12 +13,17 @@ permissions:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # A new push cancels the previous run of a branch, but never of main: it could stop `publish` mid-push (D-170).
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
   # Git hooks are a local safety net; CI runs the same checks explicitly.
   LEFTHOOK: '0'
   NG_CLI_ANALYTICS: 'false'
+  # D-170: the images of the public demo, as deploy/demo/docker-compose.demo.yml pulls them.
+  DEMO_API_IMAGE: ghcr.io/alejandrobuitrago685/saas-o-matic-api
+  DEMO_WEB_IMAGE: ghcr.io/alejandrobuitrago685/saas-o-matic-web-demo
+  SAAS_O_MATIC_TAG: sha-${{ github.sha }}
 
 jobs:
   quality:
@@ -150,3 +155,92 @@ jobs:
         run: npx playwright install chromium
       - name: README · start (npm run dev), GET /health and the dashboard with the sample data (AC-95)
         run: npm run e2e:smoke
+
+  # D-170, AC-61: the images of the public demo are built once, here, and tested against the stack of the demo
+  # (docker-compose.yml plus deploy/demo/docker-compose.demo.yml, D-171). On main they are saved for `publish`, which
+  # pushes them exactly as they were tested.
+  demo:
+    name: demo
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Build the demo images, the web with the notice of spec 05 §2 (D-169)
+        run: |
+          labels=(--label "org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY}" \
+            --label "org.opencontainers.image.revision=${GITHUB_SHA}")
+          docker build "${labels[@]}" -f apps/api/Dockerfile -t "${DEMO_API_IMAGE}:${SAAS_O_MATIC_TAG}" .
+          docker build "${labels[@]}" -f apps/web/Dockerfile --build-arg WEB_BUILD_CONFIGURATION=production,demo \
+            -t "${DEMO_WEB_IMAGE}:${SAAS_O_MATIC_TAG}" .
+      - name: Start the demo stack with those images and wait until it is healthy (D-171)
+        run: docker compose -f docker-compose.yml -f deploy/demo/docker-compose.demo.yml up -d --wait
+      - name: Containers without root, read-only, ports on 127.0.0.1 only (AC-60, D-130)
+        run: node scripts/check-containers.mjs saas-o-matic-demo
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: AC-61 e2e of the demo (notice, sample data, 5 writes, buckets per client, reset on restart)
+        run: npm run e2e:demo
+      - name: Playwright report and traces
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-report-demo
+          path: |
+            e2e/playwright-report/
+            e2e/test-results/
+          retention-days: 7
+      - name: Logs of the demo stack (the API logs carry no personal data)
+        if: failure()
+        run: docker compose -f docker-compose.yml -f deploy/demo/docker-compose.demo.yml logs --no-color
+      - name: Save the tested images for publish (D-170)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: docker save "${DEMO_API_IMAGE}:${SAAS_O_MATIC_TAG}" "${DEMO_WEB_IMAGE}:${SAAS_O_MATIC_TAG}" | gzip > demo-images.tar.gz
+      - name: Hand the tested images to publish
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: demo-images
+          path: demo-images.tar.gz
+          retention-days: 1
+      - name: Stop the demo stack
+        if: always()
+        run: docker compose -f docker-compose.yml -f deploy/demo/docker-compose.demo.yml down --volumes --remove-orphans
+
+  # D-170: only on main and with every check green. The only job that can write packages; it pushes the images `demo`
+  # tested, with the tag of the commit (what the server deploys, D-171) and `main`.
+  publish:
+    name: publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [quality, audit, e2e, smoke, demo]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: demo-images
+      - name: Load the tested images
+        run: gunzip -c demo-images.tar.gz | docker load
+      - name: Log in to GHCR with the token of this run
+        run: echo "${GITHUB_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish sha-<commit> and main
+        run: |
+          for image in "${DEMO_API_IMAGE}" "${DEMO_WEB_IMAGE}"; do
+            docker push "${image}:${SAAS_O_MATIC_TAG}"
+            docker tag "${image}:${SAAS_O_MATIC_TAG}" "${image}:main"
+            docker push "${image}:main"
+          done
+      - name: Log out of GHCR
+        if: always()
+        run: docker logout ghcr.io

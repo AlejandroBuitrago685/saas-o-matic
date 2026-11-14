@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 
 import { AppFooter } from './core/layout/app-footer';
 import { AppHeader } from './core/layout/app-header';
+import { DemoBanner } from './core/layout/demo-banner';
 import { ToastRegion } from './core/layout/toast-region';
 
 /**
@@ -11,7 +12,7 @@ import { ToastRegion } from './core/layout/toast-region';
  */
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, AppHeader, AppFooter, ToastRegion],
+  imports: [RouterOutlet, DemoBanner, AppHeader, AppFooter, ToastRegion],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

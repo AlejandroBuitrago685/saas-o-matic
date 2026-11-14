@@ -1,0 +1,11 @@
+# Daily reset of the public demo (D-171, AC-61, RNF-SEC-20): restarting the API container regenerates the sample data
+# (DEMO_MODE, 08-despliegue §4). The container belongs to the project `name` of docker-compose.demo.yml. It pulls
+# nothing: a new version is only deployed by hand, with a fixed tag.
+[Unit]
+Description=Reset the sample data of the SaaS-O-Matic demo
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=docker restart saas-o-matic-demo-api-1
