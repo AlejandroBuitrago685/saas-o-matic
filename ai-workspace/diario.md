@@ -1222,3 +1222,108 @@ Canarias), más el plan, las dos pilas de e2e, la revisión y el cierre.
 **Siguiente parte: P11 · Demo pública**, en la rama `feat/p11-demo`, desde `main` en verde.
 
 **Decisiones por validar:** S-08.
+
+## P11 · Demo pública — 2026-11-14 · ramas `feat/p11-demo` (PR #17) y `chore/p11-close`
+
+**Hecho**
+- **Código** (PR #17):
+  - API: con `DEMO_MODE`, cada arranque siembra el perfil `demo` en un `/data` vacío. Nunca borra una base de datos
+    (D-174), y no arranca con más de 5 escrituras por minuto (D-173);
+  - web: el aviso de spec 05 §2, solo en el build `demo` (D-168, D-169);
+  - `deploy/demo/`: el *override* de Compose, las plantillas del sitio de nginx y el reinicio diario con systemd
+    (D-171, D-172);
+  - CI: el trabajo `demo` prueba las imágenes, y `publish` sube esas mismas a GHCR (D-170). AC-61 sale de
+    `PENDING_CRITERIA`.
+- **`main`** exige ahora 11 *checks*: se ha añadido `demo` tras su primer verde, como autorizó el usuario.
+- **Publicación:** `sha-ab4960e…` y `main` de las dos imágenes. Los paquetes heredaron la visibilidad pública del
+  repositorio, así que no hubo que cambiarla (D-166 lo daba por necesario). El *pull* anónimo funciona, y cada etiqueta
+  apunta al *digest* que probó el trabajo `demo`.
+- **Despliegue** (por SSH, según 08-despliegue §4.4):
+  - Docker 29.1.3 y Compose 2.40.3, del archivo de Ubuntu;
+  - la pila, con `sha-ab4960e…`;
+  - el fichero del sitio, con las plantillas rellenadas en el servidor;
+  - el certificado ECDSA, emitido con `certonly --nginx` al primer intento. La renovación de prueba pasa y no toca el
+    fichero;
+  - el *timer* del reinicio, activo.
+- **Cierre** (esta PR):
+  - las etiquetas OCI de las imágenes (D-176, con TDD);
+  - la documentación, la trazabilidad y el README, con el enlace a la demo.
+
+**Comprobación en vivo** (AC-61, parte R; https://saas-o-matic.codeserviceapi.es)
+
+| Comprobación | Resultado |
+|---|---|
+| HTTP → HTTPS | `301` en `/` y en `/api/health`. |
+| HSTS | Una sola cabecera, `max-age=31536000; includeSubDomains`, en `/`, `/api/customers` y `/api/catalog`. |
+| Cabeceras | CSP, `nosniff` y `same-origin` en todas; COOP y CORP en la API. `no-store` en la API, salvo `/catalog` (`max-age=300`). |
+| Aviso | El texto exacto, antes de la cabecera, a 1280 y a 360 px y sin desplazamiento horizontal. |
+| Datos | Los 25 clientes de ejemplo. |
+| Escrituras | 5 × `201`, y la sexta da `429 RATE_LIMITED` con `retry-after: 59`. |
+| Suplantación | Con un `X-Forwarded-For` o un `X-Real-IP` falsos sigue el `429`. Si se envía `CF-Connecting-IP`, Cloudflare lo rechaza con `403`. |
+| Cubos por cliente | A (IPv4): 90 → 89 → 88, mientras B (IPv6) va de 98 a 97. Además, B escribe (`201`) con A limitado. |
+| *Timer* | Activo; el próximo, el 15/11 a las 05:00, hora del servidor. |
+| Reinicio | Con la propia unidad de systemd: el cliente del visitante pasa de `200` a `404`, y el total de 26 a 25. `Result=success`, y dos siembras en el log. |
+| Contenedores | Sin root, solo lectura, sin capacidades y con `no-new-privileges`. Dentro de sus límites, y con `/data` en `tmpfs`. Unos 42 MB entre los dos. |
+| Los demás sitios | Igual que la línea base, comprobados después de cada paso. |
+
+**Falló o lo descubrí por el camino**
+- **`publish` falló la primera vez** (D-177): la API se publicó, y GHCR rechazó el manifiesto de la web con `denied`.
+  Al relanzar solo ese trabajo, pasó.
+- **La imagen de la web decía ser nginx** (D-176): heredaba las etiquetas de su base, y GHCR mostraba su descripción
+  y su licencia. Lo descubrí al buscar la causa del `denied`, que resultó no tener relación.
+- **La segunda red no pudo ser el propio servidor.** Se usaron IPv4 e IPv6 de un mismo equipo, que Cloudflare envía
+  como dos clientes, y 08-despliegue §4.4 lo admite ya.
+- **Cloudflare inyecta su script de analítica** (`static.cloudflareinsights.com`) en el HTML. La CSP lo bloquea, así
+  que no sale ningún dato del visitante, pero la consola muestra el error. Queda pendiente de decidir.
+- **La primera petición del reto ACME por Cloudflare dio `520`**, justo tras recargar nginx. No se repitió, y certbot
+  emitió el certificado al primer intento.
+
+**Correcciones**
+- **Del usuario:** aprueba D-174 y D-175.
+- **Del revisor** (`sonnet`, una pasada): **APTO CON CAMBIOS**, sin P0 ni P1. Corregidos:
+  - P2: las recomendaciones de abajo, aunque genéricas, dejaban ver el estado del servidor. Ahora son una lista de
+    endurecimiento que vale para cualquier servidor, sin decir cómo está este, como pidió el usuario y recoge D-175;
+  - P3: la frase sobre la segunda red describía la protección del origen; ahora es neutra;
+  - P3: el test de D-176 descarta los comentarios antes de unir las líneas de continuación, y lee las instrucciones
+    sin distinguir mayúsculas, como Docker.
+
+  Sin cambio:
+  - P3: la lista de etiquetas de la base de nginx es fija. Queda ligada a su *digest*, y el comentario pide releerla
+    al cambiar de base.
+
+**Recomendaciones fuera del alcance de la prueba** (del usuario, para después de la entrega). Es la lista habitual de
+endurecimiento de un servidor; el detalle no se publica (D-175):
+- revisar las actualizaciones automáticas de seguridad del sistema;
+- revisar en qué interfaces escucha cada servicio.
+
+**Pendientes, con la parte en la que se resuelven**
+
+| Pendiente | Parte |
+|---|---|
+| README final, prueba desde un clon limpio y revisión final | P12 |
+| El script de analítica de Cloudflare que bloquea la CSP | Decisión del usuario |
+| Quitar el `overrides` de `minimatch` cuando ESLint y typescript-eslint pidan la 11 | Cuando salgan |
+
+**Decisiones:**
+- D-165 a D-173: validadas en el plan;
+- D-174 y D-175: aprobadas;
+- D-176 y D-177: pendientes de validar.
+
+**Tiempo:** estimado 3 h (unas 4 h con el CI de la demo). Real:
+- unas 2 h 20 min desde el *merge* de la PR #16 hasta la PR #17 (23:41–02:06, hora de Canarias), con una pausa por el
+  límite de uso;
+- más 1 h de publicación, despliegue y comprobación (06:23–07:20).
+
+## Nota de traspaso — 2026-11-14, tras P11
+
+**Estado**
+- P0 a P11 hechas. El código de P11 está en `main` (PR #17), y el cierre, en la rama `chore/p11-close`.
+- La demo, https://saas-o-matic.codeserviceapi.es, corre `sha-ab4960e…`. Las imágenes de esta PR solo cambian las
+  etiquetas, así que no hace falta volver a desplegarla. Si se hace, son los pasos de 08-despliegue §4.4.
+- El directorio de la demo está en el servidor, fuera de cualquier repositorio. Las órdenes de operación y la vuelta
+  atrás están en 08-despliegue §4.4.
+- `main` exige 11 *checks*: `quality` ×3, `audit`, `e2e`, los 5 `smoke` y `demo`.
+
+**Siguiente parte: P12 · Cierre:** README final, prueba desde un clon limpio y revisión final.
+
+**Decisiones por validar:** S-08, D-176 y D-177.

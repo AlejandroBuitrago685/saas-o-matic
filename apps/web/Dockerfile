@@ -33,3 +33,16 @@ COPY --from=build /app/apps/web/dist/web/browser /srv/saas-o-matic
 EXPOSE 8080
 # nginx directly, without the entrypoint scripts of the base image: they try to rewrite /etc/nginx, which is read-only.
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
+# D-176: every label of the image, because an image inherits those of its base, and the ones of nginx-unprivileged
+# describe nginx (GHCR shows them on the package page). The CI fills the ones of each build; a local build leaves them
+# empty. The repository declares no license, so the image claims none.
+ARG OCI_SOURCE="" OCI_REVISION="" OCI_VERSION="" OCI_CREATED=""
+LABEL org.opencontainers.image.title="saas-o-matic-web" \
+      org.opencontainers.image.description="The SPA of SaaS-O-Matic, served by nginx, which forwards /api to the API." \
+      org.opencontainers.image.source="${OCI_SOURCE}" \
+      org.opencontainers.image.url="${OCI_SOURCE}" \
+      org.opencontainers.image.revision="${OCI_REVISION}" \
+      org.opencontainers.image.version="${OCI_VERSION}" \
+      org.opencontainers.image.created="${OCI_CREATED}" \
+      org.opencontainers.image.licenses="" \
+      maintainer=""

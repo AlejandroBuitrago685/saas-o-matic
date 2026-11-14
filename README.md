@@ -4,7 +4,10 @@ Herramienta interna para que el equipo comercial simule y presupueste suscripcio
 clientes corporativos: alta de clientes con validación fiscal, simulación por tramos con impuestos y conversión de
 divisas en tiempo real.
 
-> **Estado:** funcionalidad completa; falta la entrega. Hechas las partes P0 a P10:
+> **Demo pública:** <https://saas-o-matic.codeserviceapi.es>, con datos ficticios que se regeneran cada día. Admite
+> 5 escrituras por minuto e IP.
+>
+> **Estado:** funcionalidad completa y demo publicada; falta el cierre. Hechas las partes P0 a P11:
 >
 > - monorepo, herramientas de calidad y CI;
 > - reglas de negocio del dominio: precios por tramos, impuestos, identificador fiscal y conversión de divisas;
@@ -12,9 +15,10 @@ divisas en tiempo real.
 > - dashboard con métricas, búsqueda y paginación (las dos en la URL) y datos de ejemplo;
 > - divisas con caché, indicador de estado y la elegida recordada al recargar;
 > - robustez: seguridad, estados de error, 360 px y accesibilidad;
-> - Docker Compose con nginx, e2e contra esa pila y prueba de humo del arranque en Linux, Windows y macOS.
+> - Docker Compose con nginx, e2e contra esa pila y prueba de humo del arranque en Linux, Windows y macOS;
+> - la demo pública: el CI prueba sus imágenes, las publica en GHCR y el servidor las descarga.
 >
-> Faltan la demo pública (P11) y el cierre: README final, prueba desde un clon limpio y revisión (P12). Detalle en el
+> Falta el cierre: README final, prueba desde un clon limpio y revisión (P12). Detalle en el
 > [plan de implementación](ai-workspace/04-plan-implementacion.md).
 
 ## Requisitos

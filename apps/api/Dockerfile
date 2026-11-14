@@ -46,3 +46,14 @@ USER node
 WORKDIR /app/apps/api
 EXPOSE 3000
 CMD ["node", "dist/main.js"]
+# D-176: every label of the image (GHCR shows them on the package page). The CI fills the ones of each build; a local
+# build leaves them empty. The repository declares no license, so the image claims none.
+ARG OCI_SOURCE="" OCI_REVISION="" OCI_VERSION="" OCI_CREATED=""
+LABEL org.opencontainers.image.title="saas-o-matic-api" \
+      org.opencontainers.image.description="The API of SaaS-O-Matic: quotes multi-currency SaaS subscriptions." \
+      org.opencontainers.image.source="${OCI_SOURCE}" \
+      org.opencontainers.image.url="${OCI_SOURCE}" \
+      org.opencontainers.image.revision="${OCI_REVISION}" \
+      org.opencontainers.image.version="${OCI_VERSION}" \
+      org.opencontainers.image.created="${OCI_CREATED}" \
+      org.opencontainers.image.licenses=""

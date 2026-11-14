@@ -174,10 +174,13 @@ jobs:
       - run: npm ci
       - name: Build the demo images, the web with the notice of spec 05 §2 (D-169)
         run: |
-          labels=(--label "org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY}" \
-            --label "org.opencontainers.image.revision=${GITHUB_SHA}")
-          docker build "${labels[@]}" -f apps/api/Dockerfile -t "${DEMO_API_IMAGE}:${SAAS_O_MATIC_TAG}" .
-          docker build "${labels[@]}" -f apps/web/Dockerfile --build-arg WEB_BUILD_CONFIGURATION=production,demo \
+          # D-176: the labels of each build, which the Dockerfiles declare as build arguments; created is the commit date.
+          metadata=(--build-arg "OCI_SOURCE=https://github.com/${GITHUB_REPOSITORY}" \
+            --build-arg "OCI_REVISION=${GITHUB_SHA}" \
+            --build-arg "OCI_VERSION=${SAAS_O_MATIC_TAG}" \
+            --build-arg "OCI_CREATED=$(git log -1 --format=%cI)")
+          docker build "${metadata[@]}" -f apps/api/Dockerfile -t "${DEMO_API_IMAGE}:${SAAS_O_MATIC_TAG}" .
+          docker build "${metadata[@]}" -f apps/web/Dockerfile --build-arg WEB_BUILD_CONFIGURATION=production,demo \
             -t "${DEMO_WEB_IMAGE}:${SAAS_O_MATIC_TAG}" .
       - name: Start the demo stack with those images and wait until it is healthy (D-171)
         run: docker compose -f docker-compose.yml -f deploy/demo/docker-compose.demo.yml up -d --wait
