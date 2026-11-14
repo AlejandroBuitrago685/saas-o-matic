@@ -4,6 +4,8 @@
   >Saltar al contenido</a
 >
 <div class="flex min-h-screen flex-col">
+  <!-- Only in the demo build (D-169), and not sticky: it scrolls away with the page (D-168). -->
+  <app-demo-banner />
   <!-- Sticky on the host: inside it, the <header> would only stick within its own height (D-51: the rates
        indicator stays visible while scrolling). -->
   <app-header class="sticky top-0 z-10" />

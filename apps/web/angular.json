@@ -54,6 +54,14 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "demo": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/core/layout/demo-build.ts",
+                  "with": "src/app/core/layout/demo-build.demo.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
