@@ -64,3 +64,13 @@ Apruebo el plan, con estos ajustes:
 5) P13 dura unas 3 h.
 
 Los dos tests de documentación me parecen bien: déjalos. Te autorizo el push de docs/p12-cierre para la prueba del clon limpio, también con los arreglos que salgan de ella. La PR y el merge, como siempre: me los pides con el CI en verde.
+
+## Mensaje 3
+
+Respuesta a la pregunta de la interfaz: «¿Paro yo el ng serve huérfano que ocupa el puerto 4200 (PID 48772)?»
+
+Sí, páralo
+
+## Mensaje 4
+
+Respuestas: mantén la línea de las dos cuentas y las tres debilidades de la sección de producción; el prompt 26 literal está bien. El puerto 4200 ya está libre: termina la prueba del clon limpio (npm run dev, la descarga limpia de Chromium y e2e:smoke). Un ajuste menor: el README repite los requisitos de Node en "Arranque rápido" y en "Requisitos"; déjalo en un solo sitio. Después, el diario, la nota de traspaso para P13 y pídeme abrir la PR.

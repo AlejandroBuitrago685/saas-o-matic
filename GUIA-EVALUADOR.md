@@ -35,6 +35,8 @@ npm run dev
 
 - Web en <http://localhost:4200> y API en <http://localhost:3000/health>. Con `npm run dev`, la documentación
   interactiva de la API está en <http://localhost:3000/docs>.
+- Medido en un clon limpio con la caché de npm vacía, `npm ci`, `npm run setup` y `npm test` tardan unos 2 minutos en
+  total; el resto del recorrido es leer.
 - `npm test`: tests de dominio, contrato, API, herramientas y web.
 - `npm run trace`: comprueba que cada criterio de aceptación y cada vector de prueba lo cita algún test.
 - Opcional, con Docker: `docker compose up --build -d` y <http://localhost:8080>. Para los e2e, `npm run e2e:stack` y

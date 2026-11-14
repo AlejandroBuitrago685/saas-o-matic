@@ -23,7 +23,8 @@ simulador a 360 px. Se regeneran con `npm run capturas`._
 
 ## Arranque rápido
 
-Con Node 22 (desde la 22.22.3), 24 (desde la 24.15) o 26 en adelante (el [`.nvmrc`](.nvmrc) recomienda la 26) y npm 10:
+Necesitas **Node.js** `^22.22.3 || ^24.15.0 || >=26.0.0` (el [`.nvmrc`](.nvmrc) recomienda la 26) y **npm** 10 o
+superior. No se compila nada nativo: el driver de SQLite trae binarios para Windows, macOS y Linux.
 
 ```bash
 npm ci
@@ -46,12 +47,6 @@ intervine yo y qué haría distinto en producción.
 
 - [`decisiones.md`](ai-workspace/decisiones.md) y [`diario.md`](ai-workspace/diario.md): qué se decidió, quién y qué falló.
 - [`prompts/`](ai-workspace/prompts) (literales; las transcripciones se entregan aparte) y [`CLAUDE.md`](CLAUDE.md).
-
-## Requisitos
-
-- **Node.js** `^22.22.3 || ^24.15.0 || >=26.0.0` (recomendado: la versión de [`.nvmrc`](.nvmrc), Node 26).
-- **npm** 10 o superior.
-- No hace falta compilar nada nativo: el driver de SQLite trae binarios para Windows, macOS y Linux.
 
 ## Más sobre el arranque en local
 
@@ -86,7 +81,8 @@ npm run e2e:stack:down
 
 - `e2e:stack` levanta la pila de Compose como un proyecto aparte, con una base de datos vacía y límites de peticiones
   más altos, y espera a que esté sana. `e2e` ejecuta Playwright (Chromium) contra ella, con la CSP real.
-- La primera vez, `npx playwright install chromium` descarga el navegador.
+- Todos los e2e, la prueba de humo incluida, usan Chromium: la primera vez, `npx playwright install chromium` lo
+  descarga.
 - `npm run e2e:dev` ejecuta los mismos tests sin Docker, salvo los que solo tienen sentido contra la pila
   (`@prod-only`: cabeceras, CSP e IP real). Playwright arranca su propia API (puerto 3100, con SQLite en memoria) y su
   propio `ng serve` (puerto 4300): no toca la base de desarrollo y puede ejecutarse con `npm run dev` arrancado.
