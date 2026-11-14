@@ -25,7 +25,8 @@ Elementos comunes a todas las vistas:
 - **Cabecera:** nombre de la aplicación (enlace a `/`), selector de divisa e indicador del estado de los tipos (§4).
 - **Pie:** atribución obligatoria «Rates By Exchange Rate API» con enlace a `https://www.exchangerate-api.com` (RF-18).
 - **Aviso de demo** (solo en el entorno de demo, RNF-SEC-20): banner fijo con el texto «Entorno de demostración: los
-  datos son ficticios y se borran periódicamente. No introduzcas datos reales.»
+  datos son ficticios y se borran periódicamente. No introduzcas datos reales.» «Fijo» quiere decir permanente: va
+  arriba de todas las vistas, no se puede cerrar y se desplaza con la página (D-168).
 - **Notificaciones:** mensajes breves de éxito («Cliente creado», «Simulación guardada»).
 
 ## 3. Vistas

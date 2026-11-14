@@ -144,7 +144,7 @@ Variables de entorno validadas con Zod al arrancar (`loadConfig`). Se versiona `
 | `RATE_LIMIT_PER_MINUTE` / `RATE_LIMIT_WRITES_PER_MINUTE` | Enteros > 0 | `100` / `20` | D-44; en la demo, 5 escrituras (RNF-SEC-20). |
 | `TRUST_PROXY` | `false`, o lista de direcciones o rangos CIDR de los proxies (o `loopback`); nunca `true`, ni saltos, ni `/0`, ni los rangos privados enteros `uniquelocal` y `linklocal` (D-113) | `false` | Detrás de los proxies, para que la IP del límite de peticiones sea la real (D-105). En Docker, la subred de su red. |
 | `LOG_LEVEL` | Nivel de pino | `info` | — |
-| `DEMO_MODE` | Booleano | `false` | Regenera los datos al arrancar (08-despliegue §4, desde P11). Los límites de la demo se fijan con `RATE_LIMIT_*`. |
+| `DEMO_MODE` | Booleano; con `true`, `RATE_LIMIT_WRITES_PER_MINUTE` ≤ 5 (D-173) | `false` | Cada arranque siembra el perfil `demo` en una base de datos nueva (`openDemoDatabase`, AC-61, 08-despliegue §4). Nunca borra una que ya exista: si la encuentra, la API no arranca (D-174). Si las escrituras pasan de 5, tampoco arranca: así, la protección de la demo no depende de acordarse de una segunda variable. |
 
 Los **datos del catálogo** (países y tipos, planes, tarifas y su asociación) son código tipado en
 `src/config/catalog.data.ts`. Al arrancar se validan con `validateCatalog` de `domain`. Que coincidan con el registro de
