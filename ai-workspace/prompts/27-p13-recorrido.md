@@ -78,3 +78,15 @@ Después, sigue con las secciones 3 a 9 como en el plan, y pásame las capturas 
 ## Mensaje 5
 
 I hit my usage limit while you were working, but it has reset now. Please continue from where you left off.
+
+## Mensaje 6
+
+Sí, push y PR
+
+## Mensaje 7
+
+Sí, Auto-fix
+
+## Mensaje 8
+
+Pages ya está activado y publicado: el asesor ha comprobado la URL, la redirección de la raíz, las capturas y el simulador en vivo, sin errores de consola. Apruebo D-186 y D-187: regístralas. Completa la fila de P13 en la tabla «Partes y PR» con la PR #21. Después, propónme la etiqueta v1.0.0 y el texto de la release (enlaces a la demo, al recorrido y a la guía del evaluador) antes de crearlas.
