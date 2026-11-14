@@ -50,8 +50,7 @@ describe('D-86 / D-161 traceability script (blocking from P10)', () => {
     expect(blockingProblems([], {})).toEqual({ gaps: [], stale: [] });
   });
 
-  // The id is not written here: a test that names it would count as its coverage.
-  it('D-161: a single criterion is pending, the one of the public demo, until P11', () => {
-    expect(Object.values(PENDING_CRITERIA)).toEqual(['P11']);
+  it('D-161: no criterion is pending since P11, which tested the last one (the public demo)', () => {
+    expect(PENDING_CRITERIA).toEqual({});
   });
 });

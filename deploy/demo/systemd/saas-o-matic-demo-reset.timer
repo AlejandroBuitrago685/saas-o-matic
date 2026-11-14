@@ -1,0 +1,11 @@
+# Every day at 05:00, local time of the server (D-171). Persistent: a run missed while the server was off happens at
+# the next boot.
+[Unit]
+Description=Daily reset of the SaaS-O-Matic demo
+
+[Timer]
+OnCalendar=*-*-* 05:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

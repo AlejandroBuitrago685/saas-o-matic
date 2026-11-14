@@ -22,7 +22,7 @@ const AC_HEADER = /^\*\*(AC-\d+) · [^*]+\*\* · Refs: [^\n]*?· Nivel: ([^·\n]
 const TV_ROW = /^\| (TV-[A-Z]+-\d+) \|/gm;
 const AUTOMATED_LEVELS = ['U', 'I', 'E', 'CI'];
 /** @type {Readonly<Record<string, string>>} criterion → the part that brings its tests (D-161) */
-export const PENDING_CRITERIA = { 'AC-61': 'P11' };
+export const PENDING_CRITERIA = {};
 // Tests, test vectors and CI workflows (CI-level criteria are verified by named pipeline steps, e.g. AC-57).
 const TEST_FILE = /(\.test\.ts$|\.spec\.ts$|(^|\/)test\/vectors\/.+\.ts$|^\.github\/workflows\/.+\.ya?ml$)/;
 

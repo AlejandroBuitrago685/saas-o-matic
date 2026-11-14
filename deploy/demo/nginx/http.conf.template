@@ -1,0 +1,15 @@
+# nginx of the host · HTTP of the public demo (08-despliegue §4, D-99, D-167, D-172). Installed as its own file, next
+# to the other sites and without touching them. Cloudflare already sends its visitors to HTTPS: this server is for
+# the ACME challenge of certbot and for a direct visit.
+# The redirect lives in `location /`, never as a `return` of the server: the nginx plugin of certbot answers the
+# challenge with an exact location of its own, which only wins if the server does not return before.
+server {
+    listen 80;
+    listen [::]:80;
+    server_name saas-o-matic.codeserviceapi.es;
+    access_log off;
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
