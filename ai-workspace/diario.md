@@ -1528,25 +1528,42 @@ fusionada). Es una página HTML interactiva; la etiqueta de la entrega se pone a
 - **Del hook `Stop`:** la ampliación del comprobador de enlaces subió la complejidad de una función a 12; se separó la
   comprobación del ancla.
 
-**Decisiones:** D-180: validada; D-183 y D-185: validadas con el plan; D-184: del usuario; **D-186 y D-187: Claude ·
-pendiente**.
+**Decisiones:** D-180: validada; D-183 y D-185: validadas con el plan; D-184: del usuario; D-186 y D-187: validadas
+tras el *merge*.
 
 **Tiempo:** estimado 4–5 h (aceptadas por el usuario). Real: unas 4 h, con el punto de control y la revisión visual.
 
 ## Nota de traspaso — 2026-11-14, tras P13
 
 **Estado**
-- P0 a P13 hechas. P13 va en la rama `feat/p13-recorrido` (PR #21).
-- Tras el *merge*: el usuario activa Pages (Settings → Pages → Source: GitHub Actions); el workflow `Pages` publica al
-  terminar el CI de `main` (o a mano con *Run workflow*). URL:
-  <https://alejandrobuitrago685.github.io/saas-o-matic/recorrido/>.
-- Después: proponer la etiqueta `v1.0.0` y una release de GitHub con los enlaces a la demo y al recorrido, sin crearla
-  sin la aprobación del usuario.
-- La tabla «Partes y PR» del plan ya tiene la PR de P13 (#21).
+- P0 a P13 hechas y fusionadas (P13: PR #21, `c1c9890`); la tabla «Partes y PR» del plan tiene la #21.
+- **Publicado:** el usuario activó Pages y el workflow `Pages` publicó `c1c9890` al terminar el CI de `main`.
+  <https://alejandrobuitrago685.github.io/saas-o-matic/recorrido/> comprobado: la URL, la redirección de la raíz, las
+  capturas y el simulador en vivo, sin errores en la consola; la raíz, la página, `domain/index.js` y las capturas
+  responden 200.
+- **Siguiente:** la etiqueta `v1.0.0` y la release de GitHub, con el texto propuesto al usuario y creadas solo con su
+  aprobación.
 
 **Cómo se mantiene la página**
 - Cualquier cambio en las fuentes (plan, decisiones, diario, guía, especificación, `ci.yml`, tests, capturas) se
   regenera con `npm run recorrido`; si no, falla `tools/recorrido.test.ts` y el workflow de Pages.
 - Las capturas, con `npm run capturas` (puertos 3100 y 4300).
 
-**Decisiones por validar:** D-186 y D-187.
+**Decisiones por validar:** ninguna.
+
+## Prueba del clon limpio tras P13 — 2026-11-14 · `main` en `c1c9890`
+
+La repitió el usuario, fuera de esta sesión, en un clon limpio de `main` tras fusionar P13 y siguiendo el README. **Es
+la medición vigente**: la de P12 (más arriba) se tomó antes de los tests que añadió P13. El recorrido visual lee siempre
+la última tabla de este tipo del diario.
+
+| Paso del README | Resultado | Tiempo |
+|---|---|---|
+| `git clone` | bien | 2 s |
+| `npm ci` | bien | 53 s |
+| `npm run setup` | bien | 6 s |
+| `npm run dev` | API y web en 200; el dashboard, sin errores en la consola | listo en 13 s |
+| `npm test` | 1 222 + 293 tests (Node y web), 1 515 en total, todos en verde | 44 s |
+
+- No se repitieron la descarga de Chromium, `e2e:smoke`, Docker ni `npm run trace`: siguen valiendo los de P12.
+- `npm ci`, `setup` y `npm test` suman 103 s: los «unos 2 minutos» de la guía siguen siendo ciertos.

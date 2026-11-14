@@ -3,6 +3,7 @@
  * The reading routes of 5, 15 and 60 minutes (D-183): the lists of GUIA-EVALUADOR.md as checklists, with the times
  * measured in the clean clone of P12 next to each command. The page script remembers the ticks in this browser.
  */
+import { slugOf } from '../../check-markdown-links.mjs';
 import { markup } from '../html.mjs';
 import { inlineMarkdown } from '../inline-markdown.mjs';
 import { githubUrl } from '../repo-links.mjs';
@@ -100,18 +101,18 @@ function renderRoute(route, times) {
 
 /**
  * @param {readonly import('../sources/guide.mjs').Route[]} routes
- * @param {readonly import('../sources/workflow.mjs').MeasuredStep[]} steps
+ * @param {{ heading: string, steps: readonly import('../sources/workflow.mjs').MeasuredStep[] }} cleanClone the most
+ * recent clean-clone check of the diary
  */
-export function renderRoutes(routes, steps) {
-  const times = commandTimes(steps);
+export function renderRoutes(routes, cleanClone) {
+  const times = commandTimes(cleanClone.steps);
   return markup`<header class="section-head">
       <h2 id="recorridos-titulo">Tres recorridos, <span class="accent">según tu tiempo</span></h2>
       <p>
         Las listas de la <a href="${githubUrl(GUIDE_FILE)}">guía del evaluador</a>, para ir marcando. Junto a
-        cada comando, lo que tardó en un clon limpio con las cachés vacías (<a
-          href="${githubUrl(`${DIARY_FILE}#p12--cierre--2026-11-14--rama-docsp12-cierre`)}"
-          >diario de P12</a
-        >). Las marcas se guardan solo en este navegador.
+        cada comando, lo que tardó en la última prueba en un clon limpio
+        (<a href="${githubUrl(`${DIARY_FILE}#${slugOf(cleanClone.heading)}`)}">diario</a>). Las marcas se guardan
+        solo en este navegador.
       </p>
     </header>
     <div class="routes">${routes.map((route) => renderRoute(route, times))}</div>`;
