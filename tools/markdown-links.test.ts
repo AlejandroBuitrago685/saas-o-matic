@@ -39,14 +39,37 @@ describe('D-181 links of a Markdown file', () => {
 
     expect(linkTargets(markdown)).toEqual(['uno.md', 'img/dos.png', 'con espacios.md#x', 'tres.md']);
   });
+
+  it('finds the link of a nested badge and the src and href attributes of HTML', () => {
+    const markdown = [
+      '[![estado](img/badge.svg)](https://example.com/ci)',
+      '<img src="docs/capturas/uno.webp" alt="x" width="49%">',
+      '<a href="otro.md">otro</a>',
+    ].join('\n');
+
+    expect(linkTargets(markdown)).toEqual([
+      'img/badge.svg',
+      'https://example.com/ci',
+      'docs/capturas/uno.webp',
+      'otro.md',
+    ]);
+  });
 });
 
 describe('D-181 broken links', () => {
-  const files = ['README.md', 'docs/guia.md', 'docs/img/uno.png', 'src/app.ts'];
+  const files = [
+    'README.md',
+    'docs/guia.md',
+    'docs/dup.md',
+    'docs/con espacio.md',
+    'docs/img/uno.png',
+    'src/app.ts',
+  ];
   const existing = withFolders(files);
   const contents: Record<string, string> = {
     'README.md': '# Top\n',
     'docs/guia.md': '# Guía\n\n## Paso 1\n',
+    'docs/dup.md': '## Paso 1\n\n## Paso 1\n',
   };
   const read = (path: string): string | undefined => contents[path];
 
@@ -66,6 +89,17 @@ describe('D-181 broken links', () => {
     ]);
   });
 
+  it('decodes %20, numbers a repeated heading and reports a malformed percent-encoding without aborting', () => {
+    const markdown =
+      '[a](docs/con%20espacio.md) [b](docs/dup.md#paso-1-1) [c](docs/dup.md#paso-1-2) [d](docs/100%.md) [e](nada.md)';
+
+    expect(findBrokenLinks([{ path: 'README.md', content: markdown }], existing, read)).toEqual([
+      'README.md: docs/dup.md#paso-1-2 (no such heading)',
+      'README.md: docs/100%.md (invalid percent-encoding)',
+      'README.md: nada.md (no such file or folder)',
+    ]);
+  });
+
   it('resolves the links of a file against its own folder', () => {
     const markdown = '[a](img/uno.png) [b](../README.md) [c](../src/falta.ts)';
 
@@ -77,7 +111,7 @@ describe('D-181 broken links', () => {
 
 describe('D-181 the Markdown of the repository', () => {
   it('has no broken relative link, so the evaluator never meets one', () => {
-    const result = spawnSync('node', ['scripts/check-markdown-links.mjs'], {
+    const result = spawnSync(process.execPath, ['scripts/check-markdown-links.mjs'], {
       cwd: REPO_ROOT,
       encoding: 'utf8',
     });

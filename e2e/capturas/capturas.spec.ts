@@ -33,9 +33,11 @@ async function capture(page: Page, name: string): Promise<void> {
   await page.evaluate(() => document.fonts.ready);
   const png = await page.screenshot({ animations: 'disabled' });
   const scratch = await page.context().newPage();
-  const webp = await encodeWebp(scratch, png, WEBP_QUALITY);
-  await scratch.close();
-  writeFileSync(join(OUTPUT_DIR, `${name}.webp`), webp);
+  try {
+    writeFileSync(join(OUTPUT_DIR, `${name}.webp`), await encodeWebp(scratch, png, WEBP_QUALITY));
+  } finally {
+    await scratch.close();
+  }
 }
 
 async function openAcme(page: Page, request: APIRequestContext) {

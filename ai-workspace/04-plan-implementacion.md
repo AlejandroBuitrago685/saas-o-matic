@@ -279,7 +279,7 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
   - revisor sobre todo el repositorio;
   - matriz de trazabilidad con la columna de tests;
   - diario completo.
-- **Ampliado en el plan de P12 (D-178 a D-181):** `GUIA-EVALUADOR.md` con la tabla de requisitos, capturas
+- **Ampliado en el plan de P12 (D-178 a D-182):** `GUIA-EVALUADOR.md` con la tabla de requisitos, capturas
   reproducibles (`npm run capturas`), `ai-workspace/README.md`, las cabeceras de Cloudflare en 08-despliegue y dos
   tests de documentación (enlaces y tabla de la guía). **La etiqueta de la entrega pasa a P13.**
 - **AC:** AC-93, AC-94, AC-95 (manual), AC-99.

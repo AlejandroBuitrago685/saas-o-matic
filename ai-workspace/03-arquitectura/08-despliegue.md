@@ -189,8 +189,10 @@ Cloudflare documenta que esa opción añade cinco cabeceras: las cuatro de arrib
 2026-11-14), que ya enviamos con el mismo valor. Se mantiene activada y **no es una debilidad**:
 
 - **`X-Frame-Options: SAMEORIGIN` no abre nada que la CSP cierre.** La CSP de la web y la de la API llevan
-  `frame-ancestors 'none'`, que no admite ningún incrustador. La especificación de CSP dice que, si un recurso tiene
-  las dos políticas, la de `frame-ancestors` es la que se aplica y `X-Frame-Options` se ignora ([CSP Level 2, §7.7.1](https://www.w3.org/TR/CSP2/)).
+  `frame-ancestors 'none'`, que no admite ningún incrustador. La especificación de CSP dice que `frame-ancestors`
+  «obsoletes the X-Frame-Options header» y que, si un recurso tiene las dos políticas, la de `frame-ancestors` debe
+  aplicarse (SHOULD) y la cabecera, ignorarse ([CSP Level 2, §7.7.1](https://www.w3.org/TR/CSP2/), Recomendación
+  del W3C de 2016, leída el 2026-11-14).
   Y aunque un navegador antiguo sin CSP aplicara solo la cabecera, `SAMEORIGIN` solo permite incrustar la página en
   el propio origen, que no tiene ninguna página que lo haga.
 - **`Referrer-Policy: same-origin` no envía el *referer* a otros orígenes.** Solo lo envía en las peticiones al mismo

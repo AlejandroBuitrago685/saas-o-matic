@@ -23,7 +23,7 @@ simulador a 360 px. Se regeneran con `npm run capturas`._
 
 ## Arranque rápido
 
-Con Node 22.22.3 o superior (el [`.nvmrc`](.nvmrc) recomienda la 26) y npm 10:
+Con Node 22 (desde la 22.22.3), 24 (desde la 24.15) o 26 en adelante (el [`.nvmrc`](.nvmrc) recomienda la 26) y npm 10:
 
 ```bash
 npm ci
@@ -40,16 +40,12 @@ npm run dev
 
 ## Cómo se ha construido
 
-Con Claude Code y un proceso guiado por especificación: análisis, especificación, arquitectura y plan antes del código,
-y después una parte por sesión y por PR, con un subagente revisor y hooks que hacen cumplir las reglas.
+Con Claude Code y un proceso guiado por especificación: cuatro fases antes del código y después una parte por sesión y
+por PR, con un revisor y hooks. En [`ai-workspace/README.md`](ai-workspace/README.md): cómo trabajé con la IA, dónde
+intervine yo y qué haría distinto en producción.
 
-- [`ai-workspace/README.md`](ai-workspace/README.md): qué hay en cada carpeta, cómo trabajé con la IA, dónde intervine
-  yo y qué haría distinto en producción.
-- [`decisiones.md`](ai-workspace/decisiones.md) y [`diario.md`](ai-workspace/diario.md): cada decisión con su
-  alternativa descartada, y lo que falló y se corrigió en cada parte.
-- [`prompts/`](ai-workspace/prompts): los prompts de las sesiones de construcción, literales. Las transcripciones de las
-  sesiones se entregan aparte.
-- [`CLAUDE.md`](CLAUDE.md): las reglas que seguía la IA.
+- [`decisiones.md`](ai-workspace/decisiones.md) y [`diario.md`](ai-workspace/diario.md): qué se decidió, quién y qué falló.
+- [`prompts/`](ai-workspace/prompts) (literales; las transcripciones se entregan aparte) y [`CLAUDE.md`](CLAUDE.md).
 
 ## Requisitos
 

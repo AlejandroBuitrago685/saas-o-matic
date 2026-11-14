@@ -5,6 +5,8 @@
  * evaluator follows these links (README, GUIA-EVALUADOR.md, ai-workspace), so a broken one is a defect of the delivery.
  * External links are not followed: the checks never use the network. The literal prompts (`ai-workspace/prompts/`)
  * are records of what was written and are never edited, so they are not checked.
+ * It reads inline links and images (also nested, as in a badge), reference definitions and the `src` and `href`
+ * attributes of HTML. Not covered: `?query` strings, setext headings (underlined with `===`) and `id` anchors of HTML.
  * Usage: node scripts/check-markdown-links.mjs
  */
 import { readFileSync } from 'node:fs';
@@ -15,7 +17,8 @@ import { listRepoFiles, REPO_ROOT } from './lib/repo.mjs';
 
 const SKIPPED_PREFIXES = ['ai-workspace/prompts/'];
 const EXTERNAL = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
-const INLINE_LINK = /!?\[(?:[^\]\\]|\\.)*\]\(\s*(<[^>]*>|[^)\s]*)(?:\s+(?:"[^"]*"|'[^']*'))?\s*\)/g;
+const INLINE_LINK = /\]\(\s*(<[^>]*>|[^)\s]*)(?:\s+(?:"[^"]*"|'[^']*'))?\s*\)/g;
+const HTML_ATTRIBUTE = /\b(?:src|href)\s*=\s*"([^"]*)"/g;
 const REFERENCE_DEFINITION = /^ {0,3}\[[^\]]+\]:\s*(<[^>]*>|\S+)/gm;
 
 /**
@@ -70,23 +73,41 @@ export function anchorsOf(markdown) {
 
 /**
  * @param {string} markdown
- * @returns {string[]} the targets of its inline links, images and reference definitions
+ * @returns {string[]} the targets of its inline links, images, reference definitions and HTML attributes
  */
 export function linkTargets(markdown) {
   const text = stripCode(markdown);
-  const raw = [...text.matchAll(INLINE_LINK), ...text.matchAll(REFERENCE_DEFINITION)].map((m) => m[1] ?? '');
+  const matches = [INLINE_LINK, REFERENCE_DEFINITION, HTML_ATTRIBUTE].flatMap((pattern) => [
+    ...text.matchAll(pattern),
+  ]);
+  const raw = matches.map((match) => match[1] ?? '');
   return raw.map((target) => target.replace(/^<|>$/g, '')).filter((target) => target !== '');
+}
+
+/**
+ * @param {string} text
+ * @returns {string | undefined} the text with its percent-encoding decoded, or undefined when it is malformed
+ */
+function decodePercent(text) {
+  try {
+    return decodeURIComponent(text);
+  } catch {
+    return undefined;
+  }
 }
 
 /**
  * @param {string} from repository-relative path of the file with the link
  * @param {string} target
- * @returns {{ path: string, fragment: string } | undefined} undefined for an external link
+ * @returns {{ path: string, fragment: string } | 'external' | 'invalid'} where the link points; 'invalid' is a
+ * malformed percent-encoding, which is reported as a broken link and never aborts the check
  */
 function resolveTarget(from, target) {
-  if (EXTERNAL.test(target)) return undefined;
-  const [rawPath = '', fragment = ''] = target.split('#', 2);
-  const path = decodeURIComponent(rawPath);
+  if (EXTERNAL.test(target)) return 'external';
+  const [rawPath = '', rawFragment = ''] = target.split('#', 2);
+  const path = decodePercent(rawPath);
+  const fragment = decodePercent(rawFragment);
+  if (path === undefined || fragment === undefined) return 'invalid';
   if (path === '') return { path: from, fragment };
   const joined = path.startsWith('/') ? path.slice(1) : posix.join(dirname(from), path);
   return { path: posix.normalize(joined).replace(/\/$/, ''), fragment };
@@ -115,11 +136,12 @@ export function findBrokenLinks(markdownFiles, existing, readTarget) {
  */
 function problemOf(from, target, repository) {
   const resolved = resolveTarget(from, target);
-  if (resolved === undefined) return undefined;
+  if (resolved === 'external') return undefined;
+  if (resolved === 'invalid') return 'invalid percent-encoding';
   if (!repository.existing.has(resolved.path)) return 'no such file or folder';
   if (resolved.fragment === '' || !resolved.path.endsWith('.md')) return undefined;
   const anchors = anchorsOf(repository.readTarget(resolved.path) ?? '');
-  return anchors.has(decodeURIComponent(resolved.fragment).toLowerCase()) ? undefined : 'no such heading';
+  return anchors.has(resolved.fragment.toLowerCase()) ? undefined : 'no such heading';
 }
 
 /**

@@ -35,8 +35,9 @@ la [guía del evaluador](../GUIA-EVALUADOR.md) lleva cada requisito del enunciad
   ([D-73](decisiones.md#validación-de-la-arquitectura-y-plan-2026-11-12)). Cada parte acaba en una rama y una PR, con el CI en
   verde.
 - **Un revisor.** Al cerrar cada parte, un subagente [`revisor`](../.claude/agents/revisor.md) revisa el cambio contra la
-  especificación y las reglas de seguridad. Solo puede leer (D-72). Los hallazgos P0 y P1 se corrigen con un test que
-  falla antes del arreglo; el primero, el de P0, fue un **NO APTO** con un P0 y cinco P1 ([diario](diario.md)).
+  especificación y las reglas de seguridad. Solo puede leer (D-72). Los hallazgos P0 y P1 de código se corrigen con un
+  test que falla antes del arreglo; la primera revisión, la de la parte P0, fue un **NO APTO** con un hallazgo P0 y cinco
+  P1 ([diario](diario.md)).
 - **Hooks y herramientas.** Las reglas de `CLAUDE.md` marcadas con ⚙ las comprueba una herramienta probada: ESLint con
   límites de tamaño y fronteras entre capas, `tsc` estricto, scripts del repositorio, hooks de Claude Code y un CI
   obligatorio para integrar en `main` ([09-calidad-y-automatizacion](03-arquitectura/09-calidad-y-automatizacion.md)).
@@ -64,18 +65,19 @@ con el prompt en el que lo pedí.
    cualquier violación de CSP. Con el valor por defecto, la política habría dejado la web sin estilos.
    [D-70](decisiones.md#validación-de-la-arquitectura-y-plan-2026-11-12) · [prompt](prompts/06-plan-implementacion.md)
 5. **El flujo de trabajo.** Decidí una rama y una PR por parte, y hooks rápidos (el lint del fichero editado, nunca el
-   build completo). Tras el primer NO APTO del revisor, `npm install <paquete>` y `gh pr merge` pasaron a pedir
-   confirmación. [D-80, D-82 y D-85](decisiones.md#p0--scaffolding-2026-11-12) · [prompt](prompts/07-p0-plan.md)
+   build completo). Tras el primer NO APTO del revisor acepté su propuesta: `npm install <paquete>` y `gh pr merge`
+   pasaron a pedir confirmación. [D-80, D-82 y D-85](decisiones.md#p0--scaffolding-2026-11-12) ·
+   [prompt 07](prompts/07-p0-plan.md) y [prompt 08](prompts/08-p0-permisos-y-cierre.md)
 6. **La IP real, sin atajos.** Exigí que los proxies de confianza fueran solo `loopback` y la subred de Docker de la
-   demo, nunca todos los rangos privados; en P6 los estreché a direcciones exactas y pedí un e2e que demuestre que una
-   IP falsa no abre un cubo nuevo del límite.
+   demo, nunca todos los rangos privados; en P6 estreché el de la demo a direcciones exactas y pedí un e2e que demuestre
+   que una IP falsa no abre un cubo nuevo del límite.
    [D-113](decisiones.md#p3--contrato-y-base-de-la-api-2026-11-12) y D-130 · [prompt 13](prompts/13-p3-cierre.md) y [prompt 18](prompts/18-p6-plan.md)
 7. **El diseño, una extensión de roams.es.** Pedí que la interfaz pareciera una extensión natural de la web de la
    empresa, [roams.es](https://roams.es/): misma familia visual, no una copia. Validé la maqueta con dos ajustes.
    [D-122](decisiones.md#p3--contrato-y-base-de-la-api-2026-11-12) · [10-diseno-visual](03-arquitectura/10-diseno-visual.md) · [prompt](prompts/16-p5-plan.md)
-8. **Una contradicción de la especificación.** La §4.4 dejaba solo EUR mientras cargan los tipos y AC-88 pedía cambiar
-   de divisa en ese momento. Decidí que AC-88 se cumple en «Refrescando», y que tras un error los importes vuelven a
-   la divisa que había elegido. [D-142 y D-143](decisiones.md#p8--divisas-2026-11-13) · [prompt](prompts/20-p8-plan.md)
+8. **Una contradicción de la especificación.** Claude detectó que la §4.4 dejaba solo EUR mientras cargan los tipos y
+   que AC-88 pedía cambiar de divisa en ese momento, y me planteó las salidas. Decidí que AC-88 se cumple en
+   «Refrescando» y que tras un error los importes vuelven a la divisa que había elegido. [D-142 y D-143](decisiones.md#p8--divisas-2026-11-13) · [prompt](prompts/20-p8-plan.md)
 9. **No enmendar un criterio para facilitar el código.** Yo había pedido cortar el email del detalle con «…», y eso
    obligaba a cambiar AC-84. Al revisar el plan me di cuenta de que con «…» y `title` no se puede leer en móvil ni con
    el teclado, y cambié de idea: que se vea entero y se parta solo por puntos naturales, sin tocar el criterio. [D-159](decisiones.md#p10--shouldcould-y-ci-completo-2026-11-13) · [prompt](prompts/22-p10-plan.md)
@@ -98,9 +100,11 @@ delega y se controla, y cada parte cuesta tiempo de proceso además de código.
 - **Postgres en lugar de SQLite.** SQLite lo pide el enunciado y encaja con una instancia. Con varios comerciales
   escribiendo y más de una réplica haría falta Postgres; los límites de peticiones, que viven en memoria de cada
   instancia, pasarían a un almacén compartido.
-- **Un proveedor de divisas con SLA.** `open.er-api.com` no garantiza disponibilidad y pide como mucho una consulta por
-  hora; hoy se llama desde el navegador (D-22) y no se guarda el tipo usado, así que un presupuesto no es reproducible
-  a la divisa de ese día. Lo pasaría al servidor, con un proveedor de pago y el tipo guardado en cada simulación.
+- **Un proveedor de divisas con SLA.** `open.er-api.com` es el endpoint abierto del proveedor: actualiza los tipos una
+  vez al día y declara una caché de 1 hora ([análisis §9](01-analisis.md#9-datos-comprobados-durante-el-análisis-2026-11-12)),
+  sin ningún acuerdo de servicio con nosotros. Hoy se llama desde el navegador (D-22) y no se guarda el tipo usado, así
+  que un presupuesto no es reproducible a la divisa de ese día. Lo pasaría al servidor, con un proveedor con SLA y el
+  tipo guardado en cada simulación.
 - **Observabilidad.** Hoy hay una línea de log por petición, sin datos personales, y un `/health`. Faltan métricas,
   trazas, alertas y un seguimiento de errores.
 - **Copias de seguridad.** Los datos de la demo son efímeros a propósito. Una base real necesita copias periódicas y una
