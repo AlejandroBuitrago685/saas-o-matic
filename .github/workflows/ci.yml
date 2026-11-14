@@ -98,6 +98,8 @@ jobs:
         run: node scripts/check-containers.mjs saas-o-matic-e2e
       - name: Install Chromium for Playwright
         run: npx playwright install --with-deps chromium
+      - name: Evaluator walkthrough, published and from file:// (D-183, D-184)
+        run: npm run e2e:recorrido
       - name: e2e against the Compose stack, real CSP and headers (AC-96, AC-64, AC-52)
         run: npm run e2e
       # Always: the report keeps the latency measured by AC-90 on the CI runner; traces only exist for failed tests.

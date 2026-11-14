@@ -1,0 +1,2349 @@
+<!doctype html>
+    <html lang="es">
+      <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Security-Policy" content="default-src &#39;none&#39;; script-src &#39;self&#39;; style-src &#39;self&#39;; img-src &#39;self&#39;; font-src &#39;self&#39;; base-uri &#39;none&#39;; form-action &#39;none&#39;" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Recorrido de SaaS-O-Matic</title>
+    <meta
+      name="description"
+      content="Qué hace SaaS-O-Matic, cómo está construido y cómo se ha trabajado con la IA, en un recorrido visual para quien evalúa la prueba técnica."
+    />
+    <link rel="stylesheet" href="tokens.css" />
+    <link rel="stylesheet" href="recorrido.css" />
+    <link rel="stylesheet" href="portada.css" />
+    <link rel="stylesheet" href="secciones.css" />
+    <script src="recorrido.js" defer></script>
+  </head>
+      <body>
+        <a class="skip-link" href="#contenido">Saltar al contenido</a>
+        <header class="masthead">
+          <div class="masthead-inner">
+            <a class="brand" href="#portada"
+              ><span class="brand-name">SaaS-<span>O-Matic</span></span
+              ><small>Recorrido para evaluadores</small></a
+            >
+            <nav class="masthead-links" aria-label="Enlaces del proyecto">
+              <a href="https://saas-o-matic.codeserviceapi.es"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6.5 4.75v10.5c0 .6.66.96 1.16.63l7.9-5.25a.75.75 0 0 0 0-1.26l-7.9-5.25a.75.75 0 0 0-1.16.63Z"/></svg><span>Demo</span></a>
+              <a href="https://github.com/AlejandroBuitrago685/saas-o-matic"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M7 6 3 10l4 4M13 6l4 4-4 4"/></svg><span>Repositorio</span></a>
+              <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/GUIA-EVALUADOR.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span>Guía</span></a>
+            </nav>
+          </div>
+        </header>
+        <div class="layout">
+          <nav class="contents" aria-label="Secciones del recorrido">
+    <details class="contents-compact">
+      <summary>Secciones</summary>
+      <ol>
+        <li>
+        <a href="#portada" data-section="portada"><span class="rail-dot" aria-hidden="true"></span>Portada</a>
+      </li><li>
+        <a href="#producto" data-section="producto"><span class="rail-dot" aria-hidden="true"></span>El producto</a>
+      </li><li>
+        <a href="#arquitectura" data-section="arquitectura"><span class="rail-dot" aria-hidden="true"></span>Una petición</a>
+      </li><li>
+        <a href="#mapa" data-section="mapa"><span class="rail-dot" aria-hidden="true"></span>El repositorio</a>
+      </li><li>
+        <a href="#construccion" data-section="construccion"><span class="rail-dot" aria-hidden="true"></span>Cómo se construyó</a>
+      </li><li>
+        <a href="#calidad" data-section="calidad"><span class="rail-dot" aria-hidden="true"></span>Calidad</a>
+      </li><li>
+        <a href="#intervencion" data-section="intervencion"><span class="rail-dot" aria-hidden="true"></span>Dónde intervine</a>
+      </li><li>
+        <a href="#requisitos" data-section="requisitos"><span class="rail-dot" aria-hidden="true"></span>Requisitos</a>
+      </li><li>
+        <a href="#recorridos" data-section="recorridos"><span class="rail-dot" aria-hidden="true"></span>Recorridos</a>
+      </li>
+      </ol>
+    </details>
+    <ol class="rail">
+      <li>
+        <a href="#portada" data-section="portada"><span class="rail-dot" aria-hidden="true"></span>Portada</a>
+      </li><li>
+        <a href="#producto" data-section="producto"><span class="rail-dot" aria-hidden="true"></span>El producto</a>
+      </li><li>
+        <a href="#arquitectura" data-section="arquitectura"><span class="rail-dot" aria-hidden="true"></span>Una petición</a>
+      </li><li>
+        <a href="#mapa" data-section="mapa"><span class="rail-dot" aria-hidden="true"></span>El repositorio</a>
+      </li><li>
+        <a href="#construccion" data-section="construccion"><span class="rail-dot" aria-hidden="true"></span>Cómo se construyó</a>
+      </li><li>
+        <a href="#calidad" data-section="calidad"><span class="rail-dot" aria-hidden="true"></span>Calidad</a>
+      </li><li>
+        <a href="#intervencion" data-section="intervencion"><span class="rail-dot" aria-hidden="true"></span>Dónde intervine</a>
+      </li><li>
+        <a href="#requisitos" data-section="requisitos"><span class="rail-dot" aria-hidden="true"></span>Requisitos</a>
+      </li><li>
+        <a href="#recorridos" data-section="recorridos"><span class="rail-dot" aria-hidden="true"></span>Recorridos</a>
+      </li>
+    </ol>
+  </nav>
+          <main id="contenido" tabindex="-1">
+            <section id="portada" class="section" aria-labelledby="portada-titulo"><div class="hero">
+      <div class="hero-text">
+        <h1 id="portada-titulo">
+          Presupuestos SaaS <span class="accent">multi-divisa</span>, de la regla al test
+        </h1>
+        <p class="hero-lead">
+          SaaS-O-Matic es la herramienta interna con la que un comercial da de alta clientes corporativos con
+          su identificador fiscal validado y simula su suscripción por tramos, con impuestos y en la divisa
+          que elija.
+        </p>
+        <div class="actions">
+          <a class="btn btn-primary" href="https://saas-o-matic.codeserviceapi.es"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6.5 4.75v10.5c0 .6.66.96 1.16.63l7.9-5.25a.75.75 0 0 0 0-1.26l-7.9-5.25a.75.75 0 0 0-1.16.63Z"/></svg>Abrir la demo</a>
+          <a class="btn btn-secondary" href="https://github.com/AlejandroBuitrago685/saas-o-matic"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M7 6 3 10l4 4M13 6l4 4-4 4"/></svg>Ver el repositorio</a>
+          <a class="btn-link" href="#producto">Empezar el recorrido<svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 10h11M11 5.5 15.5 10 11 14.5"/></svg></a>
+        </div>
+        <p class="hero-note">
+          La demo usa datos ficticios que se regeneran cada día. Para comprobar cada requisito con su test, la
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/GUIA-EVALUADOR.md">guía del evaluador</a>.
+        </p>
+      </div>
+      <figure class="projection" aria-labelledby="proyeccion-pie">
+    <p class="projection-label">Total mensual</p>
+    <p class="projection-total amount">810,70 €</p>
+    <svg
+    class="tier-bar"
+    viewBox="0 0 100 8"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <rect
+      class="tier-1"
+      x="0.00"
+      y="0"
+      width="14.33"
+      height="8"
+      rx="1.5"
+    /><rect
+      class="tier-2"
+      x="14.93"
+      y="0"
+      width="47.16"
+      height="8"
+      rx="1.5"
+    /><rect
+      class="tier-3"
+      x="62.69"
+      y="0"
+      width="36.71"
+      height="8"
+      rx="1.5"
+    />
+  </svg>
+    <dl class="projection-lines">
+      <div>
+            <dt>Tramo 1 · 10 × 10,00 €</dt>
+            <dd class="amount">100,00 €</dd>
+          </div><div>
+            <dt>Tramo 2 · 40 × 8,00 €</dt>
+            <dd class="amount">320,00 €</dd>
+          </div><div>
+            <dt>Tramo 3 · 50 × 5,00 €</dt>
+            <dd class="amount">250,00 €</dd>
+          </div>
+      <div class="projection-base">
+        <dt>Base mensual</dt>
+        <dd class="amount">670,00 €</dd>
+      </div>
+      <div>
+        <dt>Impuesto (ES, 21 %)</dt>
+        <dd class="amount">140,70 €</dd>
+      </div>
+    </dl>
+    <figcaption id="proyeccion-pie">
+      100 usuarios en España, calculado por el paquete <code>domain</code> al generar
+      esta página (TV-PR-07).
+    </figcaption>
+  </figure>
+    </div>
+    <dl class="figures">
+    <div>
+      <dt>Criterios de aceptación</dt>
+      <dd>
+        <strong>83</strong> 81 con test y
+        2 de revisión (AC-94 y AC-99)
+      </dd>
+    </div>
+    <div>
+      <dt>Vectores de prueba</dt>
+      <dd>
+        <strong>129</strong> todos citados por un test; <code>npm run trace</code> lo exige en
+        el CI
+      </dd>
+    </div>
+    <div>
+      <dt>Tests</dt>
+      <dd>
+        <strong>1&#8239;378</strong> 1&#8239;085 de Node y
+        293 de la web, contados en un clon limpio
+      </dd>
+    </div>
+    <div>
+      <dt>Decisiones registradas</dt>
+      <dd><strong>187</strong> cada una con la alternativa descartada y quién la tomó</dd>
+    </div>
+  </dl></section><section id="producto" class="section" aria-labelledby="producto-titulo"><header class="section-head">
+      <h2 id="producto-titulo">El producto, <span class="accent">paso a paso</span></h2>
+      <p>
+        El camino de un comercial por la aplicación. Pulsa un paso para ver su pantalla, la regla con un
+        ejemplo de números reales, dónde está el código y qué test la cubre.
+      </p>
+    </header>
+    <nav class="flow-strip" aria-label="Pasos del flujo">
+    <ol>
+      <li>
+            <a href="#paso-dashboard" data-step="paso-dashboard"
+              ><span class="flow-strip-icon"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8.75 14a5.25 5.25 0 1 0 0-10.5 5.25 5.25 0 0 0 0 10.5ZM12.5 12.5l4 4"/></svg></span
+              ><span class="flow-strip-name"
+                ><span class="visually-hidden">Paso 1: </span>Dashboard</span
+              ></a
+            >
+          </li><li>
+            <a href="#paso-alta" data-step="paso-alta"
+              ><span class="flow-strip-icon"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 5.75c0-.41.34-.75.75-.75h11.5c.41 0 .75.34.75.75v8.5c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75v-8.5ZM6 12.5c.4-1.1 1.2-1.75 2-1.75s1.6.65 2 1.75M8 9.25a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2ZM12 8h2.25M12 10.5h2.25"/></svg></span
+              ><span class="flow-strip-name"
+                ><span class="visually-hidden">Paso 2: </span>Alta con validación fiscal</span
+              ></a
+            >
+          </li><li>
+            <a href="#paso-detalle" data-step="paso-detalle"
+              ><span class="flow-strip-icon"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 9.5a2.75 2.75 0 1 0 0-5.5 2.75 2.75 0 0 0 0 5.5ZM4.75 16c.6-2.6 2.75-4.25 5.25-4.25S14.65 13.4 15.25 16"/></svg></span
+              ><span class="flow-strip-name"
+                ><span class="visually-hidden">Paso 3: </span>Detalle del cliente</span
+              ></a
+            >
+          </li><li>
+            <a href="#paso-tramos" data-step="paso-tramos"
+              ><span class="flow-strip-icon"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h5M13 6h3M4 14h2M10 14h6M11 4v4M8 12v4"/></svg></span
+              ><span class="flow-strip-name"
+                ><span class="visually-hidden">Paso 4: </span>Simulador por tramos</span
+              ></a
+            >
+          </li><li>
+            <a href="#paso-impuestos" data-step="paso-impuestos"
+              ><span class="flow-strip-icon"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M15 5 5 15M6.75 8a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5ZM13.25 14.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z"/></svg></span
+              ><span class="flow-strip-name"
+                ><span class="visually-hidden">Paso 5: </span>Impuestos</span
+              ></a
+            >
+          </li><li>
+            <a href="#paso-divisa" data-step="paso-divisa"
+              ><span class="flow-strip-icon"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 7.5h10.5L12 5M16 12.5H5.5L8 15"/></svg></span
+              ><span class="flow-strip-name"
+                ><span class="visually-hidden">Paso 6: </span>Divisa</span
+              ></a
+            >
+          </li><li>
+            <a href="#paso-guardar" data-step="paso-guardar"
+              ><span class="flow-strip-icon"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M5.25 3.5h7.5l3 3v9.75c0 .41-.34.75-.75.75H5.25a.75.75 0 0 1-.75-.75V4.25c0-.41.34-.75.75-.75ZM7 3.5v3.75h5V3.5M7 17v-4.5h6V17"/></svg></span
+              ><span class="flow-strip-name"
+                ><span class="visually-hidden">Paso 7: </span>Guardar e historial</span
+              ></a
+            >
+          </li>
+    </ol>
+  </nav>
+    <ol class="flow">
+      <li class="flow-step">
+    <details id="paso-dashboard"  open>
+      <summary>
+        <span class="flow-marker" aria-hidden="true">1</span>
+        <span class="flow-heading"
+          ><span class="flow-title">Dashboard</span><span class="flow-lead">Busca un cliente por nombre o identificador fiscal, sin acentos ni mayúsculas.</span></span
+        >
+      </summary>
+      <div class="flow-body">
+        <figure class="shot">
+    <img
+      src="../capturas/recorte-buscador.webp"
+      alt="El buscador con «nandu» y la única tarjeta que encuentra: Telefonía Ñandú S.A."
+      width="400"
+      height="292"
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption><a href="../capturas/dashboard.webp">Ver la captura completa</a></figcaption>
+  </figure>
+        <div class="flow-detail">
+          <div class="rule">
+            <h3>La regla</h3>
+            <p>
+      La API guarda el nombre de empresa normalizado y normaliza la consulta con la misma función del dominio:
+      sin tildes y en minúsculas.
+    </p>
+    <p class="worked">
+      <span>«Telefonía Ñandú S.A.»</span><span class="worked-arrow" aria-hidden="true">→</span
+      ><code>telefonia nandu s.a.</code>
+    </p>
+    <p>Por eso <code>nandu</code> encuentra a «Telefonía Ñandú S.A.».</p>
+            <p class="refs">AC-29 · AC-30 · AC-70 · AC-92</p>
+          </div>
+          <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/features/dashboard/customer-search.store.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>customer-search.store.ts</code
+              ><span class="path-dir">apps/web/src/app/features/dashboard/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/search-customers.use-case.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>search-customers.use-case.ts</code
+              ><span class="path-dir">apps/api/src/modules/customers/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/text/normalize-for-search.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>normalize-for-search.ts</code
+              ><span class="path-dir">packages/domain/src/text/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/search-customers.routes.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>search-customers.routes.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/customers/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/dashboard.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>dashboard.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+    </details>
+  </li><li class="flow-step">
+    <details id="paso-alta" >
+      <summary>
+        <span class="flow-marker" aria-hidden="true">2</span>
+        <span class="flow-heading"
+          ><span class="flow-title">Alta con validación fiscal</span><span class="flow-lead">Da de alta un cliente: el identificador se valida con el algoritmo oficial de su país.</span></span
+        >
+      </summary>
+      <div class="flow-body">
+        <figure class="shot">
+    <img
+      src="../capturas/recorte-alta.webp"
+      alt="El campo del DNI con 12345678A y el error: el carácter de control no es correcto"
+      width="366"
+      height="188"
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption><a href="../capturas/alta-cliente.webp">Ver la captura completa</a></figcaption>
+  </figure>
+        <div class="flow-detail">
+          <div class="rule">
+            <h3>La regla</h3>
+            <p>
+      Un validador por país detrás de una interfaz común; en España, DNI, NIE y CIF con su carácter de
+      control.
+    </p>
+    <table class="worked-table">
+      <caption class="visually-hidden">
+        Respuesta del dominio para dos identificadores españoles
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Identificador</th>
+          <th scope="col">Respuesta de <code>validateTaxId</code></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+              <td><code>12345678A</code></td>
+              <td class="is-invalid">
+                Rechazado · <code>INVALID_CHECK</code>
+              </td>
+            </tr><tr>
+              <td><code>11111111H</code></td>
+              <td class="is-valid">
+                Válido · <code>DNI</code>
+              </td>
+            </tr>
+      </tbody>
+    </table>
+            <p class="refs">AC-10 · AC-25 · AC-26 · TV-ES-04</p>
+          </div>
+          <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/tax-id/validate-tax-id.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>validate-tax-id.ts</code
+              ><span class="path-dir">packages/domain/src/tax-id/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/tax-id/registry.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>registry.ts</code
+              ><span class="path-dir">packages/domain/src/tax-id/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/create-customer.use-case.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>create-customer.use-case.ts</code
+              ><span class="path-dir">apps/api/src/modules/customers/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/features/customer-create/customer-form.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>customer-form.ts</code
+              ><span class="path-dir">apps/web/src/app/features/customer-create/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/tax-id/validate-tax-id.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>validate-tax-id.test.ts</code
+              ><span class="path-dir">packages/domain/src/tax-id/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/create-customer.rules.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>create-customer.rules.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/customers/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/customer-create.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>customer-create.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+    </details>
+  </li><li class="flow-step">
+    <details id="paso-detalle" >
+      <summary>
+        <span class="flow-marker" aria-hidden="true">3</span>
+        <span class="flow-heading"
+          ><span class="flow-title">Detalle del cliente</span><span class="flow-lead">Abre la ficha: datos del cliente, su país y su plan, y el simulador debajo.</span></span
+        >
+      </summary>
+      <div class="flow-body">
+        <figure class="shot">
+    <img
+      src="../capturas/recorte-cliente.webp"
+      alt="La tarjeta de datos de Acme Ibérica S.L.: identificador, país, email, plan y fecha de alta"
+      width="400"
+      height="396"
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption><a href="../capturas/detalle.webp">Ver la captura completa</a></figcaption>
+  </figure>
+        <div class="flow-detail">
+          <div class="rule">
+            <h3>La regla</h3>
+            <p>El país del cliente fija su impuesto; el catálogo lo valida la API al arrancar.</p>
+    <ul class="chips">
+      <li><span>ES</span> 21 %</li><li><span>PT</span> 23 %</li><li><span>FR</span> 20 %</li><li><span>DE</span> 19 %</li><li><span>IT</span> 22 %</li><li><span>GB</span> 20 %</li><li><span>US</span> 0 %</li>
+    </ul>
+            <p class="refs">AC-27 · AC-75</p>
+          </div>
+          <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/features/customer-detail/customer-detail.page.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>customer-detail.page.ts</code
+              ><span class="path-dir">apps/web/src/app/features/customer-detail/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/get-customer.use-case.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>get-customer.use-case.ts</code
+              ><span class="path-dir">apps/api/src/modules/customers/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/config/catalog.data.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>catalog.data.ts</code
+              ><span class="path-dir">apps/api/src/config/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/get-customer.routes.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>get-customer.routes.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/customers/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/customer-detail.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>customer-detail.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+    </details>
+  </li><li class="flow-step">
+    <details id="paso-tramos" >
+      <summary>
+        <span class="flow-marker" aria-hidden="true">4</span>
+        <span class="flow-heading"
+          ><span class="flow-title">Simulador por tramos</span><span class="flow-lead">Mueve el slider: la proyección se recalcula en el navegador con el mismo dominio que la API.</span></span
+        >
+      </summary>
+      <div class="flow-body">
+        <div class="shot-slot">
+    <div class="mini-sim" data-simulator hidden>
+    <div class="mini-sim-controls">
+    <div class="mini-sim-field">
+      <label for="sim-usuarios">Usuarios activos</label>
+      <output id="sim-usuarios-valor" for="sim-usuarios" class="amount">100</output>
+      <input id="sim-usuarios" class="range" type="range" min="0" max="279" step="1" value="99" aria-valuetext="100 usuarios" />
+    </div>
+    <div class="mini-sim-field">
+      <label for="sim-pais">País del cliente</label>
+      <select id="sim-pais"><option value="ES" selected>ES · 21 %</option><option value="PT">PT · 23 %</option><option value="FR">FR · 20 %</option><option value="DE">DE · 19 %</option><option value="IT">IT · 22 %</option><option value="GB">GB · 20 %</option><option value="US">US · 0 %</option></select>
+    </div>
+  </div>
+    <div class="projection projection-live">
+      <p class="projection-label">Total mensual</p>
+      <p class="projection-total amount" data-field="total" aria-live="polite">810,70 €</p>
+      <svg
+    class="tier-bar"
+    viewBox="0 0 100 8"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <rect
+      class="tier-1"
+      x="0.00"
+      y="0"
+      width="14.33"
+      height="8"
+      rx="1.5"
+    /><rect
+      class="tier-2"
+      x="14.93"
+      y="0"
+      width="47.16"
+      height="8"
+      rx="1.5"
+    /><rect
+      class="tier-3"
+      x="62.69"
+      y="0"
+      width="36.71"
+      height="8"
+      rx="1.5"
+    />
+  </svg>
+      <dl class="projection-lines">
+    <div data-tier="1">
+          <dt>
+            Tramo 1 · <span data-field="units">10</span> ×
+            10,00 €
+          </dt>
+          <dd class="amount" data-field="subtotal">100,00 €</dd>
+        </div><div data-tier="2">
+          <dt>
+            Tramo 2 · <span data-field="units">40</span> ×
+            8,00 €
+          </dt>
+          <dd class="amount" data-field="subtotal">320,00 €</dd>
+        </div><div data-tier="3">
+          <dt>
+            Tramo 3 · <span data-field="units">50</span> ×
+            5,00 €
+          </dt>
+          <dd class="amount" data-field="subtotal">250,00 €</dd>
+        </div>
+    <div class="projection-base">
+      <dt>Base mensual</dt>
+      <dd class="amount" data-field="base">670,00 €</dd>
+    </div>
+    <div>
+      <dt>Impuesto (<span data-field="rate">21 %</span>)</dt>
+      <dd class="amount" data-field="tax">140,70 €</dd>
+    </div>
+  </dl>
+    </div>
+    <p class="mini-sim-note">Cada número lo calcula <code>calculatePricing</code> del paquete <code>domain</code> compilado, el mismo que usan la API y la web, importado aquí como módulo.</p>
+    <script type="application/json" id="catalogo-simulador">{"countries":[{"code":"ES","taxRateBps":2100},{"code":"PT","taxRateBps":2300},{"code":"FR","taxRateBps":2000},{"code":"DE","taxRateBps":1900},{"code":"IT","taxRateBps":2200},{"code":"GB","taxRateBps":2000},{"code":"US","taxRateBps":0}],"plans":[{"code":"STARTER","tariffCode":"STANDARD"},{"code":"BUSINESS","tariffCode":"STANDARD"},{"code":"ENTERPRISE","tariffCode":"STANDARD"}],"tariffs":[{"code":"STANDARD","tiers":[{"tier":1,"fromUser":1,"toUser":10,"unitPriceCents":1000},{"tier":2,"fromUser":11,"toUser":50,"unitPriceCents":800},{"tier":3,"fromUser":51,"toUser":null,"unitPriceCents":500}]}]}</script>
+  </div>
+    <div data-simulator-fallback>
+      <figure class="shot">
+    <img
+      src="../capturas/recorte-tramos.webp"
+      alt="La proyección de 100 usuarios: tres tramos, base de 670 €, impuesto y total de 810,70 €"
+      width="366"
+      height="383"
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption><a href="../capturas/tramos.webp">Ver la captura completa</a></figcaption>
+  </figure>
+      <p class="notice">
+        El simulador en vivo importa el paquete <code>domain</code> compilado como módulo, y los navegadores
+        no cargan módulos desde un fichero local. Pruébalo en la
+        <a href="https://alejandrobuitrago685.github.io/saas-o-matic/recorrido/#paso-tramos">versión publicada</a>.
+      </p>
+    </div>
+  </div>
+        <div class="flow-detail">
+          <div class="rule">
+            <h3>La regla</h3>
+            <p>Tramos acumulativos: cada usuario paga el precio de su tramo, no el del último.</p>
+    <svg
+    class="tier-bar"
+    viewBox="0 0 100 8"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <rect
+      class="tier-1"
+      x="0.00"
+      y="0"
+      width="14.33"
+      height="8"
+      rx="1.5"
+    /><rect
+      class="tier-2"
+      x="14.93"
+      y="0"
+      width="47.16"
+      height="8"
+      rx="1.5"
+    /><rect
+      class="tier-3"
+      x="62.69"
+      y="0"
+      width="36.71"
+      height="8"
+      rx="1.5"
+    />
+  </svg>
+    <ol class="worked-lines">
+      <li>
+            <span>Usuarios 1–10</span
+            ><span class="amount"
+              >10 × 10,00 € = 100,00 €</span
+            >
+          </li><li>
+            <span>Usuarios 11–50</span
+            ><span class="amount"
+              >40 × 8,00 € = 320,00 €</span
+            >
+          </li><li>
+            <span>Usuarios 51–100</span
+            ><span class="amount"
+              >50 × 5,00 € = 250,00 €</span
+            >
+          </li>
+      <li class="worked-total">
+        <span>Base de 100 usuarios</span
+        ><span class="amount">670,00 €</span>
+      </li>
+    </ol>
+    <p class="vector">Es el vector TV-PR-07 de la especificación.</p>
+            <p class="refs">AC-01 · AC-02 · AC-03 · AC-76 · TV-PR-07</p>
+          </div>
+          <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/pricing/calculate-pricing.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>calculate-pricing.ts</code
+              ><span class="path-dir">packages/domain/src/pricing/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/slider/slider-scale.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>slider-scale.ts</code
+              ><span class="path-dir">packages/domain/src/slider/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/features/simulator/simulator.store.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>simulator.store.ts</code
+              ><span class="path-dir">apps/web/src/app/features/simulator/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/pricing/calculate-pricing.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>calculate-pricing.test.ts</code
+              ><span class="path-dir">packages/domain/src/pricing/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/slider/slider-scale.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>slider-scale.test.ts</code
+              ><span class="path-dir">packages/domain/src/slider/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/simulator.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>simulator.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+    </details>
+  </li><li class="flow-step">
+    <details id="paso-impuestos" >
+      <summary>
+        <span class="flow-marker" aria-hidden="true">5</span>
+        <span class="flow-heading"
+          ><span class="flow-title">Impuestos</span><span class="flow-lead">El impuesto del país se aplica una sola vez, sobre la base entera, con un único redondeo.</span></span
+        >
+      </summary>
+      <div class="flow-body">
+        <figure class="shot">
+    <img
+      src="../capturas/recorte-tramos.webp"
+      alt="Las líneas de base, impuesto del 21 % y total de la proyección de 100 usuarios"
+      width="366"
+      height="383"
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption><a href="../capturas/tramos.webp">Ver la captura completa</a></figcaption>
+  </figure>
+        <div class="flow-detail">
+          <div class="rule">
+            <h3>La regla</h3>
+            <p>
+      Un solo impuesto sobre la base entera y un único redondeo, al céntimo y hacia arriba en el medio.
+    </p>
+    <ol class="worked-lines">
+      <li><span>Base</span><span class="amount">670,00 €</span></li>
+      <li>
+        <span>Impuesto (ES, 21 %)</span
+        ><span class="amount">140,70 €</span>
+      </li>
+      <li class="worked-total">
+        <span>Total mensual</span><span class="amount">810,70 €</span>
+      </li>
+    </ol>
+            <p class="refs">AC-04 · AC-05 · TV-TX-01 · TV-RD-01</p>
+          </div>
+          <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/tax/calculate-tax.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>calculate-tax.ts</code
+              ><span class="path-dir">packages/domain/src/tax/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain/src/money"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>money</code
+              ><span class="path-dir">packages/domain/src/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/tax/calculate-tax.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>calculate-tax.test.ts</code
+              ><span class="path-dir">packages/domain/src/tax/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+    </details>
+  </li><li class="flow-step">
+    <details id="paso-divisa" >
+      <summary>
+        <span class="flow-marker" aria-hidden="true">6</span>
+        <span class="flow-heading"
+          ><span class="flow-title">Divisa</span><span class="flow-lead">Cambia la divisa de la cabecera: cada partida se convierte por separado y se suma después.</span></span
+        >
+      </summary>
+      <div class="flow-body">
+        <figure class="shot">
+    <img
+      src="../capturas/recorte-divisa.webp"
+      alt="La proyección de 60 usuarios convertida a libras, partida a partida"
+      width="366"
+      height="443"
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption><a href="../capturas/simulador.webp">Ver la captura completa</a></figcaption>
+  </figure>
+        <div class="flow-detail">
+          <div class="rule">
+            <h3>La regla</h3>
+            <p>
+      Cada tramo y el impuesto se convierten por separado; la base y el total son sumas de lo convertido, así
+      que siempre cuadran.
+    </p>
+    <ol class="worked-lines">
+      <li>
+            <span>Tramo 1: 100,00 €</span
+            ><span class="amount">83,59 GBP</span>
+          </li><li>
+            <span>Tramo 2: 320,00 €</span
+            ><span class="amount">267,49 GBP</span>
+          </li><li>
+            <span>Tramo 3: 50,00 €</span
+            ><span class="amount">41,80 GBP</span>
+          </li>
+      <li>
+        <span>Impuesto: 98,70 €</span
+        ><span class="amount">82,51 GBP</span>
+      </li>
+      <li class="worked-total">
+        <span>Total de 60 usuarios</span
+        ><span class="amount">475,39 GBP</span>
+      </li>
+    </ol>
+    <p class="vector">
+      Con el tipo de referencia de los tests: 1 € = 0,835919 GBP. Los
+      tipos los pide el navegador; el servidor no hace peticiones salientes.
+    </p>
+            <p class="refs">AC-79 · AC-80 · AC-88</p>
+          </div>
+          <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/currency/convert-pricing.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>convert-pricing.ts</code
+              ><span class="path-dir">packages/domain/src/currency/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.store.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>exchange-rates.store.ts</code
+              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.parser.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>exchange-rates.parser.ts</code
+              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/currency/convert-pricing.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>convert-pricing.test.ts</code
+              ><span class="path-dir">packages/domain/src/currency/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/currency-conversion.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>currency-conversion.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/exchange-rates.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>exchange-rates.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+    </details>
+  </li><li class="flow-step">
+    <details id="paso-guardar" >
+      <summary>
+        <span class="flow-marker" aria-hidden="true">7</span>
+        <span class="flow-heading"
+          ><span class="flow-title">Guardar e historial</span><span class="flow-lead">Guarda la simulación: la API recalcula los importes y la añade arriba del historial.</span></span
+        >
+      </summary>
+      <div class="flow-body">
+        <figure class="shot">
+    <img
+      src="../capturas/recorte-historial.webp"
+      alt="Una simulación guardada en el historial, con sus usuarios, base, impuesto y total"
+      width="400"
+      height="469"
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption><a href="../capturas/historial.webp">Ver la captura completa</a></figcaption>
+  </figure>
+        <div class="flow-detail">
+          <div class="rule">
+            <h3>La regla</h3>
+            <p>
+      El navegador solo envía las cantidades; la API recalcula los importes con el mismo dominio y guarda una
+      instantánea de los tramos y del impuesto.
+    </p>
+    <p class="worked">
+      <span>Cuerpo de <code>POST /simulations</code>:</span
+      > <code>customerId</code> <code>activeUsers</code> <code>storageGb</code> <code>apiCallsPerMonth</code>
+    </p>
+    <p>Cualquier importe en la petición es un campo desconocido y se rechaza con un <code>400</code>.</p>
+            <p class="refs">AC-40 · AC-42 · AC-44 · AC-46</p>
+          </div>
+          <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/simulations/create-simulation.use-case.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>create-simulation.use-case.ts</code
+              ><span class="path-dir">apps/api/src/modules/simulations/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/db/schema/simulation-tiers.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>simulation-tiers.ts</code
+              ><span class="path-dir">apps/api/src/db/schema/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/features/customer-detail/simulation-history.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>simulation-history.ts</code
+              ><span class="path-dir">apps/web/src/app/features/customer-detail/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/simulations/create-simulation.routes.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>create-simulation.routes.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/simulations/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/simulations/simulation-snapshot.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>simulation-snapshot.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/simulations/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/simulation-save.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>simulation-save.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+    </details>
+  </li>
+    </ol></section><section id="arquitectura" class="section" aria-labelledby="arquitectura-titulo"><header class="section-head">
+      <h2 id="arquitectura-titulo">Cómo viaja <span class="accent">una petición</span></h2>
+      <p>
+        Del navegador a la base de datos, y la única llamada que sale fuera: los tipos de cambio, que pide el
+        propio navegador. Pulsa una pieza para ver qué hace, qué control de seguridad aplica y en qué fichero
+        está.
+      </p>
+    </header>
+    <nav class="arch" aria-label="Piezas de la arquitectura">
+      <ol class="arch-path">
+        <li><a class="arch-node" href="#pieza-navegador" data-piece="pieza-navegador"
+    ><span class="arch-name">Navegador</span><span class="arch-role">Angular 22</span></a
+  ></li><li><a class="arch-node" href="#pieza-cloudflare" data-piece="pieza-cloudflare"
+    ><span class="arch-name">Cloudflare</span><span class="arch-role">solo en la demo</span></a
+  ></li><li><a class="arch-node" href="#pieza-nginx" data-piece="pieza-nginx"
+    ><span class="arch-name">nginx</span><span class="arch-role">web y proxy</span></a
+  ></li><li><a class="arch-node" href="#pieza-api" data-piece="pieza-api"
+    ><span class="arch-name">API Fastify</span><span class="arch-role">rutas y casos de uso</span></a
+  ></li><li><a class="arch-node" href="#pieza-contrato" data-piece="pieza-contrato"
+    ><span class="arch-name">Contrato Zod</span><span class="arch-role">esquemas compartidos</span></a
+  ></li><li><a class="arch-node" href="#pieza-dominio" data-piece="pieza-dominio"
+    ><span class="arch-name">Dominio</span><span class="arch-role">reglas puras</span></a
+  ></li><li><a class="arch-node" href="#pieza-sqlite" data-piece="pieza-sqlite"
+    ><span class="arch-name">SQLite</span><span class="arch-role">Drizzle</span></a
+  ></li>
+      </ol>
+      <div class="arch-branch">
+        <span class="arch-branch-label">El navegador pide los tipos de cambio</span>
+        <a class="arch-node" href="#pieza-divisas" data-piece="pieza-divisas"
+    ><span class="arch-name">open.er-api.com</span><span class="arch-role">tipos de cambio</span></a
+  >
+      </div>
+    </nav>
+    <div class="arch-panels"><article id="pieza-navegador" class="arch-panel" aria-labelledby="pieza-navegador-titulo" tabindex="-1">
+    <h3 id="pieza-navegador-titulo">Navegador <span>Angular 22</span></h3>
+    <div class="arch-panel-body">
+      <div class="arch-text">
+        <p>Pinta la interfaz con signals y calcula la proyección con el mismo dominio que la API, sin esperar a la red (ADR-008).</p>
+        <p class="arch-control">
+          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
+            ><strong>Control de seguridad.</strong> CSP sin scripts ni estilos en línea, y ningún HTML insertado a mano: nada de innerHTML ni de bypassSecurityTrust*.
+            <span class="refs">RNF-SEC-06 · RNF-SEC-14</span></span
+          >
+        </p>
+      </div>
+      <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/app.config.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>app.config.ts</code
+              ><span class="path-dir">apps/web/src/app/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/features/simulator/simulator.store.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>simulator.store.ts</code
+              ><span class="path-dir">apps/web/src/app/features/simulator/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    </div>
+  </article><article id="pieza-cloudflare" class="arch-panel" aria-labelledby="pieza-cloudflare-titulo" tabindex="-1">
+    <h3 id="pieza-cloudflare-titulo">Cloudflare <span>solo en la demo</span></h3>
+    <div class="arch-panel-body">
+      <div class="arch-text">
+        <p>Proxy y HTTPS delante del nginx del servidor de la demo pública. En local y con Docker Compose no existe.</p>
+        <p class="arch-control">
+          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
+            ><strong>Control de seguridad.</strong> El nginx del servidor recupera la IP real de CF-Connecting-IP solo si la conexión viene de Cloudflare, así que el límite de escrituras cuenta por cliente.
+            <span class="refs">RNF-SEC-08 · RNF-SEC-20</span></span
+          >
+        </p>
+      </div>
+      <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/deploy/demo/nginx/https.conf.template"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>https.conf.template</code
+              ><span class="path-dir">deploy/demo/nginx/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/deploy/demo/docker-compose.demo.yml"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>docker-compose.demo.yml</code
+              ><span class="path-dir">deploy/demo/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    </div>
+  </article><article id="pieza-nginx" class="arch-panel" aria-labelledby="pieza-nginx-titulo" tabindex="-1">
+    <h3 id="pieza-nginx-titulo">nginx <span>web y proxy</span></h3>
+    <div class="arch-panel-body">
+      <div class="arch-text">
+        <p>Sirve la build de Angular y reenvía /api a la API: un único origen para la web y la API (ADR-012).</p>
+        <p class="arch-control">
+          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
+            ><strong>Control de seguridad.</strong> Cabeceras de seguridad y CSP de la web, y contenedores sin root, de solo lectura y con el puerto solo en 127.0.0.1.
+            <span class="refs">RNF-SEC-06 · RNF-SEC-16</span></span
+          >
+        </p>
+      </div>
+      <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/nginx/nginx.conf"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>nginx.conf</code
+              ><span class="path-dir">apps/web/nginx/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/nginx/security-headers.conf"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>security-headers.conf</code
+              ><span class="path-dir">apps/web/nginx/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    </div>
+  </article><article id="pieza-api" class="arch-panel" aria-labelledby="pieza-api-titulo" tabindex="-1">
+    <h3 id="pieza-api-titulo">API Fastify <span>rutas y casos de uso</span></h3>
+    <div class="arch-panel-body">
+      <div class="arch-text">
+        <p>Rutas finas que llaman a casos de uso; un único manejador de errores responde en formato RFC 9457 (ADR-009).</p>
+        <p class="arch-control">
+          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
+            ><strong>Control de seguridad.</strong> Límite de peticiones por IP, CORS con lista cerrada, errores sin detalles internos y logs sin datos personales.
+            <span class="refs">RNF-SEC-07 · RNF-SEC-08 · RNF-SEC-10 · RNF-SEC-11</span></span
+          >
+        </p>
+      </div>
+      <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/app.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>app.ts</code
+              ><span class="path-dir">apps/api/src/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/http/rate-limit.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>rate-limit.ts</code
+              ><span class="path-dir">apps/api/src/http/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/http/error-handler.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>error-handler.ts</code
+              ><span class="path-dir">apps/api/src/http/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    </div>
+  </article><article id="pieza-contrato" class="arch-panel" aria-labelledby="pieza-contrato-titulo" tabindex="-1">
+    <h3 id="pieza-contrato-titulo">Contrato Zod <span>esquemas compartidos</span></h3>
+    <div class="arch-panel-body">
+      <div class="arch-text">
+        <p>Los mismos esquemas validan las peticiones en la API, generan el OpenAPI y dan los tipos a la web (ADR-002).</p>
+        <p class="arch-control">
+          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
+            ><strong>Control de seguridad.</strong> Esquemas estrictos: un campo desconocido o un importe enviado por el cliente se rechazan con un 400.
+            <span class="refs">RNF-SEC-01 · RNF-SEC-03</span></span
+          >
+        </p>
+      </div>
+      <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/contract/src/simulations.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>simulations.ts</code
+              ><span class="path-dir">packages/contract/src/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/contract/src/customers.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>customers.ts</code
+              ><span class="path-dir">packages/contract/src/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/openapi.json"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>openapi.json</code
+              ><span class="path-dir">apps/api/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    </div>
+  </article><article id="pieza-dominio" class="arch-panel" aria-labelledby="pieza-dominio-titulo" tabindex="-1">
+    <h3 id="pieza-dominio-titulo">Dominio <span>reglas puras</span></h3>
+    <div class="arch-panel-body">
+      <div class="arch-text">
+        <p>Precios por tramos, impuestos, redondeo, divisas y validación fiscal: funciones puras sin dependencias, con el 100 % de cobertura (ADR-001).</p>
+        <p class="arch-control">
+          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
+            ><strong>Control de seguridad.</strong> El servidor calcula todos los importes con estas funciones; nunca acepta uno del cliente.
+            <span class="refs">RNF-SEC-03</span></span
+          >
+        </p>
+      </div>
+      <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/index.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>index.ts</code
+              ><span class="path-dir">packages/domain/src/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/pricing/calculate-pricing.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>calculate-pricing.ts</code
+              ><span class="path-dir">packages/domain/src/pricing/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    </div>
+  </article><article id="pieza-sqlite" class="arch-panel" aria-labelledby="pieza-sqlite-titulo" tabindex="-1">
+    <h3 id="pieza-sqlite-titulo">SQLite <span>Drizzle</span></h3>
+    <div class="arch-panel-body">
+      <div class="arch-text">
+        <p>Clientes y simulaciones; cada simulación guarda su desglose en una tabla hija, como instantánea (ADR-004).</p>
+        <p class="arch-control">
+          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
+            ><strong>Control de seguridad.</strong> Solo consultas parametrizadas, comodines de LIKE escapados e IDs UUID v7 no enumerables.
+            <span class="refs">RNF-SEC-02 · RNF-SEC-04</span></span
+          >
+        </p>
+      </div>
+      <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/db/schema/customers.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>customers.ts</code
+              ><span class="path-dir">apps/api/src/db/schema/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/db/like-pattern.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>like-pattern.ts</code
+              ><span class="path-dir">apps/api/src/db/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/shared/id-generator.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>id-generator.ts</code
+              ><span class="path-dir">apps/api/src/shared/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    </div>
+  </article><article id="pieza-divisas" class="arch-panel" aria-labelledby="pieza-divisas-titulo" tabindex="-1">
+    <h3 id="pieza-divisas-titulo">open.er-api.com <span>tipos de cambio</span></h3>
+    <div class="arch-panel-body">
+      <div class="arch-text">
+        <p>El navegador pide los tipos de cambio, los guarda en caché y avisa si están desactualizados o si fallan (D-22, D-51).</p>
+        <p class="arch-control">
+          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
+            ><strong>Control de seguridad.</strong> La respuesta se valida antes de usarla y el backend no hace ninguna petición saliente.
+            <span class="refs">RNF-SEC-13 · RNF-SEC-18</span></span
+          >
+        </p>
+      </div>
+      <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.client.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>exchange-rates.client.ts</code
+              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.parser.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>exchange-rates.parser.ts</code
+              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.cache.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>exchange-rates.cache.ts</code
+              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    </div>
+  </article></div></section><section id="mapa" class="section" aria-labelledby="mapa-titulo"><header class="section-head">
+      <h2 id="mapa-titulo">Dónde está <span class="accent">cada cosa</span></h2>
+      <p>
+        30 carpetas y ficheros que merece la pena abrir, no todos. Cada uno dice para qué sirve y cuándo
+        abrirlo, y enlaza a GitHub.
+      </p>
+    </header>
+    <div class="map-filter" data-map-filter hidden>
+      <p id="mapa-filtro">Filtrar por interés</p>
+      <div role="group" aria-labelledby="mapa-filtro">
+        <button type="button" aria-pressed="true" data-interest="todo">Todo</button>
+        <button type="button" aria-pressed="false" data-interest="negocio">Negocio</button><button type="button" aria-pressed="false" data-interest="seguridad">Seguridad</button><button type="button" aria-pressed="false" data-interest="tests">Tests</button><button type="button" aria-pressed="false" data-interest="ia">Proceso con IA</button>
+      </div>
+      <p class="map-count" aria-live="polite" data-map-count>30 entradas</p>
+    </div>
+    <div class="map-tree">
+      <section
+            class="map-group"
+            aria-labelledby="mapa-ai-workspace"
+          >
+            <h3 id="mapa-ai-workspace">
+              <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg>ai-workspace <span>El proceso: del enunciado a las decisiones</span>
+            </h3>
+            <ul class="map-entries">
+              <li class="map-entry" data-interests="ia">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/README.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>README.md</code><span class="path-dir">ai-workspace/</span></span></a>
+    <p>Mapa del proceso, cómo se trabajó con la IA y dónde intervino el responsable. <span class="map-when">Lo primero, para entender el proceso.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Proceso con IA</li>
+    </ul>
+  </li><li class="map-entry" data-interests="negocio ia">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/01-analisis.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>01-analisis.md</code><span class="path-dir">ai-workspace/</span></span></a>
+    <p>Requisitos, ambigüedades y casos límite antes de decidir nada. <span class="map-when">Para ver cómo se desmenuzó el enunciado.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Negocio</li><li>Proceso con IA</li>
+    </ul>
+  </li><li class="map-entry" data-interests="negocio tests">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/02-reglas-negocio.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>02-reglas-negocio.md</code><span class="path-dir">ai-workspace/02-especificacion/</span></span></a>
+    <p>Tramos, impuestos, redondeo y divisas, con sus vectores de prueba. <span class="map-when">Para comprobar una cifra del simulador.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Negocio</li><li>Tests</li>
+    </ul>
+  </li><li class="map-entry" data-interests="negocio">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/03-validacion-fiscal.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>03-validacion-fiscal.md</code><span class="path-dir">ai-workspace/02-especificacion/</span></span></a>
+    <p>El algoritmo de cada identificador fiscal, con su fuente oficial. <span class="map-when">Si te interesa la validación fiscal.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Negocio</li>
+    </ul>
+  </li><li class="map-entry" data-interests="seguridad">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>06-seguridad.md</code><span class="path-dir">ai-workspace/02-especificacion/</span></span></a>
+    <p>OWASP API Top 10, modelo de amenazas y por qué no hay login. <span class="map-when">Para revisar la seguridad con método.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Seguridad</li>
+    </ul>
+  </li><li class="map-entry" data-interests="tests negocio">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>07-criterios-aceptacion.md</code><span class="path-dir">ai-workspace/02-especificacion/</span></span></a>
+    <p>Los criterios de aceptación, cada uno con su nivel de test. <span class="map-when">Para ver qué significa «hecho».</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Tests</li><li>Negocio</li>
+    </ul>
+  </li><li class="map-entry" data-interests="ia">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/ai-workspace/03-arquitectura/adr"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>adr/</code><span class="path-dir">ai-workspace/03-arquitectura/</span></span></a>
+    <p>Las decisiones de arquitectura, una por fichero. <span class="map-when">Para entender el porqué de la estructura.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Proceso con IA</li>
+    </ul>
+  </li><li class="map-entry" data-interests="ia">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>decisiones.md</code><span class="path-dir">ai-workspace/</span></span></a>
+    <p>Cada decisión con la alternativa descartada, el motivo y quién la tomó. <span class="map-when">Para saber quién decidió qué.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Proceso con IA</li>
+    </ul>
+  </li><li class="map-entry" data-interests="ia">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/diario.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>diario.md</code><span class="path-dir">ai-workspace/</span></span></a>
+    <p>Una entrada por parte: qué se hizo, qué falló y qué corrigió el revisor. <span class="map-when">Para ver el proceso real, con sus errores.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Proceso con IA</li>
+    </ul>
+  </li><li class="map-entry" data-interests="ia">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/ai-workspace/prompts"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>prompts/</code><span class="path-dir">ai-workspace/</span></span></a>
+    <p>Los prompts de cada sesión, literales y numerados. <span class="map-when">Para ver qué se pidió exactamente.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Proceso con IA</li>
+    </ul>
+  </li>
+            </ul>
+          </section><section
+            class="map-group"
+            aria-labelledby="mapa-packages"
+          >
+            <h3 id="mapa-packages">
+              <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg>packages <span>El código compartido</span>
+            </h3>
+            <ul class="map-entries">
+              <li class="map-entry" data-interests="negocio">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/pricing/calculate-pricing.ts"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>calculate-pricing.ts</code><span class="path-dir">packages/domain/src/pricing/</span></span></a>
+    <p>Tramos acumulativos e impuesto: la misma función en la API y en la web. <span class="map-when">Para ver la regla central.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Negocio</li>
+    </ul>
+  </li><li class="map-entry" data-interests="negocio">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain/src/tax-id"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>tax-id/</code><span class="path-dir">packages/domain/src/</span></span></a>
+    <p>Un validador de identificador fiscal por país detrás de una interfaz común. <span class="map-when">Para ver cómo se extiende a otro país.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Negocio</li>
+    </ul>
+  </li><li class="map-entry" data-interests="negocio">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/currency/convert-pricing.ts"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>convert-pricing.ts</code><span class="path-dir">packages/domain/src/currency/</span></span></a>
+    <p>Conversión partida a partida, con aritmética entera. <span class="map-when">Si te preguntas por qué los totales cuadran.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Negocio</li>
+    </ul>
+  </li><li class="map-entry" data-interests="seguridad">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/contract/src"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>src/</code><span class="path-dir">packages/contract/</span></span></a>
+    <p>Esquemas Zod que validan la API y tipan la web. <span class="map-when">Para ver el contrato de la API.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Seguridad</li>
+    </ul>
+  </li>
+            </ul>
+          </section><section
+            class="map-group"
+            aria-labelledby="mapa-apps"
+          >
+            <h3 id="mapa-apps">
+              <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg>apps <span>La API y la web</span>
+            </h3>
+            <ul class="map-entries">
+              <li class="map-entry" data-interests="negocio">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api/src/modules"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>modules/</code><span class="path-dir">apps/api/src/</span></span></a>
+    <p>Un módulo por recurso: rutas, casos de uso y repositorios. <span class="map-when">Para seguir una petición en la API.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Negocio</li>
+    </ul>
+  </li><li class="map-entry" data-interests="seguridad">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api/src/http"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>http/</code><span class="path-dir">apps/api/src/</span></span></a>
+    <p>Lo transversal: errores RFC 9457, límite de peticiones, CORS, cabeceras y logs. <span class="map-when">Para revisar los controles de seguridad.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Seguridad</li>
+    </ul>
+  </li><li class="map-entry" data-interests="negocio">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/config/catalog.data.ts"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>catalog.data.ts</code><span class="path-dir">apps/api/src/config/</span></span></a>
+    <p>Tarifas e impuestos por país, validados al arrancar. <span class="map-when">Para cambiar un precio o un tipo.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Negocio</li>
+    </ul>
+  </li><li class="map-entry" data-interests="negocio">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/web/src/app/features"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>features/</code><span class="path-dir">apps/web/src/app/</span></span></a>
+    <p>Las pantallas: dashboard, alta, detalle y simulador. <span class="map-when">Para ver la interfaz con signals.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Negocio</li>
+    </ul>
+  </li><li class="map-entry" data-interests="tests">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/styles/tokens.css"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>tokens.css</code><span class="path-dir">apps/web/src/styles/</span></span></a>
+    <p>Los colores y medidas de la interfaz, con su contraste probado. <span class="map-when">Si te interesa el diseño o la accesibilidad.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Tests</li>
+    </ul>
+  </li><li class="map-entry" data-interests="seguridad">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/web/nginx"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>nginx/</code><span class="path-dir">apps/web/</span></span></a>
+    <p>El nginx de producción: CSP, cabeceras y proxy a la API. <span class="map-when">Para ver la CSP real.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Seguridad</li>
+    </ul>
+  </li>
+            </ul>
+          </section><section
+            class="map-group"
+            aria-labelledby="mapa-tests-y-calidad"
+          >
+            <h3 id="mapa-tests-y-calidad">
+              <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg>Tests y calidad <span>Lo que comprueba que todo lo anterior es cierto</span>
+            </h3>
+            <ul class="map-entries">
+              <li class="map-entry" data-interests="tests">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/e2e/specs"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>specs/</code><span class="path-dir">e2e/</span></span></a>
+    <p>Los e2e de Playwright contra la pila de Docker, con la CSP real. <span class="map-when">Para ver un flujo completo probado.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Tests</li>
+    </ul>
+  </li><li class="map-entry" data-interests="seguridad tests">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/xss.spec.ts"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>xss.spec.ts</code><span class="path-dir">e2e/specs/</span></span></a>
+    <p>Un nombre de empresa con HTML malicioso se muestra como texto y no ejecuta nada. <span class="map-when">Para ver la defensa frente a XSS.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Seguridad</li><li>Tests</li>
+    </ul>
+  </li><li class="map-entry" data-interests="tests ia">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/tools"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>tools/</code></span></a>
+    <p>Tests de las propias herramientas: reglas de lint, hooks, scripts y documentación. <span class="map-when">Para ver que los controles también se prueban.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Tests</li><li>Proceso con IA</li>
+    </ul>
+  </li><li class="map-entry" data-interests="tests">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/scripts/trace-tests.mjs"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>trace-tests.mjs</code><span class="path-dir">scripts/</span></span></a>
+    <p>Exige que cada criterio y cada vector los cite algún test. <span class="map-when">Para ver cómo se hace cumplir la trazabilidad.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Tests</li>
+    </ul>
+  </li><li class="map-entry" data-interests="tests seguridad">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.github/workflows/ci.yml"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>ci.yml</code><span class="path-dir">.github/workflows/</span></span></a>
+    <p>El pipeline: calidad en tres versiones de Node, auditoría, e2e, humo y demo. <span class="map-when">Para ver qué bloquea un merge.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Tests</li><li>Seguridad</li>
+    </ul>
+  </li><li class="map-entry" data-interests="ia seguridad">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/eslint.config.js"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>eslint.config.js</code></span></a>
+    <p>Límites de tamaño, fronteras entre capas y reglas de seguridad. <span class="map-when">Para ver las reglas que la IA no podía saltarse.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Proceso con IA</li><li>Seguridad</li>
+    </ul>
+  </li>
+            </ul>
+          </section><section
+            class="map-group"
+            aria-labelledby="mapa-trabajo-con-la-ia"
+          >
+            <h3 id="mapa-trabajo-con-la-ia">
+              <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg>Trabajo con la IA <span>Las reglas que seguía Claude y cómo se hacían cumplir</span>
+            </h3>
+            <ul class="map-entries">
+              <li class="map-entry" data-interests="ia">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/CLAUDE.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>CLAUDE.md</code></span></a>
+    <p>Las reglas de trabajo, de código y de seguridad que leía cada sesión. <span class="map-when">Para ver qué se le exigía a la IA.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Proceso con IA</li>
+    </ul>
+  </li><li class="map-entry" data-interests="ia tests">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.claude/agents/revisor.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>revisor.md</code><span class="path-dir">.claude/agents/</span></span></a>
+    <p>El subagente revisor: solo lee y devuelve hallazgos P0 a P3. <span class="map-when">Para ver cómo se revisaba cada parte.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Proceso con IA</li><li>Tests</li>
+    </ul>
+  </li><li class="map-entry" data-interests="ia seguridad">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.claude/settings.json"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>settings.json</code><span class="path-dir">.claude/</span></span></a>
+    <p>Permisos y hooks: qué pedía confirmación y qué se comprobaba en cada edición. <span class="map-when">Para ver los guardarraíles.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Proceso con IA</li><li>Seguridad</li>
+    </ul>
+  </li><li class="map-entry" data-interests="ia">
+    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/scripts/claude-hooks"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>claude-hooks/</code><span class="path-dir">scripts/</span></span></a>
+    <p>Bloquean acciones prohibidas, pasan el lint del fichero editado y no dejan terminar en rojo. <span class="map-when">Para ver cómo se paraba a la IA.</span></p>
+    <ul class="map-tags" aria-label="Interés">
+      <li>Proceso con IA</li>
+    </ul>
+  </li>
+            </ul>
+          </section>
+    </div></section><section id="construccion" class="section" aria-labelledby="construccion-titulo"><header class="section-head">
+      <h2 id="construccion-titulo">Cómo se <span class="accent">construyó</span></h2>
+      <p>
+        Cuatro fases antes del código (análisis, especificación, arquitectura y plan) y después
+        14 partes, cada una en su sesión, su rama y su PR. Todas siguieron el mismo ciclo.
+      </p>
+    </header>
+    <h3 class="sub-title">El ciclo de cada parte</h3>
+    <ol class="cycle">
+    <li>
+          <span class="cycle-index" aria-hidden="true">1</span>
+          <h4><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/04-plan-implementacion.md#4-protocolo-de-cada-parte-d-73">Plan</a></h4>
+          <p>Una sesión nueva lee la nota de traspaso y presenta el plan: objetivo, criterios, ficheros, orden de los tests y riesgos. No se toca código hasta que el responsable del proyecto lo aprueba.</p>
+        </li><li>
+          <span class="cycle-index" aria-hidden="true">2</span>
+          <h4><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/07-tests.md">TDD</a></h4>
+          <p>Primero el test con los vectores de la especificación; en el dominio, siempre, con el 100 % de cobertura.</p>
+        </li><li>
+          <span class="cycle-index" aria-hidden="true">3</span>
+          <h4><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.claude/agents/revisor.md">Revisor</a></h4>
+          <p>Un subagente de solo lectura revisa el diff contra la especificación y la seguridad. Los P0 y P1 se corrigen, cada uno con su test.</p>
+        </li><li>
+          <span class="cycle-index" aria-hidden="true">4</span>
+          <h4><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/diario.md">Documentación</a></h4>
+          <p>Una sola actualización al cerrar: decisiones, diario, trazabilidad y el prompt literal.</p>
+        </li><li>
+          <span class="cycle-index" aria-hidden="true">5</span>
+          <h4><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.github/workflows/ci.yml">PR y CI</a></h4>
+          <p>Una rama y una PR por parte. main solo acepta la PR con todos los checks del CI en verde.</p>
+        </li>
+  </ol>
+    <h3 class="sub-title">Las partes, de P0 a P13</h3>
+    <ol class="timeline">
+      <li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P0</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P0: </span>Scaffolding y herramientas</h3>
+      <p>Monorepo vacío pero completo en herramientas, para que la primera línea de negocio ya nazca bajo las reglas.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/1">PR #1</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-88</a> ·
+          Protección de <code>main</code> en GitHub</span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P1</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P1: </span>Dominio: precios, impuestos, redondeo, catálogo, texto y slider</h3>
+      <p>El núcleo de cálculo, puro y probado con TDD.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/2">PR #2</a>, <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/3">PR #3</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-95</a> ·
+          <code>calculatePricing</code> solo acepta una <code>ValidTariff</code></span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P2</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P2: </span>Dominio: identificador fiscal</h3>
+      <p>Normalización y un validador por país detrás de una interfaz común (RNF-26).</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/4">PR #4</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-100</a> ·
+          AC-16 lo garantiza el tipo</span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P3</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P3: </span>Contrato y base de la API</h3>
+      <p>Todo lo transversal del backend, listo para que P4 solo añada casos de uso.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/5">PR #5</a>, <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/6">PR #6</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-115</a> ·
+          Generador propio de UUID v7</span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P4</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P4: </span>API de la porción vertical</h3>
+      <p>Alta y lectura de clientes, y creación y listado de simulaciones de punta a punta en el backend.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/7">PR #7</a>, <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/8">PR #8</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-120</a> ·
+          Alta sin carrera</span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P5</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P5: </span>Web de la porción vertical</h3>
+      <p>Alta → detalle → simulador (EUR, slider y campo numérico) → guardar → historial, en el navegador.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/9">PR #9</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-122</a> ·
+          Dirección visual de la web</span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P6</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P6: </span>Docker Compose, nginx y e2e de la porción vertical</h3>
+      <p>La porción vertical probada en el navegador contra la pila de producción, con CSP real.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/10">PR #10</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-130</a> ·
+          Red de Compose fija e IP real (estrecha D-113)</span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P7</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P7: </span>Búsqueda y dashboard</h3>
+      <p>Listado paginado y búsqueda sin acentos ni mayúsculas, en la API y en la web.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/11">PR #11</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-136</a> ·
+          Un término de búsqueda que queda vacío al normalizarse no filtra por su campo</span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P8</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P8: </span>Divisas</h3>
+      <p>Selector, tipos con caché, indicador de estado siempre visible y conversión por partidas hoja.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/12">PR #12</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-144</a> ·
+          Conversión exacta</span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P9</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P9: </span>Robustez: seguridad, estados, responsive y accesibilidad</h3>
+      <p>Cerrar los AC transversales que no han caído en las partes anteriores.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/13">PR #13</a>, <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/14">PR #14</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-152</a> ·
+          Con la API caída, nginx contesta él mismo con un Problem RFC 9457</span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P10</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P10: </span>Should/Could y CI completo</h3>
+      <p>Los extras y el pipeline final.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/15">PR #15</a>, <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/16">PR #16</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-161</a> ·
+          La trazabilidad bloquea desde P10</span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P11</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P11: </span>Demo pública</h3>
+      <p>Demo en una URL pública con las medidas de D-47.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/17">PR #17</a>, <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/18">PR #18</a>, <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/19">PR #19</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-170</a> ·
+          El CI publica lo que probó</span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P12</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P12: </span>Cierre: README, clon limpio y revisión final</h3>
+      <p>Que el evaluador lo levante sin fricción y que el <code>ai-workspace</code> cuente el proceso completo.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/20">PR #20</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-181</a> ·
+          Los enlaces de los Markdown se comprueban</span
+        >
+      </p>
+    </div>
+  </li><li class="tl-part">
+    <span class="tl-id" aria-hidden="true">P13</span>
+    <div class="tl-body">
+      <h3><span class="visually-hidden">P13: </span>Recorrido visual para los evaluadores</h3>
+      <p>Que un evaluador entienda el proyecto en 5 minutos sin leer todo <code>ai-workspace</code>.</p>
+      <p class="tl-meta">
+        <span class="tl-pr"
+    ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/pull/21">PR #21</a></span
+  ><span class="tl-decision"
+          ><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-183</a> ·
+          El recorrido es HTML estático generado del repositorio</span
+        >
+      </p>
+    </div>
+  </li>
+    </ol></section><section id="calidad" class="section" aria-labelledby="calidad-titulo"><header class="section-head">
+      <h2 id="calidad-titulo">Calidad que <span class="accent">se comprueba sola</span></h2>
+      <p>Nada se integra en main sin el CI en verde. Las reglas de CLAUDE.md marcadas con ⚙ las hace cumplir una herramienta que también tiene sus tests.</p>
+    </header>
+    <div class="quality">
+      <div class="quality-block">
+        <h3><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.github/workflows/ci.yml">El pipeline</a></h3>
+        <p>6 trabajos, leídos de <code>ci.yml</code>. Abre uno para ver sus pasos.</p>
+        <ol class="pipeline">
+    <li class="pipeline-job">
+          <details>
+            <summary>
+              <span class="pipeline-name">quality</span
+              ><span class="pipeline-count">9 pasos</span>
+            </summary>
+            <ol class="pipeline-steps">
+              <li>Format</li><li>Lint</li><li>Typecheck</li><li>File names, forbidden patterns and dependency cycles</li><li>Migrations match the schema (db:check)</li><li>Node tests (domain coverage 100 %)</li><li>Web unit tests</li><li>Build</li><li>Traceability, blocking (every AC and TV has a test; only the declared pending ones are left, D-161)</li>
+            </ol>
+          </details>
+        </li><li class="pipeline-job">
+          <details>
+            <summary>
+              <span class="pipeline-name">audit</span
+              ><span class="pipeline-count">2 pasos</span>
+            </summary>
+            <ol class="pipeline-steps">
+              <li>Dependency audit (fails on high or critical, AC-57)</li><li>No committed .env files (AC-55)</li>
+            </ol>
+          </details>
+        </li><li class="pipeline-job">
+          <details>
+            <summary>
+              <span class="pipeline-name">e2e</span
+              ><span class="pipeline-count">8 pasos</span>
+            </summary>
+            <ol class="pipeline-steps">
+              <li>Start the Compose stack and wait until it is healthy (AC-97, D-133)</li><li>Containers without root, read-only, ports on 127.0.0.1 only (AC-60, D-130)</li><li>Install Chromium for Playwright</li><li>Evaluator walkthrough, published and from file:// (D-183, D-184)</li><li>e2e against the Compose stack, real CSP and headers (AC-96, AC-64, AC-52)</li><li>Playwright report and traces</li><li>Logs of the stack (the API logs carry no personal data)</li><li>Stop the stack and delete its data</li>
+            </ol>
+          </details>
+        </li><li class="pipeline-job">
+          <details>
+            <summary>
+              <span class="pipeline-name">smoke</span
+              ><span class="pipeline-count">5 pasos</span>
+            </summary>
+            <ol class="pipeline-steps">
+              <li>README · install</li><li>README · migrate and seed (npm run setup)</li><li>Install Chromium for Playwright (with its system libraries on Linux)</li><li>Install Chromium for Playwright</li><li>README · start (npm run dev), GET /health and the dashboard with the sample data (AC-95)</li>
+            </ol>
+          </details>
+        </li><li class="pipeline-job">
+          <details>
+            <summary>
+              <span class="pipeline-name">demo</span
+              ><span class="pipeline-count">10 pasos</span>
+            </summary>
+            <ol class="pipeline-steps">
+              <li>Build the demo images, the web with the notice of spec 05 §2 (D-169)</li><li>Start the demo stack with those images and wait until it is healthy (D-171)</li><li>Containers without root, read-only, ports on 127.0.0.1 only (AC-60, D-130)</li><li>Install Chromium for Playwright</li><li>AC-61 e2e of the demo (notice, sample data, 5 writes, buckets per client, reset on restart)</li><li>Playwright report and traces</li><li>Logs of the demo stack (the API logs carry no personal data)</li><li>Save the tested images for publish (D-170)</li><li>Hand the tested images to publish</li><li>Stop the demo stack</li>
+            </ol>
+          </details>
+        </li><li class="pipeline-job">
+          <details>
+            <summary>
+              <span class="pipeline-name">publish</span
+              ><span class="pipeline-count">4 pasos</span>
+            </summary>
+            <ol class="pipeline-steps">
+              <li>Load the tested images</li><li>Log in to GHCR with the token of this run</li><li>Publish sha-&lt;commit&gt; and main</li><li>Log out of GHCR</li>
+            </ol>
+          </details>
+        </li>
+  </ol>
+      </div>
+      <div class="quality-block">
+        <h3>Tests por capa</h3>
+        <p>1&#8239;378 tests en el clon limpio: 1&#8239;085 de Node y 293 de la web, más los e2e.</p>
+        <table class="layers">
+    <caption class="visually-hidden">
+      Ficheros de test por capa
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Capa</th>
+        <th scope="col">Ficheros de test</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+            <th scope="row"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain">Dominio</a></th>
+            <td>
+              <span class="layer-bar"
+                ><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="52.8"
+                    height="10"
+                    rx="2"
+                  /></svg></span
+              ><span class="amount">19</span>
+            </td>
+          </tr><tr>
+            <th scope="row"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/contract">Contrato</a></th>
+            <td>
+              <span class="layer-bar"
+                ><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="13.9"
+                    height="10"
+                    rx="2"
+                  /></svg></span
+              ><span class="amount">5</span>
+            </td>
+          </tr><tr>
+            <th scope="row"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api">API</a></th>
+            <td>
+              <span class="layer-bar"
+                ><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100.0"
+                    height="10"
+                    rx="2"
+                  /></svg></span
+              ><span class="amount">36</span>
+            </td>
+          </tr><tr>
+            <th scope="row"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/web">Web</a></th>
+            <td>
+              <span class="layer-bar"
+                ><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="83.3"
+                    height="10"
+                    rx="2"
+                  /></svg></span
+              ><span class="amount">30</span>
+            </td>
+          </tr><tr>
+            <th scope="row"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/tools">Herramientas</a></th>
+            <td>
+              <span class="layer-bar"
+                ><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="55.6"
+                    height="10"
+                    rx="2"
+                  /></svg></span
+              ><span class="amount">20</span>
+            </td>
+          </tr><tr>
+            <th scope="row"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/e2e">e2e</a></th>
+            <td>
+              <span class="layer-bar"
+                ><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="66.7"
+                    height="10"
+                    rx="2"
+                  /></svg></span
+              ><span class="amount">24</span>
+            </td>
+          </tr>
+    </tbody>
+  </table>
+      </div>
+      <div class="quality-block">
+        <h3><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/08-trazabilidad.md">Trazabilidad</a></h3>
+        <ol class="trace">
+    <li><strong>Requisito</strong><span>RF, RNF y RNF-SEC del análisis</span></li>
+    <li><strong>83 criterios</strong><span>81 con test; AC-94 y AC-99, de revisión</span></li>
+    <li><strong>129 vectores</strong><span>entradas y salidas exactas</span></li>
+    <li><strong>Test</strong><span>cita su AC o TV en el título</span></li>
+  </ol>
+        <p><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/scripts/trace-tests.mjs"><code>npm run trace</code></a> falla en el CI si un criterio automatizable o un vector no lo cita ningún test.</p>
+      </div>
+    </div></section><section id="intervencion" class="section" aria-labelledby="intervencion-titulo"><header class="section-head">
+      <h2 id="intervencion-titulo">Dónde <span class="accent">intervine yo</span></h2>
+      <p>
+        10 momentos en los que mi criterio cambió el rumbo, en el orden en que ocurrieron. El
+        texto es el de
+        <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/README.md#dónde-intervine-yo">ai-workspace/README.md</a>; cada uno
+        enlaza con su decisión y con el prompt en el que lo pedí.
+      </p>
+    </header>
+    <ol class="moments">
+      <li class="moment">
+            <span class="moment-index" aria-hidden="true">01</span>
+            <h3><span class="visually-hidden">1. </span>Validación fiscal estricta</h3>
+            <p>Rechacé la validación genérica de 2 a 20 caracteres fuera de España: no es «estricta». Pedí el formato oficial de cada país, con su fuente, y un validador por país detrás de una interfaz común.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#validación-fiscal">D-15</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/02-especificacion.md">prompt</a></p>
+          </li><li class="moment">
+            <span class="moment-index" aria-hidden="true">02</span>
+            <h3><span class="visually-hidden">2. </span>Seguridad con método</h3>
+            <p>Pedí sustituir el requisito de seguridad genérico por un bloque basado en el OWASP API Security Top 10 y un modelo de amenazas, incluido por qué no hay login.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#api-y-seguridad">D-40</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/02-especificacion.md">prompt</a></p>
+          </li><li class="moment">
+            <span class="moment-index" aria-hidden="true">03</span>
+            <h3><span class="visually-hidden">3. </span>Un fallback que no esconde el error</h3>
+            <p>Aprobé la caché de los tipos de cambio con una condición: carga, error con «Reintentar» y tipos desactualizados se ven siempre, cada estado con su e2e.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#validación-de-la-especificación-2026-11-12">D-51</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/03-validacion-especificacion.md">prompt</a></p>
+          </li><li class="moment">
+            <span class="moment-index" aria-hidden="true">04</span>
+            <h3><span class="visually-hidden">4. </span>La CSP, comprobada</h3>
+            <p>Pedí verificar si el build de Angular inyectaba CSS en línea, y un e2e que falle ante cualquier violación de CSP. Con el valor por defecto, la política habría dejado la web sin estilos.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#validación-de-la-arquitectura-y-plan-2026-11-12">D-70</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/06-plan-implementacion.md">prompt</a></p>
+          </li><li class="moment">
+            <span class="moment-index" aria-hidden="true">05</span>
+            <h3><span class="visually-hidden">5. </span>El flujo de trabajo</h3>
+            <p>Decidí una rama y una PR por parte, y hooks rápidos (el lint del fichero editado, nunca el build completo). Tras el primer NO APTO del revisor acepté su propuesta: <code>npm install &lt;paquete&gt;</code> y <code>gh pr merge</code> pasaron a pedir confirmación.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p0--scaffolding-2026-11-12">D-80, D-82 y D-85</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/07-p0-plan.md">prompt 07</a> y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/08-p0-permisos-y-cierre.md">prompt 08</a></p>
+          </li><li class="moment">
+            <span class="moment-index" aria-hidden="true">06</span>
+            <h3><span class="visually-hidden">6. </span>La IP real, sin atajos</h3>
+            <p>Exigí que los proxies de confianza fueran solo <code>loopback</code> y la subred de Docker de la demo, nunca todos los rangos privados; en P6 estreché el de la demo a direcciones exactas y pedí un e2e que demuestre que una IP falsa no abre un cubo nuevo del límite.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p3--contrato-y-base-de-la-api-2026-11-12">D-113</a> y D-130 · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/13-p3-cierre.md">prompt 13</a> y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/18-p6-plan.md">prompt 18</a></p>
+          </li><li class="moment">
+            <span class="moment-index" aria-hidden="true">07</span>
+            <h3><span class="visually-hidden">7. </span>El diseño, una extensión de roams.es</h3>
+            <p>Pedí que la interfaz pareciera una extensión natural de la web de la empresa, <a href="https://roams.es/">roams.es</a>: misma familia visual, no una copia. Validé la maqueta con dos ajustes.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p3--contrato-y-base-de-la-api-2026-11-12">D-122</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/10-diseno-visual.md">10-diseno-visual</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/16-p5-plan.md">prompt</a></p>
+          </li><li class="moment">
+            <span class="moment-index" aria-hidden="true">08</span>
+            <h3><span class="visually-hidden">8. </span>Una contradicción de la especificación</h3>
+            <p>Claude detectó que la §4.4 dejaba solo EUR mientras cargan los tipos y que AC-88 pedía cambiar de divisa en ese momento, y me planteó las salidas. Decidí que AC-88 se cumple en «Refrescando» y que tras un error los importes vuelven a la divisa que había elegido.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p8--divisas-2026-11-13">D-142 y D-143</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/20-p8-plan.md">prompt</a></p>
+          </li><li class="moment">
+            <span class="moment-index" aria-hidden="true">09</span>
+            <h3><span class="visually-hidden">9. </span>No enmendar un criterio para facilitar el código</h3>
+            <p>Yo había pedido cortar el email del detalle con «…», y eso obligaba a cambiar AC-84. Al revisar el plan me di cuenta de que con «…» y <code>title</code> no se puede leer en móvil ni con el teclado, y cambié de idea: que se vea entero y se parta solo por puntos naturales, sin tocar el criterio.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p10--shouldcould-y-ci-completo-2026-11-13">D-159</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/22-p10-plan.md">prompt</a></p>
+          </li><li class="moment">
+            <span class="moment-index" aria-hidden="true">10</span>
+            <h3><span class="visually-hidden">10. </span>Parar la línea cuando el CI se pone rojo</h3>
+            <p>Tras fusionar P10, el e2e de AC-91 falló en <code>main</code>. Pedí arreglarlo en una PR aparte antes de seguir, y demostrarlo con repeticiones: de 6 fallos en 100 ejecuciones a 0 en 100.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/diario.md#arreglo-tras-p10--e2e-inestable-de-ac-91--2026-11-13--rama-fixe2e-slider-initial-value">diario</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/23-arreglo-e2e-ac91.md">prompt</a></p>
+          </li>
+    </ol></section><section id="requisitos" class="section" aria-labelledby="requisitos-titulo"><header class="section-head">
+      <h2 id="requisitos-titulo">Requisitos y <span class="accent">evidencias</span></h2>
+      <p>Cada requisito del enunciado, dónde se ve en la aplicación, qué criterios de aceptación lo concretan y qué test lo comprueba. Es la tabla de la <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/GUIA-EVALUADOR.md">guía del evaluador</a>, leída del fichero al generar esta página.</p>
+    </header>
+    <div class="req-search" data-req-search hidden>
+    <label for="buscar-requisito">Buscar un requisito, un criterio o un test</label>
+    <input id="buscar-requisito" type="search" autocomplete="off" spellcheck="false" placeholder="Por ejemplo: divisa, AC-44 o simulator" />
+    <p class="req-count" aria-live="polite" data-req-count>20 requisitos</p>
+  </div>
+    <div class="req-wrap">
+      <table class="req-table">
+        <caption class="visually-hidden">Requisitos del enunciado, dónde se ven, criterios y tests</caption>
+        <thead><tr><th scope="col">Requisito del enunciado</th><th scope="col">Dónde se ve</th><th scope="col">Criterios</th><th scope="col">Tests</th></tr></thead>
+        <tbody><tr data-search="alta de un cliente corporativo, post /customers (rf-01, rf-06) «nuevo cliente» → /customers/new ac-20, ac-26, ac-72 api · duplicados · e2e apps/api/src/modules/customers/create-customer.routes.test.ts apps/api/src/modules/customers/create-customer.rules.test.ts e2e/specs/customer-create.spec.ts">
+    <th scope="row">Alta de un cliente corporativo, <code>POST /customers</code> (RF-01, RF-06)</th>
+    <td data-label="Dónde se ve">«Nuevo cliente» → <code>/customers/new</code></td>
+    <td data-label="Criterios">AC-20, AC-26, AC-72</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/create-customer.routes.test.ts">API</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/create-customer.rules.test.ts">duplicados</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/customer-create.spec.ts">e2e</a></td>
+  </tr><tr data-search="validación algorítmica del identificador fiscal; españa: dni, nie y cif (rf-02, rf-03) formulario de alta, con españa y 12345678a ac-10, ac-11, ac-12, ac-13, ac-14, ac-15, ac-25, ac-73 dominio · api · e2e packages/domain/src/tax-id/validate-tax-id.test.ts apps/api/src/modules/customers/create-customer.rules.test.ts e2e/specs/customer-create.spec.ts">
+    <th scope="row">Validación algorítmica del identificador fiscal; España: DNI, NIE y CIF (RF-02, RF-03)</th>
+    <td data-label="Dónde se ve">Formulario de alta, con España y <code>12345678A</code></td>
+    <td data-label="Criterios">AC-10, AC-11, AC-12, AC-13, AC-14, AC-15, AC-25, AC-73</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/tax-id/validate-tax-id.test.ts">dominio</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/create-customer.rules.test.ts">API</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/customer-create.spec.ts">e2e</a></td>
+  </tr><tr data-search="simulación de consumo guardada en la base de datos, post /simulations (rf-07, rf-10) «guardar simulación» en el detalle del cliente ac-40, ac-41, ac-46 api · validación · instantánea apps/api/src/modules/simulations/create-simulation.routes.test.ts apps/api/src/modules/simulations/create-simulation.validation.test.ts apps/api/src/modules/simulations/simulation-snapshot.test.ts">
+    <th scope="row">Simulación de consumo guardada en la base de datos, <code>POST /simulations</code> (RF-07, RF-10)</th>
+    <td data-label="Dónde se ve">«Guardar simulación» en el detalle del cliente</td>
+    <td data-label="Criterios">AC-40, AC-41, AC-46</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/simulations/create-simulation.routes.test.ts">API</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/simulations/create-simulation.validation.test.ts">validación</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/simulations/simulation-snapshot.test.ts">instantánea</a></td>
+  </tr><tr data-search="facturación gradual por tramos: 10 €, 8 € y 5 € por usuario (rf-08) desglose del simulador: 15 usuarios son 100 € + 40 € ac-01, ac-02, ac-03 dominio packages/domain/src/pricing/calculate-pricing.test.ts">
+    <th scope="row">Facturación gradual por tramos: 10 €, 8 € y 5 € por usuario (RF-08)</th>
+    <td data-label="Dónde se ve">Desglose del simulador: 15 usuarios son 100 € + 40 €</td>
+    <td data-label="Criterios">AC-01, AC-02, AC-03</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/pricing/calculate-pricing.test.ts">dominio</a></td>
+  </tr><tr data-search="impuesto del país del cliente, con un único redondeo (rf-09, rnf-04) líneas «impuesto» y «total» de la proyección ac-04, ac-05 dominio packages/domain/src/tax/calculate-tax.test.ts">
+    <th scope="row">Impuesto del país del cliente, con un único redondeo (RF-09, RNF-04)</th>
+    <td data-label="Dónde se ve">Líneas «Impuesto» y «Total» de la proyección</td>
+    <td data-label="Criterios">AC-04, AC-05</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/tax/calculate-tax.test.ts">dominio</a></td>
+  </tr><tr data-search="base de datos sqlite con persistencia limpia (rnf-02, rnf-06) esquema y restricciones y las migraciones de apps/api/drizzle ac-20, ac-93 api · ac-93: revisión apps/api/src/modules/customers/create-customer.routes.test.ts">
+    <th scope="row">Base de datos SQLite con persistencia limpia (RNF-02, RNF-06)</th>
+    <td data-label="Dónde se ve"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/04-base-de-datos.md">Esquema y restricciones</a> y las migraciones de <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api/drizzle"><code>apps/api/drizzle</code></a></td>
+    <td data-label="Criterios">AC-20, AC-93</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/create-customer.routes.test.ts">API</a> · AC-93: revisión</td>
+  </tr><tr data-search="buscador por nombre de empresa o identificador fiscal (rf-04, rf-14) caja de búsqueda del dashboard (/) ac-29, ac-30, ac-70, ac-71 api · e2e apps/api/src/modules/customers/search-customers.routes.test.ts e2e/specs/dashboard.spec.ts">
+    <th scope="row">Buscador por nombre de empresa o identificador fiscal (RF-04, RF-14)</th>
+    <td data-label="Dónde se ve">Caja de búsqueda del dashboard (<code>/</code>)</td>
+    <td data-label="Criterios">AC-29, AC-30, AC-70, AC-71</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/search-customers.routes.test.ts">API</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/dashboard.spec.ts">e2e</a></td>
+  </tr><tr data-search="dashboard con el listado (rf-14) y, como extra, las métricas (rf-19) dashboard (/) ac-47, ac-70, ac-92 api · e2e · métricas apps/api/src/modules/stats/stats.routes.test.ts e2e/specs/dashboard.spec.ts e2e/specs/dashboard-metrics.spec.ts">
+    <th scope="row">Dashboard con el listado (RF-14) y, como extra, las métricas (RF-19)</th>
+    <td data-label="Dónde se ve">Dashboard (<code>/</code>)</td>
+    <td data-label="Criterios">AC-47, AC-70, AC-92</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/stats/stats.routes.test.ts">API</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/dashboard.spec.ts">e2e</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/dashboard-metrics.spec.ts">métricas</a></td>
+  </tr><tr data-search="detalle del cliente con tarjetas (rf-05, rf-15) un cliente del dashboard → /customers/:id ac-27, ac-75 api · e2e apps/api/src/modules/customers/get-customer.routes.test.ts e2e/specs/customer-detail.spec.ts">
+    <th scope="row">Detalle del cliente con tarjetas (RF-05, RF-15)</th>
+    <td data-label="Dónde se ve">Un cliente del dashboard → <code>/customers/:id</code></td>
+    <td data-label="Criterios">AC-27, AC-75</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/get-customer.routes.test.ts">API</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/customer-detail.spec.ts">e2e</a></td>
+  </tr><tr data-search="historial de simulaciones guardadas (rf-11, rf-17) «historial de simulaciones», en el detalle ac-44, ac-78 api · e2e apps/api/src/modules/simulations/read-simulations.routes.test.ts e2e/specs/simulation-save.spec.ts">
+    <th scope="row">Historial de simulaciones guardadas (RF-11, RF-17)</th>
+    <td data-label="Dónde se ve">«Historial de simulaciones», en el detalle</td>
+    <td data-label="Criterios">AC-44, AC-78</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/simulations/read-simulations.routes.test.ts">API</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/simulation-save.spec.ts">e2e</a></td>
+  </tr><tr data-search="simulador con slider y proyección en tiempo real (rf-16, rnf-09) «simulador», en el detalle ac-76, ac-77, ac-90, ac-91 e2e · escala del slider e2e/specs/simulator.spec.ts packages/domain/src/slider/slider-scale.test.ts">
+    <th scope="row">Simulador con slider y proyección en tiempo real (RF-16, RNF-09)</th>
+    <td data-label="Dónde se ve">«Simulador», en el detalle</td>
+    <td data-label="Criterios">AC-76, AC-77, AC-90, AC-91</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/simulator.spec.ts">e2e</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/slider/slider-scale.test.ts">escala del slider</a></td>
+  </tr><tr data-search="cambio de divisa de visualización (rf-13) selector «divisa» de la cabecera ac-79, ac-88 e2e · dominio e2e/specs/currency-conversion.spec.ts packages/domain/src/currency/convert-pricing.test.ts">
+    <th scope="row">Cambio de divisa de visualización (RF-13)</th>
+    <td data-label="Dónde se ve">Selector «Divisa» de la cabecera</td>
+    <td data-label="Criterios">AC-79, AC-88</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/currency-conversion.spec.ts">e2e</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/currency/convert-pricing.test.ts">dominio</a></td>
+  </tr><tr data-search="estados de carga y error de la api de tipos de cambio (rf-12, rnf-08) indicador de la cabecera, con «reintentar» ac-80, ac-81, ac-82, ac-85 e2e · caché · api caída e2e/specs/exchange-rates.spec.ts e2e/specs/exchange-rates-cache.spec.ts e2e/specs/api-down.spec.ts">
+    <th scope="row">Estados de carga y error de la API de tipos de cambio (RF-12, RNF-08)</th>
+    <td data-label="Dónde se ve">Indicador de la cabecera, con «Reintentar»</td>
+    <td data-label="Criterios">AC-80, AC-81, AC-82, AC-85</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/exchange-rates.spec.ts">e2e</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/exchange-rates-cache.spec.ts">caché</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/api-down.spec.ts">API caída</a></td>
+  </tr><tr data-search="interfaz responsive desde 360 px y accesible (rnf-07, rnf-13) cualquier vista con la ventana a 360 px ac-84, ac-86 responsive · accesibilidad e2e/specs/responsive.spec.ts e2e/specs/accessibility.spec.ts">
+    <th scope="row">Interfaz responsive desde 360 px y accesible (RNF-07, RNF-13)</th>
+    <td data-label="Dónde se ve">Cualquier vista con la ventana a 360 px</td>
+    <td data-label="Criterios">AC-84, AC-86</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/responsive.spec.ts">responsive</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/accessibility.spec.ts">accesibilidad</a></td>
+  </tr><tr data-search="backend en node.js + typescript con api rest y código modular (rnf-01, rnf-03, rnf-10) apps/api y openapi.json ac-93 reglas de lint · ac-93: revisión tools/eslint-rules.test.ts">
+    <th scope="row">Backend en Node.js + TypeScript con API REST y código modular (RNF-01, RNF-03, RNF-10)</th>
+    <td data-label="Dónde se ve"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api/src"><code>apps/api</code></a> y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/openapi.json"><code>openapi.json</code></a></td>
+    <td data-label="Criterios">AC-93</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/tools/eslint-rules.test.ts">reglas de lint</a> · AC-93: revisión</td>
+  </tr><tr data-search="extra: tests y ci (rnf-12, rnf-21) pestaña «actions» del repositorio ac-96 pipeline .github/workflows/ci.yml">
+    <th scope="row">Extra: tests y CI (RNF-12, RNF-21)</th>
+    <td data-label="Dónde se ve">Pestaña «Actions» del repositorio</td>
+    <td data-label="Criterios">AC-96</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.github/workflows/ci.yml">pipeline</a></td>
+  </tr><tr data-search="repositorio público y arranque en pocos pasos (rnf-14, rnf-18, rnf-19, rnf-23) el readme ac-94, ac-95, ac-98 arranque en limpio · versiones de node · ac-94: revisión e2e/smoke/clean-start.spec.ts tools/repo-config.test.ts">
+    <th scope="row">Repositorio público y arranque en pocos pasos (RNF-14, RNF-18, RNF-19, RNF-23)</th>
+    <td data-label="Dónde se ve">El <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/README.md">README</a></td>
+    <td data-label="Criterios">AC-94, AC-95, AC-98</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/smoke/clean-start.spec.ts">arranque en limpio</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/tools/repo-config.test.ts">versiones de Node</a> · AC-94: revisión</td>
+  </tr><tr data-search="carpeta ai-workspace con specs, arquitectura y prompts (rnf-15, rnf-16, rnf-17) ai-workspace/ ac-99 ac-99: revisión">
+    <th scope="row">Carpeta <code>ai-workspace</code> con specs, arquitectura y prompts (RNF-15, RNF-16, RNF-17)</th>
+    <td data-label="Dónde se ve"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/README.md"><code>ai-workspace/</code></a></td>
+    <td data-label="Criterios">AC-99</td>
+    <td data-label="Tests">AC-99: revisión</td>
+  </tr><tr data-search="extra: docker compose como alternativa de arranque (rnf-20) docker compose up --build ac-97 pila de producción e2e/specs/production-stack.spec.ts">
+    <th scope="row">Extra: Docker Compose como alternativa de arranque (RNF-20)</th>
+    <td data-label="Dónde se ve"><code>docker compose up --build</code></td>
+    <td data-label="Criterios">AC-97</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/production-stack.spec.ts">pila de producción</a></td>
+  </tr><tr data-search="extra: demo pública protegida (rnf-22) https://saas-o-matic.codeserviceapi.es ac-61 demo · ac-61: revisión en vivo e2e/demo/demo.spec.ts">
+    <th scope="row">Extra: demo pública protegida (RNF-22)</th>
+    <td data-label="Dónde se ve"><a href="https://saas-o-matic.codeserviceapi.es">saas-o-matic.codeserviceapi.es</a></td>
+    <td data-label="Criterios">AC-61</td>
+    <td data-label="Tests"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/demo/demo.spec.ts">demo</a> · AC-61: revisión en vivo</td>
+  </tr></tbody>
+      </table>
+      <p class="req-empty" data-req-empty hidden>Ningún requisito coincide con la búsqueda.</p>
+    </div></section><section id="recorridos" class="section" aria-labelledby="recorridos-titulo"><header class="section-head">
+      <h2 id="recorridos-titulo">Tres recorridos, <span class="accent">según tu tiempo</span></h2>
+      <p>
+        Las listas de la <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/GUIA-EVALUADOR.md">guía del evaluador</a>, para ir marcando. Junto a
+        cada comando, lo que tardó en un clon limpio con las cachés vacías (<a
+          href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/diario.md#p12--cierre--2026-11-14--rama-docsp12-cierre"
+          >diario de P12</a
+        >). Las marcas se guardan solo en este navegador.
+      </p>
+    </header>
+    <div class="routes"><article class="route" aria-labelledby="ruta-5-titulo" data-route>
+    <h3 id="ruta-5-titulo"><span class="route-minutes">5 min</span> la demo</h3>
+    <p class="route-intro">Abre <a href="https://saas-o-matic.codeserviceapi.es">saas-o-matic.codeserviceapi.es</a>. Los datos son ficticios y se regeneran cada día; admite 5 escrituras por minuto e IP.</p>
+    <ul class="route-list">
+      <li>
+    <input type="checkbox" id="ruta-5-1" data-persist />
+    <label for="ruta-5-1"><strong>Dashboard</strong> (<code>/</code>): 25 clientes (20 por página), las métricas y el buscador. Escribe <code>nandu</code>: encuentra «Telefonía Ñandú S.A.» sin acento ni mayúsculas.</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-5-2" data-persist />
+    <label for="ruta-5-2"><strong>Detalle de «Acme Ibérica S.L.»</strong>: mueve el slider de usuarios y mira el desglose por tramos (10 × 10 € + 40 × 8 € + el resto a 5 €), el impuesto de España y el total.</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-5-3" data-persist />
+    <label for="ruta-5-3"><strong>Divisas</strong>: cambia el selector «Divisa» de la cabecera a GBP o JPY. Los importes se convierten con los tipos de <code>open.er-api.com</code>, y el indicador de la cabecera dice de qué día son.</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-5-4" data-persist />
+    <label for="ruta-5-4"><strong>Guardar</strong> la simulación: aparece arriba en el historial del cliente.</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-5-5" data-persist />
+    <label for="ruta-5-5"><strong>Nuevo cliente</strong> con país España y el identificador <code>12345678A</code> (dígito de control incorrecto): el formulario lo rechaza. Con <code>11111111H</code> (un DNI válido que no está en los datos de ejemplo) lo acepta; si otro visitante ya lo dio de alta, la demo avisa de que está duplicado, que es la otra regla (el par país e identificador es único).</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-5-6" data-persist />
+    <label for="ruta-5-6">Reduce la ventana a 360 px: no hay desplazamiento horizontal.</label
+    >
+    
+  </li>
+    </ul>
+    <p class="route-progress" aria-live="polite" data-route-progress></p>
+  </article><article class="route" aria-labelledby="ruta-15-titulo" data-route>
+    <h3 id="ruta-15-titulo"><span class="route-minutes">15 min</span> en local, con los tests</h3>
+    <p class="route-intro">Necesitas Node 22 (desde la 22.22.3), 24 (desde la 24.15) o 26 en adelante (el <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.nvmrc"><code>.nvmrc</code></a> recomienda la 26) y npm 10. No se compila nada nativo: el driver de SQLite trae binarios.</p>
+    <ul class="route-list">
+      <li>
+    <input type="checkbox" id="ruta-15-c1" data-persist />
+    <label for="ruta-15-c1"><code>npm ci</code></label
+    ><span class="route-time" title="Medido en un clon limpio">59 s</span>
+    
+  </li><li>
+    <input type="checkbox" id="ruta-15-c2" data-persist />
+    <label for="ruta-15-c2"><code>npm run setup</code></label
+    ><span class="route-time" title="Medido en un clon limpio">4 s</span>
+    
+  </li><li>
+    <input type="checkbox" id="ruta-15-c3" data-persist />
+    <label for="ruta-15-c3"><code>npm run dev</code></label
+    ><span class="route-time" title="Medido en un clon limpio">listo en 7 s</span>
+    
+  </li><li>
+    <input type="checkbox" id="ruta-15-1" data-persist />
+    <label for="ruta-15-1">Web en <a href="http://localhost:4200">localhost:4200</a> y API en <a href="http://localhost:3000/health">localhost:3000/health</a>. Con <code>npm run dev</code>, la documentación interactiva de la API está en <a href="http://localhost:3000/docs">localhost:3000/docs</a>.</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-15-2" data-persist />
+    <label for="ruta-15-2">Medido en un clon limpio con la caché de npm vacía, <code>npm ci</code>, <code>npm run setup</code> y <code>npm test</code> tardan unos 2 minutos en total; el resto del recorrido es leer.</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-15-3" data-persist />
+    <label for="ruta-15-3"><code>npm test</code>: tests de dominio, contrato, API, herramientas y web.</label
+    ><span class="route-time" title="Medido en un clon limpio">37 s</span>
+    
+  </li><li>
+    <input type="checkbox" id="ruta-15-4" data-persist />
+    <label for="ruta-15-4"><code>npm run trace</code>: comprueba que cada criterio de aceptación y cada vector de prueba lo cita algún test.</label
+    ><span class="route-time" title="Medido en un clon limpio">1 s</span>
+    
+  </li><li>
+    <input type="checkbox" id="ruta-15-5" data-persist />
+    <label for="ruta-15-5">Opcional, con Docker: <code>docker compose up --build -d</code> y <a href="http://localhost:8080">localhost:8080</a>. Para los e2e, <code>npm run e2e:stack</code> y <code>npm run e2e</code>.</label
+    ><span class="route-time" title="Medido en un clon limpio">42 s (con capas de Docker ya en caché en el equipo)</span>
+    
+  </li>
+    </ul>
+    <p class="route-progress" aria-live="polite" data-route-progress></p>
+  </article><article class="route" aria-labelledby="ruta-60-titulo" data-route>
+    <h3 id="ruta-60-titulo"><span class="route-minutes">60 min</span> el código y el proceso</h3>
+    
+    <ul class="route-list">
+      <li>
+    <input type="checkbox" id="ruta-60-1" data-persist />
+    <label for="ruta-60-1"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/README.md"><code>ai-workspace/README.md</code></a>: qué hay en cada carpeta, cómo se trabajó con la IA y dónde intervino el responsable del proyecto. Es la mejor entrada al proceso.</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-60-2" data-persist />
+    <label for="ruta-60-2">Del problema a la especificación: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/00-enunciado.md"><code>00-enunciado.md</code></a>, <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/01-analisis.md"><code>01-analisis.md</code></a> (ambigüedades y casos límite) y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/README.md"><code>02-especificacion/</code></a> (reglas, contrato, criterios de aceptación).</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-60-3" data-persist />
+    <label for="ruta-60-3">La arquitectura: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/README.md"><code>03-arquitectura/</code></a> y sus <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/README.md">ADR</a>.</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-60-4" data-persist />
+    <label for="ruta-60-4">Las reglas que seguía la IA y cómo se hacen cumplir: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/CLAUDE.md"><code>CLAUDE.md</code></a>, el subagente <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.claude/agents/revisor.md"><code>revisor</code></a> y los hooks de <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.claude/settings.json"><code>.claude/settings.json</code></a>.</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-60-5" data-persist />
+    <label for="ruta-60-5">El código, de dentro afuera:</label
+    >
+    <ul class="route-nested">
+            <li>
+    <input type="checkbox" id="ruta-60-5-1" data-persist />
+    <label for="ruta-60-5-1">reglas de negocio puras: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain/src"><code>packages/domain</code></a> (empieza por <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain/src/pricing"><code>pricing</code></a> y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain/src/tax-id"><code>tax-id</code></a>);</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-60-5-2" data-persist />
+    <label for="ruta-60-5-2">la API: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api/src/modules"><code>apps/api/src/modules</code></a> (rutas, casos de uso y repositorios por módulo);</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-60-5-3" data-persist />
+    <label for="ruta-60-5-3">la web: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/web/src/app/features"><code>apps/web/src/app/features</code></a>;</label
+    >
+    
+  </li><li>
+    <input type="checkbox" id="ruta-60-5-4" data-persist />
+    <label for="ruta-60-5-4">el pipeline: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.github/workflows/ci.yml"><code>.github/workflows/ci.yml</code></a>.</label
+    >
+    
+  </li>
+          </ul>
+  </li><li>
+    <input type="checkbox" id="ruta-60-6" data-persist />
+    <label for="ruta-60-6">El proceso real: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md"><code>decisiones.md</code></a> (cada decisión con su alternativa descartada y quién la tomó) y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/diario.md"><code>diario.md</code></a> (una entrada por parte, con lo que falló y lo que corrigió el revisor).</label
+    >
+    
+  </li>
+    </ul>
+    <p class="route-progress" aria-live="polite" data-route-progress></p>
+  </article></div></section>
+          </main>
+        </div>
+        <footer class="footer">
+          <p>Cada cifra y cada tabla de esta página salen del repositorio con <code>npm run recorrido</code>.</p>
+          <p>
+            Prueba técnica para Roams. Complementa a la
+            <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/GUIA-EVALUADOR.md">guía del evaluador</a>; no la sustituye.
+          </p>
+        </footer>
+      </body>
+    </html> 

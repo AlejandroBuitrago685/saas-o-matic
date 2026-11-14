@@ -5,6 +5,8 @@ import { describe, expect, it } from 'vitest';
 import {
   anchorsOf,
   findBrokenLinks,
+  htmlIdsOf,
+  htmlLinkTargets,
   linkTargets,
   slugOf,
   withFolders,
@@ -105,6 +107,59 @@ describe('D-181 broken links', () => {
 
     expect(findBrokenLinks([{ path: 'docs/guia.md', content: markdown }], existing, read)).toEqual([
       'docs/guia.md: ../src/falta.ts (no such file or folder)',
+    ]);
+  });
+});
+
+describe('D-183 links of the HTML pages of docs/ and links to this repository on GitHub', () => {
+  const repo = 'https://github.com/AlejandroBuitrago685/saas-o-matic';
+  const files = [
+    'README.md',
+    'docs/guia.md',
+    'docs/recorrido/index.html',
+    'docs/capturas/uno.webp',
+    'src/app.ts',
+  ];
+  const existing = withFolders(files);
+  const contents: Record<string, string> = {
+    'docs/guia.md': ['# Guía', '', '## Paso 1', ''].join('\n'),
+    'docs/recorrido/index.html': '<section id="portada"></section><details id="paso-uno"></details>',
+  };
+  const read = (path: string): string | undefined => contents[path];
+
+  it('reads only the src and href attributes of an HTML page, and its id anchors', () => {
+    const page = '<a href="#portada">x</a> <p>[no](link.md)</p> <img src="../capturas/uno.webp" alt="">';
+
+    expect(htmlLinkTargets(page)).toEqual(['#portada', '../capturas/uno.webp']);
+    expect([...htmlIdsOf(contents['docs/recorrido/index.html'] ?? '')]).toEqual(['portada', 'paso-uno']);
+  });
+
+  it('checks the relative links and the anchors of an HTML page', () => {
+    const page =
+      '<a href="#paso-uno"></a><a href="#nada"></a><img src="../capturas/uno.webp"><img src="../capturas/dos.webp">';
+
+    expect(findBrokenLinks([{ path: 'docs/recorrido/index.html', content: page }], existing, read)).toEqual([
+      'docs/recorrido/index.html: #nada (no such anchor)',
+      'docs/recorrido/index.html: ../capturas/dos.webp (no such file or folder)',
+    ]);
+  });
+
+  it('checks that a GitHub link to this repository names a real path and, for Markdown, a real heading', () => {
+    const markdown = [
+      `[a](${repo}/blob/main/src/app.ts)`,
+      `[b](${repo}/tree/main/docs)`,
+      `[c](${repo}/blob/main/docs/gu%C3%ADa.md)`,
+      `[d](${repo}/blob/main/docs/guia.md#paso-1)`,
+      `[e](${repo}/blob/main/docs/guia.md#paso-9)`,
+      `[f](${repo}/blob/main/src/falta.ts)`,
+      `[g](${repo}/pull/20)`,
+      '[h](https://github.com/otro/repo/blob/main/nada.md)',
+    ].join(' ');
+
+    expect(findBrokenLinks([{ path: 'README.md', content: markdown }], existing, read)).toEqual([
+      `README.md: ${repo}/blob/main/docs/gu%C3%ADa.md (no such file or folder)`,
+      `README.md: ${repo}/blob/main/docs/guia.md#paso-9 (no such heading)`,
+      `README.md: ${repo}/blob/main/src/falta.ts (no such file or folder)`,
     ]);
   });
 });

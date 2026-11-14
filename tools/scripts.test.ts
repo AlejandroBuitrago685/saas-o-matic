@@ -8,6 +8,7 @@ import {
   findCommittedEnvFiles,
   findForbiddenWebPatterns,
   findInvisibleCharacters,
+  isWebSource,
 } from '../scripts/check-forbidden-patterns.mjs';
 import { API_DEV_PORT, PROCESSES } from '../scripts/dev.mjs';
 import { listTrackedFiles } from '../scripts/lib/repo.mjs';
@@ -25,6 +26,25 @@ describe('AC-56 forbidden patterns in the web app (RNF-SEC-14)', () => {
     expect(findings).toHaveLength(2);
     expect(findings[0]).toContain('x.html');
     expect(findings[1]).toContain('y.ts');
+  });
+});
+
+describe('D-183 the scripts of the evaluator walkthrough follow the same rule (RNF-SEC-14)', () => {
+  it('checks the web app and the scripts of docs/recorrido, not the copied domain package nor the generated page', () => {
+    expect(isWebSource('apps/web/src/app/x.ts')).toBe(true);
+    expect(isWebSource('docs/recorrido/recorrido.js')).toBe(true);
+    expect(isWebSource('docs/recorrido/simulador.js')).toBe(true);
+    expect(isWebSource('docs/recorrido/index.html')).toBe(false);
+    expect(isWebSource('docs/recorrido/domain/index.js')).toBe(false);
+    expect(isWebSource('scripts/recorrido/html.mjs')).toBe(false);
+  });
+
+  it('rejects innerHTML in a script of the walkthrough', () => {
+    const findings = findForbiddenWebPatterns([
+      { path: 'docs/recorrido/recorrido.js', content: 'node.innerHTML = text;' },
+    ]);
+
+    expect(findings).toEqual(['docs/recorrido/recorrido.js: innerHTML/outerHTML (RNF-SEC-14)']);
   });
 });
 

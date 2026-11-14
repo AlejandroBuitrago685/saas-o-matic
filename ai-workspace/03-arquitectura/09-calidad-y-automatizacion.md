@@ -16,7 +16,7 @@ scaffolding ([ADR-013](adr/ADR-013-cumplimiento-automatico.md)).
 | Nombres de fichero | `scripts/check-filenames.mjs` (sin dependencias) | CI |
 | Formato | Prettier | pre-commit, CI |
 | Conventional Commits | commitlint (hook `commit-msg` de lefthook) | Commit |
-| Sin `innerHTML` ni `bypassSecurityTrust*` (RNF-SEC-14) | `no-restricted-syntax` en TS + `scripts/check-forbidden-patterns.mjs` para plantillas | CI, hook |
+| Sin `innerHTML` ni `bypassSecurityTrust*` (RNF-SEC-14) | `no-restricted-syntax` en TS + `scripts/check-forbidden-patterns.mjs` para plantillas y para los scripts del recorrido (`docs/recorrido/*.js`, D-183) | CI, hook |
 | Sin estilos de componente (CSP) | `no-restricted-syntax` sobre `styles`/`styleUrl` en `@Component` | Ídem |
 | Sin `console`, sin `process.env` fuera de `config/` | `no-console`, `no-restricted-properties` | Ídem |
 | Backend sin clientes salientes (RNF-SEC-18, AC-59, D-154) | `no-restricted-imports` (`http`, `https`, `http2`, `tls`, `dgram`, `undici`… y lo que abre conexiones de `net`) y `no-restricted-globals` (`fetch`, `WebSocket`…) en `apps/api/src` | Ídem |
@@ -30,6 +30,8 @@ scaffolding ([ADR-013](adr/ADR-013-cumplimiento-automatico.md)).
 | Nada se integra con el CI en rojo | Protección de `main` en GitHub: PR obligatoria y los checks del CI (D-88; `e2e` desde P6, los 5 `smoke` desde P10 y `demo` desde P11) | Merge |
 | Cada test cita su AC o TV (los de infraestructura, su D o ADR) | `scripts/trace-tests.mjs --strict` (`npm run trace`): **bloquea desde P10** en el CI y en `verify`. Solo admite los pendientes que declara el plan (`PENDING_CRITERIA`, vacía desde P11), y un pendiente que ya tiene test también falla (D-161). Probado en `tools/trace-tests.test.ts` | CI, `verify` |
 | La demo publica lo que se probó y no deja datos del servidor en el repositorio | El trabajo `demo` construye y prueba las imágenes, y `publish` (solo en `main`, el único con `packages: write`) publica esas mismas (D-170). `tools/demo-deploy.test.ts` comprueba las plantillas de nginx (D-105), que `deploy/` no contiene rutas del host ni IPs y que el CI y el *override* usan las mismas imágenes (D-172) | CI, tests |
+| Enlaces de la documentación sin romper | `scripts/check-markdown-links.mjs` (`npm run check`): enlaces relativos y anclas de los Markdown (D-181), el HTML de `docs/` y los enlaces de GitHub a este repositorio (D-187) | CI, `verify` |
+| El recorrido de los evaluadores no se desfasa del repositorio | `tools/recorrido.test.ts` regenera `docs/recorrido` y lo compara con lo versionado; el e2e `npm run e2e:recorrido` lo abre publicado y desde `file://` (D-183, D-184) | Tests, trabajo `e2e` del CI, workflow de Pages |
 | Cobertura del dominio al 100 % | Umbrales de Vitest | CI |
 | «Hecho» = tests en verde | Hook `Stop` (§5) | Al terminar cada tarea |
 

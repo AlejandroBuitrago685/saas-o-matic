@@ -297,6 +297,9 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
   `GUIA-EVALUADOR.md`.
 - **Hecho cuando:** la página está publicada, enlazada desde el README y con el CI en verde; después se pone la
   **etiqueta de la entrega**, que antes era de P12.
+- **Estado (2026-11-14):** hecha en la rama `feat/p13-recorrido` (D-183 a D-187). El usuario aceptó 4–5 h en lugar de
+  3, por las nueve secciones, el e2e propio, el workflow de Pages y la ampliación del comprobador de enlaces. La
+  publicación y la etiqueta `v1.0.0` esperan al *merge* y a que el usuario active Pages.
 
 ## 4. Protocolo de cada parte (D-73)
 
@@ -381,3 +384,25 @@ Hasta entonces, un retraso consume holgura y después el martes. Nada Must se re
 
 Los 83 criterios (AC-01…AC-99, incluido AC-64) tienen parte asignada. El script de trazabilidad lo comprobará en
 P10 y P12 contra los tests reales.
+
+## 8. Partes y PR
+
+Las PR con las que entró cada parte en `main`, comprobadas con `gh pr list --state merged` el 2026-11-14. El
+recorrido visual (P13) lee esta tabla: el CI no tiene el historial de git.
+
+| Parte | PR |
+|---|---|
+| P0 | #1 |
+| P1 | #2 y #3 (seguimiento de la revisión) |
+| P2 | #4 |
+| P3 | #5 y #6 (validación de decisiones y traspaso) |
+| P4 | #7 y #8 (validación de decisiones) |
+| P5 | #9 |
+| P6 | #10 |
+| P7 | #11 |
+| P8 | #12 |
+| P9 | #13 y #14 (traspaso) |
+| P10 | #15 y #16 (arreglo del e2e de AC-91) |
+| P11 | #17, #18 (cierre) y #19 (aprobaciones) |
+| P12 | #20 |
+| P13 | #21 |

@@ -1467,3 +1467,86 @@ fusionada). Es una página HTML interactiva; la etiqueta de la entrega se pone a
   amplíe su alcance (D-181).
 
 **Decisiones por validar:** D-180.
+
+## P13 · Recorrido visual para los evaluadores — 2026-11-14 · rama `feat/p13-recorrido`
+
+**Hecho**
+- **La página** (`docs/recorrido`, D-183): portada, el producto en 7 pasos, cómo viaja una petición, el mapa del
+  repositorio (30 entradas con filtro), cómo se construyó (P0 a P13 y el ciclo de cada parte), calidad, los diez
+  momentos de «Dónde intervine yo», la tabla de requisitos con buscador y los recorridos de 5, 15 y 60 minutos con
+  casillas. HTML estático: sin JS se lee entera; el script clásico añade filtros, buscador, casillas, la franja de
+  pasos y la pieza activa del diagrama. CSP estricta en un `<meta>`, sin CDN ni rastreadores, colores generados de los
+  tokens de la web y Montserrat copiada con su licencia.
+- **Nada a mano** (D-183): `npm run recorrido` lee el plan, las decisiones, el diario (tiempos del clon limpio), la guía
+  (tabla y recorridos, con el mismo lector que su test), el README de `ai-workspace` (momentos), la especificación (83
+  criterios: 81 con test y AC-94 y AC-99 de revisión; 129 vectores), `ci.yml` y los ficheros de test. Los ejemplos con
+  números los calcula el paquete `domain` compilado con el catálogo de la API. `tools/recorrido.test.ts` falla si la
+  página versionada no es la que se genera hoy, si una ruta o un ID no existe, si la CSP se relaja o si aparece una IP.
+- **Simulador en vivo** (D-184): el paso 4 importa `domain` como módulo; con `file://` muestra el recorte y un aviso.
+- **Capturas** (D-186): un recorte legible por paso, de la vista móvil a densidad 2×, con enlace a la captura completa,
+  y todo en `e2e/capturas/recorrido.spec.ts`.
+- **Pages** (D-185): `pages.yml` publica `docs/` cuando el CI de `main` termina en verde; `docs/index.html` lleva a
+  `recorrido/`. Enlaces en lo alto del README y de la guía.
+- **Comprobaciones:** el comprobador de enlaces cubre el HTML de `docs/` y los enlaces de GitHub a este repositorio
+  (D-187); `check-forbidden-patterns` cubre los scripts de la página; e2e propio (`npm run e2e:recorrido`, 9 tests:
+  consola, CSP, axe, 360 px, teclado, filtro, buscador, casillas y simulador con TV-PR-07, TV-PR-04 y TV-TX-07), en el
+  trabajo `e2e` del CI.
+- **Registro:** D-180 validada; D-183 a D-187; tabla «Partes y PR» en el plan; prompt 27.
+
+**Falló o lo descubrí por el camino**
+- **Las horas del historial dependían de la zona horaria de la máquina** (14:00 frente a 15:00 en la misma captura):
+  un fallo del script de P12. Las capturas fijan ahora `Europe/Madrid`, y por eso cambia `movil-360.webp`.
+- **El `hidden` del simulador no ocultaba nada:** `.mini-sim { display: grid }` lo anulaba, y con `file://` se veía un
+  simulador sin vida. Lo encontró el e2e; una regla global `[hidden] { display: none !important }` lo corrige.
+- **axe esperaba para siempre** las animaciones del contenido plegado. El e2e despliega todo antes de pasarlo.
+- **Prettier reformateaba el HTML de las plantillas** con etiqueta `html`, e inflaba las funciones por encima del
+  límite de líneas. La etiqueta se llama `markup`.
+- **Escapes perdidos otra vez:** el *heredoc* de Python y la herramienta de escritura convirtieron `\b` en un carácter
+  de retroceso y `\u00a0` en un espacio de no separación literal. Los detectaron el lint y una lectura del fichero;
+  desde entonces, esas expresiones se escriben con `Edit` o con `String.fromCodePoint`.
+- **El guardián de red de los e2e bloqueaba `file://`**, y `check-forbidden-patterns` saltaba con el texto de la página
+  que nombra `innerHTML`: la regla se aplica a los scripts, no al HTML generado, que escapa todo.
+- Un `cd ..` de más sacó una orden del repositorio y `npx` descargó en su caché un paquete `tsc` ajeno, sin tocar el
+  proyecto.
+
+**Correcciones**
+- **Del usuario** (al aprobar el plan): página raíz en Pages, cifras iguales a las de la guía, diagrama vertical a
+  360 px y 4–5 h. En el punto de control: recortes legibles en lugar de la pantalla reducida, una franja con los 7
+  pasos, el simulador en vivo en el paso 4 y las cifras en 2×2 a 360 px.
+- **De la revisión visual** (skill `impeccable`: detector y revisor de acabado, sin el contexto de la sesión): contraste
+  del enlace de salto en *hover*, relleno de los desplegables del CI, identificadores partidos («12345678 / A»), el
+  borde de 3 px solo para importes calculados, botones de la portada en una fila, referencias de los momentos en su
+  línea, columnas fijas en el mapa, títulos-enlace sin subrayado, tiempos largos sin forma de píldora y la franja
+  difuminada a 360 px. No se hizo: escribir un `PRODUCT.md` de la skill (no se pidió).
+- **Del revisor** (`sonnet`, una pasada, sobre el diff de la parte): **APTO CON CAMBIOS**, sin P0 ni P1. Corregidos:
+  - P2: la copia del paquete `domain` solo seguía `from '…'` con comillas simples. Ahora sigue también las dobles,
+    los `import` sin `from` y los dinámicos, y rechaza un módulo fuera del paquete, con su test;
+  - P2: la comprobación de frescura de Pages podría fallar por el entorno sin avisar en la PR. El test ya corre en
+    Ubuntu con Node 22, 24 y 26 en `quality`; queda dicho en D-185;
+  - P3: el separador de miles del simulador sale de `formatToParts`, no de un `replace`; las salidas sin error del
+    simulador están comentadas (el paso conserva su recorte); un `?? ''` coherente en el diagrama.
+- **Del hook `Stop`:** la ampliación del comprobador de enlaces subió la complejidad de una función a 12; se separó la
+  comprobación del ancla.
+
+**Decisiones:** D-180: validada; D-183 y D-185: validadas con el plan; D-184: del usuario; **D-186 y D-187: Claude ·
+pendiente**.
+
+**Tiempo:** estimado 4–5 h (aceptadas por el usuario). Real: unas 4 h, con el punto de control y la revisión visual.
+
+## Nota de traspaso — 2026-11-14, tras P13
+
+**Estado**
+- P0 a P13 hechas. P13 va en la rama `feat/p13-recorrido` (PR #21).
+- Tras el *merge*: el usuario activa Pages (Settings → Pages → Source: GitHub Actions); el workflow `Pages` publica al
+  terminar el CI de `main` (o a mano con *Run workflow*). URL:
+  <https://alejandrobuitrago685.github.io/saas-o-matic/recorrido/>.
+- Después: proponer la etiqueta `v1.0.0` y una release de GitHub con los enlaces a la demo y al recorrido, sin crearla
+  sin la aprobación del usuario.
+- La tabla «Partes y PR» del plan ya tiene la PR de P13 (#21).
+
+**Cómo se mantiene la página**
+- Cualquier cambio en las fuentes (plan, decisiones, diario, guía, especificación, `ci.yml`, tests, capturas) se
+  regenera con `npm run recorrido`; si no, falla `tools/recorrido.test.ts` y el workflow de Pages.
+- Las capturas, con `npm run capturas` (puertos 3100 y 4300).
+
+**Decisiones por validar:** D-186 y D-187.

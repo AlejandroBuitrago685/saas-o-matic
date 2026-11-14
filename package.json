@@ -35,6 +35,8 @@
     "e2e:smoke": "npm run test:smoke -w @saas-o-matic/e2e",
     "e2e:demo": "npm run test:demo -w @saas-o-matic/e2e",
     "capturas": "npm run build:packages && npm run test:capturas -w @saas-o-matic/e2e",
+    "recorrido": "npm run build:packages && node scripts/recorrido/generate-recorrido.mjs",
+    "e2e:recorrido": "npm run recorrido && npm run test:recorrido -w @saas-o-matic/e2e",
     "e2e:stack": "node scripts/e2e-stack.mjs up",
     "e2e:stack:down": "node scripts/e2e-stack.mjs down",
     "verify": "npm run format:check && npm run lint && npm run typecheck && npm run check && npm run db:check -w @saas-o-matic/api && npm run build:packages && vitest run --coverage && npm run test -w @saas-o-matic/web && npm run build && npm run trace",

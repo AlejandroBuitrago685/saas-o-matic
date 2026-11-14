@@ -4,6 +4,11 @@ Tres recorridos según el tiempo que tengas, y una tabla que lleva cada requisit
 ve y al test que lo comprueba. Lo que no está aquí está en el [`README`](README.md) y en
 [`ai-workspace/`](ai-workspace/README.md).
 
+> Para una vista de conjunto antes de empezar, el
+> [recorrido visual](https://alejandrobuitrago685.github.io/saas-o-matic/recorrido/) (en local,
+> [`docs/recorrido/index.html`](docs/recorrido/index.html)) muestra el producto, la arquitectura y el proceso, con
+> esta misma tabla y estos recorridos.
+
 ## Recorrido de 5 minutos: la demo
 
 Abre <https://saas-o-matic.codeserviceapi.es>. Los datos son ficticios y se regeneran cada día; admite 5 escrituras por
