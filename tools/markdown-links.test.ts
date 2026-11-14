@@ -7,6 +7,7 @@ import {
   findBrokenLinks,
   htmlIdsOf,
   htmlLinkTargets,
+  isCheckedPath,
   linkTargets,
   slugOf,
   withFolders,
@@ -161,6 +162,17 @@ describe('D-183 links of the HTML pages of docs/ and links to this repository on
       `README.md: ${repo}/blob/main/docs/guia.md#paso-9 (no such heading)`,
       `README.md: ${repo}/blob/main/src/falta.ts (no such file or folder)`,
     ]);
+  });
+});
+
+describe('D-188 the conversations are records, but their README is checked', () => {
+  it('skips the prompts and the conversations, and checks the README of the conversations and the rest', () => {
+    expect(isCheckedPath('ai-workspace/prompts/01-analisis.md')).toBe(false);
+    expect(isCheckedPath('ai-workspace/conversaciones/09-arreglo-ac91-y-p11.md')).toBe(false);
+    expect(isCheckedPath('ai-workspace/conversaciones/README.md')).toBe(true);
+    expect(isCheckedPath('ai-workspace/README.md')).toBe(true);
+    expect(isCheckedPath('docs/recorrido/index.html')).toBe(true);
+    expect(isCheckedPath('scripts/conversaciones/sessions.json')).toBe(false);
   });
 });
 

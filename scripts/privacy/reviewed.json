@@ -1,0 +1,436 @@
+{
+  "ai-workspace/01-analisis.md": [
+    "469debb7a38806d7",
+    "8d3f9b205fff69bd",
+    "dcb343b003183546"
+  ],
+  "ai-workspace/02-especificacion/01-alcance.md": [
+    "fde6187f6431129f"
+  ],
+  "ai-workspace/02-especificacion/02-reglas-negocio.md": [
+    "23c7fbb920c3bdbb",
+    "3533f7d57a7b80ae"
+  ],
+  "ai-workspace/02-especificacion/05-frontend.md": [
+    "092c9b1f2bdc1990",
+    "16ee79ef8c12197d",
+    "45df46b3a29a0c38",
+    "76d6c68176f0b6e9",
+    "a27a16984922da01",
+    "c1a033aee4a73a93",
+    "cd82c9166b27850d",
+    "e35fad846a45f8c2"
+  ],
+  "ai-workspace/02-especificacion/06-seguridad.md": [
+    "6b2055df708d13a9",
+    "d5c650c5ebaf3fc0",
+    "ee5df42186214692",
+    "eede88becf2d31f3"
+  ],
+  "ai-workspace/02-especificacion/07-criterios-aceptacion.md": [
+    "1afbc4d2985d2412",
+    "29bc903196442104",
+    "2b5762d64c16873f",
+    "91ee50bd3f3f6a5f",
+    "9ae4458673ebb255",
+    "f06bd9faa4d0c810"
+  ],
+  "ai-workspace/02-especificacion/README.md": [
+    "b6f19736517e1cef"
+  ],
+  "ai-workspace/03-arquitectura/01-vision-general.md": [
+    "8fb5ac283de27f87",
+    "a17de336691b5023"
+  ],
+  "ai-workspace/03-arquitectura/02-monorepo.md": [
+    "4b4298b57d02e932",
+    "535286ea7aac527e",
+    "8e714665e503003b",
+    "b979c588dbabe826",
+    "d3ee5695d77c7278"
+  ],
+  "ai-workspace/03-arquitectura/03-backend.md": [
+    "671a8ea9906c7902",
+    "83af52106d531829",
+    "d2fba726a59fdb22"
+  ],
+  "ai-workspace/03-arquitectura/05-driver-sqlite.md": [
+    "dbfd16df89d5773b"
+  ],
+  "ai-workspace/03-arquitectura/06-frontend.md": [
+    "3e8874c6e973ef97",
+    "7b7af112a2c56ec5",
+    "d2109c9c06184c4c",
+    "d8bd32e445cfea90"
+  ],
+  "ai-workspace/03-arquitectura/07-tests.md": [
+    "0914aeb07c166de7",
+    "6814e8b658e588a8",
+    "db7144de037f7b52"
+  ],
+  "ai-workspace/03-arquitectura/08-despliegue.md": [
+    "0fe93cc09c396777",
+    "1417cb5bb4a66218",
+    "173c51f9b7dce571",
+    "361db5a8ed019501",
+    "42e826af96d9b822",
+    "47fdec4ffc38787e",
+    "5ef702242b9542bd",
+    "611ed79af1c30477",
+    "87d5cdd0ba008071",
+    "8c1f38868f4ff9ea",
+    "ac6b0d66a3a2d851",
+    "b5a6b9704c36e860",
+    "bfabf4f17bd6eee7",
+    "c99878fbe3562bf9",
+    "f6efbce6372b0650"
+  ],
+  "ai-workspace/03-arquitectura/09-calidad-y-automatizacion.md": [
+    "095a40c996824aa5",
+    "1f952aa38b25f7f8",
+    "52fc136cc40b2a82"
+  ],
+  "ai-workspace/03-arquitectura/10-diseno-visual.md": [
+    "31d619c209cab1a0",
+    "58805a3d5d051d93",
+    "a8bf909e744a5c9c",
+    "eb224c698b2102be",
+    "ffc404c3863334d1"
+  ],
+  "ai-workspace/03-arquitectura/adr/ADR-001-dominio-compartido-puro.md": [
+    "7f99614c169d0edc"
+  ],
+  "ai-workspace/03-arquitectura/adr/ADR-008-proyeccion-en-cliente.md": [
+    "0ed20444122bfee0",
+    "70a6699e9656e9a0",
+    "928053922277e9c0",
+    "a8c1855867236487"
+  ],
+  "ai-workspace/03-arquitectura/adr/ADR-010-app-por-factoria.md": [
+    "15c2dd89fd7433bd",
+    "933ce377bb63638a"
+  ],
+  "ai-workspace/03-arquitectura/README.md": [
+    "751304162e738e60"
+  ],
+  "ai-workspace/04-plan-implementacion.md": [
+    "2a5255ce6672855a",
+    "d033472de8094aff",
+    "e7ab25a41aa8ba1f",
+    "e99f46a5dd17a096",
+    "f5576d1d61a44fb3",
+    "fdae5913fe573220"
+  ],
+  "ai-workspace/conversaciones/01-fases-y-p0-p3.md": [
+    "041c0c62e371e6f0",
+    "05ae05c11410726e",
+    "0c6f7f1983103a01",
+    "0fd1b71f1c9d9dc6",
+    "136eee457fff2957",
+    "141f21e94040352a",
+    "22907110db610ac6",
+    "258f004046da0b8c",
+    "27ec5817dd3bb7ca",
+    "46d6f5f450175a91",
+    "4a500dd44c530bfb",
+    "4d997217e224d2c5",
+    "54df0221c15fc163",
+    "5b1fc5fb52e862f0",
+    "6de0b6c14d53f3d6",
+    "6fb7291f9f6504dd",
+    "9268116ceea20930",
+    "94712af819eb81e0",
+    "98c407c9c9fb6f7e",
+    "a6b138584ba3eba1",
+    "aca1d3d03e26aeb0",
+    "ad739b4d46c403d5",
+    "c44bbe2a01ce0fde",
+    "d1766cd0d2ec5c1d",
+    "d2996013a5a0b96a",
+    "dc8b2f6582c67ee0",
+    "e2010e2b3b78c7be",
+    "ec4897f25ca80f85",
+    "f04a836150a6f42e",
+    "f609501f0cc83018"
+  ],
+  "ai-workspace/conversaciones/02-p4.md": [
+    "5b1fc5fb52e862f0",
+    "6a52470f1e00cf6c"
+  ],
+  "ai-workspace/conversaciones/03-p5.md": [
+    "0ff6bad7dd6719b7",
+    "1a8dfa48358ef21e",
+    "21bcd64e20069fd6",
+    "2b672634b7e808fd",
+    "2ce7cf313cf6cba2",
+    "308ee60249c09a0f",
+    "30dd5687c640c247",
+    "4ecaa2f5ecf6690f",
+    "5b1fc5fb52e862f0",
+    "8a021bfcda69eab7",
+    "8c5064e11af4f3a0",
+    "8f128d7d2eb87be8",
+    "9087c5923b5503ef",
+    "a0ea365f26627f69",
+    "a4ac90d8961a7619",
+    "da07c4a8d3d03cb6",
+    "df92cbc6749cc94b",
+    "e98e8f31300a8300",
+    "ed2dccd8b6f63ec5",
+    "fd2b7ddea1716ff1"
+  ],
+  "ai-workspace/conversaciones/04-p6.md": [
+    "23e114fddaf490aa",
+    "2617617989f30a16",
+    "302064891c324c3f",
+    "456673a41df2f32b",
+    "5b1fc5fb52e862f0",
+    "84a820520f97f492",
+    "9fd5fe34c2e017cf",
+    "a6d93dc0c5b9ffa4",
+    "b63b14844cf65e1f",
+    "e338dc0355fb2f40",
+    "f4a85fdde4d167ee",
+    "fad411911f826a80"
+  ],
+  "ai-workspace/conversaciones/05-p7.md": [
+    "4964dd5944f509cb",
+    "49663392723dec22",
+    "5b1fc5fb52e862f0",
+    "5f1b2d00fc39c682",
+    "60a6db44c79faf32",
+    "981047f5acdad086"
+  ],
+  "ai-workspace/conversaciones/06-p8.md": [
+    "143436ebd7a00166",
+    "2741c25afbe1b756",
+    "31eb4176768d8633",
+    "489e6385d3eb9fb3",
+    "5b1fc5fb52e862f0",
+    "684ed923178af8bb",
+    "7cf8751fc8a8eab1",
+    "8dab359a26470891",
+    "968a6eb245d1e22b",
+    "b99995e254159b82",
+    "e030ec3068380f53",
+    "e388deeaa64688f8",
+    "e516649204982e9b",
+    "f7a99158c487e70f"
+  ],
+  "ai-workspace/conversaciones/07-p9.md": [
+    "04000562392cf8c0",
+    "09d1f02de3960804",
+    "11a56ddef0fddd3f",
+    "36cff88ffdd32926",
+    "4e70195f1fafffdb",
+    "5b1fc5fb52e862f0",
+    "71b8918710dd3125",
+    "7baa8f45209d1ff7",
+    "bed69eb8250a61ff",
+    "c5e36e14844312e7",
+    "ddc97f6cceccad17"
+  ],
+  "ai-workspace/conversaciones/08-p10.md": [
+    "103393c35c2d5259",
+    "1767400589dec4b6",
+    "3aacf9fe5c902ce4",
+    "3df039b0bc0486bb",
+    "59b56cf3c039147c",
+    "5b1fc5fb52e862f0",
+    "6555b2c0e6980b8b",
+    "a605b9198d26efed",
+    "cdbb2ed82d8d9675",
+    "d2018a842daaf647",
+    "e7fa24ace2c66901",
+    "f8e2806218d78dec",
+    "fde19e7c0492c194",
+    "fe35313dee660699"
+  ],
+  "ai-workspace/conversaciones/09-arreglo-ac91-y-p11.md": [
+    "01135868ba60d938",
+    "1d766ea120e568f5",
+    "1e89e46240043b18",
+    "277527d75b5210fe",
+    "2adbd01ea64df3ea",
+    "38f642f21809001c",
+    "3e68cc61f73c9f8d",
+    "4b90ae09b67ec6d3",
+    "529226691cbb2369",
+    "56f36b0da73ed22b",
+    "5b1fc5fb52e862f0",
+    "5e7160d0e78a6311",
+    "5ffd22fb613a9ce1",
+    "65a88a7993f7178d",
+    "6d925ba9f53fe0bc",
+    "8692658ef23dfa29",
+    "8ef27b95a9d5a4fc",
+    "c9713dff1c9f6fec",
+    "cb68e0dd3ca3eb1d",
+    "d0c70c8cf968da54",
+    "d7cff93e0c2b3e4e"
+  ],
+  "ai-workspace/conversaciones/10-p12.md": [
+    "004f8a9849f2f8c6",
+    "2f4b22cc8b8b7e42",
+    "358a8dc9c9176ec3",
+    "59c4598640b5c103",
+    "5b1fc5fb52e862f0",
+    "5f0ce311aecbc048",
+    "73edc69c16f757ee",
+    "7f04e6bc4bd8ff44",
+    "82a291c4932df0ea",
+    "96dfa3dd0e63c790",
+    "97d1886f2be5e0e4",
+    "cc0b6d9bc87a30c1",
+    "db2c77d406d984ba",
+    "e12b417654cff384"
+  ],
+  "ai-workspace/conversaciones/11-p13.md": [
+    "072600f7e93c0feb",
+    "28718e023dd34bc2",
+    "2fdf62843173d735",
+    "358412f557fb771e",
+    "39a68ad522c99e2b",
+    "40cf101bcfd28c73",
+    "50ec36b70983ebf2",
+    "50f9135c161f5952",
+    "5b1fc5fb52e862f0",
+    "78a037b27e94b956",
+    "879d81c8c5724724",
+    "99b4e0c2e67048c2",
+    "b1b57236a92cb346",
+    "c1346e0d636058fa",
+    "d25464e73c1b76d7"
+  ],
+  "ai-workspace/conversaciones/README.md": [
+    "92a1264d40037c7f"
+  ],
+  "ai-workspace/decisiones.md": [
+    "01e0aab5d52b3fa2",
+    "12dfde61f1ab5481",
+    "156c82b5ba62eb18",
+    "33149a9385f5c173",
+    "64fdfa9ce1719f72",
+    "711d183de28eae65",
+    "8bbb3b5df71ef0ec",
+    "8bf30c78a4862765",
+    "aa97b376b4782911",
+    "aecee64d08a375ab",
+    "caa6f087613a8520",
+    "e007fadd8c633c2a",
+    "e7dc244b6e8b13bc",
+    "e999c2ff0f278701",
+    "fb3cd1727f5f90a0"
+  ],
+  "ai-workspace/diario.md": [
+    "0936ee1e75770a82",
+    "0b55fd200ad3ef49",
+    "0dce69edc49a0273",
+    "1ad3767b7bf1c7d3",
+    "2959d452db2465bf",
+    "36d2cb18ea2f84e2",
+    "3b8d928b0302c2b0",
+    "4b5a529aec8bd1e5",
+    "56ec3b3a98844eaf",
+    "5842c4844e4a71e7",
+    "76b7a115d368805f",
+    "78a33c46fcfbff37",
+    "8081fe08957de75f",
+    "9a6ff5a607d48e89",
+    "9b1c02558c27db25",
+    "a2ceb4977e2ecb97",
+    "a61fb99f7f1ba826",
+    "ad43aafeef790573",
+    "ad938e31eee771de",
+    "ae90aeb8853b0691",
+    "b29ca48876827c1e",
+    "b84b848230288e66",
+    "ba5ff5fca9ff8405",
+    "c0ab6449b27ebdf9",
+    "d5a00a05368b0960",
+    "d93ff98a3e4f08e8",
+    "da4213e432e7ef5f",
+    "e3148eb9767a4c21",
+    "e56d982b3c417ac3",
+    "e92a5d290682f4ab"
+  ],
+  "ai-workspace/prompts/02-especificacion.md": [
+    "c1257298c8e7d547"
+  ],
+  "ai-workspace/prompts/05-arquitectura.md": [
+    "141f21e94040352a"
+  ],
+  "ai-workspace/prompts/06-plan-implementacion.md": [
+    "2665a1b4ae675524"
+  ],
+  "ai-workspace/prompts/10-p1-cierre.md": [
+    "27ec5817dd3bb7ca",
+    "54df0221c15fc163"
+  ],
+  "ai-workspace/prompts/18-p6-plan.md": [
+    "f4a85fdde4d167ee"
+  ],
+  "ai-workspace/prompts/20-p8-plan.md": [
+    "2741c25afbe1b756"
+  ],
+  "ai-workspace/prompts/24-p11-plan.md": [
+    "cb68e0dd3ca3eb1d"
+  ],
+  "ai-workspace/prompts/26-p12-cierre.md": [
+    "2f4b22cc8b8b7e42",
+    "5f0ce311aecbc048",
+    "7f04e6bc4bd8ff44",
+    "96dfa3dd0e63c790",
+    "cc0b6d9bc87a30c1",
+    "db2c77d406d984ba"
+  ],
+  "ai-workspace/prompts/27-p13-recorrido.md": [
+    "28718e023dd34bc2",
+    "39a68ad522c99e2b",
+    "40cf101bcfd28c73"
+  ],
+  "ai-workspace/prompts/28-cierre-conversaciones.md": [
+    "025fa03b89ad4f39",
+    "125d1d4237097e5d",
+    "2e8dec1064b214b0",
+    "2eafc886a09e54e8",
+    "6d1e02e2dc54282e",
+    "81ac20184834540d",
+    "8203a21cd6751dd0",
+    "91dda36ebbc6bcad"
+  ],
+  "ai-workspace/README.md": [
+    "2526ec2e4776451b",
+    "9a6dca36b7549af8",
+    "b138fb89a52798a7"
+  ],
+  "deploy/demo/docker-compose.demo.yml": [
+    "7f37e8783b374da2",
+    "949dcdc7bcf6675e"
+  ],
+  "deploy/demo/nginx/http.conf.template": [
+    "2eb15f6214205111"
+  ],
+  "README.md": [
+    "65fda658626e64c6",
+    "c7f852b81bcd9247"
+  ],
+  "scripts/recorrido/content/architecture.mjs": [
+    "4b4b5387e12919df",
+    "ea2e4f98b1451d5e"
+  ],
+  "scripts/recorrido/render/architecture.mjs": [
+    "5519c7d799865596",
+    "b4e0185d49be6403",
+    "ed9ffe9265f50a53"
+  ],
+  "scripts/recorrido/render/hero.mjs": [
+    "4b75758ed4a06a1b"
+  ],
+  "scripts/recorrido/render/projection.mjs": [
+    "2e9d8aed0fd6c5dc"
+  ],
+  "scripts/recorrido/render/rules.mjs": [
+    "436d005ba0bcfc2b"
+  ]
+}

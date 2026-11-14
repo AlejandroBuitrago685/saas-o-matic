@@ -18,7 +18,7 @@ Seguimos con P3. Estoy en modo plan: preséntame el plan, incluido cómo verá l
 
 Buen plan. Apruebo D-105 a D-108, y D-109 tras la prueba. Tres ajustes:
 
-1. IP real (D-105): he revisado el servidor y el snippet de Cloudflare NO está a nivel global: solo se incluye dentro del server de api.codeservice.es. Nuestro fichero de sitio de P11 tiene que incluirlo explícitamente. Si no, $remote_addr sería la IP del nodo de Cloudflare y todos los usuarios compartirían el mismo cubo del rate limit. Corrige D-105 y añádelo como requisito de P11, con una comprobación después del despliegue.
+[Omitido: detalle del servidor privado]
 
 2. Swagger: los evaluadores tienen que poder explorar la API sin leer código. Además de generarlo en el test, versiona el openapi.json en el repo, con una comprobación en el CI de que está al día, y sirve Swagger UI en /docs solo en desarrollo, nunca en la demo ni en producción. Enlázalo desde el README.
 

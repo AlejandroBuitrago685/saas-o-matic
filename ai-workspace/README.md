@@ -16,6 +16,7 @@ la [guía del evaluador](../GUIA-EVALUADOR.md) lleva cada requisito del enunciad
 | [`decisiones.md`](decisiones.md) | Cada decisión (`D-xx`) con la alternativa descartada, el motivo y quién la tomó; los supuestos y las preguntas para negocio. |
 | [`diario.md`](diario.md) | Una entrada por parte: qué se hizo, qué falló, qué corrigió el responsable del proyecto y qué corrigió el revisor. |
 | [`prompts/`](prompts) | Los prompts de las sesiones de construcción, literales y numerados. |
+| [`conversaciones/`](conversaciones/README.md) | Las sesiones de construcción enteras, legibles y con los datos del servidor tapados, con once momentos clave enlazados. |
 
 ## Por dónde empezar a leer
 
@@ -42,10 +43,12 @@ la [guía del evaluador](../GUIA-EVALUADOR.md) lleva cada requisito del enunciad
   límites de tamaño y fronteras entre capas, `tsc` estricto, scripts del repositorio, hooks de Claude Code y un CI
   obligatorio para integrar en `main` ([09-calidad-y-automatizacion](03-arquitectura/09-calidad-y-automatizacion.md)).
 - **Los prompts** que pegué en las sesiones de construcción están literales en [`prompts/`](prompts). Donde habría
-  revelado datos del servidor de la demo llevan la marca «[Omitido (D-175): …]»; el resto no se toca.
+  revelado detalles del servidor privado de la demo llevan la marca «[Omitido: detalle del servidor privado]»
+  (D-175); el resto no se toca.
 - Además de las sesiones de construcción, usé Claude fuera del repositorio para preparar los prompts de cada parte y
   revisar los planes antes de aprobarlos.
-- Usé dos cuentas de Claude. Las transcripciones de las sesiones se entregan aparte.
+- Usé dos cuentas de Claude. Las conversaciones de las sesiones de construcción están en
+  [`conversaciones/`](conversaciones/README.md), con los datos del servidor tapados y once momentos clave enlazados.
 
 ## Dónde intervine yo
 

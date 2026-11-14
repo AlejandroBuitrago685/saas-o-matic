@@ -23,7 +23,7 @@ services:
     tmpfs: !override
       - /tmp
       - /data:size=32m,uid=1000,gid=1000,mode=0700
-    # A small server shared with other applications: one replica, bounded memory, CPU and processes.
+    # One replica, with bounded memory, CPU and processes.
     mem_limit: 256m
     cpus: 0.5
     pids_limit: 64
@@ -37,7 +37,7 @@ services:
     # The demo build of the SPA, with the notice of spec 05 §2 (D-169).
     image: ghcr.io/alejandrobuitrago685/saas-o-matic-web-demo:${SAAS_O_MATIC_TAG:?set the image tag, sha-<commit>}
     build: !reset null
-    # D-99: Docker bypasses the firewall, so only loopback; the host nginx forwards to this port.
+    # D-99: only loopback; the host nginx forwards to this port.
     ports: !override
       - 127.0.0.1:4010:8080
     mem_limit: 64m

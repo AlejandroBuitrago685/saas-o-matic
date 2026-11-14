@@ -13,8 +13,8 @@ server {
     # Explicit, so the site does not depend on what the http block of the host sets.
     ssl_protocols TLSv1.2 TLSv1.3;
 
-    # D-105: the snippet is not global. It restores $remote_addr from CF-Connecting-IP, and only when the connection
-    # comes from a range of Cloudflare; it also replaces the private ranges the http block of the host trusts.
+    # D-105: included explicitly. It restores $remote_addr from CF-Connecting-IP, and only when the connection comes
+    # from a range of Cloudflare.
     include __CLOUDFLARE_REALIP_SNIPPET__;
 
     # D-134, RNF-SEC-11: the access log would keep the IP of every visitor.

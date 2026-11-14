@@ -1,0 +1,1279 @@
+{
+  "paragraphs": [
+    {
+      "session": "45aec011",
+      "uuid": "dccfac53-207b-4ec9-8cf9-c22c4b06d504",
+      "hash": "c1257298c8e7d547",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "baf78bc3-c0fd-44e0-a663-2b431e8dec53",
+      "hash": "fc7818a90671d93a",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "5455ac81-6f34-422b-b5dd-602e38d4b02c",
+      "hash": "141f21e94040352a",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "68e05272-5c2b-4611-9864-a5973e55a7e9",
+      "hash": "a6250d978bee6681",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "68e05272-5c2b-4611-9864-a5973e55a7e9",
+      "hash": "f8164084486c489a",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "f52bab40-a602-4b0e-90a0-74debb0006b7",
+      "hash": "2665a1b4ae675524",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "4db07ccf-bcfd-4671-a981-a79ad8703f37",
+      "hash": "f609501f0cc83018",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "4db07ccf-bcfd-4671-a981-a79ad8703f37",
+      "hash": "e2010e2b3b78c7be",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "c490880c-fb3e-498b-89d8-4a77ea7d4c34",
+      "hash": "28be8e7ab64b862a",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "da5cf53a-e771-4264-a3b8-bdf8bbd1fa1c",
+      "hash": "0fd1b71f1c9d9dc6",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "3c6e70f5-43e7-4b61-9cdd-f76b193e196d",
+      "hash": "4d22aea6bd67dc80",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "5c36915e-5bfc-4d24-a23e-8467bfb33372",
+      "hash": "836f2aaa95610425",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "d9b19b74-9189-4b0a-b14e-1cdf94d031f1",
+      "hash": "d1766cd0d2ec5c1d",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "d8ce502a-0d86-48cd-8cfc-7f7a823416f5",
+      "hash": "f9b58cf978e8d863",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "8fe28229-9c83-4270-bb6b-beafbfca8c46",
+      "hash": "6782c767866262f2",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "167a06f8-78e4-4064-b450-3c8c8bca37f3",
+      "hash": "4a500dd44c530bfb",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "16362582-0fa0-4169-bf9f-4684f9fa3051",
+      "hash": "54df0221c15fc163",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "16362582-0fa0-4169-bf9f-4684f9fa3051",
+      "hash": "27ec5817dd3bb7ca",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "17702549-0e2e-4c08-8d0d-de0e68693acf",
+      "hash": "d14ecb52d72b1f77",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "a2904307-8e5b-4e34-80d2-126cbabc6152",
+      "hash": "041c0c62e371e6f0",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "a2904307-8e5b-4e34-80d2-126cbabc6152",
+      "hash": "ad739b4d46c403d5",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "4e66ba7c-6b79-482a-833a-c1f46c2ce23e",
+      "hash": "6fb7291f9f6504dd",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "2c09d1ae-6231-4a88-a74e-14560b131e05",
+      "hash": "46d6f5f450175a91",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "2c09d1ae-6231-4a88-a74e-14560b131e05",
+      "hash": "c44bbe2a01ce0fde",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "fc6dd5f8-11f0-49cd-98fc-4ddb849bf1db",
+      "hash": "f1b9e615e8a6f111",
+      "decision": "omitido"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "937ce760-c856-4bda-bae7-f8e78c1f6250",
+      "hash": "6de0b6c14d53f3d6",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "937ce760-c856-4bda-bae7-f8e78c1f6250",
+      "hash": "5de0ce3b3f940c3a",
+      "decision": "omitido"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "039b7135-a3a2-4bb8-b6cc-f0dcc5266604",
+      "hash": "d2996013a5a0b96a",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "5f03b9b7-c32b-423a-ad10-d39b4c40d6fa",
+      "hash": "73368cf1183233e5",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "cba4e570-c517-4e96-bd20-4babe8416b9f",
+      "hash": "84e1fc81fb50096b",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "8e6a2081-1c08-487e-bf00-2182ae7b9dd4",
+      "hash": "258f004046da0b8c",
+      "decision": "seguro"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "8dca5f1e-79c7-4375-8cce-b96bd4242522",
+      "hash": "0c6f7f1983103a01",
+      "decision": "seguro"
+    },
+    {
+      "session": "e7d20eb4",
+      "uuid": "c47ef8b1-9df6-4ce8-87ce-6c91f99cc3a2",
+      "hash": "6a52470f1e00cf6c",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "10639ba5-ccde-443f-a96d-f8010783b0ef",
+      "hash": "a4ac90d8961a7619",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "10639ba5-ccde-443f-a96d-f8010783b0ef",
+      "hash": "9087c5923b5503ef",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "10639ba5-ccde-443f-a96d-f8010783b0ef",
+      "hash": "0ff6bad7dd6719b7",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "10639ba5-ccde-443f-a96d-f8010783b0ef",
+      "hash": "da07c4a8d3d03cb6",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "51a1962c-df7c-4b78-a63b-ba7ce531f578",
+      "hash": "93488488d6ab7df5",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "f2b751d6-8e4a-473a-bbeb-e6b655bda755",
+      "hash": "4ecaa2f5ecf6690f",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "b5b1fad5-73b1-4846-9981-12c5a33a790d",
+      "hash": "8c5064e11af4f3a0",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "97018df5-96bd-4889-8e50-6a4af1633ec2",
+      "hash": "2b672634b7e808fd",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "97018df5-96bd-4889-8e50-6a4af1633ec2",
+      "hash": "21bcd64e20069fd6",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "97018df5-96bd-4889-8e50-6a4af1633ec2",
+      "hash": "30dd5687c640c247",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "2ff7bb7e-4f25-4906-ac52-a8fb1a5fdc42",
+      "hash": "df92cbc6749cc94b",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "66d24c20-d1da-4c60-b7ec-e1990dff3f1c",
+      "hash": "8a021bfcda69eab7",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "0010a191-3caf-495e-a845-4ab9996ad611",
+      "hash": "a0ea365f26627f69",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "67ec4f5f-0142-4736-9611-45a6d8f81dab",
+      "hash": "1bc9f6f222f96a38",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "85e5bce9-6b22-45fd-b887-ba575499ecbe",
+      "hash": "1a8dfa48358ef21e",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "5d12d371-2217-4138-bbbf-5d1b9c66a6d2",
+      "hash": "fd2b7ddea1716ff1",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "7bdcfe65-6a09-4e85-ba2f-59e5609cd3c4",
+      "hash": "2ce7cf313cf6cba2",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "31dc4bb7-9793-4c6e-bbbf-75699a4145a2",
+      "hash": "ed2dccd8b6f63ec5",
+      "decision": "seguro"
+    },
+    {
+      "session": "0c3bf42c",
+      "uuid": "31dc4bb7-9793-4c6e-bbbf-75699a4145a2",
+      "hash": "8f128d7d2eb87be8",
+      "decision": "seguro"
+    },
+    {
+      "session": "67afb48f",
+      "uuid": "85b4a69c-9fae-49dc-9c38-b45320556595",
+      "hash": "f4a85fdde4d167ee",
+      "decision": "seguro"
+    },
+    {
+      "session": "67afb48f",
+      "uuid": "b48dd433-6092-4a1d-a81a-015a43ddb99b",
+      "hash": "23e114fddaf490aa",
+      "decision": "seguro"
+    },
+    {
+      "session": "67afb48f",
+      "uuid": "b48dd433-6092-4a1d-a81a-015a43ddb99b",
+      "hash": "b63b14844cf65e1f",
+      "decision": "seguro"
+    },
+    {
+      "session": "67afb48f",
+      "uuid": "b48dd433-6092-4a1d-a81a-015a43ddb99b",
+      "hash": "e338dc0355fb2f40",
+      "decision": "seguro"
+    },
+    {
+      "session": "67afb48f",
+      "uuid": "b48dd433-6092-4a1d-a81a-015a43ddb99b",
+      "hash": "a6d93dc0c5b9ffa4",
+      "decision": "seguro"
+    },
+    {
+      "session": "67afb48f",
+      "uuid": "b48dd433-6092-4a1d-a81a-015a43ddb99b",
+      "hash": "456673a41df2f32b",
+      "decision": "seguro"
+    },
+    {
+      "session": "67afb48f",
+      "uuid": "b48dd433-6092-4a1d-a81a-015a43ddb99b",
+      "hash": "9fd5fe34c2e017cf",
+      "decision": "seguro"
+    },
+    {
+      "session": "67afb48f",
+      "uuid": "81f4bc37-f218-4fa6-b9d4-f6202fee94e3",
+      "hash": "462b34cb403a44eb",
+      "decision": "seguro"
+    },
+    {
+      "session": "67afb48f",
+      "uuid": "4c65da4b-f3a9-4e0d-93e8-13fddabe6e1f",
+      "hash": "84a820520f97f492",
+      "decision": "seguro"
+    },
+    {
+      "session": "67afb48f",
+      "uuid": "eeb7047e-448d-411d-85f9-fb22f449f46a",
+      "hash": "302064891c324c3f",
+      "decision": "seguro"
+    },
+    {
+      "session": "67afb48f",
+      "uuid": "eeb7047e-448d-411d-85f9-fb22f449f46a",
+      "hash": "fad411911f826a80",
+      "decision": "seguro"
+    },
+    {
+      "session": "c2dbb256",
+      "uuid": "cd3fb748-cea7-4b0e-80ee-f19e27b161b2",
+      "hash": "4112774705a7e84b",
+      "decision": "seguro"
+    },
+    {
+      "session": "c2dbb256",
+      "uuid": "90b07020-db92-49cb-8fa2-ec0f0b136517",
+      "hash": "5342d9ed13ed2bbb",
+      "decision": "seguro"
+    },
+    {
+      "session": "c2dbb256",
+      "uuid": "c1ff56f9-b79c-4936-8970-66153185c3b4",
+      "hash": "49663392723dec22",
+      "decision": "seguro"
+    },
+    {
+      "session": "c2dbb256",
+      "uuid": "26b9047f-1038-4332-95d8-48788323dfec",
+      "hash": "981047f5acdad086",
+      "decision": "seguro"
+    },
+    {
+      "session": "c2dbb256",
+      "uuid": "759b4a77-c6b4-4079-b7b7-50bb55c49803",
+      "hash": "840f3695c4af8c48",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "52d84448-b469-430a-8f84-5e5db1d869ec",
+      "hash": "2741c25afbe1b756",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "126fdd73-b3b5-4e18-9aac-f271a3e055b1",
+      "hash": "489e6385d3eb9fb3",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "126fdd73-b3b5-4e18-9aac-f271a3e055b1",
+      "hash": "7cf8751fc8a8eab1",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "126fdd73-b3b5-4e18-9aac-f271a3e055b1",
+      "hash": "8617e8f601390df8",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "126fdd73-b3b5-4e18-9aac-f271a3e055b1",
+      "hash": "ecc071442065c6b3",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "126fdd73-b3b5-4e18-9aac-f271a3e055b1",
+      "hash": "f7a99158c487e70f",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "126fdd73-b3b5-4e18-9aac-f271a3e055b1",
+      "hash": "968a6eb245d1e22b",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "a57f524b-5c64-441e-8e03-bbc4e693ebfb",
+      "hash": "42a792589f4cf483",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "1a69bb0b-8677-4eda-9eb2-24cff8da907c",
+      "hash": "b37354a8431eb2cd",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "de04c5f0-06d2-400b-9034-06ba5be4cd0d",
+      "hash": "684ed923178af8bb",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "2c3a117b-3c18-4d0a-957a-7002bd411a35",
+      "hash": "1bc9f6f222f96a38",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "58985850-230a-4ee0-9ee4-5e2f1de58b08",
+      "hash": "9f98618e965f72c0",
+      "decision": "seguro"
+    },
+    {
+      "session": "a89bc115",
+      "uuid": "da968873-920c-4fcb-a88e-f7accb3b9fe4",
+      "hash": "31eb4176768d8633",
+      "decision": "seguro"
+    },
+    {
+      "session": "61148061",
+      "uuid": "775a55df-dcdd-44b5-85b9-2160d0b4c08e",
+      "hash": "71b8918710dd3125",
+      "decision": "seguro"
+    },
+    {
+      "session": "61148061",
+      "uuid": "775a55df-dcdd-44b5-85b9-2160d0b4c08e",
+      "hash": "bed69eb8250a61ff",
+      "decision": "seguro"
+    },
+    {
+      "session": "61148061",
+      "uuid": "775a55df-dcdd-44b5-85b9-2160d0b4c08e",
+      "hash": "59e199620e257bb7",
+      "decision": "seguro"
+    },
+    {
+      "session": "61148061",
+      "uuid": "775a55df-dcdd-44b5-85b9-2160d0b4c08e",
+      "hash": "a7159f3d717126c5",
+      "decision": "seguro"
+    },
+    {
+      "session": "61148061",
+      "uuid": "cbb80267-1801-443f-ab5e-bb64d645c80d",
+      "hash": "71b8918710dd3125",
+      "decision": "seguro"
+    },
+    {
+      "session": "61148061",
+      "uuid": "cbb80267-1801-443f-ab5e-bb64d645c80d",
+      "hash": "bed69eb8250a61ff",
+      "decision": "seguro"
+    },
+    {
+      "session": "61148061",
+      "uuid": "cbb80267-1801-443f-ab5e-bb64d645c80d",
+      "hash": "ad9fa862d11ba516",
+      "decision": "seguro"
+    },
+    {
+      "session": "61148061",
+      "uuid": "cbb80267-1801-443f-ab5e-bb64d645c80d",
+      "hash": "949bce365f02ae7a",
+      "decision": "seguro"
+    },
+    {
+      "session": "61148061",
+      "uuid": "bf33e463-6121-4527-9535-d5743a79fab5",
+      "hash": "7baa8f45209d1ff7",
+      "decision": "seguro"
+    },
+    {
+      "session": "61148061",
+      "uuid": "1cccd265-01f2-4b19-8c6f-0eb325cda2fb",
+      "hash": "ddc97f6cceccad17",
+      "decision": "seguro"
+    },
+    {
+      "session": "61148061",
+      "uuid": "f20dbf9e-68cb-4687-ab21-079d318ea58b",
+      "hash": "36cff88ffdd32926",
+      "decision": "seguro"
+    },
+    {
+      "session": "61148061",
+      "uuid": "19fc56f2-a5be-489d-a082-05f0804f77c7",
+      "hash": "09d1f02de3960804",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "7adf54c5-e64e-4eb5-8e48-1e45879bfd27",
+      "hash": "237522a191b9a37a",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "88e7ab8c-8781-49cb-884d-450e71f20834",
+      "hash": "4f408e4d1755168d",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "4a4137d3-75b4-4b6d-97ae-317ff05228a7",
+      "hash": "c8e790d664e70ff0",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "4a4137d3-75b4-4b6d-97ae-317ff05228a7",
+      "hash": "ecba8a9f94c2b082",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "4a4137d3-75b4-4b6d-97ae-317ff05228a7",
+      "hash": "1767400589dec4b6",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "4a4137d3-75b4-4b6d-97ae-317ff05228a7",
+      "hash": "3df039b0bc0486bb",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "8231af63-8b3f-47d3-b9da-c5a084eb778c",
+      "hash": "c8e790d664e70ff0",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "8231af63-8b3f-47d3-b9da-c5a084eb778c",
+      "hash": "ecba8a9f94c2b082",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "8231af63-8b3f-47d3-b9da-c5a084eb778c",
+      "hash": "1767400589dec4b6",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "8231af63-8b3f-47d3-b9da-c5a084eb778c",
+      "hash": "f8e2806218d78dec",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "5bca1123-87ec-405b-9401-1f515b552983",
+      "hash": "2cc782a6dd89ee5f",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "cc973d9a-7156-4b56-a6ba-eeee9f2c13ed",
+      "hash": "59b56cf3c039147c",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "ace98899-a7a8-46ae-89b2-d9bce868461e",
+      "hash": "3aacf9fe5c902ce4",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "a58a9129-b1c0-40e6-bf62-eddc25ad8e02",
+      "hash": "cdbb2ed82d8d9675",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "d68bde86-1ed3-49a7-b573-e90d8d5c68e4",
+      "hash": "fe35313dee660699",
+      "decision": "seguro"
+    },
+    {
+      "session": "46898b04",
+      "uuid": "75b774b8-7dca-4a16-a6d1-98a5197d7a00",
+      "hash": "d2018a842daaf647",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "f8fc5829-ca7b-4a0a-bc4c-fc9257f17f45",
+      "hash": "868d3b4034311a90",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "e844a2d1-d73d-4ca7-85ee-b38e8cf1dc8a",
+      "hash": "d7cff93e0c2b3e4e",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "e80ade4d-5128-444f-9021-f55e1042ad7a",
+      "hash": "5ffd22fb613a9ce1",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "f429c5d6-fb66-4b1f-a2cc-09a28d1584f7",
+      "hash": "18d35e4874b4e9a7",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "7822304d-be1c-4c7a-ac03-ec0aecd62c3b",
+      "hash": "b72789838eb23da6",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "a4e46b7e-f1bc-4b06-959c-4dfb571338bd",
+      "hash": "3f54e032ef8cb127",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "d64bfaec-ef9e-4ff2-8475-283cc3f906c5",
+      "hash": "7fe205836c9f841c",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "b185e554-d07f-46f4-bc0b-2160388af7df",
+      "hash": "9758ee720cec3bf0",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "294b5d60-f7fe-414e-b271-9f11bf08be25",
+      "hash": "0d9d20f5b00184eb",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "830fbf90-6cc5-4bb1-9cb6-998adc639537",
+      "hash": "a76d5ca4efcba498",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "830fbf90-6cc5-4bb1-9cb6-998adc639537",
+      "hash": "f455b5ec898ac732",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "830fbf90-6cc5-4bb1-9cb6-998adc639537",
+      "hash": "9cf1afd4503f6141",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "09ae009e-733d-4ed8-81e7-e070384cccb8",
+      "hash": "9abddb759fde974a",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "09ae009e-733d-4ed8-81e7-e070384cccb8",
+      "hash": "2adbd01ea64df3ea",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "09ae009e-733d-4ed8-81e7-e070384cccb8",
+      "hash": "8d5ddf2f5abdcef9",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "6b490ec7-63e1-41a4-a222-c362ed4d50cc",
+      "hash": "a0903fcd61995117",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "f51faabe-df35-4846-8bf8-fe645d5d375c",
+      "hash": "5e7160d0e78a6311",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "f51faabe-df35-4846-8bf8-fe645d5d375c",
+      "hash": "28e1a60f7977361e",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "f51faabe-df35-4846-8bf8-fe645d5d375c",
+      "hash": "38f642f21809001c",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "f51faabe-df35-4846-8bf8-fe645d5d375c",
+      "hash": "9db2559726c742f9",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "f51faabe-df35-4846-8bf8-fe645d5d375c",
+      "hash": "f0a79651e3be5747",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "f51faabe-df35-4846-8bf8-fe645d5d375c",
+      "hash": "4b90ae09b67ec6d3",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "e7f809a9-afa7-4664-80c6-05fa470bd4ea",
+      "hash": "6c2a86e41341ecdd",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "e7f809a9-afa7-4664-80c6-05fa470bd4ea",
+      "hash": "a4cd26d129882dfa",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "546d7eb8-443f-4540-bad5-f8aa7371e4c8",
+      "hash": "c0987784ada3bd14",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "64fbfb10-3f93-4e21-9988-fa9daef79f42",
+      "hash": "3e68cc61f73c9f8d",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "71ca8a8e-8eb9-4bbf-bd43-8de457b1a3f9",
+      "hash": "a6d2fd70c867e5d6",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "09cb158c-5d3f-4ff1-b123-9f893a97085d",
+      "hash": "65a88a7993f7178d",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "62cee723-37a5-4cee-a35f-cbb3898b0e62",
+      "hash": "1999acdc5fb7f856",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "4f1ac160-2e7f-44aa-898c-593fcb549a52",
+      "hash": "01135868ba60d938",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "4f1ac160-2e7f-44aa-898c-593fcb549a52",
+      "hash": "c9713dff1c9f6fec",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "4f1ac160-2e7f-44aa-898c-593fcb549a52",
+      "hash": "529226691cbb2369",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "4f1ac160-2e7f-44aa-898c-593fcb549a52",
+      "hash": "170731b8c14042e1",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "4f1ac160-2e7f-44aa-898c-593fcb549a52",
+      "hash": "8692658ef23dfa29",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "913b980d-b8ff-41bd-a998-a261901874a2",
+      "hash": "57a7bfdc1cb9586a",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "fd57b3cf-ae25-4792-9a5e-b7c81c42ab4a",
+      "hash": "06d319333c06fc4a",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "dbf0ed91-7205-48dc-b876-0be332a0b439",
+      "hash": "40fe66d2625935bf",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "df41ec1f-1e98-42b2-b978-2942717780fc",
+      "hash": "e2ef30f6c823a4b1",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "01676e9d-7a49-4a12-9ac4-4d3d6b96f85d",
+      "hash": "c60502f818c29800",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "022ee73c-1949-4569-af08-414d930ef6bc",
+      "hash": "d7980d7c50744271",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "c3d4c8b8-5017-42e7-a45d-27ecedf0844b",
+      "hash": "6617750871e29b78",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "23b9b37f-8481-46bc-8691-799b7a23febc",
+      "hash": "be32c8a17863afb8",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "cd04aaae-9da8-4e8c-aa23-72a90812ae9b",
+      "hash": "0faf86e4f14825dd",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "e21f4921-df88-4188-b4c5-f8ca0b447a23",
+      "hash": "4fee29598c7eaad0",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "6d8157a2-f7d5-4ebd-9b73-f87c9f24a9f4",
+      "hash": "c07be5d783b5c044",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "8294f7ec-2a3f-4591-bb38-22e42cec747f",
+      "hash": "d0c70c8cf968da54",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "02593d7a-7432-4c18-9b34-bc596b78e198",
+      "hash": "3fcf41cfbceb55e8",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "418ce772-4927-40fa-ab66-b511bdbd0b4f",
+      "hash": "4cd4ae0a7a5e0219",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "acf1e159-2a59-4248-bb7b-f1e79ee626b4",
+      "hash": "6d925ba9f53fe0bc",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "4e536416-cf77-451d-99e6-654209486f46",
+      "hash": "e693ff53376a9873",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "8366273b-9918-4e14-834f-3d589e44b161",
+      "hash": "b5ddf02af4a58317",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "8852aa27-993f-446b-bf43-54ebdc22e8d5",
+      "hash": "5169f8d570a58b8f",
+      "decision": "seguro"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "d7989b74-f9bb-426d-ae89-7b7bff0d9389",
+      "hash": "d4ebc3d1e6ad18d8",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "54c27a45-5741-4166-a398-b9ee0a4a4cfa",
+      "hash": "b07661b89e29e71f",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "cecb3810-da2d-4680-b0ae-8b0de5f281fa",
+      "hash": "769bc632c8b578ce",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "cecb3810-da2d-4680-b0ae-8b0de5f281fa",
+      "hash": "2532c0bcf9134e35",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "cecb3810-da2d-4680-b0ae-8b0de5f281fa",
+      "hash": "cbefc88c9f3aba71",
+      "decision": "omitido"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "cecb3810-da2d-4680-b0ae-8b0de5f281fa",
+      "hash": "10a79058e382170f",
+      "decision": "omitido"
+    },
+    {
+      "session": "23261255",
+      "uuid": "0b3e30d2-fff3-4ad2-8da6-3c63fa807484",
+      "hash": "cc0b6d9bc87a30c1",
+      "decision": "seguro"
+    },
+    {
+      "session": "23261255",
+      "uuid": "0b3e30d2-fff3-4ad2-8da6-3c63fa807484",
+      "hash": "5f0ce311aecbc048",
+      "decision": "seguro"
+    },
+    {
+      "session": "23261255",
+      "uuid": "0b3e30d2-fff3-4ad2-8da6-3c63fa807484",
+      "hash": "96dfa3dd0e63c790",
+      "decision": "seguro"
+    },
+    {
+      "session": "23261255",
+      "uuid": "0b3e30d2-fff3-4ad2-8da6-3c63fa807484",
+      "hash": "2f4b22cc8b8b7e42",
+      "decision": "seguro"
+    },
+    {
+      "session": "23261255",
+      "uuid": "162ea0ee-1185-436c-a2ee-b43df1e53cb4",
+      "hash": "1a2419a5a03aea36",
+      "decision": "omitido"
+    },
+    {
+      "session": "23261255",
+      "uuid": "162ea0ee-1185-436c-a2ee-b43df1e53cb4",
+      "hash": "82a291c4932df0ea",
+      "decision": "seguro"
+    },
+    {
+      "session": "23261255",
+      "uuid": "ea413676-7569-40b4-b855-c9fe8a85bcb3",
+      "hash": "db2c77d406d984ba",
+      "decision": "seguro"
+    },
+    {
+      "session": "23261255",
+      "uuid": "34f6ce6b-02c4-4d36-b436-a6b89d3d6951",
+      "hash": "e12b417654cff384",
+      "decision": "seguro"
+    },
+    {
+      "session": "23261255",
+      "uuid": "e94376b4-a20c-4bf8-adaf-cd39262d2ec4",
+      "hash": "358a8dc9c9176ec3",
+      "decision": "seguro"
+    },
+    {
+      "session": "23261255",
+      "uuid": "010b0ac7-a3b3-4c98-8ee7-3f5143db6e25",
+      "hash": "004f8a9849f2f8c6",
+      "decision": "seguro"
+    },
+    {
+      "session": "23261255",
+      "uuid": "656c345b-539f-40de-9e20-a5fa96586899",
+      "hash": "97d1886f2be5e0e4",
+      "decision": "seguro"
+    },
+    {
+      "session": "23261255",
+      "uuid": "656c345b-539f-40de-9e20-a5fa96586899",
+      "hash": "59c4598640b5c103",
+      "decision": "seguro"
+    },
+    {
+      "session": "23261255",
+      "uuid": "98b33e45-014d-46cc-b2e7-23ab970ce08c",
+      "hash": "7f04e6bc4bd8ff44",
+      "decision": "seguro"
+    },
+    {
+      "session": "23261255",
+      "uuid": "e66367e4-8c65-4cf1-bd3e-6ac3e449bbba",
+      "hash": "73edc69c16f757ee",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "89d8fa44-983f-4b59-b08b-657fe0e2fecc",
+      "hash": "39a68ad522c99e2b",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "8b06b46c-1416-486c-944f-2c5fd9a7128f",
+      "hash": "879d81c8c5724724",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "8b06b46c-1416-486c-944f-2c5fd9a7128f",
+      "hash": "b1b57236a92cb346",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "a103fe2a-42ac-405a-8680-9ff364f1165a",
+      "hash": "879d81c8c5724724",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "a103fe2a-42ac-405a-8680-9ff364f1165a",
+      "hash": "b1b57236a92cb346",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "d22d81f7-d7d7-4a4b-a93c-d65609258acd",
+      "hash": "816a879f99824af0",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "b1827df4-9128-49e6-8595-894c55a62d4b",
+      "hash": "50ec36b70983ebf2",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "45ef39b5-3299-4644-9b4b-6484461e7c78",
+      "hash": "072600f7e93c0feb",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "bcd3bacc-590d-46c1-9074-022ab906e683",
+      "hash": "358412f557fb771e",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "bcd3bacc-590d-46c1-9074-022ab906e683",
+      "hash": "78a037b27e94b956",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "4e440304-1846-4844-b983-61c5c025ad78",
+      "hash": "39f2993f5d7ea8a1",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "2f865111-c4f5-4987-8e52-0d65b96470f3",
+      "hash": "c1346e0d636058fa",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "e9aa8123-970f-4df1-bed7-abd70fe59e1a",
+      "hash": "2fdf62843173d735",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "dceb5f63-9160-4fcb-a889-bb2efd7e04fb",
+      "hash": "d25464e73c1b76d7",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "157ea856-52e1-456b-9e80-26342d207817",
+      "hash": "28718e023dd34bc2",
+      "decision": "seguro"
+    },
+    {
+      "session": "905f1354",
+      "uuid": "14a56d32-a499-4c69-b2a9-984532c6c5da",
+      "hash": "40cf101bcfd28c73",
+      "decision": "seguro"
+    }
+  ],
+  "sections": [
+    {
+      "session": "6c090115",
+      "hash": "0a661c8426cf18a5"
+    },
+    {
+      "session": "6c090115",
+      "hash": "866afd8179f4e7ad"
+    },
+    {
+      "session": "6c090115",
+      "hash": "3bbf2b0f1d71bd10"
+    }
+  ],
+  "lines": [
+    {
+      "session": "45aec011",
+      "uuid": "61b33a6d-d4df-4e62-9ebb-af38a62bb5df",
+      "hash": "942f89b164cf80bd"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "16362582-0fa0-4169-bf9f-4684f9fa3051",
+      "hash": "79b1cb2950f50b6b"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "16362582-0fa0-4169-bf9f-4684f9fa3051",
+      "hash": "b07de2bc0ff30300"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "16362582-0fa0-4169-bf9f-4684f9fa3051",
+      "hash": "24774866fe1bb6f6"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "16362582-0fa0-4169-bf9f-4684f9fa3051",
+      "hash": "8591f756c9b50a72"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "16362582-0fa0-4169-bf9f-4684f9fa3051",
+      "hash": "13e7bc1ab0db258b"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "f8fc5829-ca7b-4a0a-bc4c-fc9257f17f45",
+      "hash": "4e9e7b64292d172a"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "f8fc5829-ca7b-4a0a-bc4c-fc9257f17f45",
+      "hash": "c49a81f89faaf205"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "f8fc5829-ca7b-4a0a-bc4c-fc9257f17f45",
+      "hash": "928a1363b86dd853"
+    },
+    {
+      "session": "6c090115",
+      "uuid": "f8fc5829-ca7b-4a0a-bc4c-fc9257f17f45",
+      "hash": "950d200229e3ad68"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "2c09d1ae-6231-4a88-a74e-14560b131e05",
+      "hash": "729aa73d3d2a67ae"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "937ce760-c856-4bda-bae7-f8e78c1f6250",
+      "hash": "adc82b38ed5cd8be"
+    },
+    {
+      "session": "45aec011",
+      "uuid": "937ce760-c856-4bda-bae7-f8e78c1f6250",
+      "hash": "94aedfe670b80d96"
+    }
+  ],
+  "sentences": [
+    {
+      "session": "23261255",
+      "uuid": "656c345b-539f-40de-9e20-a5fa96586899",
+      "hash": "be84bc884e3315d2"
+    },
+    {
+      "session": "23261255",
+      "uuid": "656c345b-539f-40de-9e20-a5fa96586899",
+      "hash": "b2a3b88039a5a2a3"
+    }
+  ]
+}

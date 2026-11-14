@@ -42,6 +42,13 @@ npm run dev
 > **¿Evalúas el proyecto?** La [guía del evaluador](GUIA-EVALUADOR.md) propone recorridos de 5, 15 y 60 minutos y lleva
 > cada requisito del enunciado a la pantalla donde se ve y al test que lo comprueba.
 
+## Si algo falla
+
+- **`npm ci` da `EBADENGINE`:** tu versión de Node no es compatible. Instala la LTS desde [nodejs.org](https://nodejs.org/) (hoy, la 26) o ejecuta `nvm install`, que lee el [`.nvmrc`](.nvmrc).
+- **Los puertos 3000 y 4200** tienen que estar libres: la API y la web los usan.
+- **En Windows, si PowerShell no deja ejecutar `npm`** («la ejecución de scripts está deshabilitada»), usa CMD o Git Bash.
+- **Sin internet, la app funciona**, pero sin tipos de cambio: la cabecera lo indica y los importes siguen en euros. Si hay tipos guardados de menos de 48 h, los usa y avisa de que están desactualizados.
+
 ## Cómo se ha construido
 
 Con Claude Code y un proceso guiado por especificación: cuatro fases antes del código y después una parte por sesión y
@@ -49,7 +56,7 @@ por PR, con un revisor y hooks. En [`ai-workspace/README.md`](ai-workspace/READM
 intervine yo y qué haría distinto en producción.
 
 - [`decisiones.md`](ai-workspace/decisiones.md) y [`diario.md`](ai-workspace/diario.md): qué se decidió, quién y qué falló.
-- [`prompts/`](ai-workspace/prompts) (literales; las transcripciones se entregan aparte) y [`CLAUDE.md`](CLAUDE.md).
+- [`prompts/`](ai-workspace/prompts) (literales), las [conversaciones con la IA](ai-workspace/conversaciones/README.md) y [`CLAUDE.md`](CLAUDE.md).
 
 ## Más sobre el arranque en local
 

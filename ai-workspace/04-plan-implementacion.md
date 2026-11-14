@@ -256,18 +256,17 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
   - HTTPS con HSTS;
   - límite de 5 escrituras;
   - regeneración de datos al arrancar.
-- **Destino (D-99, datos del servidor fuera del repositorio):**
-  - VPS del usuario, al que se accede por SSH a través de Tailscale. **Ni IPs, ni usuarios, ni rutas del servidor** en el repositorio ni en la documentación.
+- **Destino (D-99, ningún detalle del servidor en el repositorio, D-175):**
+  - un VPS privado del usuario, detrás de un proxy inverso con TLS. La demo va en **un fichero de configuración propio**.
   - Subdominio `saas-o-matic.codeserviceapi.es`, con Cloudflare como proxy; el registro DNS lo crea el usuario.
-  - nginx ya en los puertos 80 y 443, con certificados de Let's Encrypt y la IP real de Cloudflare restaurada. La demo va en **un fichero de configuración propio**, sin tocar los demás sitios.
-  - Docker no está instalado y el servidor es pequeño (1 CPU, ~2 GB libres): las imágenes **se construyen en el CI**, se publican en GHCR y el VPS solo hace *pull*.
-  - Docker se salta UFW: los contenedores **solo escuchan en 127.0.0.1**, en el puerto 4010.
+  - Las imágenes **se construyen en el CI**, se publican en GHCR y el VPS solo hace *pull*.
+  - Los contenedores **solo escuchan en 127.0.0.1**, en el puerto 4010.
 - **Riesgos:**
   - **el plan de P11 se presenta y se aprueba antes de tocar el servidor** (instalar Docker incluido);
-  - **el fichero de sitio incluye explícitamente el snippet de Cloudflare** (no es global) y sustituye `X-Forwarded-For` por `$remote_addr` (D-105); `nginx -t` antes de recargar;
+  - **el fichero de sitio incluye explícitamente la restauración de la IP de Cloudflare** y sustituye `X-Forwarded-For` por `$remote_addr` (D-105); `nginx -t` antes de recargar;
   - **comprobación tras desplegar:** desde dos redes distintas, `x-ratelimit-remaining` baja de forma independiente; si bajan juntas, el despliegue no se da por bueno;
   - la IP real a través de Cloudflare y de dos nginx (ver P3);
-  - la memoria disponible: límites de memoria en Compose y una sola réplica.
+  - el consumo de la demo: límites de memoria y CPU en Compose y una sola réplica.
 - **Hecho cuando:** la URL responde, AC-61 pasa y el README la enlaza.
 
 ### P12 · Cierre: README, clon limpio y revisión final · 2,5 h
@@ -376,7 +375,7 @@ Hasta entonces, un retraso consume holgura y después el martes. Nada Must se re
 1. **Planes aprobados rápido:** el protocolo es el cuello de botella. Para ahorrar unos 45 minutos, **P1 y P2 pueden
    presentarse en un único plan** (mismo paquete, puro TDD).
 2. **El repositorio de GitHub creado en P0** (jueves), para que el CI corra desde el principio.
-3. **El acceso al VPS de la demo** (alias SSH y subdominio, D-99): recibido el jueves.
+3. **El acceso al VPS de la demo** y el subdominio (D-99): recibidos el jueves.
 4. **Ningún bloqueo de más de 1 h:** si algo se atasca más de una hora, se aplica el plan B de esa parte (indicado en
    sus riesgos) y se sigue.
 
