@@ -74,6 +74,20 @@ describe('AC-55 the configuration is validated at startup (RNF-SEC-12, 03-backen
   });
 });
 
+describe('D-173 AC-61 the demo never starts with more than 5 writes per minute and IP (RNF-SEC-20)', () => {
+  it('rejects DEMO_MODE with the default 20 writes, and names the variable', () => {
+    expect(errorOf({ DEMO_MODE: 'true' })).toContain('RATE_LIMIT_WRITES_PER_MINUTE:');
+  });
+
+  it.each(['5', '1'])('accepts DEMO_MODE with %s writes per minute', (writes) => {
+    expect(loadConfig({ DEMO_MODE: 'true', RATE_LIMIT_WRITES_PER_MINUTE: writes }).ok).toBe(true);
+  });
+
+  it('leaves the writes of the internal tool alone', () => {
+    expect(loadConfig({ RATE_LIMIT_WRITES_PER_MINUTE: '50' }).ok).toBe(true);
+  });
+});
+
 describe('D-105 TRUST_PROXY is false or the addresses of the proxies, never true nor a hop count', () => {
   it.each([
     ['false', false],

@@ -9,6 +9,9 @@ const ENVIRONMENTS = ['development', 'test', 'production'] as const;
 
 const flag = z.enum(['true', 'false']).transform((value) => value === 'true');
 
+/** RNF-SEC-20: the public demo allows at most 5 writes per minute and IP (D-173). */
+const DEMO_MAX_WRITES_PER_MINUTE = 5;
+
 /** An http(s) origin: scheme, host and port, nothing else (RNF-SEC-07). `*` is not a URL, so it fails. */
 const originSchema = z
   .url({ protocol: /^https?$/ })
@@ -38,6 +41,11 @@ const envSchema = z
   .refine((env) => env.DATABASE_PATH !== ':memory:' || env.NODE_ENV === 'test', {
     path: ['DATABASE_PATH'],
     message: 'an in-memory database is only allowed in tests',
+  })
+  // D-173: fail closed, so the protection of the demo never depends on remembering a second variable.
+  .refine((env) => !env.DEMO_MODE || env.RATE_LIMIT_WRITES_PER_MINUTE <= DEMO_MAX_WRITES_PER_MINUTE, {
+    path: ['RATE_LIMIT_WRITES_PER_MINUTE'],
+    message: `must be ${String(DEMO_MAX_WRITES_PER_MINUTE)} or less with DEMO_MODE=true`,
   });
 
 export interface AppConfig {
