@@ -1,6 +1,6 @@
 # ADR-012 · Origen único: la SPA llama a `/api` y un proxy quita el prefijo
 
-- **Estado:** propuesta (D-65) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-65, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 

@@ -1,6 +1,6 @@
 # ADR-009 · `Result` en el dominio, `AppError` en la aplicación y un único manejador RFC 9457
 
-- **Estado:** propuesta (D-62) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-62, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 

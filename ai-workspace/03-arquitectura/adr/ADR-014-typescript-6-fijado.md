@@ -1,6 +1,6 @@
 # ADR-014 · TypeScript 6.0.x fijado en todo el monorepo
 
-- **Estado:** propuesta (D-67) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-67, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 

@@ -42,7 +42,7 @@ validar). Fecha límite: **jueves 19/11 a las 23:00** (S-05 resuelto). Objetivo:
 | | 12:30–13:30 y 14:30–15:00 | **P11** (2.ª mitad) Demo final y AC-61 | **C4 · lun 15:00** |
 | | 15:00–17:30 | **P12** README, clon limpio y revisión final | **C5 · lun 17:30** |
 | | 17:30–19:00 | Holgura (1,5 h) | ≈ 19:00 **Entrega** |
-| **Mar 17** | Todo el día | Solo margen | |
+| **Mar 17** | Todo el día | Margen. **P13** (unas 3 h, D-178) se hace en otra sesión en cuanto P12 esté fusionada, sin esperar a este día | **Etiqueta de la entrega** al cerrar P13 |
 | **Jue 19** | — | — | Límite de la empresa: 23:00 (hora de la empresa: si es peninsular, son las 22:00 en Canarias) |
 
 Esfuerzo pendiente 31,5 h (P2 ya hecha; P11 reestimada a 3 h por D-99) frente a 36 h programadas: **4,5 h de holgura** antes del lunes a las 19:00, más el martes.
@@ -278,13 +278,25 @@ lint y tipos, revisor sin P0 ni P1, diario, trazabilidad y commit.
   - **prueba desde un clon limpio** siguiendo el README;
   - revisor sobre todo el repositorio;
   - matriz de trazabilidad con la columna de tests;
-  - diario completo;
-  - etiqueta de la entrega.
+  - diario completo.
+- **Ampliado en el plan de P12 (D-178 a D-181):** `GUIA-EVALUADOR.md` con la tabla de requisitos, capturas
+  reproducibles (`npm run capturas`), `ai-workspace/README.md`, las cabeceras de Cloudflare en 08-despliegue y dos
+  tests de documentación (enlaces y tabla de la guía). **La etiqueta de la entrega pasa a P13.**
 - **AC:** AC-93, AC-94, AC-95 (manual), AC-99.
 - **Hecho cuando:**
   - el clon limpio funciona sin desviarse del README;
   - el revisor no deja P0 ni P1 en todo el repositorio;
   - todo está en `main` con el CI en verde.
+
+### P13 · Recorrido visual para los evaluadores · unas 3 h (D-178)
+
+- **Objetivo:** que un evaluador entienda el proyecto en 5 minutos sin leer todo `ai-workspace`.
+- **Qué es:** una página HTML interactiva. Se hace **en otra sesión, cuando P12 esté fusionada**.
+- **Entradas que deja P12** (nota de traspaso del diario): las capturas de `docs/capturas` y su script
+  (`npm run capturas`), la lista final de «Dónde intervine yo» de `ai-workspace/README.md` y la tabla de requisitos de
+  `GUIA-EVALUADOR.md`.
+- **Hecho cuando:** la página está publicada, enlazada desde el README y con el CI en verde; después se pone la
+  **etiqueta de la entrega**, que antes era de P12.
 
 ## 4. Protocolo de cada parte (D-73)
 

@@ -1,6 +1,6 @@
 # ADR-006 · Búsqueda con columna normalizada y `LIKE` con escape
 
-- **Estado:** propuesta (D-59) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-59, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 

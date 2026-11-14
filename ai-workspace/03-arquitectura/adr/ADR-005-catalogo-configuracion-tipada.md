@@ -1,6 +1,6 @@
 # ADR-005 · Catálogo como configuración tipada validada al arrancar
 
-- **Estado:** propuesta (D-58) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-58, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 

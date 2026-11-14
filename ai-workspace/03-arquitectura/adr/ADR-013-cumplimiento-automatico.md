@@ -1,6 +1,6 @@
 # ADR-013 · Reglas de código aplicadas con herramientas, hooks y subagente revisor
 
-- **Estado:** propuesta (D-66) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-66, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 

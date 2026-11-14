@@ -1,6 +1,6 @@
 # ADR-001 · Dominio compartido en TypeScript puro
 
-- **Estado:** propuesta (D-54) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-54, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 

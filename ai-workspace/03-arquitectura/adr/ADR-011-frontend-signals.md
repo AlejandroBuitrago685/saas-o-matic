@@ -1,6 +1,6 @@
 # ADR-011 · Frontend con stores de signals, `httpResource`, Signal Forms, sin Zone.js y sin estilos de componente
 
-- **Estado:** propuesta (D-64) · **Fecha:** 2026-11-12
+- **Estado:** aceptada (D-64, validada el 2026-11-12) · **Fecha:** 2026-11-12
 
 ## Contexto
 
