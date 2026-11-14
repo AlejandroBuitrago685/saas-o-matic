@@ -1307,7 +1307,7 @@ endurecimiento de un servidor; el detalle no se publica (D-175):
 **Decisiones:**
 - D-165 a D-173: validadas en el plan;
 - D-174 y D-175: aprobadas;
-- D-176 y D-177: pendientes de validar.
+- D-176 y D-177: aprobadas con la PR de cierre.
 
 **Tiempo:** estimado 3 h (unas 4 h con el CI de la demo). Real:
 - unas 2 h 20 min desde el *merge* de la PR #16 hasta la PR #17 (23:41–02:06, hora de Canarias), con una pausa por el
@@ -1317,7 +1317,7 @@ endurecimiento de un servidor; el detalle no se publica (D-175):
 ## Nota de traspaso — 2026-11-14, tras P11
 
 **Estado**
-- P0 a P11 hechas. El código de P11 está en `main` (PR #17), y el cierre, en la rama `chore/p11-close`.
+- P0 a P11 hechas. El código de P11 está en `main` (PR #17), y el cierre, en la PR #18.
 - La demo, https://saas-o-matic.codeserviceapi.es, corre `sha-ab4960e…`. Las imágenes de esta PR solo cambian las
   etiquetas, así que no hace falta volver a desplegarla. Si se hace, son los pasos de 08-despliegue §4.4.
 - El directorio de la demo está en el servidor, fuera de cualquier repositorio. Las órdenes de operación y la vuelta
@@ -1326,4 +1326,4 @@ endurecimiento de un servidor; el detalle no se publica (D-175):
 
 **Siguiente parte: P12 · Cierre:** README final, prueba desde un clon limpio y revisión final.
 
-**Decisiones por validar:** S-08, D-176 y D-177.
+**Decisiones por validar:** S-08.
