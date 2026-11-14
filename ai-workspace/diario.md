@@ -1647,3 +1647,36 @@ la medición vigente**: la anterior se tomó antes de los tests de esta parte.
   Es el único test que no corre.
 - No se repitieron la descarga de Chromium, `e2e:smoke` ni Docker: siguen valiendo los de P12.
 - `npm ci`, `setup` y `npm test` suman 88 s: los «unos 2 minutos» de la guía siguen siendo ciertos.
+
+## «Lo más destacable» del README — 2026-11-14 · rama `docs/readme-destacado`
+
+**Hecho**
+- **El bloque** (D-190): siete líneas tras las capturas del README, sobre el negocio, los tests, el CI, la seguridad, la
+  calidad, la accesibilidad y el despliegue. Cada una enlaza con lo que la demuestra.
+- **Sus cifras, comprobadas:** `tools/readme-highlights.test.ts` las lee de su fuente con los lectores del recorrido:
+  - los tests, de la última medición del clon limpio de este diario;
+  - los criterios y los vectores, de `npm run trace`;
+  - el 100 % de cobertura, de `vitest.config.ts`, que solo lo exige al dominio;
+  - los 11 checks, las versiones de Node y los sistemas, de `ci.yml`;
+  - la CSP sin `unsafe-inline`, del nginx de la web.
+
+  Se probó con tres mutaciones del README (la cifra de tests, la de checks y la cobertura atribuida a todo el código),
+  y el test falla en las tres.
+- **Una precisión:** el bloque dice que el impuesto se redondea una sola vez sobre la base. Al convertir de divisa se
+  redondea cada partida, así que «un solo redondeo», sin más, no sería exacto.
+- **Registro:** D-190, la fila de validación, el prompt 29 y, en el 28, el mensaje que llegó tras su commit.
+
+**Correcciones**
+- **Del revisor** (`sonnet`, una pasada): **APTO CON CAMBIOS**, sin P0 ni P1. Comprobó en el repositorio cada
+  afirmación del bloque, y ninguna es falsa. Corregidos:
+  - P2: el enlace de accesibilidad solo demostraba axe a 360 px; ahora lleva a la carpeta de los e2e, donde están
+    también el teclado y el desplazamiento horizontal;
+  - P2: el test también comprueba que `smoke` prueba las mismas versiones de Node que `quality`. Lee los trabajos
+    igual que `workflowJobs`, del recorrido, y comprueba que `publish` no cuenta. Se probó quitando Node 26 de
+    `smoke`, y falla;
+  - P3: los sistemas del CI se comparan sin depender de su orden; D-190 dice qué líneas son prosa, por qué no dice
+    «un solo redondeo» y que los 11 checks salen de `ci.yml`.
+
+  Sin cambio: que los destinos de los enlaces existen ya lo comprueba `check-markdown-links` (D-181).
+
+**Decisiones:** D-190, a petición del usuario (el contenido es suyo y el test, de Claude).

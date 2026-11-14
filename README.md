@@ -24,6 +24,16 @@ tiempo real.
 _Arriba, el dashboard con los datos de ejemplo y el simulador con el desglose por tramos, en libras. Abajo, el
 simulador a 360 px. Se regeneran con `npm run capturas`._
 
+## Lo más destacable
+
+- **Negocio exacto:** importes en céntimos enteros y sin coma flotante, con el impuesto redondeado una sola vez sobre la base y 129 vectores de prueba en la especificación ([reglas de negocio](ai-workspace/02-especificacion/02-reglas-negocio.md#32-cálculo-y-redondeo-rnf-04-d-10)).
+- **Tests:** 1 553 en el último clon limpio (1 260 de Node y 293 de la web), más los e2e con Playwright, con la cobertura del 100 % obligatoria en el dominio y 81 de los 83 criterios de aceptación con test (los otros 2 son de revisión), lo que comprueba `npm run trace` ([estrategia de tests](ai-workspace/03-arquitectura/07-tests.md)).
+- **CI:** 11 checks obligatorios para integrar en `main`, con Node 22, 24 y 26, en Linux, Windows y macOS, y una auditoría de dependencias ([`ci.yml`](.github/workflows/ci.yml)).
+- **Seguridad:** el OWASP API Security Top 10 con un modelo de amenazas, una CSP estricta sin `unsafe-inline`, el límite de peticiones por la IP real del cliente, errores RFC 9457, logs sin datos personales y contenedores sin root y de solo lectura ([seguridad](ai-workspace/02-especificacion/06-seguridad.md)).
+- **Calidad del código:** TypeScript estricto, ESLint con límites de tamaño y fronteras entre capas, hooks que lo comprueban mientras se edita y un revisor al cerrar cada parte ([calidad y automatización](ai-workspace/03-arquitectura/09-calidad-y-automatizacion.md)).
+- **Accesibilidad:** axe en los e2e, las vistas se recorren con teclado y a 360 px no hay desplazamiento horizontal ([e2e de accesibilidad, teclado y 360 px](e2e/specs)).
+- **Despliegue:** Docker Compose en local y la demo en un VPS privado detrás de Cloudflare, con las mismas imágenes que probó el CI ([despliegue](ai-workspace/03-arquitectura/08-despliegue.md)).
+
 ## Arranque rápido
 
 Necesitas **Node.js** `^22.22.3 || ^24.15.0 || >=26.0.0` (el [`.nvmrc`](.nvmrc) recomienda la 26) y **npm** 10 o
