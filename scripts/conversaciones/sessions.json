@@ -1,0 +1,93 @@
+[
+  {
+    "id": "45aec011-6969-4e0c-a6c3-b426805f5f95",
+    "file": "01-fases-y-p0-p3.md",
+    "title": "01 · Fases 1 a 4 (análisis, especificación, arquitectura y plan) y P0 a P3",
+    "prompts": [
+      "01-analisis.md",
+      "02-especificacion.md",
+      "03-validacion-especificacion.md",
+      "04-validacion-d49-d53.md",
+      "05-arquitectura.md",
+      "06-plan-implementacion.md",
+      "07-p0-plan.md",
+      "08-p0-permisos-y-cierre.md",
+      "09-p1-p2-plan.md",
+      "10-p1-cierre.md",
+      "11-p2.md",
+      "12-p3-plan.md",
+      "13-p3-cierre.md"
+    ],
+    "prs": [1, 2, 3, 4, 5, 6]
+  },
+  {
+    "id": "e7d20eb4-91a9-4648-b977-e6c6490b7e01",
+    "file": "02-p4.md",
+    "title": "02 · P4 · API de la porción vertical",
+    "prompts": ["14-p4-plan.md", "15-p4-cierre.md"],
+    "prs": [7, 8]
+  },
+  {
+    "id": "0c3bf42c-e431-4289-8290-7933204e9d08",
+    "file": "03-p5.md",
+    "title": "03 · P5 · Web de la porción vertical",
+    "prompts": ["16-p5-plan.md", "17-p5-cierre.md"],
+    "prs": [9]
+  },
+  {
+    "id": "67afb48f-2f2b-44f7-8ee0-a38688b4adf7",
+    "file": "04-p6.md",
+    "title": "04 · P6 · Docker Compose, nginx y e2e",
+    "prompts": ["18-p6-plan.md"],
+    "prs": [10]
+  },
+  {
+    "id": "c2dbb256-c0a1-47bf-a047-c5710e787876",
+    "file": "05-p7.md",
+    "title": "05 · P7 · Búsqueda, dashboard y seed",
+    "prompts": ["19-p7-plan.md"],
+    "prs": [11]
+  },
+  {
+    "id": "a89bc115-0778-4d17-b3b7-1d7456092c3b",
+    "file": "06-p8.md",
+    "title": "06 · P8 · Divisas",
+    "prompts": ["20-p8-plan.md"],
+    "prs": [12]
+  },
+  {
+    "id": "61148061-405e-41f3-b8d8-638f736244bc",
+    "file": "07-p9.md",
+    "title": "07 · P9 · Robustez: seguridad, estados, responsive y accesibilidad",
+    "prompts": ["21-p9-plan.md"],
+    "prs": [13, 14]
+  },
+  {
+    "id": "46898b04-b211-42af-b5b4-f6a541a29f91",
+    "file": "08-p10.md",
+    "title": "08 · P10 · Should/Could y CI completo",
+    "prompts": ["22-p10-plan.md"],
+    "prs": [15]
+  },
+  {
+    "id": "6c090115-5225-49b0-bc1d-4005cbd4481f",
+    "file": "09-arreglo-ac91-y-p11.md",
+    "title": "09 · Arreglo del e2e de AC-91 y P11 · Demo pública",
+    "prompts": ["23-arreglo-e2e-ac91.md", "24-p11-plan.md", "25-p11-despliegue.md"],
+    "prs": [16, 17, 18, 19]
+  },
+  {
+    "id": "23261255-e796-4ef8-b081-8d72c7884100",
+    "file": "10-p12.md",
+    "title": "10 · P12 · Cierre",
+    "prompts": ["26-p12-cierre.md"],
+    "prs": [20]
+  },
+  {
+    "id": "905f1354-d681-48fb-8205-26840b3dbdc2",
+    "file": "11-p13.md",
+    "title": "11 · P13 · Recorrido visual para los evaluadores",
+    "prompts": ["27-p13-recorrido.md"],
+    "prs": [21, 22]
+  }
+]

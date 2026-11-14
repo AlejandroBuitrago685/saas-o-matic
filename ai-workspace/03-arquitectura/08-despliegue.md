@@ -121,14 +121,14 @@ flowchart LR
 
 ## 4. Demo pública (RNF-22, D-47, P11)
 
-URL: <https://saas-o-matic.codeserviceapi.es>. Está en el VPS del usuario, detrás de su nginx (D-99), con imágenes de
-GHCR que el CI construye y prueba. Este documento **no contiene ningún dato del servidor**: ni IPs, ni usuarios, ni
-rutas. Los marcadores `<…>` se rellenan en el servidor.
+URL: <https://saas-o-matic.codeserviceapi.es>. Está en un VPS privado del usuario, detrás de un proxy inverso con TLS
+(D-99), con imágenes de GHCR que el CI construye y prueba. Este documento describe el diseño del despliegue, **no el
+servidor** (D-175). Los marcadores `<…>` se rellenan en el servidor.
 
 ```mermaid
 flowchart LR
   C["Cliente"] --> CF["Cloudflare<br/>proxy y HTTPS"]
-  CF --> H["nginx del host · 443<br/>certificado de Let's Encrypt"]
+  CF --> H["proxy inverso del host · 443<br/>TLS"]
   H --> W["nginx del contenedor web<br/>127.0.0.1:4010"]
   W --> A["API · DEMO_MODE"]
 ```
@@ -218,17 +218,11 @@ Consecuencia para los tests: la pila de Compose y los e2e comprueban las cabecer
   `sha-<commit>` y `main`. Es el único trabajo con `packages: write`, y solo se ejecuta con todo en verde.
 - Los paquetes son **públicos** (D-166): el servidor hace *pull* sin credenciales.
 
-### 4.4 Procedimiento en el servidor
+### 4.4 Procedimiento de despliegue
 
-Lo ejecuta el operador por SSH. Cada cambio de nginx pasa por `nginx -t` antes de recargar, y no se toca ningún otro
-sitio.
+Lo ejecuta el operador en el servidor. Cada cambio del proxy pasa por `nginx -t` antes de recargar.
 
-1. **Docker** (D-165), desde el archivo de Ubuntu:
-   `NEEDRESTART_SUSPEND=1 apt-get install --no-install-recommends docker.io docker-compose-v2`. Antes, la misma orden
-   con `-s` enseña qué entra: deben ser paquetes nuevos, sin actualizar ni quitar ninguno. `NEEDRESTART_SUSPEND` evita
-   que `needrestart` reinicie por su cuenta servicios de otras aplicaciones. Docker añade sus cadenas en `FORWARD` y
-   activa `ip_forward`, pero no toca `INPUT` ni UFW. Se comprueba con una foto de `iptables -S` y de los puertos que
-   escuchan, antes y después, con una sesión SSH de reserva abierta.
+1. **Docker y Compose** (D-165): lo único que necesita el servidor.
 2. **Despliegue**, en el directorio de la demo, con una copia de `docker-compose.yml` y de
    `deploy/demo/docker-compose.demo.yml`:
 
@@ -239,14 +233,14 @@ sitio.
    ```
 
 3. **Certificado** (D-167), solo la primera vez:
-   - la plantilla HTTP se instala como fichero propio, en el directorio de sitios activos; después, `nginx -t` y
+   - la plantilla HTTP se instala como un fichero propio del proxy; después, `nginx -t` y
      `systemctl reload nginx`;
    - `certbot certonly --nginx -d saas-o-matic.codeserviceapi.es --deploy-hook "systemctl reload nginx"`.
 
-   `certonly` no edita el fichero, y el *deploy hook* recarga nginx en cada renovación de `certbot.timer`. Aunque la
-   zona de Cloudflare fuerce HTTPS, Cloudflare no redirige `/.well-known/acme-challenge/`, así que el reto llega al
-   puerto 80 del origen. Después, `certbot renew --dry-run --cert-name saas-o-matic.codeserviceapi.es` comprueba la
-   renovación, y el fichero del sitio sigue igual.
+   `certonly` no edita el fichero, y el *deploy hook* recarga nginx cada vez que se renueva el certificado de la demo.
+   Aunque la zona de Cloudflare fuerce HTTPS, Cloudflare no redirige `/.well-known/acme-challenge/`, así que el reto
+   llega al origen por HTTP. Después, `certbot renew --dry-run --cert-name saas-o-matic.codeserviceapi.es` lo comprueba,
+   y el fichero del sitio sigue igual.
 4. **Sitio completo:** el mismo fichero pasa a tener las dos plantillas, una tras otra, con los tres marcadores
    sustituidos por las rutas del servidor (el snippet de Cloudflare, `fullchain.pem` y `privkey.pem`). Después,
    `nginx -t && systemctl reload nginx`.
@@ -270,8 +264,7 @@ sitio.
   despliegue no se da por bueno. Valen dos redes o, en un mismo equipo, IPv4 e IPv6, porque Cloudflare las envía como
   dos clientes;
 - el *timer* aparece en `systemctl list-timers`;
-- tras un reinicio, los datos vuelven a ser los de ejemplo;
-- los demás sitios del servidor responden igual.
+- tras un reinicio, los datos vuelven a ser los de ejemplo.
 
 ### 4.5 Opciones que se valoraron (contexto de D-99)
 

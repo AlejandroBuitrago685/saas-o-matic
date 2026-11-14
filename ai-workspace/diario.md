@@ -429,8 +429,8 @@ el viernes gana 2 h de holgura (calendario actualizado).
 '`.
 
 **Correcciones del usuario**
-- D-105: el snippet de Cloudflare no es global; el sitio de P11 lo incluye explícitamente, y se comprueba tras
-  desplegar con dos redes.
+- D-105: el sitio de P11 incluye explícitamente la restauración de la IP de Cloudflare, y se comprueba tras desplegar
+  con dos redes.
 - D-106: el test de `__proto__` comprueba también que `Object.prototype` sigue limpio.
 - D-110: `openapi.json` versionado y comprobado, `/docs` solo en desarrollo, enlazado desde el README.
 - `@fastify/swagger-ui` en `devDependencies`, con `import()` dinámico y un test.
@@ -1238,11 +1238,11 @@ Canarias), más el plan, las dos pilas de e2e, la revisión y el cierre.
 - **Publicación:** `sha-ab4960e…` y `main` de las dos imágenes. Los paquetes heredaron la visibilidad pública del
   repositorio, así que no hubo que cambiarla (D-166 lo daba por necesario). El *pull* anónimo funciona, y cada etiqueta
   apunta al *digest* que probó el trabajo `demo`.
-- **Despliegue** (por SSH, según 08-despliegue §4.4):
-  - Docker 29.1.3 y Compose 2.40.3, del archivo de Ubuntu;
+- **Despliegue** (según 08-despliegue §4.4):
+  - Docker y Compose;
   - la pila, con `sha-ab4960e…`;
   - el fichero del sitio, con las plantillas rellenadas en el servidor;
-  - el certificado ECDSA, emitido con `certonly --nginx` al primer intento. La renovación de prueba pasa y no toca el
+  - el certificado de la demo, emitido con `certonly --nginx` al primer intento. La renovación de prueba pasa y no toca el
     fichero;
   - el *timer* del reinicio, activo.
 - **Cierre** (esta PR):
@@ -1264,37 +1264,28 @@ Canarias), más el plan, las dos pilas de e2e, la revisión y el cierre.
 | *Timer* | Activo; el próximo, el 15/11 a las 05:00, hora del servidor. |
 | Reinicio | Con la propia unidad de systemd: el cliente del visitante pasa de `200` a `404`, y el total de 26 a 25. `Result=success`, y dos siembras en el log. |
 | Contenedores | Sin root, solo lectura, sin capacidades y con `no-new-privileges`. Dentro de sus límites, y con `/data` en `tmpfs`. Unos 42 MB entre los dos. |
-| Los demás sitios | Igual que la línea base, comprobados después de cada paso. |
 
 **Falló o lo descubrí por el camino**
 - **`publish` falló la primera vez** (D-177): la API se publicó, y GHCR rechazó el manifiesto de la web con `denied`.
   Al relanzar solo ese trabajo, pasó.
 - **La imagen de la web decía ser nginx** (D-176): heredaba las etiquetas de su base, y GHCR mostraba su descripción
   y su licencia. Lo descubrí al buscar la causa del `denied`, que resultó no tener relación.
-- **La segunda red no pudo ser el propio servidor.** Se usaron IPv4 e IPv6 de un mismo equipo, que Cloudflare envía
-  como dos clientes, y 08-despliegue §4.4 lo admite ya.
+- **Las dos direcciones de cliente fueron IPv4 e IPv6 de un mismo equipo**, que Cloudflare envía como dos clientes, y
+  08-despliegue §4.4 lo admite ya.
 - **Cloudflare inyecta su script de analítica** (`static.cloudflareinsights.com`) en el HTML. La CSP lo bloquea, así
   que no sale ningún dato del visitante, pero la consola muestra el error. Queda pendiente de decidir.
-- **La primera petición del reto ACME por Cloudflare dio `520`**, justo tras recargar nginx. No se repitió, y certbot
-  emitió el certificado al primer intento.
 
 **Correcciones**
 - **Del usuario:** aprueba D-174 y D-175.
 - **Del revisor** (`sonnet`, una pasada): **APTO CON CAMBIOS**, sin P0 ni P1. Corregidos:
-  - P2: las recomendaciones de abajo, aunque genéricas, dejaban ver el estado del servidor. Ahora son una lista de
-    endurecimiento que vale para cualquier servidor, sin decir cómo está este, como pidió el usuario y recoge D-175;
-  - P3: la frase sobre la segunda red describía la protección del origen; ahora es neutra;
+  - P2: un detalle del servidor en el diario; se quita (D-175);
+  - P3: una frase sobre la segunda red; ahora es neutra;
   - P3: el test de D-176 descarta los comentarios antes de unir las líneas de continuación, y lee las instrucciones
     sin distinguir mayúsculas, como Docker.
 
   Sin cambio:
   - P3: la lista de etiquetas de la base de nginx es fija. Queda ligada a su *digest*, y el comentario pide releerla
     al cambiar de base.
-
-**Recomendaciones fuera del alcance de la prueba** (del usuario, para después de la entrega). Es la lista habitual de
-endurecimiento de un servidor; el detalle no se publica (D-175):
-- revisar las actualizaciones automáticas de seguridad del sistema;
-- revisar en qué interfaces escucha cada servicio.
 
 **Pendientes, con la parte en la que se resuelven**
 
@@ -1393,7 +1384,7 @@ de npm y la de Playwright vacías; Windows 11, Node 22.23.4)
 **Correcciones**
 - **Del usuario** (al aprobar el plan): analítica de Cloudflare ya resuelta; el detalle de IA va en
   `ai-workspace/README.md` y el README solo lleva un bloque corto; de la sesión asesora, una línea neutra; los momentos de
-  «Dónde intervine yo»; P13 dura unas 3 h. Después: mantiene la línea de las dos cuentas y las tres debilidades de la
+  «Dónde intervine yo»; P13 dura unas 3 h. Después: mantiene la línea de las dos cuentas y las tres debilidades de diseño de la
   sección de producción, da por bueno el prompt 26 literal y pide los requisitos de Node en un solo sitio.
 - **Del revisor** (`sonnet`, una pasada, sobre todo el diff): **APTO CON CAMBIOS**, sin P0 ni P1. Corregidos:
   - P2: «Node 22.22.3 o superior» era falso (`engine-strict` con tres rangos) y «nada se compila» también;
@@ -1408,8 +1399,8 @@ de npm y la de Playwright vacías; Windows 11, Node 22.23.4)
     de los momentos 5 y 6; la confusión entre la parte P0 y los hallazgos P0; la cita exacta de CSP2 en D-179; D-75
     marcada y D-182 en el plan; el bloque del README, de 11 a unas 6 líneas; `try/finally` en la captura; filas
     «Extra» en la guía.
-  - Sin cambio, por decisión del usuario: las tres debilidades de la sección de producción, aunque D-175 omite las del
-    servidor (son decisiones de diseño ya registradas en D-171, D-173 y D-176).
+  - Sin cambio, por decisión del usuario: las tres debilidades de la sección de producción, que son decisiones de
+    diseño ya registradas en D-171, D-173 y D-176.
   - Sin cambio: una nota en 06-seguridad sobre el `same-origin` del borde; D-179 ya lo cubre y la enlaza 08-despliegue.
   - Sin cambio: el script de capturas no corre en el CI (queda dicho en D-180).
 
@@ -1567,3 +1558,53 @@ la última tabla de este tipo del diario.
 
 - No se repitieron la descarga de Chromium, `e2e:smoke`, Docker ni `npm run trace`: siguen valiendo los de P12.
 - `npm ci`, `setup` y `npm test` suman 103 s: los «unos 2 minutos» de la guía siguen siendo ciertos.
+
+## Cierre de la entrega · Conversaciones con la IA — 2026-11-14 · rama `docs/conversaciones`
+
+**Hecho**
+- **Conversaciones** (D-188): las 11 sesiones de construcción, en `ai-workspace/conversaciones/` (unos 770 KB). Su
+  README lleva la tabla de sesiones y 11 momentos clave, cada uno enlazado a su turno. Las convierte
+  `scripts/conversaciones/` a partir de los ficheros de sesión, que no están en el repositorio.
+- **Privacidad** (D-175, reescrita, y D-189): nada de lo que se entrega describe el servidor privado de la demo.
+  - Una sola marca, que no dice qué tapa.
+  - Patrones en el conversor, y un fichero privado fuera del repositorio con los términos y las palabras de alerta.
+  - Cada uno de los 325 párrafos con alerta está omitido o registrado como seguro por su *hash*.
+  - `tools/privacy.test.ts` lo comprueba.
+- **Lo ya entregado, limpio:**
+  - D-99, D-105, D-165, D-167, D-175 y D-179;
+  - 08-despliegue §4, el plan (P11) y este diario (P11 y P12);
+  - los prompts 10, 12 y 23 a 25, con la marca única;
+  - los comentarios de `deploy/`.
+
+  El recorrido se ha regenerado.
+- **README:** «Si algo falla», tras el arranque rápido. Nombra la LTS vigente de Node, que es la 26 desde el
+  2026-10-28; la 24 está en mantenimiento (calendario de [nodejs/Release](https://github.com/nodejs/Release), leído
+  el 2026-11-14). Además, el enlace a las conversaciones sustituye a «se entregan aparte».
+- **Registro:** D-188 y D-189, la fila de validación y el prompt 28.
+
+**Falló o lo descubrí por el camino**
+- **Algunos mensajes míos no salían en la conversión:**
+  - los que envié a mitad de turno, que la app guarda como adjuntos en cola;
+  - una respuesta a un plan, guardada con el formato antiguo de la app;
+  - tres respuestas a preguntas, con otra cabecera.
+
+  Ya se recuperan, y cada caso tiene su test.
+- **Los informes de los subagentes en segundo plano** llegaban como un puntero con el identificador interno del agente.
+  Ahora sale el veredicto, también cuando el informe lo pone como título.
+- **Lo que ya estaba publicado contaba más del servidor que lo que se iba a tapar:** los prompts 10, 12, 23 y 24, D-99
+  y el plan. Lo señalé en el punto de control, y el usuario endureció el criterio.
+- **Escapes perdidos otra vez** en los *heredoc* y en `sed` (`\b` y `\n`). Los delató el lint, y se corrigieron con
+  `Edit`.
+- **La prueba del test de privacidad:** con las 11 conversaciones sin tapar en la carpeta, falla (hosts, IP y un
+  email). Con las tapadas, pasa.
+
+**Correcciones**
+- **Del usuario:**
+  - confirma el inventario, sin zips de otra cuenta ni sesiones de asesoría;
+  - deja visibles las IP que no revelan nada;
+  - pide actualizar las cifras de la release y nombrar la LTS vigente;
+  - pide que las omisiones no dependan de una revisión manual;
+  - después, el criterio estricto (D-175 y D-189).
+
+**Decisiones:** D-188 y D-189, validadas con el plan (el criterio es del usuario y el mecanismo, de Claude). D-175,
+reescrita por el usuario.

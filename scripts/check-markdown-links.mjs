@@ -4,7 +4,9 @@
  * or folder, and, when the link has a `#fragment` and the target is Markdown, a heading of that file (D-181). The
  * evaluator follows these links (README, GUIA-EVALUADOR.md, ai-workspace), so a broken one is a defect of the delivery.
  * External links are not followed: the checks never use the network. The literal prompts (`ai-workspace/prompts/`)
- * are records of what was written and are never edited, so they are not checked.
+ * are records of what was written and are never edited, so they are not checked; nor are the conversations
+ * (`ai-workspace/conversaciones/`, D-188), whose links are relative to the repository root where they were written.
+ * The README of that folder is checked: it links to the turns of each conversation.
  * It reads inline links and images (also nested, as in a badge), reference definitions and the `src` and `href`
  * attributes of HTML. Not covered: `?query` strings and setext headings (underlined with `===`).
  * D-183: it also checks the HTML pages of `docs/` (the evaluator walkthrough): their `src` and `href` attributes and
@@ -18,7 +20,8 @@ import { pathToFileURL } from 'node:url';
 
 import { listRepoFiles, REPO_ROOT } from './lib/repo.mjs';
 
-const SKIPPED_PREFIXES = ['ai-workspace/prompts/'];
+const SKIPPED_PREFIXES = ['ai-workspace/prompts/', 'ai-workspace/conversaciones/'];
+const CHECKED_DESPITE_PREFIX = new Set(['ai-workspace/conversaciones/README.md']);
 /** The HTML pages that are checked: the published site of the evaluator walkthrough (D-183). */
 const HTML_PAGES = /^docs\/.+\.html$/;
 const EXTERNAL = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
@@ -192,6 +195,16 @@ function fragmentProblem({ path, fragment }, readTarget) {
 }
 
 /**
+ * @param {string} path repository-relative path of a file
+ * @returns {boolean} whether its links are checked: Markdown outside the records, and the HTML pages of `docs/`
+ */
+export function isCheckedPath(path) {
+  if (HTML_PAGES.test(path)) return true;
+  if (!path.endsWith('.md')) return false;
+  return CHECKED_DESPITE_PREFIX.has(path) || !SKIPPED_PREFIXES.some((prefix) => path.startsWith(prefix));
+}
+
+/**
  * @param {readonly string[]} files repository-relative paths of files
  * @returns {Set<string>} the files and every folder that contains them
  */
@@ -207,10 +220,7 @@ export function withFolders(files) {
 function main() {
   const files = listRepoFiles();
   const read = (/** @type {string} */ path) => readFileSync(`${REPO_ROOT}/${path}`, 'utf8');
-  const isChecked = (/** @type {string} */ path) =>
-    (path.endsWith('.md') && !SKIPPED_PREFIXES.some((prefix) => path.startsWith(prefix))) ||
-    HTML_PAGES.test(path);
-  const markdown = files.filter(isChecked).map((path) => ({ path, content: read(path) }));
+  const markdown = files.filter(isCheckedPath).map((path) => ({ path, content: read(path) }));
   const problems = findBrokenLinks(markdown, withFolders(files), read);
   if (problems.length > 0) {
     process.stderr.write(`Broken Markdown links:\n${problems.map((p) => `  - ${p}`).join('\n')}\n`);
