@@ -7,6 +7,9 @@ tiempo real.
 > **Demo pública:** <https://saas-o-matic.codeserviceapi.es>, con datos ficticios que se regeneran cada día. Admite 5
 > escrituras por minuto e IP.
 >
+> **Recorrido visual:** <https://alejandrobuitrago685.github.io/saas-o-matic/recorrido/>: qué hace, cómo está
+> construido y cómo se trabajó con la IA, en una página. En local, [`docs/recorrido/index.html`](docs/recorrido/index.html).
+>
 > **Estado:** completo. El plan, con sus partes y decisiones, está en
 > [`04-plan-implementacion.md`](ai-workspace/04-plan-implementacion.md).
 

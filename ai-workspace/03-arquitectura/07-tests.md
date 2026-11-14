@@ -63,6 +63,10 @@ hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel�
       `index.html`, salud e IP real).
   - El trabajo `e2e` del CI comprueba además los contenedores con `scripts/check-containers.mjs`: sin root, solo
     lectura, sin *capabilities* y puertos solo en `127.0.0.1` (AC-60, D-130).
+- **El recorrido de los evaluadores (P13, D-183, D-184):** `recorrido` (`npm run e2e:recorrido`,
+  `playwright.recorrido.config.ts`) no arranca servidores: sirve `docs/` desde el disco en un origen de prueba, como
+  Pages, y abre también la página con `file://`. Comprueba la consola, la CSP, axe, los 360 px, el teclado, el filtro,
+  el buscador, las casillas y el simulador en vivo (TV-PR-07, TV-PR-04 y TV-TX-07). Corre en el trabajo `e2e` del CI.
 - **La demo pública (AC-61, P11):** `demo` (`npm run e2e:demo`, `playwright.demo.config.ts`) prueba `e2e/demo/` contra
   la pila de la demo, en `127.0.0.1:4010`. En el CI, el trabajo `demo` la levanta con las mismas imágenes que publica
   (D-170).
