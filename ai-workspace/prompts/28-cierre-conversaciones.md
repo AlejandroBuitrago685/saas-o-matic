@@ -91,3 +91,9 @@ Cambio de criterio, más estricto: en todo lo que se entrega no debe verse nada 
 6) Fuera del repositorio: revisa también las descripciones de las PR ya fusionadas (por ejemplo, la #17 y la #18) y quita con gh pr edit lo que describa el servidor [Omitido: detalle del servidor privado]. No reescribas el historial de git ni los mensajes de commit; anota en D-189 que lo anterior sigue en el historial y por qué no se reescribe.
 
 Antes del commit, enséñame la lista de cambios por fichero y una búsqueda final de estos términos en todo lo entregable.
+
+## Mensaje 8 · Aprobación del resultado, con una corrección
+
+Lo he revisado: apruebo el resultado. Una sola corrección: en 10-p12.md (hacia la línea 487) queda la frase «[Omitido: detalle del servidor privado]». Omite esa frase con la marca, y añade «[Omitido: detalle del servidor privado]» a la búsqueda literal del escáner para que no vuelva a pasar.
+
+Después, adelante: corrige las descripciones de las PR #3 y #18 con gh pr edit, y sigue con el revisor, la medición en un clon limpio, el commit, el push y la PR. El merge me lo pides con el CI en verde, y antes de recolocar v1.0.0 me pides confirmación.

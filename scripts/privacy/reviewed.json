@@ -310,16 +310,16 @@
     "12dfde61f1ab5481",
     "156c82b5ba62eb18",
     "33149a9385f5c173",
+    "5e8129f9dba4fd80",
     "64fdfa9ce1719f72",
     "711d183de28eae65",
     "8bbb3b5df71ef0ec",
     "8bf30c78a4862765",
     "aa97b376b4782911",
-    "aecee64d08a375ab",
+    "adab3bb0db7e0c57",
     "caa6f087613a8520",
     "e007fadd8c633c2a",
     "e7dc244b6e8b13bc",
-    "e999c2ff0f278701",
     "fb3cd1727f5f90a0"
   ],
   "ai-workspace/diario.md": [
@@ -399,6 +399,9 @@
     "8203a21cd6751dd0",
     "91dda36ebbc6bcad"
   ],
+  "ai-workspace/prompts/29-readme-destacado.md": [
+    "5513791d7ab316f1"
+  ],
   "ai-workspace/README.md": [
     "2526ec2e4776451b",
     "9a6dca36b7549af8",
@@ -412,6 +415,7 @@
     "2eb15f6214205111"
   ],
   "README.md": [
+    "02834c5b3dab823d",
     "65fda658626e64c6",
     "c7f852b81bcd9247"
   ],
