@@ -11,3 +11,13 @@ La PR #25 está fusionada y el CI de main y Pages están en verde. Sigue con el 
 2) Después de ese merge, propónme volver a desplegar la demo con la imagen de ese commit (08-despliegue §4.4). Tienes mi aprobación para hacerlo cuando me enseñes los comandos: pull y up -d --wait --force-recreate, sin tocar nada más del servidor. Después, compruébala en vivo: el aviso, las tres vistas a 1280 y 360 px y la consola sin errores.
 
 3) Por último, recoloca v1.0.0 sobre ese mismo commit y actualiza la release con las cifras vigentes. Pídeme confirmación antes de borrar la etiqueta.
+
+## Mensaje 2 · Antes de mover la etiqueta
+
+Respuesta a la pregunta de si borrar `v1.0.0` y su release: el README seguiría con la cifra de la medición anterior.
+
+Antes, alinea el README
+
+## Mensaje 3 · Durante la nueva medición del clon limpio
+
+puedes cerrar los otros servers sin probeolma

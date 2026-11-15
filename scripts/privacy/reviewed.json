@@ -393,6 +393,7 @@
     "0b55fd200ad3ef49",
     "0dce69edc49a0273",
     "1ad3767b7bf1c7d3",
+    "280262a731264ceb",
     "2959d452db2465bf",
     "36d2cb18ea2f84e2",
     "3b8d928b0302c2b0",
@@ -490,9 +491,9 @@
     "2eb15f6214205111"
   ],
   "README.md": [
-    "02834c5b3dab823d",
     "65fda658626e64c6",
-    "c7f852b81bcd9247"
+    "c7f852b81bcd9247",
+    "d3aff52d1f25e33d"
   ],
   "scripts/recorrido/content/architecture.mjs": [
     "4b4b5387e12919df",
