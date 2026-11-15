@@ -13,7 +13,8 @@ entrega. Están convertidas a Markdown legible ([D-188](../decisiones.md), [D-18
   `tools/privacy.test.ts`, lo comprueba en cada CI.
 
 Las horas son de Canarias, que en noviembre es UTC+0. Cada turno tiene un encabezado numerado, así que se puede
-enlazar. No entran las sesiones de asesoría ni esta última, la del cierre, que sigue abierta mientras se escribe esto.
+enlazar. No entran las sesiones de asesoría. La 13 llega hasta la fusión de la PR #25: lo que siguió en la misma
+sesión, el redespliegue de la demo y la etiqueta, no entra.
 
 ## Las sesiones
 
@@ -30,6 +31,8 @@ enlazar. No entran las sesiones de asesoría ni esta última, la del cierre, que
 | [09](09-arreglo-ac91-y-p11.md) | 13/11 22:36 → 14/11 09:05 | Arreglo del e2e de AC-91 y P11 · Demo pública | Claude Opus 5.5 | [23](../prompts/23-arreglo-e2e-ac91.md), [24](../prompts/24-p11-plan.md), [25](../prompts/25-p11-despliegue.md) | #16 a #19 |
 | [10](10-p12.md) | 14/11 09:17 → 10:37 | P12 · Cierre | Claude Sonnet 5.5 | [26](../prompts/26-p12-cierre.md) | #20 |
 | [11](11-p13.md) | 14/11 10:55 → 13:02 | P13 · Recorrido visual para los evaluadores | Claude Opus 5.5 | [27](../prompts/27-p13-recorrido.md) | #21, #22 |
+| [12](12-cierre-conversaciones-y-readme.md) | 14/11 13:12 → 22:20 | Cierre: conversaciones con la IA y README | Claude Opus 5.5 | [28](../prompts/28-cierre-conversaciones.md), [29](../prompts/29-readme-destacado.md) | #23, #24 |
+| [13](13-rediseno-visual.md) | 14/11 22:54 → 15/11 10:48 | Rediseño visual a partir de tres maquetas | Claude Opus 5.5 | [30](../prompts/30-rediseno-visual.md) | #25, #26 |
 
 Las PR están en la [lista de PR fusionadas](https://github.com/AlejandroBuitrago685/saas-o-matic/pulls?q=is%3Apr+is%3Amerged)
 del repositorio, y la tabla «Partes y PR» del [plan](../04-plan-implementacion.md) dice qué parte cerró cada una.
@@ -37,10 +40,10 @@ del repositorio, y la tabla «Partes y PR» del [plan](../04-plan-implementacion
 P4 tuvo dos arranques cortados por errores de la API (`ec9694fc` y `e70694f5`). Están enteros dentro de la sesión
 `e7d20eb4`, que es la que se convierte.
 
-## Once momentos clave
+## Doce momentos clave
 
-Los diez de [«Dónde intervine yo»](../README.md#dónde-intervine-yo) y el primer **NO APTO** del revisor, cada uno con
-enlace al turno de la conversación en el que ocurrió.
+Los diez de [«Dónde intervine yo»](../README.md#dónde-intervine-yo), el primer **NO APTO** del revisor y el rediseño,
+cada uno con enlace al turno de la conversación en el que ocurrió.
 
 1. **Validación fiscal estricta (D-15).** Rechazo la validación genérica de 2 a 20 caracteres y pido el formato
    oficial de cada país, con su fuente. [01 · turno 3](01-fases-y-p0-p3.md#3--alejandro--1211-0902)
@@ -66,6 +69,9 @@ enlace al turno de la conversación en el que ocurrió.
     tocar AC-84. [08 · turno 5](08-p10.md#5--alejandro--1311-2145)
 11. **Parar la línea cuando el CI se pone rojo.** Pido arreglar el e2e inestable de AC-91 en una PR aparte antes de
     seguir con P11, y demostrarlo con repeticiones. [09 · turno 5](09-arreglo-ac91-y-p11.md#5--alejandro--1311-2304)
+12. **Una maqueta no manda sobre la especificación (D-191).** Ante el choque de los tramos del total, elijo respetar
+    la spec ([13 · turno 3](13-rediseno-visual.md#3--alejandro--1411-2258)). Al aprobar el plan, pido actualizar la spec
+    con lo que cambia y que la cabecera no tape media pantalla en el móvil ([13 · turno 7](13-rediseno-visual.md#7--alejandro--1411-2303)).
 
 ## Cómo se regeneran
 
