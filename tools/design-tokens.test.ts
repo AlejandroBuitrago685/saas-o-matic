@@ -38,6 +38,9 @@ const PAIRS: readonly (readonly [foreground: string, background: string, minimum
     ['surface', 'canvas', 'surface-muted'].map((surface) => [text, surface, TEXT] as const),
   ),
   ['ink-muted', 'primary-tint', TEXT],
+  // D-191: the tariff box of the simulator
+  ['ink', 'primary-tint', TEXT],
+  ['ink-soft', 'primary-tint', TEXT],
   // Primary button in its three states, links and the projection total
   ['on-primary', 'primary', TEXT],
   ['on-primary', 'primary-hover', TEXT],
@@ -49,6 +52,8 @@ const PAIRS: readonly (readonly [foreground: string, background: string, minimum
   // Soft button and badges
   ['primary-ink', 'primary-soft', TEXT],
   ['primary-ink', 'primary-soft-hover', TEXT],
+  // D-191: selected text on the selection colour (the neutral badge is `ink-soft` on `surface-muted`, above)
+  ['ink', 'primary-soft', TEXT],
   // Status text on its own background and on white
   ...['success', 'warning', 'danger', 'info'].flatMap((status) => [
     [`${status}-fg`, `${status}-bg`, TEXT] as const,
@@ -62,6 +67,8 @@ const PAIRS: readonly (readonly [foreground: string, background: string, minimum
   ['ink', 'surface', NON_TEXT],
   ['track', 'surface', NON_TEXT],
   ['track', 'primary-tint', NON_TEXT],
+  // D-191: the icon of a metric or a block title on its square
+  ['primary', 'primary-soft', NON_TEXT],
 ];
 
 describe('D-124 design tokens meet WCAG 2.1 AA contrast (RNF-13)', () => {

@@ -11,29 +11,35 @@
 </ul>
 
 <!-- aria-disabled, not disabled: a disabled button loses the focus of whoever just pressed it (spec 05 §5). The
-     store ignores the click while it cannot go there. -->
-<nav aria-label="Paginación" class="mt-6 flex flex-wrap items-center justify-between gap-3">
-  <button
-    type="button"
-    class="btn btn-secondary"
-    [attr.aria-disabled]="!canGoBack()"
-    (click)="store.previous()"
-  >
-    Anterior
-  </button>
-  <p class="flex min-h-11 items-center gap-2 text-small text-ink-soft" aria-live="polite">
+     store ignores the click while it cannot go there. The range goes first and the buttons together on the right
+     (D-191); on a phone the buttons share the row below. -->
+<nav
+  aria-label="Paginación"
+  class="mt-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-t border-line pt-5"
+>
+  <p class="flex min-h-11 items-center gap-2 text-small font-semibold text-ink-soft" aria-live="polite">
     @if (store.isRefreshing()) {
       <app-spinner /> Buscando…
     } @else {
       {{ rangeText() }}
     }
   </p>
-  <button
-    type="button"
-    class="btn btn-secondary"
-    [attr.aria-disabled]="!canGoForward()"
-    (click)="store.next()"
-  >
-    Siguiente
-  </button>
+  <div class="flex flex-1 justify-end gap-3 sm:flex-none">
+    <button
+      type="button"
+      class="btn btn-secondary flex-1 sm:flex-none"
+      [attr.aria-disabled]="!canGoBack()"
+      (click)="store.previous()"
+    >
+      <app-icon name="arrow-left" class="size-5" />Anterior
+    </button>
+    <button
+      type="button"
+      class="btn btn-secondary flex-1 sm:flex-none"
+      [attr.aria-disabled]="!canGoForward()"
+      (click)="store.next()"
+    >
+      Siguiente<app-icon name="arrow-right" class="size-5" />
+    </button>
+  </div>
 </nav>

@@ -1,24 +1,30 @@
 <section class="flex flex-col gap-4" aria-labelledby="history-title">
-  <h2 id="history-title" class="section-title">Historial de simulaciones</h2>
+  <h2 id="history-title" class="section-title sm:text-title-lg">Historial de simulaciones</h2>
   <p data-testid="history-conversion-note" class="text-small text-ink-muted" [hidden]="!hasConversionNote()">
     Convertido al tipo de cambio actual, no al de la fecha de la simulación.
   </p>
 
   @switch (store.historyStatus()) {
     @case ('loading') {
-      <div class="card"><app-loading-block label="Cargando el historial…" /></div>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div class="card"><app-loading-block label="Cargando el historial…" [lines]="4" /></div>
+        <div class="card hidden md:block"><app-loading-block [announce]="false" [lines]="4" /></div>
+      </div>
     }
     @case ('error') {
       <app-error-state message="No se ha podido cargar el historial." (retry)="store.reloadHistory()" />
     }
     @case ('ready') {
       @let simulations = store.simulations();
-      <ol class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3" aria-label="Simulaciones guardadas">
+      <ol class="grid grid-cols-1 gap-4 md:grid-cols-2" aria-label="Simulaciones guardadas">
         @for (simulation of simulations; track simulation.id) {
           <li><app-simulation-card [simulation]="simulation" /></li>
         } @empty {
-          <li class="card md:col-span-2 xl:col-span-3">
-            Aún no hay simulaciones. Usa el simulador para crear la primera.
+          <li class="card empty-state md:col-span-2">
+            <span class="icon-tile"><app-icon name="file-text" class="size-6" /></span>
+            <p class="font-semibold text-ink">
+              Aún no hay simulaciones. Usa el simulador para crear la primera.
+            </p>
           </li>
         }
       </ol>

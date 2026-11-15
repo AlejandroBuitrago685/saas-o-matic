@@ -7,6 +7,7 @@ import type { ReadyCatalog } from '../../core/catalog/catalog.store';
 import type { MessageParams } from '../../core/errors/error-messages';
 import { COUNTRY_NAMES, TAX_ID_FIELD_TEXT } from '../../shared/format/country-text';
 import { FieldError, isShowingError } from '../../shared/ui/field-error';
+import { Icon } from '../../shared/ui/icon';
 import { Spinner } from '../../shared/ui/spinner';
 import { CustomerCreateApi } from './customer-create.api';
 import { describeFailure, type FormNotice } from './customer-form.failure';
@@ -21,7 +22,7 @@ import {
 /** V2 form (spec 05 §3.2) with Signal Forms (ADR-011). It only renders once the catalog is ready. */
 @Component({
   selector: 'app-customer-form',
-  imports: [FormField, FieldError, RouterLink, Spinner],
+  imports: [FormField, FieldError, Icon, RouterLink, Spinner],
   templateUrl: './customer-form.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

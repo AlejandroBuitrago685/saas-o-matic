@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { ErrorState } from '../../shared/ui/error-state';
+import { Icon } from '../../shared/ui/icon';
 import { LoadingBlock } from '../../shared/ui/loading-block';
 import { CustomerResults } from './customer-results';
 import { CustomerSearchBox } from './customer-search-box';
@@ -18,7 +19,7 @@ const SKELETON_CARDS = [0, 1, 2, 3, 4, 5] as const;
  */
 @Component({
   selector: 'app-dashboard-page',
-  imports: [CustomerResults, CustomerSearchBox, DashboardMetrics, ErrorState, LoadingBlock, RouterLink],
+  imports: [CustomerResults, CustomerSearchBox, DashboardMetrics, ErrorState, Icon, LoadingBlock, RouterLink],
   providers: [CustomerSearchStore, DashboardStatsStore],
   templateUrl: './dashboard.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
+import { Icon } from '../../shared/ui/icon';
 import { ToastStore } from './toast.store';
 
 /**
@@ -8,6 +9,7 @@ import { ToastStore } from './toast.store';
  */
 @Component({
   selector: 'app-toast-region',
+  imports: [Icon],
   template: `
     <div
       role="status"
@@ -16,9 +18,7 @@ import { ToastStore } from './toast.store';
     >
       @for (toast of store.toasts(); track toast.id) {
         <div class="alert alert-success pointer-events-auto w-full max-w-sm bg-surface shadow-raised">
-          <svg aria-hidden="true" viewBox="0 0 20 20" class="mt-0.5 size-5 shrink-0 fill-current">
-            <path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" />
-          </svg>
+          <app-icon name="circle-check" class="mt-0.5 size-5" />
           <p class="flex-1 font-semibold">{{ toast.message }}</p>
           <button
             type="button"
@@ -26,11 +26,7 @@ import { ToastStore } from './toast.store';
             aria-label="Cerrar aviso"
             (click)="store.dismiss(toast.id)"
           >
-            <svg aria-hidden="true" viewBox="0 0 20 20" class="size-4 fill-current">
-              <path
-                d="m10 8.6 4.6-4.6L16 5.4 11.4 10l4.6 4.6-1.4 1.4-4.6-4.6L5.4 16 4 14.6 8.6 10 4 5.4 5.4 4z"
-              />
-            </svg>
+            <app-icon name="x" class="size-4" />
           </button>
         </div>
       }

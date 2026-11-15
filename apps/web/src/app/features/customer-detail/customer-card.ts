@@ -4,6 +4,7 @@ import type { CustomerResponse } from '@saas-o-matic/contract';
 import { COUNTRY_NAMES } from '../../shared/format/country-text';
 import { DateTimePipe } from '../../shared/format/date-time.pipe';
 import { emailBreakSegments } from '../../shared/format/email-segments';
+import { PlanBadge } from '../../shared/ui/plan-badge';
 
 /**
  * Customer data (spec 05 §3.3). Values at body size in the normal text colour, labels small and muted (feedback
@@ -12,15 +13,15 @@ import { emailBreakSegments } from '../../shared/format/email-segments';
  */
 @Component({
   selector: 'app-customer-card',
-  imports: [DateTimePipe],
+  imports: [DateTimePipe, PlanBadge],
   template: `
-    <section class="card flex flex-col gap-4" aria-labelledby="customer-card-title">
-      <h2 id="customer-card-title" class="section-title">Datos del cliente</h2>
+    <section class="card flex h-full flex-col gap-4" aria-labelledby="customer-card-title">
+      <h2 id="customer-card-title" class="section-title sm:text-title-lg">Datos del cliente</h2>
       <dl class="data-list">
         <div>
           <dt>Identificador fiscal</dt>
           <dd class="flex flex-wrap items-center gap-2">
-            {{ customer().taxId }} <span class="badge">{{ customer().taxIdType }}</span>
+            {{ customer().taxId }} <span class="badge badge-neutral">{{ customer().taxIdType }}</span>
           </dd>
         </div>
         <div>
@@ -38,7 +39,7 @@ import { emailBreakSegments } from '../../shared/format/email-segments';
         <div>
           <dt>Plan</dt>
           <dd>
-            <span class="badge">{{ customer().plan }}</span>
+            <app-plan-badge [plan]="customer().plan" />
           </dd>
         </div>
         <div>

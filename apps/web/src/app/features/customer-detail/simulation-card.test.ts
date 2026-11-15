@@ -75,9 +75,10 @@ describe('AC-87 history card in the selected currency (spec 05 §3.5)', () => {
     await fixture.whenStable();
 
     expect(host.querySelector('details')?.open).toBe(false);
-    // The marker is decoration, hidden from screen readers: the summary is read as its text alone.
-    expect(plain(host.querySelector('summary [aria-hidden="true"]')?.textContent)).toBe('▸');
-    expect(plain(host.querySelector('summary')?.textContent)).toBe('▸ Desglose por tramo');
+    // The marker is decoration, hidden from screen readers: the summary is read as its text alone. It is an SVG icon
+    // since D-191, so it adds no text of its own.
+    expect(host.querySelector('summary [aria-hidden="true"] svg')).not.toBeNull();
+    expect(plain(host.querySelector('summary')?.textContent)).toBe('Desglose por tramo');
     expect(breakdown()).toEqual([
       plain('Tramo 1 · usuarios 1–10 · 10 × 10,00 €: 100,00 €'),
       plain('Tramo 2 · usuarios 11–50 · 5 × 8,00 €: 40,00 €'),

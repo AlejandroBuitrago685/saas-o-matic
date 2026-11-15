@@ -2,8 +2,10 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input, si
 import type { Country, Pricing, PricingLine } from '@saas-o-matic/domain';
 
 import { CurrencyStore } from '../../core/currency/currency.store';
+import { figureSizeClass, PROJECTION_FIGURE_SIZES } from '../../shared/format/figure-size';
 import { formatMoney, formatRatesDate, MoneyPipe, TaxRatePipe } from '../../shared/format/money.pipe';
 import { tierLabel } from '../../shared/format/tier-label';
+import { TierLabel } from '../../shared/ui/tier-label';
 
 /** Screen readers hear the new total at most this often while the slider moves (06-frontend §6). */
 export const ANNOUNCE_DELAY_MS = 500;
@@ -23,32 +25,36 @@ function tierRows(
 /**
  * Projection of the simulator, always next to the controls (spec 05 §3.4). It takes the highlighted card of the
  * visual direction (D-122): the total is the figure the sales team quotes. The amounts follow the selected currency
- * with the leaf-item rule (D-20), so the breakdown always adds up; outside EUR they are approximate (D-19).
+ * with the leaf-item rule (D-20), so the breakdown always adds up; outside EUR they are approximate (D-19). The
+ * simulator puts «Guardar simulación» at its foot (D-191), through the content slot.
  */
 @Component({
   selector: 'app-projection-panel',
-  imports: [MoneyPipe, TaxRatePipe],
+  imports: [MoneyPipe, TaxRatePipe, TierLabel],
   template: `
-    <div class="card-highlight flex flex-col gap-3">
+    <section class="card-highlight @container flex h-full flex-col gap-4" aria-labelledby="projection-title">
+      <h2 id="projection-title" class="section-title sm:text-title-lg">Total mensual</h2>
       @if (view(); as current) {
-        <p class="text-small font-semibold text-ink-soft">Total mensual</p>
-        <p data-testid="projection-total" class="amount text-display font-extrabold text-primary">
+        <p data-testid="projection-total" [class]="totalClass()">
           {{ current.total | money: current.currency }}
         </p>
-        <dl class="flex flex-col gap-1 border-t border-line pt-3 text-small">
+        <p class="-mt-3 text-small text-ink-soft">Impuestos incluidos · {{ current.currency }}</p>
+        <dl class="flex flex-col gap-2 border-t border-line pt-4 text-small text-ink-soft">
           @for (row of current.tiers; track row.tier) {
             <div class="flex justify-between gap-4">
-              <dt>{{ row.label }}</dt>
-              <dd class="amount text-ink">{{ row.amount | money: current.currency }}</dd>
+              <dt><app-tier-label [label]="row.label" /></dt>
+              <dd class="amount font-semibold text-ink">{{ row.amount | money: current.currency }}</dd>
             </div>
           }
-          <div class="flex justify-between gap-4 font-semibold text-ink">
+          <div
+            class="mt-2 flex justify-between gap-4 border-t border-line pt-4 text-body font-semibold text-ink"
+          >
             <dt>Base mensual</dt>
             <dd class="amount">{{ current.base | money: current.currency }}</dd>
           </div>
-          <div class="flex justify-between gap-4">
+          <div class="flex justify-between gap-4 text-body">
             <dt>Impuesto ({{ country() }}, {{ current.taxRateBps | taxRate }})</dt>
-            <dd class="amount text-ink">{{ current.tax | money: current.currency }}</dd>
+            <dd class="amount font-semibold text-ink">{{ current.tax | money: current.currency }}</dd>
           </div>
         </dl>
         @if (current.note; as note) {
@@ -57,8 +63,9 @@ function tierRows(
       } @else {
         <p>No se puede calcular la proyección con estos datos.</p>
       }
+      <div class="mt-auto flex flex-col gap-3 pt-2"><ng-content /></div>
       <p class="sr-only" aria-live="polite" aria-atomic="true">{{ announcement() }}</p>
-    </div>
+    </section>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -86,6 +93,12 @@ export class ProjectionPanel {
           ? undefined
           : `Importes orientativos en ${currency} con tipos del ${formatRatesDate(shown.ratesUpdatedAt)}`,
     };
+  });
+
+  protected readonly totalClass = computed(() => {
+    const view = this.view();
+    const text = view === undefined ? '' : formatMoney(view.total, view.currency);
+    return `amount font-extrabold tracking-tight text-primary ${figureSizeClass(text, PROJECTION_FIGURE_SIZES)}`;
   });
 
   private readonly totalText = computed(() => {

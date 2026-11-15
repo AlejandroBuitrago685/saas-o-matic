@@ -7,8 +7,9 @@
   <!-- Only in the demo build (D-169), and not sticky: it scrolls away with the page (D-168). -->
   <app-demo-banner />
   <!-- Sticky on the host: inside it, the <header> would only stick within its own height (D-51: the rates
-       indicator stays visible while scrolling). -->
-  <app-header class="sticky top-0 z-10" />
+       indicator stays visible while scrolling). Only from 640 px: on a phone its three rows would cover too much of
+       the screen, so there it scrolls with the page (D-191). -->
+  <app-header class="sm:sticky sm:top-0 sm:z-10" />
 
   <main id="main" tabindex="-1" class="mx-auto w-full max-w-app flex-1 px-4 py-6 sm:px-6 sm:py-8">
     <router-outlet />

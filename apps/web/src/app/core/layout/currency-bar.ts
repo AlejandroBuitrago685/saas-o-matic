@@ -15,8 +15,9 @@ import { RatesStatus } from './rates-status';
   selector: 'app-currency-bar',
   imports: [CurrencySelect, RatesStatus],
   template: `
-    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 lg:justify-end">
+    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 lg:justify-end lg:gap-x-5">
       <app-rates-status [state]="rates.state()" [chosen]="currency.chosen()" (retry)="retry()" />
+      <span class="hidden h-6 w-px bg-line lg:block" aria-hidden="true"></span>
       <app-currency-select
         [selected]="currency.effective()"
         [available]="currency.available()"
