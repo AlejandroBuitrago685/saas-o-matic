@@ -151,7 +151,7 @@ describe('D-189 the deliverables say nothing of the server', () => {
   it('covers the conversations, the prompts, the documentation, the walkthrough and deploy/', () => {
     const files = deliverables();
 
-    expect(files.filter((path) => /^ai-workspace\/conversaciones\/\d{2}-/.test(path))).toHaveLength(11);
+    expect(files.filter((path) => /^ai-workspace\/conversaciones\/\d{2}-/.test(path))).toHaveLength(13);
     expect(files).toEqual(
       expect.arrayContaining(['README.md', 'GUIA-EVALUADOR.md', 'docs/recorrido/index.html']),
     );

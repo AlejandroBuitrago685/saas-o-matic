@@ -89,5 +89,19 @@
     "title": "11 · P13 · Recorrido visual para los evaluadores",
     "prompts": ["27-p13-recorrido.md"],
     "prs": [21, 22]
+  },
+  {
+    "id": "75e6b54c-ad8b-4c8b-82ed-db746b2d5f67",
+    "file": "12-cierre-conversaciones-y-readme.md",
+    "title": "12 · Cierre: conversaciones con la IA y README",
+    "prompts": ["28-cierre-conversaciones.md", "29-readme-destacado.md"],
+    "prs": [23, 24]
+  },
+  {
+    "id": "bd1a248b-058e-435c-b19c-1900b13a4824",
+    "file": "13-rediseno-visual.md",
+    "title": "13 · Rediseño visual a partir de tres maquetas",
+    "prompts": ["30-rediseno-visual.md"],
+    "prs": [25, 26]
   }
 ]

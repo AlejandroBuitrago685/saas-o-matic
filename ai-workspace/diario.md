@@ -1697,7 +1697,7 @@ la medición vigente**: la anterior se tomó antes de los tests de esta parte.
   Feather en `apps/web/public/lucide-license.txt`. Sin dependencia.
 - **Cifras que caben:** el total, las métricas y el historial eligen su tamaño por la longitud de la cifra y el ancho de
   su tarjeta (*container queries*). Lo comprueba un e2e nuevo, `projection-fit.spec.ts`, con 10 000 usuarios en MXN a
-  360 y a 1 280 px.
+  360, 1 024 y 1 280 px.
 - **Especificación y documentación:** spec 05 §3.3 (tres columnas desde 1 280 px), notas de D-191 en D-122 y D-150,
   `06-frontend.md` y `10-diseno-visual.md` v2, con la tabla de choques entre maqueta y especificación (§7). Ningún
   criterio de aceptación cambia.
@@ -1742,4 +1742,26 @@ la medición vigente**: la anterior se tomó antes de los tests de esta parte.
 
 **Decisiones:** D-191, del usuario (la dirección, los tramos y la cabecera en móvil) con la implementación de Claude.
 
-**Tiempo:** unas 3 h (21:40–00:40, hora de Canarias) hasta la PR, con el punto de control y las dos revisiones.
+**Tiempo:** unas 2 h 15 min (22:54–01:10, hora de Canarias) hasta los commits, con el punto de control y las dos
+revisiones; la PR, a la mañana siguiente.
+
+## Conversaciones 12 y 13 — 2026-11-15 · rama `docs/conversaciones-cierre`
+
+**Hecho**
+- **Dos conversaciones más** en `ai-workspace/conversaciones/`, con `scripts/conversaciones/` y el fichero privado:
+  - la 12, la sesión del cierre (conversaciones y README, PR #23 y #24);
+  - la 13, la del rediseño (PR #25), que llega hasta su fusión.
+- **El README de la carpeta:** las dos filas de la tabla y un duodécimo momento clave, el de D-191.
+- **El test de privacidad** cuenta 13 conversaciones.
+- **Correcciones en la entrada del rediseño:** `projection-fit.spec.ts` mide a 360, 1 024 y 1 280 px, y la hora de inicio
+  estaba mal; ahora sale de la conversación convertida.
+
+**Falló o lo descubrí por el camino**
+- **Convertir la sesión en curso no terminaba nunca:** cada mensaje nuevo de Claude traía otro párrafo con alerta. La 13
+  se convierte desde una copia de la sesión cortada justo antes del mensaje que pidió este cierre.
+- **El clasificador de permisos bloqueó otra vez una aprobación de privacidad**, la de 12 párrafos como seguros. El
+  usuario revisó el listado de las 72 decisiones nuevas y ejecutó la aprobación.
+
+**Decisiones:** ninguna nueva; las omisiones siguen D-175 y D-189, con el mismo criterio que el prompt 28.
+
+**Tiempo:** unos 40 min.
