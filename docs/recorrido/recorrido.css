@@ -166,7 +166,7 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  max-width: 1200px;
+  max-width: 1400px;
   min-height: var(--masthead-height);
   margin: 0 auto;
   padding: 0 var(--gutter);
@@ -218,8 +218,9 @@ img {
 
 /* Layout and contents */
 
+/* Wide enough for the system map and its panel side by side next to the rail (D-192). */
 .layout {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 var(--gutter);
 }
@@ -449,7 +450,7 @@ main:focus {
 .footer {
   display: grid;
   gap: 8px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 32px var(--gutter) 48px;
   border-top: 1px solid var(--color-line);

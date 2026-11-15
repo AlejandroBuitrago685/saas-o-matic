@@ -67,7 +67,7 @@ export function renderHero(data) {
         <div class="actions">
           <a class="btn btn-primary" href="${DEMO_URL}">${icon('play')}Abrir la demo</a>
           <a class="btn btn-secondary" href="${REPO_URL}">${icon('code')}Ver el repositorio</a>
-          <a class="btn-link" href="#producto">Empezar el recorrido${icon('arrow')}</a>
+          <a class="btn-link" href="#arquitectura">Empezar el recorrido${icon('arrow')}</a>
         </div>
         <p class="hero-note">
           La demo usa datos ficticios que se regeneran cada día. Para comprobar cada requisito con su test, la

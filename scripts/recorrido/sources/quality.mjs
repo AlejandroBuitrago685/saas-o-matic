@@ -15,7 +15,6 @@ export const CI_FILE = '.github/workflows/ci.yml';
 
 /** @typedef {{ total: number, automated: number, reviewOnly: string[] }} CriteriaCount */
 /** @typedef {{ id: string, name: string, steps: string[] }} CiJob */
-/** @typedef {{ layer: string, folder: string, files: number }} TestLayer */
 
 /**
  * @param {string} criteria the text of 07-criterios-aceptacion.md
@@ -59,27 +58,4 @@ export function workflowJobs(workflow) {
       name: /^ {4}name: (.+)$/m.exec(chunk)?.[1]?.replace(/^'|'$/g, '') ?? '',
       steps: [...chunk.matchAll(/^ {6}- name: (.+)$/gm)].map(([, name = '']) => name),
     }));
-}
-
-/** Where the tests of each layer live (03-arquitectura/07-tests §1). */
-export const TEST_LAYERS = [
-  { layer: 'Dominio', folder: 'packages/domain' },
-  { layer: 'Contrato', folder: 'packages/contract' },
-  { layer: 'API', folder: 'apps/api' },
-  { layer: 'Web', folder: 'apps/web' },
-  { layer: 'Herramientas', folder: 'tools' },
-  { layer: 'e2e', folder: 'e2e' },
-];
-
-/**
- * @param {readonly string[]} repoFiles repository-relative paths
- * @returns {TestLayer[]} the number of test files (`*.test.ts`, `*.spec.ts`) of each layer
- */
-export function testFilesByLayer(repoFiles) {
-  const tests = repoFiles.filter((path) => /\.(?:test|spec)\.ts$/.test(path));
-  return TEST_LAYERS.map(({ layer, folder }) => ({
-    layer,
-    folder,
-    files: tests.filter((path) => path.startsWith(`${folder}/`)).length,
-  }));
 }

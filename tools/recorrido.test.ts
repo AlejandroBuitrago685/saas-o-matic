@@ -3,9 +3,7 @@ import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import { REQUEST_PATH, RATES_CALL } from '../scripts/recorrido/content/architecture.mjs';
 import { FLOW_STEPS } from '../scripts/recorrido/content/flow.mjs';
-import { REPO_MAP } from '../scripts/recorrido/content/repo-map.mjs';
 import { AFTER_PLAN, HIGHLIGHTED_DECISIONS, PART_CYCLE } from '../scripts/recorrido/content/timeline.mjs';
 import { reachableModules } from '../scripts/recorrido/generate-recorrido.mjs';
 import { escapeHtml } from '../scripts/recorrido/html.mjs';
@@ -38,8 +36,6 @@ describe('D-183 the committed walkthrough is the one the repository generates to
 describe('D-183 everything the walkthrough curates points to something real', () => {
   const contentPaths = [
     ...FLOW_STEPS.flatMap((step) => [...step.files, ...step.tests]),
-    ...[...REQUEST_PATH, RATES_CALL].flatMap((piece) => piece.files),
-    ...REPO_MAP.flatMap((group) => group.entries.map((entry) => entry.path)),
     ...PART_CYCLE.map((step) => step.source.split('#')[0] ?? ''),
   ];
 
@@ -47,20 +43,16 @@ describe('D-183 everything the walkthrough curates points to something real', ()
     expect(existsSync(join(REPO_ROOT, path))).toBe(true);
   });
 
-  it('cites only criteria, test vectors, security requirements and decisions that are defined', () => {
+  it('cites only criteria, test vectors and decisions that are defined', () => {
     const criteria = read('ai-workspace/02-especificacion/07-criterios-aceptacion.md');
     const vectors = ['02-reglas-negocio', '03-validacion-fiscal', '05-frontend']
       .map((name) => read(`ai-workspace/02-especificacion/${name}.md`))
       .join('\n');
-    const security = read('ai-workspace/02-especificacion/06-seguridad.md');
     const decisions = read('ai-workspace/decisiones.md');
     const cited = FLOW_STEPS.flatMap((step) => step.criteria);
 
     for (const id of cited.filter((ref) => ref.startsWith('AC-'))) expect(criteria).toContain(`**${id} · `);
     for (const id of cited.filter((ref) => ref.startsWith('TV-'))) expect(vectors).toContain(`| ${id} |`);
-    for (const id of [...REQUEST_PATH, RATES_CALL].flatMap((piece) => piece.controlIds)) {
-      expect(security).toContain(`| ${id} |`);
-    }
     const highlighted = [...Object.values(HIGHLIGHTED_DECISIONS), ...AFTER_PLAN.map((work) => work.decision)];
     for (const id of highlighted) expect(decisions).toContain(`| ${id} | **`);
   });
@@ -71,14 +63,6 @@ describe('D-183 everything the walkthrough curates points to something real', ()
 
     expect(afterNumbers.length).toBeGreaterThan(0);
     expect(Math.min(...afterNumbers)).toBeGreaterThan(Math.max(...partNumbers));
-  });
-
-  it('shows 25 to 35 entries in the repository map, each with at least one interest', () => {
-    const entries = REPO_MAP.flatMap((group) => group.entries);
-
-    expect(entries.length).toBeGreaterThanOrEqual(25);
-    expect(entries.length).toBeLessThanOrEqual(35);
-    expect(entries.every((entry) => entry.interests.length > 0)).toBe(true);
   });
 
   it('links pictures of docs/capturas that exist and stay small', () => {

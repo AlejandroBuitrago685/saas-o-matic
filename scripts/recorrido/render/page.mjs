@@ -79,7 +79,9 @@ function renderHead() {
     <link rel="stylesheet" href="recorrido.css" />
     <link rel="stylesheet" href="portada.css" />
     <link rel="stylesheet" href="secciones.css" />
+    <link rel="stylesheet" href="esquema.css" />
     <script src="recorrido.js" defer></script>
+    <script src="esquema.js" defer></script>
   </head>`;
 }
 

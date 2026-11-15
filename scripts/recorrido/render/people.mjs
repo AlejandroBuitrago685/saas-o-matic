@@ -5,7 +5,6 @@
  */
 import { markup } from '../html.mjs';
 import { inlineMarkdown } from '../inline-markdown.mjs';
-import { githubUrl } from '../repo-links.mjs';
 import { WORKSPACE_README } from '../sources/workflow.mjs';
 
 /**
@@ -23,23 +22,14 @@ function renderBody(body) {
 
 /** @param {readonly import('../sources/workflow.mjs').Moment[]} moments */
 export function renderMoments(moments) {
-  return markup`<header class="section-head">
-      <h2 id="intervencion-titulo">Dónde <span class="accent">intervine yo</span></h2>
-      <p>
-        ${moments.length} momentos en los que mi criterio cambió el rumbo, en el orden en que ocurrieron. El
-        texto es el de
-        <a href="${githubUrl(`${WORKSPACE_README}#dónde-intervine-yo`)}">ai-workspace/README.md</a>; cada uno
-        enlaza con su decisión y con el prompt en el que lo pedí.
-      </p>
-    </header>
-    <ol class="moments">
-      ${moments.map(
-        (moment, index) =>
-          markup`<li class="moment">
-            <span class="moment-index" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>
-            <h3><span class="visually-hidden">${index + 1}. </span>${moment.title}</h3>
-            ${renderBody(moment.body)}
-          </li>`,
-      )}
-    </ol>`;
+  return markup`<ol class="moments">
+    ${moments.map(
+      (moment, index) =>
+        markup`<li class="moment">
+          <span class="moment-index" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>
+          <h4><span class="visually-hidden">${index + 1}. </span>${moment.title}</h4>
+          ${renderBody(moment.body)}
+        </li>`,
+    )}
+  </ol>`;
 }
