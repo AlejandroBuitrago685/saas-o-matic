@@ -100,7 +100,8 @@ Comportamiento:
 - **Simulador** (V4, §3.4).
 - **Historial** (§3.5).
 - **Maquetación:** en móvil, una columna (cliente, simulador, historial). Desde 1 024 px, cliente y simulador en dos
-  columnas y el historial debajo, a todo el ancho.
+  columnas y el historial debajo, a todo el ancho. Desde 1 280 px, tres columnas: el cliente, los controles del
+  simulador y su proyección, que lleva «Guardar simulación» (D-191).
 
 | Estado | Qué se ve |
 |---|---|
@@ -240,7 +241,8 @@ campos que no se usan se ignoran.
 ### 4.4 Estados de los tipos de cambio (D-23, D-51)
 
 **El fallback nunca oculta el error.** El estado de los tipos se muestra siempre en un **indicador fijo de la
-cabecera**, junto al selector de divisa. Se ve **sea cual sea la divisa seleccionada**, también en EUR, y no es una
+cabecera**, junto al selector de divisa. «Fijo» quiere decir que está siempre presente; la cabecera se queda pegada al
+desplazarse desde 640 px, y en móvil se desplaza con la página (D-191). Se ve **sea cual sea la divisa seleccionada**, también en EUR, y no es una
 notificación que desaparece. Cada cambio de estado se anuncia a los lectores de pantalla sin interrumpir.
 
 | Estado | Cuándo | Indicador (siempre visible) | Efecto en importes y selector |

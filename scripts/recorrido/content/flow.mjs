@@ -69,7 +69,7 @@ export const FLOW_STEPS = [
     id: 'paso-detalle',
     icon: 'user',
     title: 'Detalle del cliente',
-    lead: 'Abre la ficha: datos del cliente, su país y su plan, y el simulador debajo.',
+    lead: 'Abre la ficha: datos del cliente, su país y su plan, junto al simulador y su total.',
     capture: {
       closeUp: 'recorte-cliente.webp',
       full: 'detalle.webp',

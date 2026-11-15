@@ -1680,3 +1680,66 @@ la medición vigente**: la anterior se tomó antes de los tests de esta parte.
   Sin cambio: que los destinos de los enlaces existen ya lo comprueba `check-markdown-links` (D-181).
 
 **Decisiones:** D-190, a petición del usuario (el contenido es suyo y el test, de Claude).
+
+## Rediseño visual a partir de tres maquetas — 2026-11-14/15 · rama `feat/rediseno-visual`
+
+**Hecho**
+- **La dirección v2** (D-191): tres maquetas del usuario como dirección, no como plano. Solo cambian plantillas,
+  clases, tokens e iconos; stores, servicios, rutas, validaciones, dominio, contrato y API quedan igual.
+  - Dashboard: subtítulo, métricas con icono, un panel con el buscador, las tarjetas (etiquetas visibles, plan con su
+    color y «Ver detalle» como pista visual) y la paginación al pie.
+  - Alta: dos bloques con icono, identificador y email en paralelo desde 640 px y el botón a lo ancho.
+  - Detalle: dos columnas desde 1 024 px y tres desde 1 280 px; el campo de usuarios junto a su etiqueta; el recuadro
+    «Tarificación acumulativa», que sale del catálogo; «Guardar simulación» en el panel del total; el historial en
+    tarjetas con el importe «/mes».
+  - Cabecera en tres filas a 360 px, fija solo desde 640 px.
+- **Iconos:** Lucide 1.65.0 en SVG en línea (`app-icon`, trazados como `path`), con su licencia ISC y la MIT de
+  Feather en `apps/web/public/lucide-license.txt`. Sin dependencia.
+- **Cifras que caben:** el total, las métricas y el historial eligen su tamaño por la longitud de la cifra y el ancho de
+  su tarjeta (*container queries*). Lo comprueba un e2e nuevo, `projection-fit.spec.ts`, con 10 000 usuarios en MXN a
+  360 y a 1 280 px.
+- **Especificación y documentación:** spec 05 §3.3 (tres columnas desde 1 280 px), notas de D-191 en D-122 y D-150,
+  `06-frontend.md` y `10-diseno-visual.md` v2, con la tabla de choques entre maqueta y especificación (§7). Ningún
+  criterio de aceptación cambia.
+- **Capturas y recorrido** regenerados; el texto del paso del detalle del recorrido ya no dice «el simulador debajo».
+
+**Falló o lo descubrí por el camino**
+- **Una media en pesos no cabía a 32 px** en la tarjeta de métrica de 1 280 px con el icono a su lado, y el «≈» se
+  quedaba solo en otra línea; con «≈ 1.853,47 US$» también. Desde 1 024 px la cifra va bajo el icono.
+- **El e2e nuevo encontró un desbordamiento real:** a 360 px, la base y el impuesto en pesos no cabían en dos columnas
+  del historial. Se apilan cuando la tarjeta es estrecha.
+- **La plantilla del icono con un `@switch`** superaba la complejidad permitida (6): los trazados pasaron a datos y
+  la plantilla, a un `@for`.
+- **El recorte del buscador del recorrido** cortaba la tarjeta del resultado: con las métricas apiladas encima, ya no
+  cabía en la ventana. El script sube el buscador antes de recortar.
+- **Angular quita el espacio en blanco entre dos elementos:** el separador «·» de las etiquetas de tramo se pegaba a sus
+  vecinos y cambiaba el texto. El separador lleva sus espacios.
+- **El hook no deja descartar cambios con `git checkout`:** la configuración temporal de vista previa de la demo se
+  deshizo a mano.
+- **El registro de privacidad (D-189) lo aprobó el usuario:** el clasificador de permisos bloqueó `--aprobar-todo` por
+  ser una aprobación de control. Claude leyó los 12 párrafos nuevos o editados y el usuario ejecutó la aprobación.
+
+**Correcciones**
+- **Del usuario:** los tramos siguen la especificación (respuesta a la pregunta del plan); al aprobar el plan, la spec y
+  D-122 también se actualizan, la cabecera no tapa media pantalla en móvil, los recortes se revisan a ojo y las
+  conversaciones se añaden antes de la etiqueta. El dashboard se aprobó en su punto de control sin cambios.
+- **De la revisión visual** (skill `impeccable`: detector, sin hallazgos, y revisor de acabado, sin el contexto de la
+  sesión): siete arreglos, todos aplicados. Los tramos ya no dejan un «·» al final de línea. En la columna estrecha, los
+  campos secundarios se apilan. A 360 px, la celda de llamadas a la API va a lo ancho. Los `select` llevan su
+  *chevron*. El error del detalle tiene marco y el historial, un esqueleto en rejilla. El botón secundario es lavanda y
+  el campo de usuarios va alineado como los demás.
+- **Del revisor** (`sonnet`, una pasada): **APTO CON CAMBIOS**, sin P0 ni P1. Corregidos:
+  - P2: `10-diseno-visual.md` decía que solo el email tenía *placeholder*; también lo tiene el buscador;
+  - P2: la cifra de la media del dashboard perdió `.amount` y su ajuste a una línea no tenía test. Ahora la métrica y el
+    total comparten `figure-size.ts` (tamaño por longitud), con su test, y `projection-fit.spec.ts` mide también la
+    media, y a 1 024 px;
+  - P2: spec 05 §4.4 decía «indicador fijo» sin matiz; ahora aclara que la cabecera solo se queda pegada desde 640 px;
+  - P3: test de `app-tier-label`, la cifra de ejemplo unificada y `sm:z-10` en la cabecera.
+
+  Sin cambio, anotado en `10-diseno-visual.md` §7.3: la tarifa se lee dos veces del catálogo (el store no se toca) y el
+  campo de usuarios va antes que el slider en el orden del foco. El orden del foco entre 640 y 1 023 px («Nuevo
+  cliente» se ve antes que la divisa y se alcanza después) ya venía de antes.
+
+**Decisiones:** D-191, del usuario (la dirección, los tramos y la cabecera en móvil) con la implementación de Claude.
+
+**Tiempo:** unas 3 h (21:40–00:40, hora de Canarias) hasta la PR, con el punto de control y las dos revisiones.
