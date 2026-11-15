@@ -495,15 +495,6 @@
     "c7f852b81bcd9247",
     "d3aff52d1f25e33d"
   ],
-  "scripts/recorrido/content/architecture.mjs": [
-    "4b4b5387e12919df",
-    "ea2e4f98b1451d5e"
-  ],
-  "scripts/recorrido/render/architecture.mjs": [
-    "5519c7d799865596",
-    "b4e0185d49be6403",
-    "ed9ffe9265f50a53"
-  ],
   "scripts/recorrido/render/hero.mjs": [
     "4b75758ed4a06a1b"
   ],

@@ -1,8 +1,8 @@
 // @ts-check
 /**
- * How it was built (D-183): the timeline of the parts P0 to P13 (objective, pull requests and one decision, all read
- * from the plan and from decisiones.md), the work that closed the delivery after them, and the cycle every part
- * followed.
+ * How it was built (D-183): the cycle every part followed, and the timeline of the parts P0 to P13 (objective, pull
+ * requests and one decision, all read from the plan and from decisiones.md) with the work that closed the delivery
+ * after them. «Cómo se trabajó con la IA» (process.mjs) lays them out.
  */
 import { AFTER_PLAN, HIGHLIGHTED_DECISIONS, PART_CYCLE } from '../content/timeline.mjs';
 import { markup } from '../html.mjs';
@@ -44,7 +44,7 @@ function renderPart(part, data) {
   return markup`<li class="tl-part">
     <span class="tl-id" aria-hidden="true">${part.id}</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">${part.id}: </span>${part.title}</h3>
+      <h4><span class="visually-hidden">${part.id}: </span>${part.title}</h4>
       <p>${inlineMarkdown(capitalized(part.objective), PLAN_FILE)}</p>
       <p class="tl-meta">
         ${renderPullRequests(data.pullRequests.get(part.id) ?? [])}<span class="tl-decision"
@@ -66,7 +66,7 @@ function renderAfterPlan(work, data) {
   return markup`<li class="tl-part">
     <span class="tl-dot" aria-hidden="true"></span>
     <div class="tl-body">
-      <h3>${work.title}</h3>
+      <h5>${work.title}</h5>
       <p>${work.what}</p>
       <p class="tl-meta">
         ${renderPullRequests(work.pullRequests)}<span class="tl-decision"
@@ -78,7 +78,7 @@ function renderAfterPlan(work, data) {
   </li>`;
 }
 
-function renderCycle() {
+export function renderCycle() {
   return markup`<ol class="cycle">
     ${PART_CYCLE.map(
       (step, index) =>
@@ -91,22 +91,15 @@ function renderCycle() {
   </ol>`;
 }
 
-/** @param {TimelineData} data */
-export function renderTimeline(data) {
-  return markup`<header class="section-head">
-      <h2 id="construccion-titulo">Cómo se <span class="accent">construyó</span></h2>
-      <p>
-        Cuatro fases antes del código (análisis, especificación, arquitectura y plan) y después
-        ${data.parts.length} partes, cada una en su sesión, su rama y su PR. Todas siguieron el mismo ciclo.
-      </p>
-    </header>
-    <h3 class="sub-title">El ciclo de cada parte</h3>
-    ${renderCycle()}
-    <h3 class="sub-title">Las partes, de P0 a ${data.parts.at(-1)?.id ?? ''}</h3>
-    <ol class="timeline">
+/**
+ * The parts of the plan and the work after them, one entry each.
+ * @param {TimelineData} data
+ */
+export function renderParts(data) {
+  return markup`<ol class="timeline">
       ${data.parts.map((part) => renderPart(part, data))}
     </ol>
-    <h3 class="sub-title">Después del plan: el cierre</h3>
+    <h4 class="sub-title">Después del plan: el cierre</h4>
     <ol class="timeline">
       ${AFTER_PLAN.map((work) => renderAfterPlan(work, data))}
     </ol>`;

@@ -1,7 +1,7 @@
 // Evaluator walkthrough of SaaS-O-Matic (D-183). The page is complete without this script; it only adds behaviour:
-// the current section in the contents, the strip of steps, the pieces of the architecture, the filter of the map,
-// the search of the requirements, the checklists and the live simulator. A classic script on purpose: module scripts
-// do not load from file:// (D-184), so this one never imports anything.
+// the current section in the contents, the strip of steps, the search of the requirements and the live simulator.
+// The system map has its own script, esquema.js (D-192). A classic script on purpose: module scripts do not load
+// from file:// (D-184), so this one never imports anything.
 'use strict';
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -56,52 +56,6 @@ const scrollBehavior = () => (reducedMotion.matches ? 'auto' : 'smooth');
   mark();
 })();
 
-(function connectArchitecture() {
-  const nodes = [...document.querySelectorAll('.arch-node[data-piece]')];
-  const panels = nodes.map((node) => document.getElementById(node.dataset.piece ?? '')).filter(Boolean);
-  if (panels.length === 0) return;
-  const show = (id) => {
-    for (const panel of panels) panel.hidden = panel.id !== id;
-    for (const node of nodes) {
-      if (node.dataset.piece === id) node.setAttribute('aria-current', 'true');
-      else node.removeAttribute('aria-current');
-    }
-  };
-  for (const node of nodes) {
-    node.addEventListener('click', (event) => {
-      event.preventDefault();
-      const id = node.dataset.piece ?? '';
-      show(id);
-      document.getElementById(id)?.focus({ preventScroll: true });
-    });
-  }
-  show(panels[0].id);
-})();
-
-(function connectMapFilter() {
-  const filter = document.querySelector('[data-map-filter]');
-  const entries = [...document.querySelectorAll('.map-entry')];
-  const count = document.querySelector('[data-map-count]');
-  if (filter === null || count === null) return;
-  const buttons = [...filter.querySelectorAll('button[data-interest]')];
-  const apply = (interest) => {
-    let shown = 0;
-    for (const entry of entries) {
-      const matches = interest === 'todo' || (entry.dataset.interests ?? '').split(' ').includes(interest);
-      entry.hidden = !matches;
-      if (matches) shown += 1;
-    }
-    for (const group of document.querySelectorAll('.map-group')) {
-      group.hidden = group.querySelector('.map-entry:not([hidden])') === null;
-    }
-    for (const button of buttons)
-      button.setAttribute('aria-pressed', String(button.dataset.interest === interest));
-    count.textContent = `${shown} ${shown === 1 ? 'entrada' : 'entradas'}`;
-  };
-  for (const button of buttons) button.addEventListener('click', () => apply(button.dataset.interest));
-  filter.hidden = false;
-})();
-
 (function connectRequirementSearch() {
   const box = document.querySelector('[data-req-search]');
   const input = document.getElementById('buscar-requisito');
@@ -122,42 +76,6 @@ const scrollBehavior = () => (reducedMotion.matches ? 'auto' : 'smooth');
     empty.hidden = shown > 0;
   });
   box.hidden = false;
-})();
-
-(function connectChecklists() {
-  const storage = (() => {
-    try {
-      return window.localStorage;
-    } catch {
-      return null;
-    }
-  })();
-  const key = (id) => `saas-o-matic.recorrido.${id}`;
-  for (const route of document.querySelectorAll('[data-route]')) {
-    const boxes = [...route.querySelectorAll('input[data-persist]')];
-    const progress = route.querySelector('[data-route-progress]');
-    const update = () => {
-      if (progress !== null)
-        progress.textContent = `${boxes.filter((box) => box.checked).length} de ${boxes.length} hechos`;
-    };
-    for (const box of boxes) {
-      try {
-        box.checked = storage?.getItem(key(box.id)) === '1';
-      } catch {
-        box.checked = false;
-      }
-      box.addEventListener('change', () => {
-        try {
-          if (box.checked) storage?.setItem(key(box.id), '1');
-          else storage?.removeItem(key(box.id));
-        } catch {
-          // Storage blocked or full: the tick still works for this visit.
-        }
-        update();
-      });
-    }
-    update();
-  }
 })();
 
 (function loadSimulator() {

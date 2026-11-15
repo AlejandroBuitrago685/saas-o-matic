@@ -12,8 +12,9 @@ import {
 import { expect, test } from '../fixtures/test.js';
 
 /**
- * The evaluator walkthrough (D-183, D-184): it loads without errors published and from a clone, it passes axe, it
- * works at 360 px and with the keyboard, and its live simulator computes with the compiled domain package.
+ * The evaluator walkthrough (D-183, D-184, D-192): it loads without errors published and from a clone, it passes axe,
+ * it works at 360 px and with the keyboard, its system map shows a card per piece and plays its flows, and its live
+ * simulator computes with the compiled domain package.
  */
 
 test.beforeEach(async ({ page, baseURL }) => {
@@ -63,7 +64,7 @@ test('AC-86 D-183: no serious or critical axe violation, with every disclosure o
   await expectNoSeriousA11yViolations(page, 'recorrido, todo desplegado');
 });
 
-test('AC-84 D-183: at 360 px nothing scrolls sideways and the architecture becomes a column', async ({
+test('AC-84 D-192: at 360 px nothing scrolls sideways and the zones of the map stack in a column', async ({
   page,
 }) => {
   await page.setViewportSize(NARROW_VIEWPORT);
@@ -72,25 +73,30 @@ test('AC-84 D-183: at 360 px nothing scrolls sideways and the architecture becom
   await expectNoHorizontalScroll(page);
 
   const lefts = await page
-    .locator('.arch-path .arch-node')
-    .evaluateAll((nodes) => nodes.map((node) => Math.round(node.getBoundingClientRect().left)));
-  expect(new Set(lefts).size, 'every piece of the architecture starts at the same x').toBe(1);
+    .locator('.sys-zone')
+    .evaluateAll((zones) => zones.map((zone) => Math.round(zone.getBoundingClientRect().left)));
+  expect(new Set(lefts).size, 'every zone of the map starts at the same x').toBe(1);
   // The strip of steps scrolls inside its own box, never the page.
   const strip = page.locator('.flow-strip');
   expect(await strip.evaluate((element) => element.scrollWidth > element.clientWidth)).toBe(true);
 });
 
-test('D-183: at 1280 px the architecture is a row', async ({ page }) => {
+test('D-192: at 1280 px the map is a grid of zones, joined by its lines, with the card beside it', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await openPublished(page);
+  const box = async (selector: string) =>
+    (await page.locator(selector).boundingBox()) ?? { x: 0, y: 0, width: 0 };
 
-  const tops = await page
-    .locator('.arch-path .arch-node')
-    .evaluateAll((nodes) => nodes.map((node) => Math.round(node.getBoundingClientRect().top)));
-  expect(new Set(tops).size, 'every piece of the architecture is on the same line').toBe(1);
+  const [browser, internet] = [await box('[data-zone="navegador"]'), await box('[data-zone="internet"]')];
+  expect(Math.round(browser.y), 'the browser and the internet share a row').toBe(Math.round(internet.y));
+  const [map, card] = [await box('[data-sys-map]'), await box('#esquema-idea')];
+  expect(card.x, 'the card sits to the right of the map').toBeGreaterThan(map.x + map.width);
+  await expect(page.locator('.sys-wire')).toHaveCount(9);
 });
 
-test('D-183: with the keyboard, the strip opens its step and a piece of the architecture shows its panel', async ({
+test('D-183: with the keyboard, the strip opens its step and a piece of the architecture shows its card', async ({
   page,
 }) => {
   await openPublished(page);
@@ -102,25 +108,62 @@ test('D-183: with the keyboard, the strip opens its step and a piece of the arch
 
   await expect(page.locator('#paso-divisa')).toHaveAttribute('open', '');
   await expect(page.locator('#paso-divisa summary')).toBeFocused();
-  await expect(page.getByRole('link', { name: /Divisa/ }).first()).toHaveAttribute('aria-current', 'step');
+  await expect(
+    page.getByRole('navigation', { name: 'Pasos del flujo' }).getByRole('link', { name: /Divisa/ }),
+  ).toHaveAttribute('aria-current', 'step');
 
-  await page.locator('.arch-node[data-piece="pieza-sqlite"]').focus();
+  const sqlite = page.locator('.sys-piece[data-piece="sqlite"]');
+  await sqlite.focus();
   await page.keyboard.press('Enter');
   await expect(page.locator('#pieza-sqlite')).toBeVisible();
-  await expect(page.locator('#pieza-navegador')).toBeHidden();
-  await expect(page.locator('.arch-node[data-piece="pieza-sqlite"]')).toHaveAttribute('aria-current', 'true');
+  await expect(page.locator('#esquema-idea')).toBeHidden();
+  await expect(sqlite).toHaveAttribute('aria-current', 'true');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#esquema-idea')).toBeVisible();
 });
 
-test('D-183: the repository map filters by interest and the requirements table finds a requirement', async ({
+test('D-192 AC-10: a flow lights the pieces of each step and sends its request along their lines', async ({
   page,
 }) => {
   await openPublished(page);
-  await page.getByRole('button', { name: 'Seguridad' }).click();
-  await expect(page.getByRole('button', { name: 'Seguridad' })).toHaveAttribute('aria-pressed', 'true');
-  for (const tags of await page.locator('.map-entry:visible .map-tags').allTextContents()) {
-    expect(tags).toContain('Seguridad');
-  }
+  await page.getByRole('button', { name: 'Alta con NIF' }).click();
+  await expect(page.locator('#flujo-alta-1')).toBeVisible();
+  await expect(page.locator('[data-sys-count]')).toHaveText('Paso 1 de 6');
+  await expect(page.locator('.sys-piece.is-lit')).toHaveCount(1);
 
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#flujo-alta-2')).toBeVisible();
+  await expect(page.locator('#flujo-alta-1')).toBeHidden();
+  await expect(page.locator('.sys-piece.is-lit')).toHaveCount(4);
+  await expect(page.locator('.sys-wire.is-lit')).toHaveCount(3);
+  await expect(page.locator('[data-sys-label]')).toHaveText('POST /api/customers');
+
+  await page.getByRole('button', { name: 'Siguiente' }).click();
+  await page.getByRole('button', { name: 'Siguiente' }).click();
+  await expect(page.locator('#flujo-alta-4')).toContainText('12345678 mod 23 = 14');
+  await page.getByRole('button', { name: 'Explorar' }).click();
+  await expect(page.locator('#esquema-idea')).toBeVisible();
+  await expect(page.locator('.sys-piece.is-lit')).toHaveCount(0);
+});
+
+test('D-192: the arrow keys step a flow only from inside the map, never from a control elsewhere', async ({
+  page,
+}) => {
+  await openPublished(page);
+  await page.getByRole('button', { name: 'Simular y guardar' }).click();
+  await expect(page.locator('[data-sys-count]')).toHaveText('Paso 1 de 6');
+
+  await page.locator('#paso-tramos summary').click();
+  const country = page.getByRole('combobox', { name: 'País del cliente' });
+  await country.focus();
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('[data-sys-count]')).toHaveText('Paso 1 de 6');
+  await expect(page.locator('#flujo-simular-1')).toBeVisible();
+});
+
+test('D-183: the requirements table finds a requirement', async ({ page }) => {
+  await openPublished(page);
   const search = page.getByRole('searchbox', { name: /Buscar un requisito/ });
   await search.fill('divisa');
   const rows = page.locator('.req-table tbody tr:visible');
@@ -145,13 +188,4 @@ test('D-184 TV-PR-07 TV-PR-04 TV-TX-07: the live simulator computes with the com
 
   await page.getByRole('combobox', { name: 'País del cliente' }).selectOption('US');
   await expect(total).toHaveText('140,00 €');
-});
-
-test('D-183: a ticked item of a reading route is still ticked after a reload', async ({ page }) => {
-  await openPublished(page);
-  const first = page.locator('#ruta-5-1');
-  await first.check();
-  await expect(page.locator('[data-route-progress]').first()).toHaveText(/^1 de \d+ hechos$/);
-  await page.reload();
-  await expect(page.locator('#ruta-5-1')).toBeChecked();
 });

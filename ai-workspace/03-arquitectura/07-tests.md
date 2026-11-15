@@ -121,6 +121,9 @@ hay que probar. Cada test cita los suyos. Los niveles siguen la columna «Nivel�
   ejecución. Margen: unos 70 ms.
 - **Sin reintentos:** un test que solo pasa a la segunda es un fallo que hay que investigar; su traza se conserva.
 
+Desde D-192, el recorrido de los evaluadores ya no tiene filtro del mapa ni casillas: sus e2e comprueban también el
+esquema de la arquitectura (una ficha por pieza, las líneas y los tres flujos con sus pasos).
+
 ## 2. Trazabilidad test → AC / TV
 
 - **Convención de nombres:** el título de cada test empieza por sus IDs:

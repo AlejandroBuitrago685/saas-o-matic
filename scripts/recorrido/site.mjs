@@ -13,12 +13,8 @@ import { renderArchitecture } from './render/architecture.mjs';
 import { renderFlow } from './render/flow.mjs';
 import { renderHero } from './render/hero.mjs';
 import { CONTENT_SECURITY_POLICY, renderPage } from './render/page.mjs';
-import { renderMoments } from './render/people.mjs';
-import { renderQuality } from './render/quality.mjs';
-import { renderRepoMap } from './render/repo-map.mjs';
+import { renderProcess } from './render/process.mjs';
 import { renderRequirements } from './render/requirements.mjs';
-import { renderRoutes } from './render/routes.mjs';
-import { renderTimeline } from './render/timeline.mjs';
 import { FONT_DIR, FONT_FILE, TOKENS_FILE, tokenStylesheet } from './sources/assets.mjs';
 
 export const SITE_DIR = 'docs/recorrido';
@@ -28,14 +24,10 @@ async function renderWalkthrough() {
   const data = await loadData();
   const sections = [
     { id: 'portada', label: 'Portada', body: renderHero(data.hero) },
+    { id: 'arquitectura', label: 'Cómo está montado', body: renderArchitecture() },
     { id: 'producto', label: 'El producto', body: renderFlow(data.flow) },
-    { id: 'arquitectura', label: 'Una petición', body: renderArchitecture() },
-    { id: 'mapa', label: 'El repositorio', body: renderRepoMap() },
-    { id: 'construccion', label: 'Cómo se construyó', body: renderTimeline(data.timeline) },
-    { id: 'calidad', label: 'Calidad', body: renderQuality(data.quality) },
-    { id: 'intervencion', label: 'Dónde intervine', body: renderMoments(data.moments) },
+    { id: 'proceso', label: 'Cómo se trabajó', body: renderProcess(data) },
     { id: 'requisitos', label: 'Requisitos', body: renderRequirements(data.requirements) },
-    { id: 'recorridos', label: 'Recorridos', body: renderRoutes(data.routes, data.cleanClone) },
   ];
   const footer = markup`Cada cifra y cada tabla de esta página salen del repositorio con <code>npm run recorrido</code>.`;
   return renderPage(sections, footer);

@@ -9,10 +9,10 @@ import { join } from 'node:path';
 import { createSimulationRequestSchema } from '@saas-o-matic/contract';
 import { MAX_SLIDER_POSITION } from '@saas-o-matic/domain';
 
-import { listRepoFiles, REPO_ROOT } from '../lib/repo.mjs';
+import { REPO_ROOT } from '../lib/repo.mjs';
 import { webpSize } from './sources/assets.mjs';
 import * as examples from './sources/examples.mjs';
-import { GUIDE_FILE, readingRoutes, requirementRows } from './sources/guide.mjs';
+import { GUIDE_FILE, requirementRows } from './sources/guide.mjs';
 import * as workflow from './sources/workflow.mjs';
 import * as quality from './sources/quality.mjs';
 
@@ -71,38 +71,24 @@ function timelineData() {
   };
 }
 
-/** @param {{ node: number, web: number }} tests */
-function qualityData(tests) {
+/** The figures of the cover: criteria, vectors, tests of the latest clean clone and decisions. */
+function heroFigures() {
+  const cleanClone = workflow.cleanCloneTimes(read(workflow.DIARY_FILE));
   return {
-    jobs: quality.workflowJobs(read(quality.CI_FILE)),
-    layers: quality.testFilesByLayer(listRepoFiles()),
     criteria: quality.criteriaCount(read(quality.CRITERIA_FILE)),
     vectors: quality.vectorCount(quality.VECTOR_FILES.map(read)),
-    tests,
+    tests: workflow.measuredTestCounts(cleanClone.steps),
+    decisions: quality.decisionCount(read(workflow.DECISIONS_FILE)),
   };
 }
 
 export async function loadData() {
   const flow = await flowData(await examples.loadCatalogInput());
-  const cleanClone = workflow.cleanCloneTimes(read(workflow.DIARY_FILE));
-  const guide = read(GUIDE_FILE);
-  const qualityFigures = qualityData(workflow.measuredTestCounts(cleanClone.steps));
-  const { criteria, vectors, tests } = qualityFigures;
   return {
-    hero: {
-      criteria,
-      vectors,
-      tests,
-      decisions: quality.decisionCount(read(workflow.DECISIONS_FILE)),
-      example: flow.rules.tiers,
-      vectorId: TIER_VECTOR.id,
-    },
+    hero: { ...heroFigures(), example: flow.rules.tiers, vectorId: TIER_VECTOR.id },
     flow,
     timeline: timelineData(),
-    quality: qualityFigures,
     moments: workflow.interventionMoments(read(workflow.WORKSPACE_README)),
-    requirements: requirementRows(guide),
-    routes: readingRoutes(guide),
-    cleanClone,
+    requirements: requirementRows(read(GUIDE_FILE)),
   };
 }

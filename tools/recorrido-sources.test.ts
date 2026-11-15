@@ -8,13 +8,8 @@ import { escapeHtml, markup, raw } from '../scripts/recorrido/html.mjs';
 import { inlineMarkdown, plainText } from '../scripts/recorrido/inline-markdown.mjs';
 import { githubUrl, REPO_URL } from '../scripts/recorrido/repo-links.mjs';
 import { tokenStylesheet, webpSize } from '../scripts/recorrido/sources/assets.mjs';
-import { GUIDE_FILE, readingRoutes, requirementRows } from '../scripts/recorrido/sources/guide.mjs';
-import {
-  CRITERIA_FILE,
-  criteriaCount,
-  testFilesByLayer,
-  workflowJobs,
-} from '../scripts/recorrido/sources/quality.mjs';
+import { GUIDE_FILE, requirementRows } from '../scripts/recorrido/sources/guide.mjs';
+import { CRITERIA_FILE, criteriaCount, workflowJobs } from '../scripts/recorrido/sources/quality.mjs';
 import {
   cleanCloneTimes,
   DIARY_FILE,
@@ -75,14 +70,6 @@ describe('D-183 D-181 the walkthrough reads the documents, never a copy of them'
     const guide = read(GUIDE_FILE).replace(/^(\| Alta de un cliente[^|]*)\|[^|]*\|/m, '$1|');
 
     expect(() => requirementRows(guide)).toThrow(/cells, not 4/);
-  });
-
-  it('takes the three reading routes, with the commands of the local one', () => {
-    const routes = readingRoutes(read(GUIDE_FILE));
-
-    expect(routes.map(({ minutes }) => minutes)).toEqual([5, 15, 60]);
-    expect(routes[1]?.commands).toEqual(['npm ci', 'npm run setup', 'npm run dev']);
-    expect(routes[0]?.items.length).toBeGreaterThan(3);
   });
 
   it('takes the ten moments of «Dónde intervine yo» with their own text', () => {
@@ -148,7 +135,7 @@ describe('D-183 D-181 the walkthrough reads the documents, never a copy of them'
     });
   });
 
-  it('reads the jobs and steps of a workflow, and the test files of each layer', () => {
+  it('reads the jobs and steps of a workflow', () => {
     const workflow = [
       'on: push',
       'jobs:',
@@ -166,13 +153,6 @@ describe('D-183 D-181 the walkthrough reads the documents, never a copy of them'
       { id: 'a', name: 'A', steps: ['uno'] },
       { id: 'b', name: '', steps: ['dos'] },
     ]);
-    expect(
-      testFilesByLayer(['packages/domain/a.test.ts', 'e2e/specs/b.spec.ts', 'tools/c.ts']),
-    ).toContainEqual({
-      layer: 'e2e',
-      folder: 'e2e',
-      files: 1,
-    });
   });
 });
 

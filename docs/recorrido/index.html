@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="recorrido.css" />
     <link rel="stylesheet" href="portada.css" />
     <link rel="stylesheet" href="secciones.css" />
+    <link rel="stylesheet" href="esquema.css" />
     <script src="recorrido.js" defer></script>
+    <script src="esquema.js" defer></script>
   </head>
       <body>
         <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -39,21 +41,13 @@
         <li>
         <a href="#portada" data-section="portada"><span class="rail-dot" aria-hidden="true"></span>Portada</a>
       </li><li>
+        <a href="#arquitectura" data-section="arquitectura"><span class="rail-dot" aria-hidden="true"></span>Cómo está montado</a>
+      </li><li>
         <a href="#producto" data-section="producto"><span class="rail-dot" aria-hidden="true"></span>El producto</a>
       </li><li>
-        <a href="#arquitectura" data-section="arquitectura"><span class="rail-dot" aria-hidden="true"></span>Una petición</a>
-      </li><li>
-        <a href="#mapa" data-section="mapa"><span class="rail-dot" aria-hidden="true"></span>El repositorio</a>
-      </li><li>
-        <a href="#construccion" data-section="construccion"><span class="rail-dot" aria-hidden="true"></span>Cómo se construyó</a>
-      </li><li>
-        <a href="#calidad" data-section="calidad"><span class="rail-dot" aria-hidden="true"></span>Calidad</a>
-      </li><li>
-        <a href="#intervencion" data-section="intervencion"><span class="rail-dot" aria-hidden="true"></span>Dónde intervine</a>
+        <a href="#proceso" data-section="proceso"><span class="rail-dot" aria-hidden="true"></span>Cómo se trabajó</a>
       </li><li>
         <a href="#requisitos" data-section="requisitos"><span class="rail-dot" aria-hidden="true"></span>Requisitos</a>
-      </li><li>
-        <a href="#recorridos" data-section="recorridos"><span class="rail-dot" aria-hidden="true"></span>Recorridos</a>
       </li>
       </ol>
     </details>
@@ -61,21 +55,13 @@
       <li>
         <a href="#portada" data-section="portada"><span class="rail-dot" aria-hidden="true"></span>Portada</a>
       </li><li>
+        <a href="#arquitectura" data-section="arquitectura"><span class="rail-dot" aria-hidden="true"></span>Cómo está montado</a>
+      </li><li>
         <a href="#producto" data-section="producto"><span class="rail-dot" aria-hidden="true"></span>El producto</a>
       </li><li>
-        <a href="#arquitectura" data-section="arquitectura"><span class="rail-dot" aria-hidden="true"></span>Una petición</a>
-      </li><li>
-        <a href="#mapa" data-section="mapa"><span class="rail-dot" aria-hidden="true"></span>El repositorio</a>
-      </li><li>
-        <a href="#construccion" data-section="construccion"><span class="rail-dot" aria-hidden="true"></span>Cómo se construyó</a>
-      </li><li>
-        <a href="#calidad" data-section="calidad"><span class="rail-dot" aria-hidden="true"></span>Calidad</a>
-      </li><li>
-        <a href="#intervencion" data-section="intervencion"><span class="rail-dot" aria-hidden="true"></span>Dónde intervine</a>
+        <a href="#proceso" data-section="proceso"><span class="rail-dot" aria-hidden="true"></span>Cómo se trabajó</a>
       </li><li>
         <a href="#requisitos" data-section="requisitos"><span class="rail-dot" aria-hidden="true"></span>Requisitos</a>
-      </li><li>
-        <a href="#recorridos" data-section="recorridos"><span class="rail-dot" aria-hidden="true"></span>Recorridos</a>
       </li>
     </ol>
   </nav>
@@ -93,7 +79,7 @@
         <div class="actions">
           <a class="btn btn-primary" href="https://saas-o-matic.codeserviceapi.es"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6.5 4.75v10.5c0 .6.66.96 1.16.63l7.9-5.25a.75.75 0 0 0 0-1.26l-7.9-5.25a.75.75 0 0 0-1.16.63Z"/></svg>Abrir la demo</a>
           <a class="btn btn-secondary" href="https://github.com/AlejandroBuitrago685/saas-o-matic"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M7 6 3 10l4 4M13 6l4 4-4 4"/></svg>Ver el repositorio</a>
-          <a class="btn-link" href="#producto">Empezar el recorrido<svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 10h11M11 5.5 15.5 10 11 14.5"/></svg></a>
+          <a class="btn-link" href="#arquitectura">Empezar el recorrido<svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 10h11M11 5.5 15.5 10 11 14.5"/></svg></a>
         </div>
         <p class="hero-note">
           La demo usa datos ficticios que se regeneran cada día. Para comprobar cada requisito con su test, la
@@ -183,9 +169,1132 @@
     </div>
     <div>
       <dt>Decisiones registradas</dt>
-      <dd><strong>191</strong> cada una con la alternativa descartada y quién la tomó</dd>
+      <dd><strong>192</strong> cada una con la alternativa descartada y quién la tomó</dd>
     </div>
-  </dl></section><section id="producto" class="section" aria-labelledby="producto-titulo"><header class="section-head">
+  </dl></section><section id="arquitectura" class="section" aria-labelledby="arquitectura-titulo"><header class="section-head">
+      <h2 id="arquitectura-titulo">Cómo está <span class="accent">montado</span></h2>
+      <p>
+        Dónde se ejecuta cada pieza y cómo se hablan. Pulsa una para ver qué hace, por qué es así, dónde está su
+        código y qué test la comprueba, o sigue una petición de punta a punta con sus números reales.
+      </p>
+    </header>
+    <div class="sys" data-system>
+      <div class="sys-flows" role="group" aria-label="Recorridos por el sistema" data-sys-flows hidden>
+    <button type="button" class="sys-flow-btn" data-flow="" aria-pressed="true"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4.5 3.5 9.75 16l1.9-5.1L16.5 9 4.5 3.5Z"/></svg>Explorar</button>
+    <button type="button" class="sys-flow-btn" data-flow="alta" aria-pressed="false">
+          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 5.75c0-.41.34-.75.75-.75h11.5c.41 0 .75.34.75.75v8.5c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75v-8.5ZM6 12.5c.4-1.1 1.2-1.75 2-1.75s1.6.65 2 1.75M8 9.25a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2ZM12 8h2.25M12 10.5h2.25"/></svg>Alta con NIF
+        </button><button type="button" class="sys-flow-btn" data-flow="simular" aria-pressed="false">
+          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h5M13 6h3M4 14h2M10 14h6M11 4v4M8 12v4"/></svg>Simular y guardar
+        </button><button type="button" class="sys-flow-btn" data-flow="divisa" aria-pressed="false">
+          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 7.5h10.5L12 5M16 12.5H5.5L8 15"/></svg>Cambiar divisa
+        </button>
+  </div>
+      <div class="sys-body">
+        <div class="sys-map" data-sys-map>
+          <svg class="sys-wires" aria-hidden="true" focusable="false" data-sys-wires></svg>
+          <div class="sys-zone sys-zone-external" data-zone="internet">
+    <span class="sys-zone-label">Internet</span>
+    <a class="sys-piece" href="#pieza-tipos" data-piece="tipos"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14ZM3 10h14M10 3c1.9 2 2.9 4.4 2.9 7s-1 5-2.9 7c-1.9-2-2.9-4.4-2.9-7s1-5 2.9-7Z"/></svg><span class="sys-piece-name">open.er-api.com</span
+    ><span class="sys-piece-caption">tipos de cambio</span></a
+  >
+  </div><div class="sys-zone sys-zone-code" data-zone="navegador">
+    <span class="sys-zone-label">Navegador</span>
+    <a class="sys-piece" href="#pieza-web" data-piece="web"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 4.75c0-.41.34-.75.75-.75h11.5c.41 0 .75.34.75.75v10.5c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V4.75ZM3.5 7.5h13"/></svg><span class="sys-piece-name">Web Angular</span
+    ><span class="sys-piece-caption">pantallas con signals</span></a
+  ><a class="sys-piece" href="#pieza-divisas" data-piece="divisas"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 7.5h10.5L12 5M16 12.5H5.5L8 15"/></svg><span class="sys-piece-name">Divisas</span
+    ><span class="sys-piece-caption">tipos, caché y estados</span></a
+  >
+  </div><div class="sys-zone sys-zone-demo" data-zone="solo-demo">
+    <span class="sys-zone-label">Solo en la demo</span>
+    <a class="sys-piece" href="#pieza-cloudflare" data-piece="cloudflare"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6.25 15h8.25a3 3 0 0 0 .4-5.97A4.75 4.75 0 0 0 5.9 8.6 3.25 3.25 0 0 0 6.25 15Z"/></svg><span class="sys-piece-name">Cloudflare</span
+    ><span class="sys-piece-caption">HTTPS delante</span></a
+  >
+  </div><div class="sys-zone sys-zone-shared" data-zone="compartido">
+    <span class="sys-zone-label">Paquetes compartidos: el mismo código en los dos lados</span>
+    <a class="sys-piece" href="#pieza-contrato" data-piece="contrato"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3M7.75 11.5l1.5 1.5 3-3"/></svg><span class="sys-piece-name">Contrato Zod</span
+    ><span class="sys-piece-caption">packages/contract</span></a
+  ><a class="sys-piece" href="#pieza-dominio" data-piece="dominio"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3 16 6.5v7L10 17l-6-3.5v-7L10 3ZM4 6.5 10 10l6-3.5M10 10v7"/></svg><span class="sys-piece-name">Dominio</span
+    ><span class="sys-piece-caption">reglas puras · packages/domain</span></a
+  >
+  </div><div class="sys-zone sys-zone-infra" data-zone="docker">
+    <span class="sys-zone-label">Docker Compose</span>
+    <a class="sys-piece" href="#pieza-nginx" data-piece="nginx"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.5 16.5 7 10 10.5 3.5 7 10 3.5ZM3.5 10.25 10 13.75l6.5-3.5M3.5 13.25 10 16.75l6.5-3.5"/></svg><span class="sys-piece-name">nginx</span
+    ><span class="sys-piece-caption">web, CSP y proxy /api</span></a
+  ><a class="sys-piece" href="#pieza-api" data-piece="api"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11 3 5 11h4.5l-1 6 6-8H10l1-6Z"/></svg><span class="sys-piece-name">API Fastify</span
+    ><span class="sys-piece-caption">rutas → casos de uso → repositorios</span></a
+  ><a class="sys-piece" href="#pieza-sqlite" data-piece="sqlite"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 7.5c3.04 0 5.5-1 5.5-2.25S13.04 3 10 3 4.5 4 4.5 5.25 6.96 7.5 10 7.5ZM4.5 5.25v9.5C4.5 16 6.96 17 10 17s5.5-1 5.5-2.25v-9.5M4.5 10c0 1.24 2.46 2.25 5.5 2.25s5.5-1 5.5-2.25"/></svg><span class="sys-piece-name">SQLite</span
+    ><span class="sys-piece-caption">Drizzle · 3 tablas</span></a
+  >
+  </div><div class="sys-zone sys-zone-guard" data-zone="guardarrailes">
+    <span class="sys-zone-label">Guardarraíles: lo que mantuvo el código así mientras lo escribía la IA</span>
+    <a class="sys-piece" href="#pieza-claude-md" data-piece="claude-md"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="sys-piece-name">CLAUDE.md</span
+    ><span class="sys-piece-caption">las reglas</span></a
+  ><a class="sys-piece" href="#pieza-hooks" data-piece="hooks"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.5v7a3.25 3.25 0 1 1-3.25-3.25"/></svg><span class="sys-piece-name">Hooks</span
+    ><span class="sys-piece-caption">en cada edición</span></a
+  ><a class="sys-piece" href="#pieza-eslint" data-piece="eslint"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 7.5h14v5H3v-5ZM6 7.5V10M9 7.5v2.5M12 7.5V10M15 7.5v2.5"/></svg><span class="sys-piece-name">ESLint</span
+    ><span class="sys-piece-caption">tamaño y fronteras</span></a
+  ><a class="sys-piece" href="#pieza-revisor" data-piece="revisor"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8.75 14a5.25 5.25 0 1 0 0-10.5 5.25 5.25 0 0 0 0 10.5ZM12.5 12.5l4 4"/></svg><span class="sys-piece-name">Revisor</span
+    ><span class="sys-piece-caption">al cerrar cada parte</span></a
+  ><a class="sys-piece" href="#pieza-ci" data-piece="ci"
+    ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6 5.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM6 17.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM14 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM6 5.5v9M6 12.5c0-2.2 1.8-4.5 4-4.5h2.5"/></svg><span class="sys-piece-name">CI</span
+    ><span class="sys-piece-caption">11 checks para main</span></a
+  >
+  </div>
+          <span class="sys-packet-label" data-sys-label hidden></span>
+        </div>
+        <div class="sys-cards" data-sys-cards>
+          <article id="esquema-idea" class="sys-card sys-intro" aria-labelledby="esquema-idea-titulo">
+    <h3 id="esquema-idea-titulo">La regla vive una sola vez</h3>
+    <p class="sys-idea">
+      <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain"><code>packages/domain</code></a> corre en el navegador para
+      proyectar la factura al instante y en la API para guardarla. La API siempre recalcula: nunca se fía de un
+      importe del cliente.
+    </p>
+    <p>Pulsa cualquier pieza para ver qué hace, por qué es así, dónde está su código y qué test la comprueba.</p>
+    <p>O elige un recorrido y sigue una petición paso a paso, con sus números reales.</p>
+  </article> <article id="pieza-tipos" class="sys-card" aria-labelledby="pieza-tipos-titulo" tabindex="-1">
+    <h3 id="pieza-tipos-titulo">open.er-api.com <span>Internet</span></h3>
+    <p>La API pública de tipos de cambio que pide el enunciado. Solo la llama el navegador.</p>
+    <p class="sys-control"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span>La respuesta se valida antes de usarla; la petición va sin cookies ni referrer y con 5 s de límite.</span></p>
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-22</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-148</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-13</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.client.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>exchange-rates.client.ts</code
+              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.parser.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>exchange-rates.parser.test.ts</code
+              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/exchange-rates.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>exchange-rates.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </article><article id="pieza-web" class="sys-card" aria-labelledby="pieza-web-titulo" tabindex="-1">
+    <h3 id="pieza-web-titulo">Web Angular <span>Navegador</span></h3>
+    <p>El dashboard, el alta, el detalle y el simulador, con signals y sin Zone.js. Cada pantalla importa solo lo común, nunca otra pantalla.</p>
+    <p class="sys-control"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span>CSP sin scripts ni estilos en línea, y prohibidos innerHTML y bypassSecurityTrust*.</span></p>
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-011-frontend-signals.md">ADR-011</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-008-proyeccion-en-cliente.md">ADR-008</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-14</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/web/src/app/features"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>features</code
+              ><span class="path-dir">apps/web/src/app/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/web/src/app/core"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>core</code
+              ><span class="path-dir">apps/web/src/app/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/simulator.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>simulator.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/xss.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>xss.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </article><article id="pieza-divisas" class="sys-card" aria-labelledby="pieza-divisas-titulo" tabindex="-1">
+    <h3 id="pieza-divisas-titulo">Divisas <span>Navegador</span></h3>
+    <p>Pide los tipos, los guarda una hora, los vuelve a validar al leerlos y enseña siempre su estado: cargando, al día, desactualizados o error con «Reintentar».</p>
+    <p class="sys-control"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span>Lo que se lee del almacenamiento del navegador pasa por el mismo parser que la respuesta de red.</span></p>
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-23</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-51</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-146</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/web/src/app/core/currency"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>currency</code
+              ><span class="path-dir">apps/web/src/app/core/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.cache.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>exchange-rates.cache.test.ts</code
+              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/exchange-rates-cache.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>exchange-rates-cache.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </article><article id="pieza-cloudflare" class="sys-card" aria-labelledby="pieza-cloudflare-titulo" tabindex="-1">
+    <h3 id="pieza-cloudflare-titulo">Cloudflare <span>Solo en la demo</span></h3>
+    <p>HTTPS y proxy delante de la demo pública. En local y con Docker Compose no existe.</p>
+    <p class="sys-control"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span>El límite de escrituras cuenta por cliente, no por el proxy.</span></p>
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-47</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-08</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/deploy/demo/docker-compose.demo.yml"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>docker-compose.demo.yml</code
+              ><span class="path-dir">deploy/demo/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/http/rate-limit.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>rate-limit.test.ts</code
+              ><span class="path-dir">apps/api/src/http/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </article><article id="pieza-contrato" class="sys-card" aria-labelledby="pieza-contrato-titulo" tabindex="-1">
+    <h3 id="pieza-contrato-titulo">Contrato Zod <span>Paquetes compartidos</span></h3>
+    <p>Los esquemas de cada petición y respuesta. La API valida con ellos y genera el OpenAPI; la web toma sus tipos con import type, sin cargar Zod.</p>
+    <p class="sys-control"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span>Esquemas estrictos: un campo desconocido o un importe enviado por el cliente se rechazan con un 400.</span></p>
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-002-contrato-compartido-zod.md">ADR-002</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-01</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-03</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/contract/src"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>src</code
+              ><span class="path-dir">packages/contract/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/openapi.json"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>openapi.json</code
+              ><span class="path-dir">apps/api/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/contract/src/simulations.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>simulations.test.ts</code
+              ><span class="path-dir">packages/contract/src/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </article><article id="pieza-dominio" class="sys-card" aria-labelledby="pieza-dominio-titulo" tabindex="-1">
+    <h3 id="pieza-dominio-titulo">Dominio <span>Paquetes compartidos</span></h3>
+    <p>Tramos, impuestos, redondeo, divisas y validación fiscal en funciones puras: sin npm, sin Node, sin DOM y sin reloj. La misma función calcula en el navegador y en la API, con el 100 % de cobertura.</p>
+    <p class="sys-control"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span>Los importes que se guardan los calcula siempre la API con estas funciones; nunca acepta uno del cliente.</span></p>
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-001-dominio-compartido-puro.md">ADR-001</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-008-proyeccion-en-cliente.md">ADR-008</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-03</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/pricing/calculate-pricing.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>calculate-pricing.ts</code
+              ><span class="path-dir">packages/domain/src/pricing/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain/src/tax-id"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>tax-id</code
+              ><span class="path-dir">packages/domain/src/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/pricing/calculate-pricing.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>calculate-pricing.test.ts</code
+              ><span class="path-dir">packages/domain/src/pricing/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/tax-id/validate-tax-id.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>validate-tax-id.test.ts</code
+              ><span class="path-dir">packages/domain/src/tax-id/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </article><article id="pieza-nginx" class="sys-card" aria-labelledby="pieza-nginx-titulo" tabindex="-1">
+    <h3 id="pieza-nginx-titulo">nginx <span>Docker Compose</span></h3>
+    <p>Sirve la web compilada y reenvía /api a la API: un único origen, así que no hace falta abrir CORS.</p>
+    <p class="sys-control"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span>Cabeceras de seguridad y CSP; contenedores sin privilegios y de solo lectura.</span></p>
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-012-origen-unico-proxy-api.md">ADR-012</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-06</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-16</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/nginx/nginx.conf"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>nginx.conf</code
+              ><span class="path-dir">apps/web/nginx/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/nginx/security-headers.conf"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>security-headers.conf</code
+              ><span class="path-dir">apps/web/nginx/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/production-stack.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>production-stack.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </article><article id="pieza-api" class="sys-card" aria-labelledby="pieza-api-titulo" tabindex="-1">
+    <h3 id="pieza-api-titulo">API Fastify <span>Docker Compose</span></h3>
+    <p>Rutas finas que llaman a casos de uso, que hablan con puertos que implementan los repositorios. Ninguna regla de negocio en las rutas y un único manejador de errores.</p>
+    <p class="sys-control"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span>Límite de peticiones, CORS cerrado, errores en RFC 9457 sin detalles internos y logs sin datos personales.</span></p>
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-009-errores-result-y-manejador-unico.md">ADR-009</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-010-app-por-factoria.md">ADR-010</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-07</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-10</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api/src/modules"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>modules</code
+              ><span class="path-dir">apps/api/src/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api/src/http"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>http</code
+              ><span class="path-dir">apps/api/src/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/create-customer.routes.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>create-customer.routes.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/customers/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/http/security.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>security.test.ts</code
+              ><span class="path-dir">apps/api/src/http/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </article><article id="pieza-sqlite" class="sys-card" aria-labelledby="pieza-sqlite-titulo" tabindex="-1">
+    <h3 id="pieza-sqlite-titulo">SQLite <span>Docker Compose</span></h3>
+    <p>Clientes, simulaciones y el desglose de cada simulación por tramos, guardado como instantánea. Importes en céntimos enteros.</p>
+    <p class="sys-control"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span>Solo SQL parametrizado, comodines de LIKE escapados e IDs UUID v7.</span></p>
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-003-driver-better-sqlite3.md">ADR-003</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-004-desglose-en-tabla-hija.md">ADR-004</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-02</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api/src/db/schema"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>schema</code
+              ><span class="path-dir">apps/api/src/db/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/simulations/simulations.repository.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>simulations.repository.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/simulations/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/db/like-pattern.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>like-pattern.test.ts</code
+              ><span class="path-dir">apps/api/src/db/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </article><article id="pieza-claude-md" class="sys-card" aria-labelledby="pieza-claude-md-titulo" tabindex="-1">
+    <h3 id="pieza-claude-md-titulo">CLAUDE.md <span>Guardarraíles</span></h3>
+    <p>Las reglas que leía cada sesión: trabajar por fases, no inventar reglas de negocio, tamaños máximos, fronteras entre capas, seguridad y qué significa «hecho».</p>
+    
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-02</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/CLAUDE.md"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>CLAUDE.md</code
+              ><span class="path-dir"></span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    
+  </article><article id="pieza-hooks" class="sys-card" aria-labelledby="pieza-hooks-titulo" tabindex="-1">
+    <h3 id="pieza-hooks-titulo">Hooks <span>Guardarraíles</span></h3>
+    <p>Bloquean acciones prohibidas antes de ejecutarlas, pasan el lint al fichero recién editado y no dejan cerrar un turno con el lint o los tipos en rojo.</p>
+    
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-013-cumplimiento-automatico.md">ADR-013</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.claude/settings.json"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>settings.json</code
+              ><span class="path-dir">.claude/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/scripts/claude-hooks"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>claude-hooks</code
+              ><span class="path-dir">scripts/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/tools/claude-hooks.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>claude-hooks.test.ts</code
+              ><span class="path-dir">tools/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </article><article id="pieza-eslint" class="sys-card" aria-labelledby="pieza-eslint-titulo" tabindex="-1">
+    <h3 id="pieza-eslint-titulo">ESLint <span>Guardarraíles</span></h3>
+    <p>250 líneas por fichero, 40 por función, complejidad 8 y fronteras entre capas: el dominio no importa nada y la web no carga Zod.</p>
+    
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-013-cumplimiento-automatico.md">ADR-013</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/eslint.config.js"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>eslint.config.js</code
+              ><span class="path-dir"></span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/tools/eslint-zones.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>eslint-zones.test.ts</code
+              ><span class="path-dir">tools/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/tools/eslint-rules.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>eslint-rules.test.ts</code
+              ><span class="path-dir">tools/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </article><article id="pieza-revisor" class="sys-card" aria-labelledby="pieza-revisor-titulo" tabindex="-1">
+    <h3 id="pieza-revisor-titulo">Revisor <span>Guardarraíles</span></h3>
+    <p>Un subagente de solo lectura revisa el diff de cada parte contra la especificación y la seguridad. Su primera revisión fue un NO APTO.</p>
+    
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-72</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.claude/agents/revisor.md"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>revisor.md</code
+              ><span class="path-dir">.claude/agents/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/diario.md"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>diario.md</code
+              ><span class="path-dir">ai-workspace/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    
+  </article><article id="pieza-ci" class="sys-card" aria-labelledby="pieza-ci-titulo" tabindex="-1">
+    <h3 id="pieza-ci-titulo">CI <span>Guardarraíles</span></h3>
+    <p>Para integrar en main: Node 22, 24 y 26 en Linux, la prueba de humo también en Windows y macOS, auditoría de dependencias, e2e y trazabilidad de cada criterio.</p>
+    
+    <h4>Por qué es así</h4>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-88</a></li>
+  </ul> <div class="paths">
+    <h4>Dónde está</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.github/workflows/ci.yml"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
+              ><code>ci.yml</code
+              ><span class="path-dir">.github/workflows/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+    <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/tools/trace-tests.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>trace-tests.test.ts</code
+              ><span class="path-dir">tools/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </article>
+          <article id="flujo-alta" class="sys-card sys-flow" aria-labelledby="flujo-alta-titulo" tabindex="-1">
+    <h3 id="flujo-alta-titulo">Alta con NIF</h3>
+    <p class="sys-summary">Un cliente con un DNI mal escrito, del formulario a la base de datos.</p>
+    <ol class="sys-steps">
+      <li
+    id="flujo-alta-1"
+    class="sys-step"
+    data-lit="web"
+    data-edges=""
+    data-label=""
+  >
+    <h4>Rellenas el alta</h4>
+    <p>Empresa, identificador fiscal, email, país y plan. La web solo comprueba que estén, su longitud y el formato del email: la regla fiscal vive en un único sitio.</p>
+    <p class="sys-example"><code>país ES · identificador 12345678A</code></p>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/01-alcance.md">RF-01</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md">AC-72</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/customer-create.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>customer-create.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-alta-2"
+    class="sys-step"
+    data-lit="web cloudflare nginx api"
+    data-edges="web-cloudflare cloudflare-nginx nginx-api"
+    data-label="POST /api/customers"
+  >
+    <h4>Viaja a la API</h4>
+    <p>nginx reenvía /api a la API desde el mismo origen. En la demo pasa antes por Cloudflare, y el límite de escrituras cuenta por cliente.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-012-origen-unico-proxy-api.md">ADR-012</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-08</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/http/rate-limit.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>rate-limit.test.ts</code
+              ><span class="path-dir">apps/api/src/http/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-alta-3"
+    class="sys-step"
+    data-lit="api contrato"
+    data-edges="api-contrato"
+    data-label=""
+  >
+    <h4>El contrato filtra la forma</h4>
+    <p>El esquema Zod estricto rechaza con un 400 un campo que falta, uno desconocido o un tipo erróneo, antes de que llegue al caso de uso.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-002-contrato-compartido-zod.md">ADR-002</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-01</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/create-customer.routes.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>create-customer.routes.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/customers/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-alta-4"
+    class="sys-step"
+    data-lit="api dominio"
+    data-edges="api-dominio"
+    data-label=""
+  >
+    <h4>El dominio aplica el algoritmo oficial</h4>
+    <p>La letra de un DNI es la que corresponde al resto de dividir el número entre 23. Si no coincide, la API responde 422 con el código del error.</p>
+    <p class="sys-example"><code>12345678 mod 23 = 14 → Z ≠ A → 422 TAX_ID_INVALID_CHECK</code></p>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/01-alcance.md">RF-03</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md">AC-10</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md">AC-11</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/tax-id/validate-tax-id.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>validate-tax-id.test.ts</code
+              ><span class="path-dir">packages/domain/src/tax-id/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-alta-5"
+    class="sys-step"
+    data-lit="api sqlite"
+    data-edges="api-sqlite"
+    data-label="INSERT"
+  >
+    <h4>Se guarda sin carreras</h4>
+    <p>Con un identificador válido se inserta con un UUID v7. El índice único de país e identificador convierte un duplicado en un 409, sin «comprobar y luego insertar».</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-120</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md">AC-20</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/customers/customers.repository.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>customers.repository.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/customers/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-alta-6"
+    class="sys-step"
+    data-lit="web cloudflare nginx api"
+    data-edges="&lt;nginx-api &lt;cloudflare-nginx &lt;web-cloudflare"
+    data-label="201 · 409 · 422"
+  >
+    <h4>La respuesta vuelve a la pantalla</h4>
+    <p>Un 201 lleva al detalle del cliente. Un error llega en formato RFC 9457 y la web lo pinta junto al campo que lo causó.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-009-errores-result-y-manejador-unico.md">ADR-009</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md">AC-73</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/customer-create.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>customer-create.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li>
+    </ol>
+  </article><article id="flujo-simular" class="sys-card sys-flow" aria-labelledby="flujo-simular-titulo" tabindex="-1">
+    <h3 id="flujo-simular-titulo">Simular y guardar</h3>
+    <p class="sys-summary">Una proyección de 100 usuarios en España, del slider al historial.</p>
+    <ol class="sys-steps">
+      <li
+    id="flujo-simular-1"
+    class="sys-step"
+    data-lit="web cloudflare nginx api"
+    data-edges="web-cloudflare cloudflare-nginx nginx-api"
+    data-label="GET /api/catalog"
+  >
+    <h4>La web carga el catálogo</h4>
+    <p>Tramos e impuestos por país vienen de la API y se validan con el mismo código del dominio. Un catálogo que no valida es un error, nunca una suposición.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-95</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-005-catalogo-configuracion-tipada.md">ADR-005</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/catalog/catalog.routes.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>catalog.routes.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/catalog/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-simular-2"
+    class="sys-step"
+    data-lit="web dominio"
+    data-edges="web-dominio"
+    data-label=""
+  >
+    <h4>Mueves el slider: el cálculo, en el navegador</h4>
+    <p>calculatePricing corre en el navegador, sin esperar a la red: tramos acumulativos y un único redondeo del impuesto sobre la base.</p>
+    <p class="sys-example"><code>10 × 10 € + 40 × 8 € + 50 × 5 € = 670 € · + 21 % = 810,70 €</code></p>
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-008-proyeccion-en-cliente.md">ADR-008</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md">AC-01</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/02-reglas-negocio.md">TV-PR-07</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/pricing/calculate-pricing.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>calculate-pricing.test.ts</code
+              ><span class="path-dir">packages/domain/src/pricing/</span></span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/simulator.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>simulator.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-simular-3"
+    class="sys-step"
+    data-lit="web cloudflare nginx api contrato"
+    data-edges="web-cloudflare cloudflare-nginx nginx-api api-contrato"
+    data-label="POST /api/simulations"
+  >
+    <h4>Guardar envía solo cantidades</h4>
+    <p>Cliente, usuarios, almacenamiento y llamadas a la API. Si el cuerpo trae un importe, el contrato lo rechaza con un 400.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-43</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-03</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/simulations/create-simulation.validation.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>create-simulation.validation.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/simulations/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-simular-4"
+    class="sys-step"
+    data-lit="api dominio"
+    data-edges="api-dominio"
+    data-label=""
+  >
+    <h4>La API recalcula</h4>
+    <p>El caso de uso toma la tarifa del plan del cliente y el impuesto de su país, y recalcula con la misma función. El precio que cuenta es el de la API.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/01-alcance.md">RF-10</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-008-proyeccion-en-cliente.md">ADR-008</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/simulations/create-simulation.routes.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>create-simulation.routes.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/simulations/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-simular-5"
+    class="sys-step"
+    data-lit="api sqlite"
+    data-edges="api-sqlite"
+    data-label="INSERT × 2"
+  >
+    <h4>Se guarda como instantánea</h4>
+    <p>La simulación y su desglose por tramos, en una tabla hija. Si mañana cambia la tarifa, el historial no cambia.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/ADR-004-desglose-en-tabla-hija.md">ADR-004</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-18</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/modules/simulations/simulation-snapshot.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>simulation-snapshot.test.ts</code
+              ><span class="path-dir">apps/api/src/modules/simulations/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-simular-6"
+    class="sys-step"
+    data-lit="web cloudflare nginx api"
+    data-edges="&lt;nginx-api &lt;cloudflare-nginx &lt;web-cloudflare"
+    data-label="201 Created"
+  >
+    <h4>Aparece arriba del historial</h4>
+    <p>La simulación guardada entra la primera del historial del cliente, convertida a la divisa que tengas elegida.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md">AC-44</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md">AC-78</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/simulation-save.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>simulation-save.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li>
+    </ol>
+  </article><article id="flujo-divisa" class="sys-card sys-flow" aria-labelledby="flujo-divisa-titulo" tabindex="-1">
+    <h3 id="flujo-divisa-titulo">Cambiar divisa</h3>
+    <p class="sys-summary">Los importes en libras, con la caché, la API externa y sus fallos.</p>
+    <ol class="sys-steps">
+      <li
+    id="flujo-divisa-1"
+    class="sys-step"
+    data-lit="web divisas"
+    data-edges=""
+    data-label=""
+  >
+    <h4>Eliges GBP en la cabecera</h4>
+    <p>La divisa elegida se recuerda en el navegador. Los importes se siguen calculando en euros: solo cambia cómo se muestran.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/01-alcance.md">RF-13</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md">AC-79</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/currency-conversion.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>currency-conversion.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-divisa-2"
+    class="sys-step"
+    data-lit="divisas"
+    data-edges=""
+    data-label=""
+  >
+    <h4>Primero, la caché</h4>
+    <p>Si hay tipos de hace menos de una hora, se usan. Al leerlos se validan otra vez, porque el almacenamiento del navegador lo puede tocar cualquiera.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-23</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-146</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.cache.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>exchange-rates.cache.test.ts</code
+              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-divisa-3"
+    class="sys-step"
+    data-lit="divisas tipos"
+    data-edges="divisas-tipos"
+    data-label="GET /v6/latest/EUR"
+  >
+    <h4>Si no, a la API de tipos</h4>
+    <p>Una petición desde el navegador, con 5 s de límite y sin cookies ni referrer. La API nunca sale a Internet.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-22</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-148</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-18</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.store.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>exchange-rates.store.test.ts</code
+              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-divisa-4"
+    class="sys-step"
+    data-lit="divisas tipos"
+    data-edges="&lt;divisas-tipos"
+    data-label=""
+  >
+    <h4>La respuesta se valida</h4>
+    <p>Un parser comprueba su forma y sus tipos antes de que nada llegue a la pantalla.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md">RNF-SEC-13</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.parser.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>exchange-rates.parser.test.ts</code
+              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-divisa-5"
+    class="sys-step"
+    data-lit="web dominio"
+    data-edges="web-dominio"
+    data-label=""
+  >
+    <h4>Conversión exacta, partida a partida</h4>
+    <p>Cada tramo, la base y el impuesto se convierten por separado con aritmética entera, y el total es su suma: las cifras siempre cuadran.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-144</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/currency/convert-pricing.test.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>convert-pricing.test.ts</code
+              ><span class="path-dir">packages/domain/src/currency/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li><li
+    id="flujo-divisa-6"
+    class="sys-step"
+    data-lit="web divisas"
+    data-edges=""
+    data-label=""
+  >
+    <h4>Y si falla, se ve</h4>
+    <p>Error con «Reintentar». Con tipos de menos de 48 h, se usan marcados como desactualizados; si no, los importes vuelven a euros. Cada estado tiene su e2e.</p>
+    
+    <ul class="sys-refs" aria-label="Criterios y decisiones">
+    <li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md">D-51</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md">AC-80</a></li><li><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md">AC-82</a></li>
+  </ul> <div class="paths">
+    <h4>Qué lo prueba</h4>
+    <ul>
+      <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/exchange-rates-cache.spec.ts"
+            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 3.5v4.75L4.4 14.6a1.25 1.25 0 0 0 1.1 1.9h9a1.25 1.25 0 0 0 1.1-1.9L12 8.25V3.5M7 3.5h6M6.25 12.5h7.5"/></svg><span class="path"
+              ><code>exchange-rates-cache.spec.ts</code
+              ><span class="path-dir">e2e/specs/</span></span
+            ></a
+          >
+        </li>
+    </ul>
+  </div>
+  </li>
+    </ol>
+  </article> <div class="sys-nav" data-sys-nav hidden>
+    <p class="sys-count" aria-live="polite" data-sys-count></p>
+    <div class="sys-progress" aria-hidden="true" data-sys-progress></div>
+    <div class="sys-nav-buttons">
+      <button type="button" class="btn btn-secondary" data-sys-prev>Anterior</button>
+      <button type="button" class="btn btn-primary" data-sys-next>Siguiente</button>
+      <button type="button" class="btn-link sys-play" data-sys-play aria-pressed="false">Reproducir</button>
+    </div>
+    <p class="sys-hint">También con las flechas del teclado; Esc vuelve a explorar.</p>
+  </div>
+        </div>
+      </div>
+      <ul class="sys-legend" aria-label="Leyenda del esquema">
+    <li><span class="sys-legend-line" aria-hidden="true"></span>petición HTTP</li>
+    <li><span class="sys-legend-line sys-legend-import" aria-hidden="true"></span>importa el código de otra pieza</li>
+    <li><span class="sys-legend-zone" aria-hidden="true"></span>dónde se ejecuta</li>
+  </ul> <script type="application/json" id="esquema-lineas">[{"id":"web-cloudflare","from":"web","to":"cloudflare","kind":"http"},{"id":"cloudflare-nginx","from":"cloudflare","to":"nginx","kind":"http"},{"id":"nginx-api","from":"nginx","to":"api","kind":"http"},{"id":"api-sqlite","from":"api","to":"sqlite","kind":"http"},{"id":"divisas-tipos","from":"divisas","to":"tipos","kind":"http"},{"id":"web-dominio","from":"web","to":"dominio","kind":"import"},{"id":"web-contrato","from":"web","to":"contrato","kind":"import"},{"id":"api-dominio","from":"api","to":"dominio","kind":"import"},{"id":"api-contrato","from":"api","to":"contrato","kind":"import"}]</script>
+    </div></section><section id="producto" class="section" aria-labelledby="producto-titulo"><header class="section-head">
       <h2 id="producto-titulo">El producto, <span class="accent">paso a paso</span></h2>
       <p>
         El camino de un comercial por la aplicación. Pulsa un paso para ver su pantalla, la regla con un
@@ -1019,589 +2128,11 @@
       </div>
     </details>
   </li>
-    </ol></section><section id="arquitectura" class="section" aria-labelledby="arquitectura-titulo"><header class="section-head">
-      <h2 id="arquitectura-titulo">Cómo viaja <span class="accent">una petición</span></h2>
-      <p>
-        Del navegador a la base de datos, y la única llamada que sale fuera: los tipos de cambio, que pide el
-        propio navegador. Pulsa una pieza para ver qué hace, qué control de seguridad aplica y en qué fichero
-        está.
-      </p>
-    </header>
-    <nav class="arch" aria-label="Piezas de la arquitectura">
-      <ol class="arch-path">
-        <li><a class="arch-node" href="#pieza-navegador" data-piece="pieza-navegador"
-    ><span class="arch-name">Navegador</span><span class="arch-role">Angular 22</span></a
-  ></li><li><a class="arch-node" href="#pieza-cloudflare" data-piece="pieza-cloudflare"
-    ><span class="arch-name">Cloudflare</span><span class="arch-role">solo en la demo</span></a
-  ></li><li><a class="arch-node" href="#pieza-nginx" data-piece="pieza-nginx"
-    ><span class="arch-name">nginx</span><span class="arch-role">web y proxy</span></a
-  ></li><li><a class="arch-node" href="#pieza-api" data-piece="pieza-api"
-    ><span class="arch-name">API Fastify</span><span class="arch-role">rutas y casos de uso</span></a
-  ></li><li><a class="arch-node" href="#pieza-contrato" data-piece="pieza-contrato"
-    ><span class="arch-name">Contrato Zod</span><span class="arch-role">esquemas compartidos</span></a
-  ></li><li><a class="arch-node" href="#pieza-dominio" data-piece="pieza-dominio"
-    ><span class="arch-name">Dominio</span><span class="arch-role">reglas puras</span></a
-  ></li><li><a class="arch-node" href="#pieza-sqlite" data-piece="pieza-sqlite"
-    ><span class="arch-name">SQLite</span><span class="arch-role">Drizzle</span></a
-  ></li>
-      </ol>
-      <div class="arch-branch">
-        <span class="arch-branch-label">El navegador pide los tipos de cambio</span>
-        <a class="arch-node" href="#pieza-divisas" data-piece="pieza-divisas"
-    ><span class="arch-name">open.er-api.com</span><span class="arch-role">tipos de cambio</span></a
-  >
-      </div>
-    </nav>
-    <div class="arch-panels"><article id="pieza-navegador" class="arch-panel" aria-labelledby="pieza-navegador-titulo" tabindex="-1">
-    <h3 id="pieza-navegador-titulo">Navegador <span>Angular 22</span></h3>
-    <div class="arch-panel-body">
-      <div class="arch-text">
-        <p>Pinta la interfaz con signals y calcula la proyección con el mismo dominio que la API, sin esperar a la red (ADR-008).</p>
-        <p class="arch-control">
-          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
-            ><strong>Control de seguridad.</strong> CSP sin scripts ni estilos en línea, y ningún HTML insertado a mano: nada de innerHTML ni de bypassSecurityTrust*.
-            <span class="refs">RNF-SEC-06 · RNF-SEC-14</span></span
-          >
-        </p>
-      </div>
-      <div class="paths">
-    <h4>Dónde está</h4>
-    <ul>
-      <li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/app.config.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>app.config.ts</code
-              ><span class="path-dir">apps/web/src/app/</span></span
-            ></a
-          >
-        </li><li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/features/simulator/simulator.store.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>simulator.store.ts</code
-              ><span class="path-dir">apps/web/src/app/features/simulator/</span></span
-            ></a
-          >
-        </li>
-    </ul>
-  </div>
-    </div>
-  </article><article id="pieza-cloudflare" class="arch-panel" aria-labelledby="pieza-cloudflare-titulo" tabindex="-1">
-    <h3 id="pieza-cloudflare-titulo">Cloudflare <span>solo en la demo</span></h3>
-    <div class="arch-panel-body">
-      <div class="arch-text">
-        <p>Proxy y HTTPS delante del nginx del servidor de la demo pública. En local y con Docker Compose no existe.</p>
-        <p class="arch-control">
-          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
-            ><strong>Control de seguridad.</strong> El nginx del servidor recupera la IP real de CF-Connecting-IP solo si la conexión viene de Cloudflare, así que el límite de escrituras cuenta por cliente.
-            <span class="refs">RNF-SEC-08 · RNF-SEC-20</span></span
-          >
-        </p>
-      </div>
-      <div class="paths">
-    <h4>Dónde está</h4>
-    <ul>
-      <li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/deploy/demo/nginx/https.conf.template"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>https.conf.template</code
-              ><span class="path-dir">deploy/demo/nginx/</span></span
-            ></a
-          >
-        </li><li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/deploy/demo/docker-compose.demo.yml"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>docker-compose.demo.yml</code
-              ><span class="path-dir">deploy/demo/</span></span
-            ></a
-          >
-        </li>
-    </ul>
-  </div>
-    </div>
-  </article><article id="pieza-nginx" class="arch-panel" aria-labelledby="pieza-nginx-titulo" tabindex="-1">
-    <h3 id="pieza-nginx-titulo">nginx <span>web y proxy</span></h3>
-    <div class="arch-panel-body">
-      <div class="arch-text">
-        <p>Sirve la build de Angular y reenvía /api a la API: un único origen para la web y la API (ADR-012).</p>
-        <p class="arch-control">
-          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
-            ><strong>Control de seguridad.</strong> Cabeceras de seguridad y CSP de la web, y contenedores sin root, de solo lectura y con el puerto solo en 127.0.0.1.
-            <span class="refs">RNF-SEC-06 · RNF-SEC-16</span></span
-          >
-        </p>
-      </div>
-      <div class="paths">
-    <h4>Dónde está</h4>
-    <ul>
-      <li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/nginx/nginx.conf"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>nginx.conf</code
-              ><span class="path-dir">apps/web/nginx/</span></span
-            ></a
-          >
-        </li><li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/nginx/security-headers.conf"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>security-headers.conf</code
-              ><span class="path-dir">apps/web/nginx/</span></span
-            ></a
-          >
-        </li>
-    </ul>
-  </div>
-    </div>
-  </article><article id="pieza-api" class="arch-panel" aria-labelledby="pieza-api-titulo" tabindex="-1">
-    <h3 id="pieza-api-titulo">API Fastify <span>rutas y casos de uso</span></h3>
-    <div class="arch-panel-body">
-      <div class="arch-text">
-        <p>Rutas finas que llaman a casos de uso; un único manejador de errores responde en formato RFC 9457 (ADR-009).</p>
-        <p class="arch-control">
-          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
-            ><strong>Control de seguridad.</strong> Límite de peticiones por IP, CORS con lista cerrada, errores sin detalles internos y logs sin datos personales.
-            <span class="refs">RNF-SEC-07 · RNF-SEC-08 · RNF-SEC-10 · RNF-SEC-11</span></span
-          >
-        </p>
-      </div>
-      <div class="paths">
-    <h4>Dónde está</h4>
-    <ul>
-      <li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/app.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>app.ts</code
-              ><span class="path-dir">apps/api/src/</span></span
-            ></a
-          >
-        </li><li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/http/rate-limit.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>rate-limit.ts</code
-              ><span class="path-dir">apps/api/src/http/</span></span
-            ></a
-          >
-        </li><li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/http/error-handler.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>error-handler.ts</code
-              ><span class="path-dir">apps/api/src/http/</span></span
-            ></a
-          >
-        </li>
-    </ul>
-  </div>
-    </div>
-  </article><article id="pieza-contrato" class="arch-panel" aria-labelledby="pieza-contrato-titulo" tabindex="-1">
-    <h3 id="pieza-contrato-titulo">Contrato Zod <span>esquemas compartidos</span></h3>
-    <div class="arch-panel-body">
-      <div class="arch-text">
-        <p>Los mismos esquemas validan las peticiones en la API, generan el OpenAPI y dan los tipos a la web (ADR-002).</p>
-        <p class="arch-control">
-          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
-            ><strong>Control de seguridad.</strong> Esquemas estrictos: un campo desconocido o un importe enviado por el cliente se rechazan con un 400.
-            <span class="refs">RNF-SEC-01 · RNF-SEC-03</span></span
-          >
-        </p>
-      </div>
-      <div class="paths">
-    <h4>Dónde está</h4>
-    <ul>
-      <li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/contract/src/simulations.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>simulations.ts</code
-              ><span class="path-dir">packages/contract/src/</span></span
-            ></a
-          >
-        </li><li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/contract/src/customers.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>customers.ts</code
-              ><span class="path-dir">packages/contract/src/</span></span
-            ></a
-          >
-        </li><li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/openapi.json"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>openapi.json</code
-              ><span class="path-dir">apps/api/</span></span
-            ></a
-          >
-        </li>
-    </ul>
-  </div>
-    </div>
-  </article><article id="pieza-dominio" class="arch-panel" aria-labelledby="pieza-dominio-titulo" tabindex="-1">
-    <h3 id="pieza-dominio-titulo">Dominio <span>reglas puras</span></h3>
-    <div class="arch-panel-body">
-      <div class="arch-text">
-        <p>Precios por tramos, impuestos, redondeo, divisas y validación fiscal: funciones puras sin dependencias, con el 100 % de cobertura (ADR-001).</p>
-        <p class="arch-control">
-          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
-            ><strong>Control de seguridad.</strong> El servidor calcula todos los importes con estas funciones; nunca acepta uno del cliente.
-            <span class="refs">RNF-SEC-03</span></span
-          >
-        </p>
-      </div>
-      <div class="paths">
-    <h4>Dónde está</h4>
-    <ul>
-      <li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/index.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>index.ts</code
-              ><span class="path-dir">packages/domain/src/</span></span
-            ></a
-          >
-        </li><li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/pricing/calculate-pricing.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>calculate-pricing.ts</code
-              ><span class="path-dir">packages/domain/src/pricing/</span></span
-            ></a
-          >
-        </li>
-    </ul>
-  </div>
-    </div>
-  </article><article id="pieza-sqlite" class="arch-panel" aria-labelledby="pieza-sqlite-titulo" tabindex="-1">
-    <h3 id="pieza-sqlite-titulo">SQLite <span>Drizzle</span></h3>
-    <div class="arch-panel-body">
-      <div class="arch-text">
-        <p>Clientes y simulaciones; cada simulación guarda su desglose en una tabla hija, como instantánea (ADR-004).</p>
-        <p class="arch-control">
-          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
-            ><strong>Control de seguridad.</strong> Solo consultas parametrizadas, comodines de LIKE escapados e IDs UUID v7 no enumerables.
-            <span class="refs">RNF-SEC-02 · RNF-SEC-04</span></span
-          >
-        </p>
-      </div>
-      <div class="paths">
-    <h4>Dónde está</h4>
-    <ul>
-      <li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/db/schema/customers.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>customers.ts</code
-              ><span class="path-dir">apps/api/src/db/schema/</span></span
-            ></a
-          >
-        </li><li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/db/like-pattern.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>like-pattern.ts</code
-              ><span class="path-dir">apps/api/src/db/</span></span
-            ></a
-          >
-        </li><li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/shared/id-generator.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>id-generator.ts</code
-              ><span class="path-dir">apps/api/src/shared/</span></span
-            ></a
-          >
-        </li>
-    </ul>
-  </div>
-    </div>
-  </article><article id="pieza-divisas" class="arch-panel" aria-labelledby="pieza-divisas-titulo" tabindex="-1">
-    <h3 id="pieza-divisas-titulo">open.er-api.com <span>tipos de cambio</span></h3>
-    <div class="arch-panel-body">
-      <div class="arch-text">
-        <p>El navegador pide los tipos de cambio, los guarda en caché y avisa si están desactualizados o si fallan (D-22, D-51).</p>
-        <p class="arch-control">
-          <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 3.25 4.5 5.25v4.5c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4.5L10 3.25Z"/></svg><span
-            ><strong>Control de seguridad.</strong> La respuesta se valida antes de usarla y el backend no hace ninguna petición saliente.
-            <span class="refs">RNF-SEC-13 · RNF-SEC-18</span></span
-          >
-        </p>
-      </div>
-      <div class="paths">
-    <h4>Dónde está</h4>
-    <ul>
-      <li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.client.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>exchange-rates.client.ts</code
-              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
-            ></a
-          >
-        </li><li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.parser.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>exchange-rates.parser.ts</code
-              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
-            ></a
-          >
-        </li><li>
-          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/app/core/currency/exchange-rates.cache.ts"
-            ><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"
-              ><code>exchange-rates.cache.ts</code
-              ><span class="path-dir">apps/web/src/app/core/currency/</span></span
-            ></a
-          >
-        </li>
-    </ul>
-  </div>
-    </div>
-  </article></div></section><section id="mapa" class="section" aria-labelledby="mapa-titulo"><header class="section-head">
-      <h2 id="mapa-titulo">Dónde está <span class="accent">cada cosa</span></h2>
-      <p>
-        31 carpetas y ficheros que merece la pena abrir, no todos. Cada uno dice para qué sirve y cuándo
-        abrirlo, y enlaza a GitHub.
-      </p>
-    </header>
-    <div class="map-filter" data-map-filter hidden>
-      <p id="mapa-filtro">Filtrar por interés</p>
-      <div role="group" aria-labelledby="mapa-filtro">
-        <button type="button" aria-pressed="true" data-interest="todo">Todo</button>
-        <button type="button" aria-pressed="false" data-interest="negocio">Negocio</button><button type="button" aria-pressed="false" data-interest="seguridad">Seguridad</button><button type="button" aria-pressed="false" data-interest="tests">Tests</button><button type="button" aria-pressed="false" data-interest="ia">Proceso con IA</button>
-      </div>
-      <p class="map-count" aria-live="polite" data-map-count>31 entradas</p>
-    </div>
-    <div class="map-tree">
-      <section
-            class="map-group"
-            aria-labelledby="mapa-ai-workspace"
-          >
-            <h3 id="mapa-ai-workspace">
-              <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg>ai-workspace <span>El proceso: del enunciado a las decisiones</span>
-            </h3>
-            <ul class="map-entries">
-              <li class="map-entry" data-interests="ia">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/README.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>README.md</code><span class="path-dir">ai-workspace/</span></span></a>
-    <p>Mapa del proceso, cómo se trabajó con la IA y dónde intervino el responsable. <span class="map-when">Lo primero, para entender el proceso.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Proceso con IA</li>
-    </ul>
-  </li><li class="map-entry" data-interests="negocio ia">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/01-analisis.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>01-analisis.md</code><span class="path-dir">ai-workspace/</span></span></a>
-    <p>Requisitos, ambigüedades y casos límite antes de decidir nada. <span class="map-when">Para ver cómo se desmenuzó el enunciado.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Negocio</li><li>Proceso con IA</li>
-    </ul>
-  </li><li class="map-entry" data-interests="negocio tests">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/02-reglas-negocio.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>02-reglas-negocio.md</code><span class="path-dir">ai-workspace/02-especificacion/</span></span></a>
-    <p>Tramos, impuestos, redondeo y divisas, con sus vectores de prueba. <span class="map-when">Para comprobar una cifra del simulador.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Negocio</li><li>Tests</li>
-    </ul>
-  </li><li class="map-entry" data-interests="negocio">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/03-validacion-fiscal.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>03-validacion-fiscal.md</code><span class="path-dir">ai-workspace/02-especificacion/</span></span></a>
-    <p>El algoritmo de cada identificador fiscal, con su fuente oficial. <span class="map-when">Si te interesa la validación fiscal.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Negocio</li>
-    </ul>
-  </li><li class="map-entry" data-interests="seguridad">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/06-seguridad.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>06-seguridad.md</code><span class="path-dir">ai-workspace/02-especificacion/</span></span></a>
-    <p>OWASP API Top 10, modelo de amenazas y por qué no hay login. <span class="map-when">Para revisar la seguridad con método.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Seguridad</li>
-    </ul>
-  </li><li class="map-entry" data-interests="tests negocio">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/07-criterios-aceptacion.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>07-criterios-aceptacion.md</code><span class="path-dir">ai-workspace/02-especificacion/</span></span></a>
-    <p>Los criterios de aceptación, cada uno con su nivel de test. <span class="map-when">Para ver qué significa «hecho».</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Tests</li><li>Negocio</li>
-    </ul>
-  </li><li class="map-entry" data-interests="ia">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/ai-workspace/03-arquitectura/adr"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>adr/</code><span class="path-dir">ai-workspace/03-arquitectura/</span></span></a>
-    <p>Las decisiones de arquitectura, una por fichero. <span class="map-when">Para entender el porqué de la estructura.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Proceso con IA</li>
-    </ul>
-  </li><li class="map-entry" data-interests="ia">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>decisiones.md</code><span class="path-dir">ai-workspace/</span></span></a>
-    <p>Cada decisión con la alternativa descartada, el motivo y quién la tomó. <span class="map-when">Para saber quién decidió qué.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Proceso con IA</li>
-    </ul>
-  </li><li class="map-entry" data-interests="ia">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/diario.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>diario.md</code><span class="path-dir">ai-workspace/</span></span></a>
-    <p>Una entrada por parte: qué se hizo, qué falló y qué corrigió el revisor. <span class="map-when">Para ver el proceso real, con sus errores.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Proceso con IA</li>
-    </ul>
-  </li><li class="map-entry" data-interests="ia">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/ai-workspace/prompts"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>prompts/</code><span class="path-dir">ai-workspace/</span></span></a>
-    <p>Los prompts de cada sesión, literales y numerados. <span class="map-when">Para ver qué se pidió exactamente.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Proceso con IA</li>
-    </ul>
-  </li><li class="map-entry" data-interests="ia">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/ai-workspace/conversaciones"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>conversaciones/</code><span class="path-dir">ai-workspace/</span></span></a>
-    <p>Las sesiones de construcción con la IA, enteras y legibles, convertidas a Markdown. <span class="map-when">Para ver la interacción real, empezando por sus momentos clave.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Proceso con IA</li>
-    </ul>
-  </li>
-            </ul>
-          </section><section
-            class="map-group"
-            aria-labelledby="mapa-packages"
-          >
-            <h3 id="mapa-packages">
-              <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg>packages <span>El código compartido</span>
-            </h3>
-            <ul class="map-entries">
-              <li class="map-entry" data-interests="negocio">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/pricing/calculate-pricing.ts"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>calculate-pricing.ts</code><span class="path-dir">packages/domain/src/pricing/</span></span></a>
-    <p>Tramos acumulativos e impuesto: la misma función en la API y en la web. <span class="map-when">Para ver la regla central.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Negocio</li>
-    </ul>
-  </li><li class="map-entry" data-interests="negocio">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain/src/tax-id"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>tax-id/</code><span class="path-dir">packages/domain/src/</span></span></a>
-    <p>Un validador de identificador fiscal por país detrás de una interfaz común. <span class="map-when">Para ver cómo se extiende a otro país.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Negocio</li>
-    </ul>
-  </li><li class="map-entry" data-interests="negocio">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/packages/domain/src/currency/convert-pricing.ts"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>convert-pricing.ts</code><span class="path-dir">packages/domain/src/currency/</span></span></a>
-    <p>Conversión partida a partida, con aritmética entera. <span class="map-when">Si te preguntas por qué los totales cuadran.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Negocio</li>
-    </ul>
-  </li><li class="map-entry" data-interests="seguridad">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/contract/src"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>src/</code><span class="path-dir">packages/contract/</span></span></a>
-    <p>Esquemas Zod que validan la API y tipan la web. <span class="map-when">Para ver el contrato de la API.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Seguridad</li>
-    </ul>
-  </li>
-            </ul>
-          </section><section
-            class="map-group"
-            aria-labelledby="mapa-apps"
-          >
-            <h3 id="mapa-apps">
-              <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg>apps <span>La API y la web</span>
-            </h3>
-            <ul class="map-entries">
-              <li class="map-entry" data-interests="negocio">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api/src/modules"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>modules/</code><span class="path-dir">apps/api/src/</span></span></a>
-    <p>Un módulo por recurso: rutas, casos de uso y repositorios. <span class="map-when">Para seguir una petición en la API.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Negocio</li>
-    </ul>
-  </li><li class="map-entry" data-interests="seguridad">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api/src/http"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>http/</code><span class="path-dir">apps/api/src/</span></span></a>
-    <p>Lo transversal: errores RFC 9457, límite de peticiones, CORS, cabeceras y logs. <span class="map-when">Para revisar los controles de seguridad.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Seguridad</li>
-    </ul>
-  </li><li class="map-entry" data-interests="negocio">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/api/src/config/catalog.data.ts"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>catalog.data.ts</code><span class="path-dir">apps/api/src/config/</span></span></a>
-    <p>Tarifas e impuestos por país, validados al arrancar. <span class="map-when">Para cambiar un precio o un tipo.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Negocio</li>
-    </ul>
-  </li><li class="map-entry" data-interests="negocio">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/web/src/app/features"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>features/</code><span class="path-dir">apps/web/src/app/</span></span></a>
-    <p>Las pantallas: dashboard, alta, detalle y simulador. <span class="map-when">Para ver la interfaz con signals.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Negocio</li>
-    </ul>
-  </li><li class="map-entry" data-interests="tests">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/apps/web/src/styles/tokens.css"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>tokens.css</code><span class="path-dir">apps/web/src/styles/</span></span></a>
-    <p>Los colores y medidas de la interfaz, con su contraste probado. <span class="map-when">Si te interesa el diseño o la accesibilidad.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Tests</li>
-    </ul>
-  </li><li class="map-entry" data-interests="seguridad">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/web/nginx"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>nginx/</code><span class="path-dir">apps/web/</span></span></a>
-    <p>El nginx de producción: CSP, cabeceras y proxy a la API. <span class="map-when">Para ver la CSP real.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Seguridad</li>
-    </ul>
-  </li>
-            </ul>
-          </section><section
-            class="map-group"
-            aria-labelledby="mapa-tests-y-calidad"
-          >
-            <h3 id="mapa-tests-y-calidad">
-              <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg>Tests y calidad <span>Lo que comprueba que todo lo anterior es cierto</span>
-            </h3>
-            <ul class="map-entries">
-              <li class="map-entry" data-interests="tests">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/e2e/specs"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>specs/</code><span class="path-dir">e2e/</span></span></a>
-    <p>Los e2e de Playwright contra la pila de Docker, con la CSP real. <span class="map-when">Para ver un flujo completo probado.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Tests</li>
-    </ul>
-  </li><li class="map-entry" data-interests="seguridad tests">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/e2e/specs/xss.spec.ts"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>xss.spec.ts</code><span class="path-dir">e2e/specs/</span></span></a>
-    <p>Un nombre de empresa con HTML malicioso se muestra como texto y no ejecuta nada. <span class="map-when">Para ver la defensa frente a XSS.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Seguridad</li><li>Tests</li>
-    </ul>
-  </li><li class="map-entry" data-interests="tests ia">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/tools"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>tools/</code></span></a>
-    <p>Tests de las propias herramientas: reglas de lint, hooks, scripts y documentación. <span class="map-when">Para ver que los controles también se prueban.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Tests</li><li>Proceso con IA</li>
-    </ul>
-  </li><li class="map-entry" data-interests="tests">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/scripts/trace-tests.mjs"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>trace-tests.mjs</code><span class="path-dir">scripts/</span></span></a>
-    <p>Exige que cada criterio y cada vector los cite algún test. <span class="map-when">Para ver cómo se hace cumplir la trazabilidad.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Tests</li>
-    </ul>
-  </li><li class="map-entry" data-interests="tests seguridad">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.github/workflows/ci.yml"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>ci.yml</code><span class="path-dir">.github/workflows/</span></span></a>
-    <p>El pipeline: calidad en tres versiones de Node, auditoría, e2e, humo y demo. <span class="map-when">Para ver qué bloquea un merge.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Tests</li><li>Seguridad</li>
-    </ul>
-  </li><li class="map-entry" data-interests="ia seguridad">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/eslint.config.js"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>eslint.config.js</code></span></a>
-    <p>Límites de tamaño, fronteras entre capas y reglas de seguridad. <span class="map-when">Para ver las reglas que la IA no podía saltarse.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Proceso con IA</li><li>Seguridad</li>
-    </ul>
-  </li>
-            </ul>
-          </section><section
-            class="map-group"
-            aria-labelledby="mapa-trabajo-con-la-ia"
-          >
-            <h3 id="mapa-trabajo-con-la-ia">
-              <svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg>Trabajo con la IA <span>Las reglas que seguía Claude y cómo se hacían cumplir</span>
-            </h3>
-            <ul class="map-entries">
-              <li class="map-entry" data-interests="ia">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/CLAUDE.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>CLAUDE.md</code></span></a>
-    <p>Las reglas de trabajo, de código y de seguridad que leía cada sesión. <span class="map-when">Para ver qué se le exigía a la IA.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Proceso con IA</li>
-    </ul>
-  </li><li class="map-entry" data-interests="ia tests">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.claude/agents/revisor.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>revisor.md</code><span class="path-dir">.claude/agents/</span></span></a>
-    <p>El subagente revisor: solo lee y devuelve hallazgos P0 a P3. <span class="map-when">Para ver cómo se revisaba cada parte.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Proceso con IA</li><li>Tests</li>
-    </ul>
-  </li><li class="map-entry" data-interests="ia seguridad">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.claude/settings.json"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span class="path"><code>settings.json</code><span class="path-dir">.claude/</span></span></a>
-    <p>Permisos y hooks: qué pedía confirmación y qué se comprobaba en cada edición. <span class="map-when">Para ver los guardarraíles.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Proceso con IA</li><li>Seguridad</li>
-    </ul>
-  </li><li class="map-entry" data-interests="ia">
-    <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/scripts/claude-hooks"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span class="path"><code>claude-hooks/</code><span class="path-dir">scripts/</span></span></a>
-    <p>Bloquean acciones prohibidas, pasan el lint del fichero editado y no dejan terminar en rojo. <span class="map-when">Para ver cómo se paraba a la IA.</span></p>
-    <ul class="map-tags" aria-label="Interés">
-      <li>Proceso con IA</li>
-    </ul>
-  </li>
-            </ul>
-          </section>
-    </div></section><section id="construccion" class="section" aria-labelledby="construccion-titulo"><header class="section-head">
-      <h2 id="construccion-titulo">Cómo se <span class="accent">construyó</span></h2>
+    </ol></section><section id="proceso" class="section" aria-labelledby="proceso-titulo"><header class="section-head">
+      <h2 id="proceso-titulo">Cómo se trabajó <span class="accent">con la IA</span></h2>
       <p>
         Cuatro fases antes del código (análisis, especificación, arquitectura y plan) y después
-        14 partes, cada una en su sesión, su rama y su PR. Todas siguieron el mismo ciclo.
+        14 partes, cada una en su sesión, su rama y su PR, con el mismo ciclo.
       </p>
     </header>
     <h3 class="sub-title">El ciclo de cada parte</h3>
@@ -1628,12 +2159,73 @@
           <p>Una rama y una PR por parte. main solo acepta la PR con todos los checks del CI en verde.</p>
         </li>
   </ol>
-    <h3 class="sub-title">Las partes, de P0 a P13</h3>
-    <ol class="timeline">
+    <h3 class="sub-title">Dónde intervine yo</h3>
+    <p class="process-lead">
+      10 momentos en los que mi criterio cambió el rumbo, con el texto de
+      <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/README.md#dónde-intervine-yo">ai-workspace/README.md</a>.
+    </p>
+    <ol class="moments">
+    <li class="moment">
+          <span class="moment-index" aria-hidden="true">01</span>
+          <h4><span class="visually-hidden">1. </span>Validación fiscal estricta</h4>
+          <p>Rechacé la validación genérica de 2 a 20 caracteres fuera de España: no es «estricta». Pedí el formato oficial de cada país, con su fuente, y un validador por país detrás de una interfaz común.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#validación-fiscal">D-15</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/02-especificacion.md">prompt</a></p>
+        </li><li class="moment">
+          <span class="moment-index" aria-hidden="true">02</span>
+          <h4><span class="visually-hidden">2. </span>Seguridad con método</h4>
+          <p>Pedí sustituir el requisito de seguridad genérico por un bloque basado en el OWASP API Security Top 10 y un modelo de amenazas, incluido por qué no hay login.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#api-y-seguridad">D-40</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/02-especificacion.md">prompt</a></p>
+        </li><li class="moment">
+          <span class="moment-index" aria-hidden="true">03</span>
+          <h4><span class="visually-hidden">3. </span>Un fallback que no esconde el error</h4>
+          <p>Aprobé la caché de los tipos de cambio con una condición: carga, error con «Reintentar» y tipos desactualizados se ven siempre, cada estado con su e2e.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#validación-de-la-especificación-2026-11-12">D-51</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/03-validacion-especificacion.md">prompt</a></p>
+        </li><li class="moment">
+          <span class="moment-index" aria-hidden="true">04</span>
+          <h4><span class="visually-hidden">4. </span>La CSP, comprobada</h4>
+          <p>Pedí verificar si el build de Angular inyectaba CSS en línea, y un e2e que falle ante cualquier violación de CSP. Con el valor por defecto, la política habría dejado la web sin estilos.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#validación-de-la-arquitectura-y-plan-2026-11-12">D-70</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/06-plan-implementacion.md">prompt</a></p>
+        </li><li class="moment">
+          <span class="moment-index" aria-hidden="true">05</span>
+          <h4><span class="visually-hidden">5. </span>El flujo de trabajo</h4>
+          <p>Decidí una rama y una PR por parte, y hooks rápidos (el lint del fichero editado, nunca el build completo). Tras el primer NO APTO del revisor acepté su propuesta: <code>npm install &lt;paquete&gt;</code> y <code>gh pr merge</code> pasaron a pedir confirmación.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p0--scaffolding-2026-11-12">D-80, D-82 y D-85</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/07-p0-plan.md">prompt 07</a> y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/08-p0-permisos-y-cierre.md">prompt 08</a></p>
+        </li><li class="moment">
+          <span class="moment-index" aria-hidden="true">06</span>
+          <h4><span class="visually-hidden">6. </span>La IP real, sin atajos</h4>
+          <p>Exigí que los proxies de confianza fueran solo <code>loopback</code> y la subred de Docker de la demo, nunca todos los rangos privados; en P6 estreché el de la demo a direcciones exactas y pedí un e2e que demuestre que una IP falsa no abre un cubo nuevo del límite.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p3--contrato-y-base-de-la-api-2026-11-12">D-113</a> y D-130 · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/13-p3-cierre.md">prompt 13</a> y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/18-p6-plan.md">prompt 18</a></p>
+        </li><li class="moment">
+          <span class="moment-index" aria-hidden="true">07</span>
+          <h4><span class="visually-hidden">7. </span>El diseño, una extensión de roams.es</h4>
+          <p>Pedí que la interfaz pareciera una extensión natural de la web de la empresa, <a href="https://roams.es/">roams.es</a>: misma familia visual, no una copia. Validé la maqueta con dos ajustes.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p3--contrato-y-base-de-la-api-2026-11-12">D-122</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/10-diseno-visual.md">10-diseno-visual</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/16-p5-plan.md">prompt</a></p>
+        </li><li class="moment">
+          <span class="moment-index" aria-hidden="true">08</span>
+          <h4><span class="visually-hidden">8. </span>Una contradicción de la especificación</h4>
+          <p>Claude detectó que la §4.4 dejaba solo EUR mientras cargan los tipos y que AC-88 pedía cambiar de divisa en ese momento, y me planteó las salidas. Decidí que AC-88 se cumple en «Refrescando» y que tras un error los importes vuelven a la divisa que había elegido.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p8--divisas-2026-11-13">D-142 y D-143</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/20-p8-plan.md">prompt</a></p>
+        </li><li class="moment">
+          <span class="moment-index" aria-hidden="true">09</span>
+          <h4><span class="visually-hidden">9. </span>No enmendar un criterio para facilitar el código</h4>
+          <p>Yo había pedido cortar el email del detalle con «…», y eso obligaba a cambiar AC-84. Al revisar el plan me di cuenta de que con «…» y <code>title</code> no se puede leer en móvil ni con el teclado, y cambié de idea: que se vea entero y se parta solo por puntos naturales, sin tocar el criterio.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p10--shouldcould-y-ci-completo-2026-11-13">D-159</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/22-p10-plan.md">prompt</a></p>
+        </li><li class="moment">
+          <span class="moment-index" aria-hidden="true">10</span>
+          <h4><span class="visually-hidden">10. </span>Parar la línea cuando el CI se pone rojo</h4>
+          <p>Tras fusionar P10, el e2e de AC-91 falló en <code>main</code>. Pedí arreglarlo en una PR aparte antes de seguir, y demostrarlo con repeticiones: de 6 fallos en 100 ejecuciones a 0 en 100.</p>
+    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/diario.md#arreglo-tras-p10--e2e-inestable-de-ac-91--2026-11-13--rama-fixe2e-slider-initial-value">diario</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/23-arreglo-e2e-ac91.md">prompt</a></p>
+        </li>
+  </ol>
+    <details class="process-parts">
+      <summary>
+        <h3>Las 14 partes, de P0 a P13, y el cierre</h3>
+      </summary>
+      <ol class="timeline">
       <li class="tl-part">
     <span class="tl-id" aria-hidden="true">P0</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P0: </span>Scaffolding y herramientas</h3>
+      <h4><span class="visually-hidden">P0: </span>Scaffolding y herramientas</h4>
       <p>Monorepo vacío pero completo en herramientas, para que la primera línea de negocio ya nazca bajo las reglas.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1647,7 +2239,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P1</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P1: </span>Dominio: precios, impuestos, redondeo, catálogo, texto y slider</h3>
+      <h4><span class="visually-hidden">P1: </span>Dominio: precios, impuestos, redondeo, catálogo, texto y slider</h4>
       <p>El núcleo de cálculo, puro y probado con TDD.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1661,7 +2253,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P2</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P2: </span>Dominio: identificador fiscal</h3>
+      <h4><span class="visually-hidden">P2: </span>Dominio: identificador fiscal</h4>
       <p>Normalización y un validador por país detrás de una interfaz común (RNF-26).</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1675,7 +2267,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P3</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P3: </span>Contrato y base de la API</h3>
+      <h4><span class="visually-hidden">P3: </span>Contrato y base de la API</h4>
       <p>Todo lo transversal del backend, listo para que P4 solo añada casos de uso.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1689,7 +2281,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P4</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P4: </span>API de la porción vertical</h3>
+      <h4><span class="visually-hidden">P4: </span>API de la porción vertical</h4>
       <p>Alta y lectura de clientes, y creación y listado de simulaciones de punta a punta en el backend.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1703,7 +2295,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P5</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P5: </span>Web de la porción vertical</h3>
+      <h4><span class="visually-hidden">P5: </span>Web de la porción vertical</h4>
       <p>Alta → detalle → simulador (EUR, slider y campo numérico) → guardar → historial, en el navegador.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1717,7 +2309,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P6</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P6: </span>Docker Compose, nginx y e2e de la porción vertical</h3>
+      <h4><span class="visually-hidden">P6: </span>Docker Compose, nginx y e2e de la porción vertical</h4>
       <p>La porción vertical probada en el navegador contra la pila de producción, con CSP real.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1731,7 +2323,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P7</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P7: </span>Búsqueda y dashboard</h3>
+      <h4><span class="visually-hidden">P7: </span>Búsqueda y dashboard</h4>
       <p>Listado paginado y búsqueda sin acentos ni mayúsculas, en la API y en la web.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1745,7 +2337,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P8</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P8: </span>Divisas</h3>
+      <h4><span class="visually-hidden">P8: </span>Divisas</h4>
       <p>Selector, tipos con caché, indicador de estado siempre visible y conversión por partidas hoja.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1759,7 +2351,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P9</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P9: </span>Robustez: seguridad, estados, responsive y accesibilidad</h3>
+      <h4><span class="visually-hidden">P9: </span>Robustez: seguridad, estados, responsive y accesibilidad</h4>
       <p>Cerrar los AC transversales que no han caído en las partes anteriores.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1773,7 +2365,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P10</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P10: </span>Should/Could y CI completo</h3>
+      <h4><span class="visually-hidden">P10: </span>Should/Could y CI completo</h4>
       <p>Los extras y el pipeline final.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1787,7 +2379,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P11</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P11: </span>Demo pública</h3>
+      <h4><span class="visually-hidden">P11: </span>Demo pública</h4>
       <p>Demo en una URL pública con las medidas de D-47.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1801,7 +2393,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P12</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P12: </span>Cierre: README, clon limpio y revisión final</h3>
+      <h4><span class="visually-hidden">P12: </span>Cierre: README, clon limpio y revisión final</h4>
       <p>Que el evaluador lo levante sin fricción y que el <code>ai-workspace</code> cuente el proceso completo.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1815,7 +2407,7 @@
   </li><li class="tl-part">
     <span class="tl-id" aria-hidden="true">P13</span>
     <div class="tl-body">
-      <h3><span class="visually-hidden">P13: </span>Recorrido visual para los evaluadores</h3>
+      <h4><span class="visually-hidden">P13: </span>Recorrido visual para los evaluadores</h4>
       <p>Que un evaluador entienda el proyecto en 5 minutos sin leer todo <code>ai-workspace</code>.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1828,12 +2420,12 @@
     </div>
   </li>
     </ol>
-    <h3 class="sub-title">Después del plan: el cierre</h3>
+    <h4 class="sub-title">Después del plan: el cierre</h4>
     <ol class="timeline">
       <li class="tl-part">
     <span class="tl-dot" aria-hidden="true"></span>
     <div class="tl-body">
-      <h3>Conversaciones con la IA y privacidad</h3>
+      <h5>Conversaciones con la IA y privacidad</h5>
       <p>Las sesiones de construcción enteras, convertidas a Markdown, y una comprobación de privacidad de todo lo entregado.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1847,7 +2439,7 @@
   </li><li class="tl-part">
     <span class="tl-dot" aria-hidden="true"></span>
     <div class="tl-body">
-      <h3>«Lo más destacable» del README</h3>
+      <h5>«Lo más destacable» del README</h5>
       <p>Siete líneas, cada una con el enlace a lo que la demuestra y con sus cifras leídas de su fuente.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1861,7 +2453,7 @@
   </li><li class="tl-part">
     <span class="tl-dot" aria-hidden="true"></span>
     <div class="tl-body">
-      <h3>Rediseño visual a partir de tres maquetas</h3>
+      <h5>Rediseño visual a partir de tres maquetas</h5>
       <p>Una dirección visual nueva para la interfaz, sin tocar su lógica, con capturas y recorrido regenerados.</p>
       <p class="tl-meta">
         <span class="tl-pr"
@@ -1873,252 +2465,37 @@
       </p>
     </div>
   </li>
-    </ol></section><section id="calidad" class="section" aria-labelledby="calidad-titulo"><header class="section-head">
-      <h2 id="calidad-titulo">Calidad que <span class="accent">se comprueba sola</span></h2>
-      <p>Nada se integra en main sin el CI en verde. Las reglas de CLAUDE.md marcadas con ⚙ las hace cumplir una herramienta que también tiene sus tests.</p>
-    </header>
-    <div class="quality">
-      <div class="quality-block">
-        <h3><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.github/workflows/ci.yml">El pipeline</a></h3>
-        <p>6 trabajos, leídos de <code>ci.yml</code>. Abre uno para ver sus pasos.</p>
-        <ol class="pipeline">
-    <li class="pipeline-job">
-          <details>
-            <summary>
-              <span class="pipeline-name">quality</span
-              ><span class="pipeline-count">9 pasos</span>
-            </summary>
-            <ol class="pipeline-steps">
-              <li>Format</li><li>Lint</li><li>Typecheck</li><li>File names, forbidden patterns and dependency cycles</li><li>Migrations match the schema (db:check)</li><li>Node tests (domain coverage 100 %)</li><li>Web unit tests</li><li>Build</li><li>Traceability, blocking (every AC and TV has a test; only the declared pending ones are left, D-161)</li>
-            </ol>
-          </details>
-        </li><li class="pipeline-job">
-          <details>
-            <summary>
-              <span class="pipeline-name">audit</span
-              ><span class="pipeline-count">2 pasos</span>
-            </summary>
-            <ol class="pipeline-steps">
-              <li>Dependency audit (fails on high or critical, AC-57)</li><li>No committed .env files (AC-55)</li>
-            </ol>
-          </details>
-        </li><li class="pipeline-job">
-          <details>
-            <summary>
-              <span class="pipeline-name">e2e</span
-              ><span class="pipeline-count">8 pasos</span>
-            </summary>
-            <ol class="pipeline-steps">
-              <li>Start the Compose stack and wait until it is healthy (AC-97, D-133)</li><li>Containers without root, read-only, ports on 127.0.0.1 only (AC-60, D-130)</li><li>Install Chromium for Playwright</li><li>Evaluator walkthrough, published and from file:// (D-183, D-184)</li><li>e2e against the Compose stack, real CSP and headers (AC-96, AC-64, AC-52)</li><li>Playwright report and traces</li><li>Logs of the stack (the API logs carry no personal data)</li><li>Stop the stack and delete its data</li>
-            </ol>
-          </details>
-        </li><li class="pipeline-job">
-          <details>
-            <summary>
-              <span class="pipeline-name">smoke</span
-              ><span class="pipeline-count">5 pasos</span>
-            </summary>
-            <ol class="pipeline-steps">
-              <li>README · install</li><li>README · migrate and seed (npm run setup)</li><li>Install Chromium for Playwright (with its system libraries on Linux)</li><li>Install Chromium for Playwright</li><li>README · start (npm run dev), GET /health and the dashboard with the sample data (AC-95)</li>
-            </ol>
-          </details>
-        </li><li class="pipeline-job">
-          <details>
-            <summary>
-              <span class="pipeline-name">demo</span
-              ><span class="pipeline-count">10 pasos</span>
-            </summary>
-            <ol class="pipeline-steps">
-              <li>Build the demo images, the web with the notice of spec 05 §2 (D-169)</li><li>Start the demo stack with those images and wait until it is healthy (D-171)</li><li>Containers without root, read-only, ports on 127.0.0.1 only (AC-60, D-130)</li><li>Install Chromium for Playwright</li><li>AC-61 e2e of the demo (notice, sample data, 5 writes, buckets per client, reset on restart)</li><li>Playwright report and traces</li><li>Logs of the demo stack (the API logs carry no personal data)</li><li>Save the tested images for publish (D-170)</li><li>Hand the tested images to publish</li><li>Stop the demo stack</li>
-            </ol>
-          </details>
-        </li><li class="pipeline-job">
-          <details>
-            <summary>
-              <span class="pipeline-name">publish</span
-              ><span class="pipeline-count">4 pasos</span>
-            </summary>
-            <ol class="pipeline-steps">
-              <li>Load the tested images</li><li>Log in to GHCR with the token of this run</li><li>Publish sha-&lt;commit&gt; and main</li><li>Log out of GHCR</li>
-            </ol>
-          </details>
+    </ol>
+    </details>
+    <h3 class="sub-title">Para ir a fondo</h3>
+    <ul class="process-docs">
+    <li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/README.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span
+              ><strong>ai-workspace</strong>el mapa del proceso, por dónde empezar</span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/conversaciones/README.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span
+              ><strong>Conversaciones</strong>las sesiones con la IA, enteras</span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/ai-workspace/prompts"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 6.25c0-.41.34-.75.75-.75h3.5l1.5 1.75h6.5c.41 0 .75.34.75.75v6.75c0 .41-.34.75-.75.75H4.25a.75.75 0 0 1-.75-.75V6.25Z"/></svg><span
+              ><strong>Prompts</strong>lo que se pidió, literal</span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span
+              ><strong>Decisiones</strong>cada una con su alternativa y quién la tomó</span
+            ></a
+          >
+        </li><li>
+          <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/diario.md"><svg class="icon" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.5 3.5H6.25a.75.75 0 0 0-.75.75v11.5c0 .41.34.75.75.75h7.5c.41 0 .75-.34.75-.75V6.5l-3-3Zm0 0v3h3"/></svg><span
+              ><strong>Diario</strong>qué falló y qué corrigió el revisor</span
+            ></a
+          >
         </li>
-  </ol>
-      </div>
-      <div class="quality-block">
-        <h3>Tests por capa</h3>
-        <p>1&#8239;580 tests en el clon limpio: 1&#8239;270 de Node y 310 de la web, más los e2e.</p>
-        <table class="layers">
-    <caption class="visually-hidden">
-      Ficheros de test por capa
-    </caption>
-    <thead>
-      <tr>
-        <th scope="col">Capa</th>
-        <th scope="col">Ficheros de test</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-            <th scope="row"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain">Dominio</a></th>
-            <td>
-              <span class="layer-bar"
-                ><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-                  <rect
-                    x="0"
-                    y="0"
-                    width="52.8"
-                    height="10"
-                    rx="2"
-                  /></svg></span
-              ><span class="amount">19</span>
-            </td>
-          </tr><tr>
-            <th scope="row"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/contract">Contrato</a></th>
-            <td>
-              <span class="layer-bar"
-                ><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-                  <rect
-                    x="0"
-                    y="0"
-                    width="13.9"
-                    height="10"
-                    rx="2"
-                  /></svg></span
-              ><span class="amount">5</span>
-            </td>
-          </tr><tr>
-            <th scope="row"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api">API</a></th>
-            <td>
-              <span class="layer-bar"
-                ><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-                  <rect
-                    x="0"
-                    y="0"
-                    width="100.0"
-                    height="10"
-                    rx="2"
-                  /></svg></span
-              ><span class="amount">36</span>
-            </td>
-          </tr><tr>
-            <th scope="row"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/web">Web</a></th>
-            <td>
-              <span class="layer-bar"
-                ><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-                  <rect
-                    x="0"
-                    y="0"
-                    width="91.7"
-                    height="10"
-                    rx="2"
-                  /></svg></span
-              ><span class="amount">33</span>
-            </td>
-          </tr><tr>
-            <th scope="row"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/tools">Herramientas</a></th>
-            <td>
-              <span class="layer-bar"
-                ><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-                  <rect
-                    x="0"
-                    y="0"
-                    width="63.9"
-                    height="10"
-                    rx="2"
-                  /></svg></span
-              ><span class="amount">23</span>
-            </td>
-          </tr><tr>
-            <th scope="row"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/e2e">e2e</a></th>
-            <td>
-              <span class="layer-bar"
-                ><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-                  <rect
-                    x="0"
-                    y="0"
-                    width="69.4"
-                    height="10"
-                    rx="2"
-                  /></svg></span
-              ><span class="amount">25</span>
-            </td>
-          </tr>
-    </tbody>
-  </table>
-      </div>
-      <div class="quality-block">
-        <h3><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/08-trazabilidad.md">Trazabilidad</a></h3>
-        <ol class="trace">
-    <li><strong>Requisito</strong><span>RF, RNF y RNF-SEC del análisis</span></li>
-    <li><strong>83 criterios</strong><span>81 con test; AC-94 y AC-99, de revisión</span></li>
-    <li><strong>129 vectores</strong><span>entradas y salidas exactas</span></li>
-    <li><strong>Test</strong><span>cita su AC o TV en el título</span></li>
-  </ol>
-        <p><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/scripts/trace-tests.mjs"><code>npm run trace</code></a> falla en el CI si un criterio automatizable o un vector no lo cita ningún test.</p>
-      </div>
-    </div></section><section id="intervencion" class="section" aria-labelledby="intervencion-titulo"><header class="section-head">
-      <h2 id="intervencion-titulo">Dónde <span class="accent">intervine yo</span></h2>
-      <p>
-        10 momentos en los que mi criterio cambió el rumbo, en el orden en que ocurrieron. El
-        texto es el de
-        <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/README.md#dónde-intervine-yo">ai-workspace/README.md</a>; cada uno
-        enlaza con su decisión y con el prompt en el que lo pedí.
-      </p>
-    </header>
-    <ol class="moments">
-      <li class="moment">
-            <span class="moment-index" aria-hidden="true">01</span>
-            <h3><span class="visually-hidden">1. </span>Validación fiscal estricta</h3>
-            <p>Rechacé la validación genérica de 2 a 20 caracteres fuera de España: no es «estricta». Pedí el formato oficial de cada país, con su fuente, y un validador por país detrás de una interfaz común.</p>
-    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#validación-fiscal">D-15</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/02-especificacion.md">prompt</a></p>
-          </li><li class="moment">
-            <span class="moment-index" aria-hidden="true">02</span>
-            <h3><span class="visually-hidden">2. </span>Seguridad con método</h3>
-            <p>Pedí sustituir el requisito de seguridad genérico por un bloque basado en el OWASP API Security Top 10 y un modelo de amenazas, incluido por qué no hay login.</p>
-    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#api-y-seguridad">D-40</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/02-especificacion.md">prompt</a></p>
-          </li><li class="moment">
-            <span class="moment-index" aria-hidden="true">03</span>
-            <h3><span class="visually-hidden">3. </span>Un fallback que no esconde el error</h3>
-            <p>Aprobé la caché de los tipos de cambio con una condición: carga, error con «Reintentar» y tipos desactualizados se ven siempre, cada estado con su e2e.</p>
-    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#validación-de-la-especificación-2026-11-12">D-51</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/03-validacion-especificacion.md">prompt</a></p>
-          </li><li class="moment">
-            <span class="moment-index" aria-hidden="true">04</span>
-            <h3><span class="visually-hidden">4. </span>La CSP, comprobada</h3>
-            <p>Pedí verificar si el build de Angular inyectaba CSS en línea, y un e2e que falle ante cualquier violación de CSP. Con el valor por defecto, la política habría dejado la web sin estilos.</p>
-    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#validación-de-la-arquitectura-y-plan-2026-11-12">D-70</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/06-plan-implementacion.md">prompt</a></p>
-          </li><li class="moment">
-            <span class="moment-index" aria-hidden="true">05</span>
-            <h3><span class="visually-hidden">5. </span>El flujo de trabajo</h3>
-            <p>Decidí una rama y una PR por parte, y hooks rápidos (el lint del fichero editado, nunca el build completo). Tras el primer NO APTO del revisor acepté su propuesta: <code>npm install &lt;paquete&gt;</code> y <code>gh pr merge</code> pasaron a pedir confirmación.</p>
-    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p0--scaffolding-2026-11-12">D-80, D-82 y D-85</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/07-p0-plan.md">prompt 07</a> y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/08-p0-permisos-y-cierre.md">prompt 08</a></p>
-          </li><li class="moment">
-            <span class="moment-index" aria-hidden="true">06</span>
-            <h3><span class="visually-hidden">6. </span>La IP real, sin atajos</h3>
-            <p>Exigí que los proxies de confianza fueran solo <code>loopback</code> y la subred de Docker de la demo, nunca todos los rangos privados; en P6 estreché el de la demo a direcciones exactas y pedí un e2e que demuestre que una IP falsa no abre un cubo nuevo del límite.</p>
-    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p3--contrato-y-base-de-la-api-2026-11-12">D-113</a> y D-130 · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/13-p3-cierre.md">prompt 13</a> y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/18-p6-plan.md">prompt 18</a></p>
-          </li><li class="moment">
-            <span class="moment-index" aria-hidden="true">07</span>
-            <h3><span class="visually-hidden">7. </span>El diseño, una extensión de roams.es</h3>
-            <p>Pedí que la interfaz pareciera una extensión natural de la web de la empresa, <a href="https://roams.es/">roams.es</a>: misma familia visual, no una copia. Validé la maqueta con dos ajustes.</p>
-    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p3--contrato-y-base-de-la-api-2026-11-12">D-122</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/10-diseno-visual.md">10-diseno-visual</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/16-p5-plan.md">prompt</a></p>
-          </li><li class="moment">
-            <span class="moment-index" aria-hidden="true">08</span>
-            <h3><span class="visually-hidden">8. </span>Una contradicción de la especificación</h3>
-            <p>Claude detectó que la §4.4 dejaba solo EUR mientras cargan los tipos y que AC-88 pedía cambiar de divisa en ese momento, y me planteó las salidas. Decidí que AC-88 se cumple en «Refrescando» y que tras un error los importes vuelven a la divisa que había elegido.</p>
-    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p8--divisas-2026-11-13">D-142 y D-143</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/20-p8-plan.md">prompt</a></p>
-          </li><li class="moment">
-            <span class="moment-index" aria-hidden="true">09</span>
-            <h3><span class="visually-hidden">9. </span>No enmendar un criterio para facilitar el código</h3>
-            <p>Yo había pedido cortar el email del detalle con «…», y eso obligaba a cambiar AC-84. Al revisar el plan me di cuenta de que con «…» y <code>title</code> no se puede leer en móvil ni con el teclado, y cambié de idea: que se vea entero y se parta solo por puntos naturales, sin tocar el criterio.</p>
-    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md#p10--shouldcould-y-ci-completo-2026-11-13">D-159</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/22-p10-plan.md">prompt</a></p>
-          </li><li class="moment">
-            <span class="moment-index" aria-hidden="true">10</span>
-            <h3><span class="visually-hidden">10. </span>Parar la línea cuando el CI se pone rojo</h3>
-            <p>Tras fusionar P10, el e2e de AC-91 falló en <code>main</code>. Pedí arreglarlo en una PR aparte antes de seguir, y demostrarlo con repeticiones: de 6 fallos en 100 ejecuciones a 0 en 100.</p>
-    <p class="refs"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/diario.md#arreglo-tras-p10--e2e-inestable-de-ac-91--2026-11-13--rama-fixe2e-slider-initial-value">diario</a> · <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/prompts/23-arreglo-e2e-ac91.md">prompt</a></p>
-          </li>
-    </ol></section><section id="requisitos" class="section" aria-labelledby="requisitos-titulo"><header class="section-head">
+  </ul></section><section id="requisitos" class="section" aria-labelledby="requisitos-titulo"><header class="section-head">
       <h2 id="requisitos-titulo">Requisitos y <span class="accent">evidencias</span></h2>
       <p>Cada requisito del enunciado, dónde se ve en la aplicación, qué criterios de aceptación lo concretan y qué test lo comprueba. Es la tabla de la <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/GUIA-EVALUADOR.md">guía del evaluador</a>, leída del fichero al generar esta página.</p>
     </header>
@@ -2234,159 +2611,7 @@
   </tr></tbody>
       </table>
       <p class="req-empty" data-req-empty hidden>Ningún requisito coincide con la búsqueda.</p>
-    </div></section><section id="recorridos" class="section" aria-labelledby="recorridos-titulo"><header class="section-head">
-      <h2 id="recorridos-titulo">Tres recorridos, <span class="accent">según tu tiempo</span></h2>
-      <p>
-        Las listas de la <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/GUIA-EVALUADOR.md">guía del evaluador</a>, para ir marcando. Junto a
-        cada comando, lo que tardó en la última prueba en un clon limpio
-        (<a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/diario.md#prueba-del-clon-limpio-tras-el-rediseño--2026-11-15--main-en-7892e86">diario</a>). Las marcas se guardan
-        solo en este navegador.
-      </p>
-    </header>
-    <div class="routes"><article class="route" aria-labelledby="ruta-5-titulo" data-route>
-    <h3 id="ruta-5-titulo"><span class="route-minutes">5 min</span> la demo</h3>
-    <p class="route-intro">Abre <a href="https://saas-o-matic.codeserviceapi.es">saas-o-matic.codeserviceapi.es</a>. Los datos son ficticios y se regeneran cada día; admite 5 escrituras por minuto e IP.</p>
-    <ul class="route-list">
-      <li>
-    <input type="checkbox" id="ruta-5-1" data-persist />
-    <label for="ruta-5-1"><strong>Dashboard</strong> (<code>/</code>): 25 clientes (20 por página), las métricas y el buscador. Escribe <code>nandu</code>: encuentra «Telefonía Ñandú S.A.» sin acento ni mayúsculas.</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-5-2" data-persist />
-    <label for="ruta-5-2"><strong>Detalle de «Acme Ibérica S.L.»</strong>: mueve el slider de usuarios y mira el desglose por tramos (10 × 10 € + 40 × 8 € + el resto a 5 €), el impuesto de España y el total.</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-5-3" data-persist />
-    <label for="ruta-5-3"><strong>Divisas</strong>: cambia el selector «Divisa» de la cabecera a GBP o JPY. Los importes se convierten con los tipos de <code>open.er-api.com</code>, y el indicador de la cabecera dice de qué día son.</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-5-4" data-persist />
-    <label for="ruta-5-4"><strong>Guardar</strong> la simulación: aparece arriba en el historial del cliente.</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-5-5" data-persist />
-    <label for="ruta-5-5"><strong>Nuevo cliente</strong> con país España y el identificador <code>12345678A</code> (dígito de control incorrecto): el formulario lo rechaza. Con <code>11111111H</code> (un DNI válido que no está en los datos de ejemplo) lo acepta; si otro visitante ya lo dio de alta, la demo avisa de que está duplicado, que es la otra regla (el par país e identificador es único).</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-5-6" data-persist />
-    <label for="ruta-5-6">Reduce la ventana a 360 px: no hay desplazamiento horizontal.</label
-    >
-    
-  </li>
-    </ul>
-    <p class="route-progress" aria-live="polite" data-route-progress></p>
-  </article><article class="route" aria-labelledby="ruta-15-titulo" data-route>
-    <h3 id="ruta-15-titulo"><span class="route-minutes">15 min</span> en local, con los tests</h3>
-    <p class="route-intro">Necesitas Node 22 (desde la 22.22.3), 24 (desde la 24.15) o 26 en adelante (el <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.nvmrc"><code>.nvmrc</code></a> recomienda la 26) y npm 10. No se compila nada nativo: el driver de SQLite trae binarios.</p>
-    <ul class="route-list">
-      <li>
-    <input type="checkbox" id="ruta-15-c1" data-persist />
-    <label for="ruta-15-c1"><code>npm ci</code></label
-    ><span class="route-time" title="Medido en un clon limpio">59 s</span>
-    
-  </li><li>
-    <input type="checkbox" id="ruta-15-c2" data-persist />
-    <label for="ruta-15-c2"><code>npm run setup</code></label
-    ><span class="route-time" title="Medido en un clon limpio">4 s</span>
-    
-  </li><li>
-    <input type="checkbox" id="ruta-15-c3" data-persist />
-    <label for="ruta-15-c3"><code>npm run dev</code></label
-    ><span class="route-time" title="Medido en un clon limpio">listo en 7 s</span>
-    
-  </li><li>
-    <input type="checkbox" id="ruta-15-1" data-persist />
-    <label for="ruta-15-1">Web en <a href="http://localhost:4200">localhost:4200</a> y API en <a href="http://localhost:3000/health">localhost:3000/health</a>. Con <code>npm run dev</code>, la documentación interactiva de la API está en <a href="http://localhost:3000/docs">localhost:3000/docs</a>.</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-15-2" data-persist />
-    <label for="ruta-15-2">Medido en un clon limpio con la caché de npm vacía, <code>npm ci</code>, <code>npm run setup</code> y <code>npm test</code> tardan unos 2 minutos en total; el resto del recorrido es leer.</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-15-3" data-persist />
-    <label for="ruta-15-3"><code>npm test</code>: tests de dominio, contrato, API, herramientas y web.</label
-    ><span class="route-time" title="Medido en un clon limpio">42 s</span>
-    
-  </li><li>
-    <input type="checkbox" id="ruta-15-4" data-persist />
-    <label for="ruta-15-4"><code>npm run trace</code>: comprueba que cada criterio de aceptación y cada vector de prueba lo cita algún test.</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-15-5" data-persist />
-    <label for="ruta-15-5">Opcional, con Docker: <code>docker compose up --build -d</code> y <a href="http://localhost:8080">localhost:8080</a>. Para los e2e, <code>npm run e2e:stack</code> y <code>npm run e2e</code>.</label
-    >
-    
-  </li>
-    </ul>
-    <p class="route-progress" aria-live="polite" data-route-progress></p>
-  </article><article class="route" aria-labelledby="ruta-60-titulo" data-route>
-    <h3 id="ruta-60-titulo"><span class="route-minutes">60 min</span> el código y el proceso</h3>
-    
-    <ul class="route-list">
-      <li>
-    <input type="checkbox" id="ruta-60-1" data-persist />
-    <label for="ruta-60-1"><a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/README.md"><code>ai-workspace/README.md</code></a>: qué hay en cada carpeta, cómo se trabajó con la IA y dónde intervino el responsable del proyecto. Es la mejor entrada al proceso.</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-60-2" data-persist />
-    <label for="ruta-60-2">Del problema a la especificación: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/00-enunciado.md"><code>00-enunciado.md</code></a>, <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/01-analisis.md"><code>01-analisis.md</code></a> (ambigüedades y casos límite) y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/02-especificacion/README.md"><code>02-especificacion/</code></a> (reglas, contrato, criterios de aceptación).</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-60-3" data-persist />
-    <label for="ruta-60-3">La arquitectura: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/README.md"><code>03-arquitectura/</code></a> y sus <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/03-arquitectura/adr/README.md">ADR</a>.</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-60-4" data-persist />
-    <label for="ruta-60-4">Las reglas que seguía la IA y cómo se hacen cumplir: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/CLAUDE.md"><code>CLAUDE.md</code></a>, el subagente <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.claude/agents/revisor.md"><code>revisor</code></a> y los hooks de <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.claude/settings.json"><code>.claude/settings.json</code></a>.</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-60-5" data-persist />
-    <label for="ruta-60-5">El código, de dentro afuera:</label
-    >
-    <ul class="route-nested">
-            <li>
-    <input type="checkbox" id="ruta-60-5-1" data-persist />
-    <label for="ruta-60-5-1">reglas de negocio puras: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain/src"><code>packages/domain</code></a> (empieza por <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain/src/pricing"><code>pricing</code></a> y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/packages/domain/src/tax-id"><code>tax-id</code></a>);</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-60-5-2" data-persist />
-    <label for="ruta-60-5-2">la API: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/api/src/modules"><code>apps/api/src/modules</code></a> (rutas, casos de uso y repositorios por módulo);</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-60-5-3" data-persist />
-    <label for="ruta-60-5-3">la web: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/tree/main/apps/web/src/app/features"><code>apps/web/src/app/features</code></a>;</label
-    >
-    
-  </li><li>
-    <input type="checkbox" id="ruta-60-5-4" data-persist />
-    <label for="ruta-60-5-4">el pipeline: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/.github/workflows/ci.yml"><code>.github/workflows/ci.yml</code></a>.</label
-    >
-    
-  </li>
-          </ul>
-  </li><li>
-    <input type="checkbox" id="ruta-60-6" data-persist />
-    <label for="ruta-60-6">El proceso real: <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/decisiones.md"><code>decisiones.md</code></a> (cada decisión con su alternativa descartada y quién la tomó) y <a href="https://github.com/AlejandroBuitrago685/saas-o-matic/blob/main/ai-workspace/diario.md"><code>diario.md</code></a> (una entrada por parte, con lo que falló y lo que corrigió el revisor).</label
-    >
-    
-  </li>
-    </ul>
-    <p class="route-progress" aria-live="polite" data-route-progress></p>
-  </article></div></section>
+    </div></section>
           </main>
         </div>
         <footer class="footer">
