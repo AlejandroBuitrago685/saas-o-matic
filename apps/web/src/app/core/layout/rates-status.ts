@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import type { Currency } from '@saas-o-matic/domain';
 
 import { formatRatesDate } from '../../shared/format/money.pipe';
+import { Icon } from '../../shared/ui/icon';
 import { Spinner } from '../../shared/ui/spinner';
 import type { RatesState } from '../currency/rates-state';
 
@@ -65,16 +66,14 @@ const TONE_CLASS: Readonly<Record<RatesStatusTone, string>> = {
  */
 @Component({
   selector: 'app-rates-status',
-  imports: [Spinner],
+  imports: [Icon, Spinner],
   template: `
     <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-small">
       <p data-testid="rates-status" role="status" aria-live="polite" [class]="toneClass()">
         @if (view().isBusy) {
           <app-spinner />
         } @else if (view().tone !== 'neutral') {
-          <svg aria-hidden="true" viewBox="0 0 20 20" class="size-5 shrink-0 fill-current">
-            <path d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16m-1 4h2v5H9zm0 6h2v2H9z" />
-          </svg>
+          <app-icon [name]="view().tone === 'danger' ? 'circle-alert' : 'triangle-alert'" class="size-5" />
         }
         <span>{{ view().text }}</span>
         @if (view().detail; as detail) {

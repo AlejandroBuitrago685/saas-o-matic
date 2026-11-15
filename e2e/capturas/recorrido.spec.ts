@@ -83,6 +83,11 @@ test.describe('close-ups', () => {
     await expect(results).toHaveCount(1);
     await expect(results.first()).toContainText('Telefonía Ñandú');
     await page.getByRole('searchbox').blur();
+    // The search box at the top of the window, so the whole card of the result fits below it (D-191: the metrics
+    // stack above it on a phone, and the card shows its labels, so the two no longer fit from where it was).
+    await page.getByRole('search').evaluate((search) => {
+      search.scrollIntoView({ block: 'start' });
+    });
     await capture(page, 'recorte-buscador', [page.getByRole('search'), results.first()]);
   });
 

@@ -13,10 +13,10 @@ import { CustomerForm } from './customer-form';
   selector: 'app-customer-create-page',
   imports: [CustomerForm, ErrorState, LoadingBlock],
   template: `
-    <div class="mx-auto flex max-w-2xl flex-col gap-6">
-      <div class="flex flex-col gap-1">
+    <div class="mx-auto flex max-w-3xl flex-col gap-6">
+      <div class="page-heading">
         <h1 class="page-title">Nuevo cliente</h1>
-        <p>Da de alta la empresa para simular su suscripción.</p>
+        <p class="page-subtitle">Da de alta la empresa para simular su suscripción.</p>
       </div>
       @if (catalog.ready(); as ready) {
         <app-customer-form [catalog]="ready" (created)="onCreated($event)" />
@@ -26,7 +26,10 @@ import { CustomerForm } from './customer-form';
           (retry)="catalog.reload()"
         />
       } @else {
-        <div class="card"><app-loading-block label="Cargando el formulario…" [lines]="6" /></div>
+        <div class="card flex flex-col gap-6">
+          <div class="skeleton h-8 w-1/2" aria-hidden="true"></div>
+          <app-loading-block label="Cargando el formulario…" [lines]="6" />
+        </div>
       }
     </div>
   `,

@@ -16,8 +16,9 @@
     @apply disabled:bg-surface-muted disabled:text-ink-disabled;
   }
 
+  /* Lavender outline since D-191, as in the visual direction: the action colour stays the only one. */
   .btn-secondary {
-    @apply border border-ink bg-surface text-ink hover:bg-surface-muted;
+    @apply border border-primary bg-surface text-primary hover:bg-primary-tint;
     @apply disabled:border-line disabled:text-ink-disabled disabled:hover:bg-surface;
     @apply aria-disabled:border-line aria-disabled:text-ink-disabled aria-disabled:hover:bg-surface;
   }
@@ -57,9 +58,41 @@
     @apply rounded-lg border-3 border-primary bg-primary-tint p-4 sm:p-6;
   }
 
-  /* Text roles */
+  /* Bordered box inside a card (a customer of the listing): a line and no shadow, so the card stays the only layer. */
+  .tile {
+    @apply rounded-lg border border-line bg-surface p-4 sm:p-5;
+  }
+
+  /* Square behind the icon of a metric or a block title (D-191). The icon is decorative; the text names the block. */
+  .icon-tile {
+    @apply inline-flex size-12 shrink-0 items-center justify-center rounded-md bg-primary-soft text-primary;
+  }
+
+  /* Text roles. The page title grows to 32 px from 640 px (D-191); the projection total stays the largest figure. */
+  .page-heading {
+    @apply flex flex-col gap-1;
+  }
+
   .page-title {
-    @apply text-title-lg font-extrabold text-ink;
+    @apply text-title-lg font-extrabold tracking-tight text-ink sm:text-title-xl;
+  }
+
+  .page-subtitle {
+    @apply text-body text-ink-soft;
+  }
+
+  /* A label over its value: the data of a card (listing, customer, history). */
+  .data-label {
+    @apply text-small text-ink-muted;
+  }
+
+  .data-value {
+    @apply text-body font-semibold text-ink;
+  }
+
+  /* Empty and no-results states inside a card: centred, with an icon, a sentence and the way out. */
+  .empty-state {
+    @apply flex flex-col items-center gap-4 px-4 py-10 text-center;
   }
 
   .section-title {
@@ -76,8 +109,9 @@
     @apply flex flex-col gap-1;
   }
 
+  /* Field labels at body size and bold, as in the visual direction of D-191. */
   .label {
-    @apply text-small font-semibold text-ink;
+    @apply text-body font-bold text-ink;
   }
 
   .hint {
@@ -90,31 +124,46 @@
     @apply disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-ink-disabled;
   }
 
+  /* A select draws its own chevron (`app-icon`, in a `relative` wrapper) instead of the arrow of each system (D-191). */
+  .select {
+    @apply cursor-pointer appearance-none pr-11;
+  }
+
   .field-error {
     @apply text-small font-semibold text-danger-fg;
   }
 
-  /* Small labels: plan, tax id type. Values, so at body-small size (user feedback at the visual checkpoint). */
+  /* Small labels: plan, tax id type. Values, so at body-small size (user feedback at the visual checkpoint). Lavender
+     by default; the tax id type is neutral and each plan has its tone (D-191, `plan-badge.ts`). */
   .badge {
-    @apply inline-flex items-center rounded-full bg-primary-soft px-3 text-small font-semibold text-primary-ink;
+    @apply inline-flex items-center rounded-full bg-primary-soft px-3 text-small font-bold tracking-wide text-primary-ink;
   }
 
-  /* Label/value lists (customer card, history): small muted label, value at body size in the normal text
-     colour. Stacked on phones, two columns from 640 px. Markup: <dl class="data-list"><div><dt/><dd/></div>. */
+  .badge-neutral {
+    @apply bg-surface-muted text-ink-soft;
+  }
+
+  .badge-info {
+    @apply bg-info-bg text-info-fg;
+  }
+
+  /* Label/value lists (customer card, history): the label small and muted over its value, at body size and in the
+     text colour (user feedback at the P5 checkpoint), with a line between rows (D-191). The history lays the same list
+     out in a row with utilities. Markup: <dl class="data-list"><div><dt/><dd/></div>. */
   .data-list {
-    @apply flex flex-col gap-3;
+    @apply flex flex-col divide-y divide-line;
   }
 
   .data-list > div {
-    @apply flex flex-col sm:flex-row sm:items-baseline sm:gap-4;
+    @apply flex flex-col gap-0.5 py-3 first:pt-0 last:pb-0;
   }
 
   .data-list dt {
-    @apply text-small text-ink-muted sm:w-40 sm:shrink-0;
+    @apply text-small text-ink-muted;
   }
 
   .data-list dd {
-    @apply text-body text-ink wrap-anywhere;
+    @apply text-body font-semibold text-ink wrap-anywhere;
   }
 
   /* Header navigation link; the current section is marked with aria-current, never with colour alone. */

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 
+import { Icon } from '../../shared/ui/icon';
 import { Spinner } from '../../shared/ui/spinner';
 import { CustomerSearchStore } from './customer-search.store';
 import { CustomerSummaryCard } from './customer-summary-card';
@@ -10,7 +11,7 @@ import { CustomerSummaryCard } from './customer-summary-card';
  */
 @Component({
   selector: 'app-customer-results',
-  imports: [CustomerSummaryCard, Spinner],
+  imports: [CustomerSummaryCard, Icon, Spinner],
   templateUrl: './customer-results.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

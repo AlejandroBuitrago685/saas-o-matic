@@ -5,7 +5,18 @@
 @layer base {
   html {
     color-scheme: light;
+    accent-color: var(--color-primary);
     -webkit-text-size-adjust: 100%;
+  }
+
+  /* The surfaces the browser draws also follow the palette (D-191): text selection and the caret. */
+  ::selection {
+    @apply bg-primary-soft text-ink;
+  }
+
+  input,
+  textarea {
+    caret-color: var(--color-primary);
   }
 
   body {

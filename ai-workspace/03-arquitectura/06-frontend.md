@@ -55,7 +55,7 @@ src/app/
 y la regla de fronteras la declara de forma explícita.
 
 **Aviso de demo** (`core/layout/demo-banner.ts`, P11):
-- Está **arriba de todas las vistas**, antes de la cabecera *sticky*. No se puede cerrar y se desplaza con la página
+- Está **arriba de todas las vistas**, antes de la cabecera (*sticky* desde 640 px, D-191). No se puede cerrar y se desplaza con la página
   (D-168): pegado a la cabecera, a 360 px dejaría poca pantalla.
 - Se decide **al compilar** (D-169). El token `IS_DEMO_BUILD` lee la constante de `demo-build.ts` (`false`), y la
   configuración `demo` de `angular.json` sustituye ese fichero por `demo-build.demo.ts` (`true`).
@@ -119,7 +119,7 @@ Principios:
   - Tras un `429`, no hay intentos automáticos durante 20 min. `retry()` (el botón «Reintentar») siempre lanza la petición.
   - Las transiciones son funciones puras (`nextRatesState(estado, evento, ahora)`), así que la máquina se prueba sin
     Angular, con un reloj inyectado.
-- **Indicador:** `RatesStatus` dentro de `CurrencyBar` (`core/layout`, D-151), siempre presente en la cabecera, que es *sticky* en su anfitrión (D-150). Lee
+- **Indicador:** `RatesStatus` dentro de `CurrencyBar` (`core/layout`, D-151), siempre presente en la cabecera, que es *sticky* en su anfitrión (D-150) desde 640 px; en móvil se desplaza con la página (D-191). Lee
   `ExchangeRatesStore.state` y muestra el texto, el indicador de actividad o el botón «Reintentar» de cada estado
   (spec `05` §4.4). Tiene `role="status"` con `aria-live="polite"`. No depende de la divisa seleccionada, así que el
   error se ve también en EUR (D-51).

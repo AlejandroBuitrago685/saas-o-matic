@@ -91,8 +91,11 @@
     "52fc136cc40b2a82"
   ],
   "ai-workspace/03-arquitectura/10-diseno-visual.md": [
-    "31d619c209cab1a0",
+    "073cde2318f51e76",
+    "0b154545225b86d4",
+    "500f44492f33a442",
     "58805a3d5d051d93",
+    "61e4b4f604b5a1aa",
     "a8bf909e744a5c9c",
     "eb224c698b2102be",
     "ffc404c3863334d1"
@@ -309,17 +312,17 @@
     "01e0aab5d52b3fa2",
     "12dfde61f1ab5481",
     "156c82b5ba62eb18",
-    "33149a9385f5c173",
-    "5e8129f9dba4fd80",
+    "2539bc18520c4a89",
     "64fdfa9ce1719f72",
     "711d183de28eae65",
     "8bbb3b5df71ef0ec",
     "8bf30c78a4862765",
-    "aa97b376b4782911",
-    "adab3bb0db7e0c57",
+    "9465a9c681b663d6",
+    "c5d2c63e7c1cea21",
     "caa6f087613a8520",
     "e007fadd8c633c2a",
     "e7dc244b6e8b13bc",
+    "e9060373e6232798",
     "fb3cd1727f5f90a0"
   ],
   "ai-workspace/diario.md": [
@@ -350,6 +353,7 @@
     "d5a00a05368b0960",
     "d93ff98a3e4f08e8",
     "da4213e432e7ef5f",
+    "e26f5f8389a85ec6",
     "e3148eb9767a4c21",
     "e56d982b3c417ac3",
     "e92a5d290682f4ab"
@@ -401,6 +405,11 @@
   ],
   "ai-workspace/prompts/29-readme-destacado.md": [
     "5513791d7ab316f1"
+  ],
+  "ai-workspace/prompts/30-rediseno-visual.md": [
+    "85acd401bdbb9288",
+    "90b5c33f7c96496a",
+    "e92e7e4d0c7480d1"
   ],
   "ai-workspace/README.md": [
     "2526ec2e4776451b",

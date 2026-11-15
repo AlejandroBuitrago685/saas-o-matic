@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { CurrencyStore } from '../../core/currency/currency.store';
 
 import { ErrorState } from '../../shared/ui/error-state';
+import { Icon } from '../../shared/ui/icon';
 import { LoadingBlock } from '../../shared/ui/loading-block';
 import { Spinner } from '../../shared/ui/spinner';
 import { CustomerDetailStore } from './customer-detail.store';
@@ -14,7 +15,7 @@ import { SimulationCard } from './simulation-card';
  */
 @Component({
   selector: 'app-simulation-history',
-  imports: [ErrorState, LoadingBlock, SimulationCard, Spinner],
+  imports: [ErrorState, Icon, LoadingBlock, SimulationCard, Spinner],
   templateUrl: './simulation-history.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

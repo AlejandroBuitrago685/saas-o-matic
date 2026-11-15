@@ -9,27 +9,40 @@ import {
 } from '@angular/core';
 import { type Currency, CURRENCIES, isCurrency } from '@saas-o-matic/domain';
 
+import { Icon } from '../../shared/ui/icon';
+
 /**
  * Currency selector of the header (spec 05 §4.1, D-21): a native `<select>`, so the keyboard and screen readers work
  * as usual. A currency without a valid rate is disabled (spec 05 §4.4, CL-31); EUR never is.
  */
 @Component({
   selector: 'app-currency-select',
+  imports: [Icon],
   template: `
     <label class="flex items-center gap-2 text-small font-semibold text-ink">
       Divisa
-      <select
-        #control
-        data-testid="currency-select"
-        class="input min-h-11 w-auto py-0 pr-8 pl-3"
-        (change)="onChange($event)"
-      >
-        @for (currency of currencies; track currency) {
-          <option [value]="currency" [disabled]="!isAvailable(currency)" [selected]="currency === selected()">
-            {{ currency }}
-          </option>
-        }
-      </select>
+      <span class="relative inline-flex">
+        <select
+          #control
+          data-testid="currency-select"
+          class="input select min-h-11 w-auto py-0 pr-9 pl-3"
+          (change)="onChange($event)"
+        >
+          @for (currency of currencies; track currency) {
+            <option
+              [value]="currency"
+              [disabled]="!isAvailable(currency)"
+              [selected]="currency === selected()"
+            >
+              {{ currency }}
+            </option>
+          }
+        </select>
+        <app-icon
+          name="chevron-down"
+          class="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-ink-soft"
+        />
+      </span>
     </label>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

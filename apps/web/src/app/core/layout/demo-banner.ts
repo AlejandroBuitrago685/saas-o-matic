@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, InjectionToken } from '@angular/core';
 
+import { Icon } from '../../shared/ui/icon';
 import { DEMO_BUILD } from './demo-build';
 
 /** Whether this build is the public demo (D-169), decided when compiling. Injected so the tests can choose. */
@@ -14,14 +15,20 @@ export const IS_DEMO_BUILD = new InjectionToken<boolean>('IS_DEMO_BUILD', {
  */
 @Component({
   selector: 'app-demo-banner',
+  imports: [Icon],
   template: `
     @if (isDemoBuild) {
       <aside
         aria-label="Aviso de demostración"
-        class="border-b border-warning-fg bg-warning-bg px-4 py-2 text-center text-sm text-warning-fg sm:px-6"
+        class="border-b border-warning-fg bg-warning-bg px-4 py-2.5 text-small text-warning-fg sm:px-6"
       >
-        <strong class="font-bold">Entorno de demostración:</strong> los datos son ficticios y se borran
-        periódicamente. No introduzcas datos reales.
+        <div class="mx-auto flex max-w-app items-start gap-2 sm:justify-center">
+          <app-icon name="triangle-alert" class="mt-0.5 size-5" />
+          <p>
+            <strong class="font-bold">Entorno de demostración:</strong> los datos son ficticios y se borran
+            periódicamente. No introduzcas datos reales.
+          </p>
+        </div>
       </aside>
     }
   `,

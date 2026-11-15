@@ -2,10 +2,10 @@
 
 | Campo | Valor |
 |---|---|
-| Estado | **v1**: dirección validada por el usuario en el punto de control visual de P5 (2026-11-13), con dos ajustes (valores de la tarjeta del cliente a tamaño de cuerpo; cabecera con navegación y botón «Nuevo cliente»). |
-| Decisiones | D-122 (dirección y tokens), D-123 (tipografía), D-124 (contraste), D-125 (componentes en CSS global y guardias) |
-| Código | [`apps/web/src/styles/`](../../apps/web/src/styles/): `tokens.css`, `base.css`, `components.css`, `range.css` |
-| Test | [`tools/design-tokens.test.ts`](../../tools/design-tokens.test.ts) (contraste) · `check-forbidden-patterns` (sin colores arbitrarios) |
+| Estado | **v2** (D-191, §7): rediseño a partir de tres maquetas, con el dashboard aprobado por el usuario en su punto de control (2026-11-14). La v1 se validó en el punto de control de P5 (2026-11-13), con dos ajustes: valores de la tarjeta del cliente a tamaño de cuerpo, y cabecera con navegación y botón «Nuevo cliente». |
+| Decisiones | D-122 (dirección y tokens), D-123 (tipografía), D-124 (contraste), D-125 (componentes en CSS global y guardias), D-191 (v2: maquetas, iconos, columnas del detalle y cabecera en móvil) |
+| Código | [`apps/web/src/styles/`](../../apps/web/src/styles/): `tokens.css`, `base.css`, `components.css`, `range.css` · iconos: [`shared/ui/icon.ts`](../../apps/web/src/app/shared/ui/icon.ts) e [`icon-paths.ts`](../../apps/web/src/app/shared/ui/icon-paths.ts) |
+| Test | [`tools/design-tokens.test.ts`](../../tools/design-tokens.test.ts) (contraste) · `check-forbidden-patterns` (sin colores arbitrarios) · [`e2e/specs/projection-fit.spec.ts`](../../e2e/specs/projection-fit.spec.ts) (la cifra más larga cabe en una línea) |
 
 ## 1. Referencia y criterio
 
@@ -42,14 +42,16 @@ es SaaS-O-Matic y la única mención es «Prueba técnica para Roams», discreta
 - **Se mantiene:** la tipografía, la lavanda como **único** color de acción, los neutros fríos, los radios, las sombras
   suaves, el foco discontinuo y el tuteo.
 - **Cambia, porque es una herramienta y no una web de captación:** sin *hero*, sin fotos ni ilustraciones, sin emojis;
-  titulares contenidos (24 px como máximo, salvo el total de la proyección); más densidad (cuerpo 16/24 en vez de 16/28).
+  titulares contenidos (el título de página llega a 32 px desde 640 px, D-191; el total de la proyección, a 48 px);
+  más densidad (cuerpo 16/24 en vez de 16/28).
 - **Marca:** logotipo de texto «SaaS-**O-Matic**» en Montserrat 800, con «O-Matic» en lavanda: el mismo gesto que la
   palabra de acento de sus titulares.
 - **Firma visual:** el **panel de proyección** del simulador reutiliza el patrón de su calculadora (borde de 3 px,
   fondo tintado, total en 36/44 y 800). Es el único elemento «de marketing» de la app, y está donde el comercial mira.
 - **Cabecera** como la suya: navegación a la izquierda («Clientes») y la acción principal a la derecha («Nuevo cliente»).
-  El grupo de la derecha admite el selector de divisa y el indicador de tipos de P8 y se reparte en varias líneas en
-  móvil; a 360 px la navegación baja a su propia fila, sin scroll horizontal.
+  El grupo de la derecha admite el selector de divisa y el indicador de tipos de P8. Desde la v2 (D-191), a 360 px va
+  en tres filas: logotipo y navegación; tipos y divisa; y «Nuevo cliente» a lo ancho. Solo es fija desde 640 px: en
+  móvil se desplaza con la página, para no tapar media pantalla.
 
 ## 2. Tokens
 
@@ -94,8 +96,10 @@ generar CSS, así que no se puede salir del sistema por descuido. Los colores ar
 | `text-small` | 14/24 | `--s-size` / `--s-line` | Etiquetas, ayudas, errores de campo, pie. |
 | `text-body` | 16/24 | `--b-size` (línea 28 en roams.es) | Cuerpo y **valores** (tarjeta del cliente, historial). Interlineado 24 por densidad de herramienta. |
 | `text-title-sm` | 18/26 | `--tD` (16 × 1,14) | Títulos de sección, logotipo. |
-| `text-title-lg` | 24/32 | `--title-a` | Título de página. |
-| `text-display` | 36/44 | `--p-font-size-36` / `--p-font-lineheight-44` | Total de la proyección. |
+| `text-title-lg` | 24/32 | `--title-a` | Título de página en móvil; títulos de tarjeta desde 640 px; cifras de métricas e historial. |
+| `text-title-xl` | 32/40 | Propio (D-191), entre los 24/32 y 36/44 de la referencia | Título de página desde 640 px; cifras de métricas con sitio (D-191). |
+| `text-display` | 36/44 | `--p-font-size-36` / `--p-font-lineheight-44` | Total de la proyección, con cifras de 11 a 14 caracteres. |
+| `text-display-xl` | 48/56 | Propio (D-191), sobre la rejilla de 4 px | Total de la proyección, con cifras de hasta 10 caracteres, como «169,40 €» (D-191). |
 
 Solo hay tokens para lo que la interfaz usa: el 12/20 (`--m-size`), el 21/28 (`--tC`) y el peso 500 de roams.es no se
 definen hasta que una vista los necesite, así que ningún texto de la app baja de 14 px.
@@ -138,6 +142,9 @@ del slider (1.4.11).
 | Borde de campo `line-control` sobre `surface` | 5,49 | 3 |
 | Borde de campo inválido `danger-fg` sobre `surface` | 7,23 | 3 |
 | Pista del slider `track` sobre `surface` / `primary-tint` | 3,64 / 3,41 | 3 |
+| D-191: texto seleccionado, `ink` sobre `primary-soft` | 15,42 | 4,5 |
+| D-191: recuadro de la tarifa, `ink` / `ink-soft` sobre `primary-tint` | 18,07 / 7,92 | 4,5 |
+| D-191: icono de métrica y de bloque, `primary` sobre `primary-soft` | 5,71 | 3 |
 
 **Ajustes respecto a roams.es:**
 
@@ -157,19 +164,22 @@ en `@layer components`** construidas solo con `@apply` sobre los tokens (D-125):
 
 | Clase | Patrón de roams.es |
 |---|---|
-| `.btn` + `.btn-primary` / `.btn-secondary` / `.btn-soft` | Sus tres botones; 48 px de alto, radio 8, texto 700. |
+| `.btn` + `.btn-primary` / `.btn-secondary` / `.btn-soft` | Sus tres botones; 48 px de alto, radio 8, texto 700. Desde D-191, el secundario lleva borde y texto lavanda, como la paginación de las maquetas (en la v1, tinta, como roams.es). |
 | `.link` | Enlace lavanda subrayado. |
 | `.card`, `.card-highlight` | Tarjeta blanca con sombra centrada; tarjeta de la calculadora. |
 | `.page-title`, `.section-title`, `.amount` | Titulares en 800; importes tabulares sin salto. |
-| `.field`, `.label`, `.hint`, `.input`, `.field-error` | Campo con borde de control; error en `danger-fg` y borde de 2 px (`aria-invalid`). |
-| `.data-list` | Etiqueta pequeña y apagada, valor a 16 px en `ink` (ajuste del usuario en el punto de control); apilado en móvil, dos columnas desde 640 px. |
-| `.badge` | Píldora lavanda clara (plan, tipo de identificador). |
+| `.field`, `.label`, `.hint`, `.input`, `.select`, `.field-error` | Campo con borde de control; etiqueta a 16 px en negrita (D-191); error en `danger-fg` y borde de 2 px (`aria-invalid`). Los `select` dibujan su propio *chevron* (`app-icon`) en vez de la flecha de cada sistema. |
+| `.data-list` | Etiqueta pequeña y apagada sobre su valor, a 16 px en `ink` y seminegrita (ajuste del usuario en el punto de control de P5), con una línea entre filas (D-191). El historial la reparte en fila con utilidades. |
+| `.badge`, `.badge-neutral`, `.badge-info` | Píldora: lavanda clara por defecto; el tipo de identificador en gris y cada plan con su tono (`app-plan-badge`: STARTER gris, BUSINESS lavanda, ENTERPRISE azul; D-191). |
+| `.tile`, `.icon-tile` | Caja con borde y sin sombra dentro de una tarjeta (cliente del listado); cuadrado lavanda claro detrás de un icono (D-191). |
+| `.page-heading`, `.page-subtitle`, `.data-label`, `.data-value`, `.empty-state` | Título con subtítulo; etiqueta sobre valor; estado vacío centrado con icono (D-191). |
 | `.nav-link` | Enlace de la cabecera; la sección actual se marca con `aria-current` y un subrayado, no solo con color. |
 | `.alert-*` | Aviso con icono, texto y borde fuerte. |
 | `.skeleton`, `.range` | Esqueleto de carga; slider nativo (pseudo-elementos `-webkit-`/`-moz-`, sin relleno de progreso para no necesitar estilos en línea). |
 
 Base global (`base.css`): fondo `canvas`, Montserrat, foco discontinuo en `:focus-visible` y `prefers-reduced-motion`
-(desactiva transiciones y el pulso del esqueleto).
+(desactiva transiciones y el pulso del esqueleto). Desde D-191, también la selección de texto, el cursor de los campos
+y `accent-color` siguen la paleta.
 
 ## 5. Tipografía autoalojada (D-123)
 
@@ -189,3 +199,65 @@ Como roams.es: **tuteo**, frases cortas y verbos de acción en los botones («Cr
 «Reintentar», «Cargar más»). Los errores dicen qué pasa y qué hacer («Revisa el identificador», «Inténtalo de nuevo») y,
 si hay un fallo del servidor, dan la referencia para soporte. Sin emojis, sin exclamaciones ni tono de marketing: es una
 herramienta de trabajo. Los textos de la especificación (`05-frontend.md` §6) se usan tal cual.
+
+## 7. Versión 2: las maquetas (D-191)
+
+El usuario generó tres maquetas con otra herramienta, que solo conocía la especificación: el dashboard, el alta (en
+escritorio y a 360 px) y el detalle con el simulador y el historial. Son la **dirección**, no un plano: jerarquía,
+tarjetas con icono, columnas y aire. Solo cambia la interfaz (plantillas, clases, tokens e iconos); la lógica, el
+contrato y la API quedan igual.
+
+### 7.1 Qué se toma de cada maqueta
+
+| Vista | Qué se toma |
+|---|---|
+| Dashboard | Subtítulo; métricas con icono; buscador con lupa; un panel con las tarjetas y la paginación al pie; tarjetas con el plan arriba a la derecha, etiquetas visibles («Identificador fiscal» con su tipo, «País», «Fecha de alta») y «Ver detalle →». |
+| Alta | Subtítulo; el formulario en dos bloques con icono, «Datos de la empresa» y «Suscripción»; identificador y email en paralelo desde 640 px; «Crear cliente» a lo ancho; etiquetas a 16 px en negrita. |
+| Detalle | Tres columnas desde 1 280 px (cliente, controles y total, al 29, 38 y 33 %), dos desde 1 024 px; el campo de usuarios junto a su etiqueta y el slider debajo; el recuadro «Tarificación acumulativa»; el total grande, su desglose y «Guardar simulación» en el panel del total; el historial en tarjetas con el importe «/mes» destacado. |
+| Móvil | Todo apilado; la cabecera en tres filas, con «Nuevo cliente» a lo ancho; sin desplazamiento horizontal. |
+
+Todo lo que la app ya tenía y las maquetas no muestran se conserva con el estilo nuevo: los estados de carga, error,
+vacío, sin resultados, tipos desactualizados y «Refrescando», las notas de conversión, la paginación, «Cargar más» y
+los avisos del formulario.
+
+### 7.2 Dónde la maqueta choca con la especificación
+
+| Maqueta | Se queda | Por qué |
+|---|---|---|
+| El total muestra «Tramo 3 · 0 × 5,00 €» | Solo los tramos con usuarios; los tres se ven en «Tarificación acumulativa», que sale del catálogo. | Spec 05 §3.4, AC-01 y AC-91. Lo decidió el usuario. |
+| Tres columnas | Dos desde 1 024 px y tres desde 1 280 px. | Spec 05 §3.3 pedía dos desde 1 024 px; se amplía, no se contradice. |
+| «Tramo 1 · 10 × 10,00 €» | «Tramo 1 · usuarios 1–10 · 10 × 10,00 €», que solo se parte entre sus partes (`app-tier-label`). | Es la etiqueta de la spec. |
+| Su propio texto del aviso de demo | El texto de spec 05 §2, con el icono de la maqueta. | Texto exigido. |
+| «Importe medio simulado» con «Sin impuestos» debajo | «Importe medio simulado (sin impuestos)». | Etiqueta de spec 05 §3.1. |
+| «Ver detalle →» como enlace | Pista visual oculta a los lectores de pantalla. | D-157: un solo enlace por tarjeta, el nombre. |
+| Títulos de unos 40 px | 32 px desde 640 px (`text-title-xl`). | Revisa el límite de 24 px de D-122 sin competir con el total. |
+| Panel del total con borde fino | El borde de 3 px de la firma de D-122. | Es la firma visual de la app. |
+| *Placeholders* en todos los campos | Solo donde son un ejemplo: el email del alta (`nombre@empresa.com`) y el buscador del dashboard («Ej. Acme o B12345674», el CIF de ejemplo de spec 05 §3.2). | El nombre repetiría su etiqueta, y el identificador ya tiene su ejemplo debajo. |
+| Slider con la parte recorrida en lavanda | Sin relleno de progreso. | Necesitaría estilos en línea (CSP, ADR-011). |
+
+### 7.3 Decisiones de detalle
+
+- **Iconos:** Lucide 1.65.0 (ISC; algunos derivados de Feather, MIT), copiados como trazados en
+  [`icon-paths.ts`](../../apps/web/src/app/shared/ui/icon-paths.ts) y dibujados en SVG en línea por `app-icon`, con
+  `aria-hidden`. La licencia se sirve con la app en `apps/web/public/lucide-license.txt`. Sin dependencia, sin
+  peticiones y sin nada que la CSP tenga que permitir.
+- **Cifras que siempre caben:** el total y la cifra de cada métrica eligen su tamaño por la longitud de la cifra y el
+  ancho de su tarjeta, con *container queries* ([`figure-size.ts`](../../apps/web/src/app/shared/format/figure-size.ts)):
+  48 px para «169,40 €» y 24 px para «≈ 1.243.127,08 MXN» en la columna de 1 280 px. El historial hace lo mismo con el
+  ancho de su tarjeta. Las métricas ponen la cifra bajo el icono desde 1 024 px, porque a su lado una media convertida
+  no cabía. Lo comprueba `projection-fit.spec.ts` con 10 000 usuarios en pesos, a 360, 1 024 y 1 280 px: el total, la
+  tarjeta del historial y la media del dashboard.
+- **Cabecera en móvil:** no es fija; se descartó fijar solo la primera fila, porque obligaba a sacarla del `<header>`
+  o a usar `display: contents`.
+- **Tramos sin «·» huérfanos:** `app-tier-label` y el recuadro de la tarifa pasan la cantidad y el precio a su propia
+  línea cuando su tarjeta es estrecha, y el separador queda solo para los lectores de pantalla. El texto no cambia.
+- **Revisión visual:** la hizo el revisor de acabado de la skill `impeccable`, sin el contexto de la sesión, contra las
+  tres maquetas. Sus siete arreglos están aplicados: los tramos, los campos secundarios apilados en la columna
+  estrecha, la celda de llamadas a la API a lo ancho a 360 px, los *chevron*, el marco del error del detalle y el
+  esqueleto del historial, el botón secundario lavanda y el campo de usuarios alineado como los demás.
+- **Orden del foco del simulador:** el campo numérico de usuarios va antes que el slider, como se ven; ningún criterio
+  fija ese orden (AC-86 solo el del alta).
+- **Deuda aceptada:** el simulador lee la tarifa del plan con `tariffForPlan` para el recuadro, igual que el store para
+  calcular el precio. Son dos lecturas de la misma tarifa del catálogo; el store no se toca en este cambio.
+- **Tarjetas dentro del panel:** los clientes del listado son cajas con borde y sin sombra (`.tile`), para que el
+  panel sea la única capa con sombra.

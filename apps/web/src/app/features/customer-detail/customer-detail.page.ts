@@ -22,15 +22,28 @@ import { CustomerOverview } from './customer-overview';
         <app-not-found-view title="Cliente no encontrado" />
       }
       @case ('error') {
-        <app-error-state message="No se ha podido cargar el cliente." (retry)="store.reloadCustomer()" />
+        <!-- Framed like the not-found view, with the page title: the error is the whole page here. -->
+        <section class="card mx-auto flex max-w-xl flex-col gap-4" aria-labelledby="customer-error-title">
+          <h1 id="customer-error-title" class="page-title">Cliente</h1>
+          <app-error-state message="No se ha podido cargar el cliente." (retry)="store.reloadCustomer()" />
+        </section>
       }
       @case ('loading') {
-        <div role="status" aria-busy="true" class="flex flex-col gap-6">
+        <!-- The shape of the loaded page (D-191): customer, controls and total, then the history. -->
+        <div role="status" aria-busy="true" class="flex flex-col gap-8">
           <span class="sr-only">Cargando el cliente…</span>
-          <div class="skeleton h-8 w-2/3" aria-hidden="true"></div>
-          <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div class="flex flex-col gap-2" aria-hidden="true">
+            <div class="skeleton h-4 w-16"></div>
+            <div class="skeleton h-10 w-2/3"></div>
+          </div>
+          <div
+            class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] xl:grid-cols-[29fr_38fr_33fr]"
+          >
             <div class="card"><app-loading-block [announce]="false" [lines]="5" /></div>
             <div class="card"><app-loading-block [announce]="false" [lines]="5" /></div>
+            <div class="card-highlight hidden xl:block">
+              <app-loading-block [announce]="false" [lines]="5" />
+            </div>
           </div>
           <div class="card"><app-loading-block [announce]="false" /></div>
         </div>
