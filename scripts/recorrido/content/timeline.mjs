@@ -23,6 +23,41 @@ export const HIGHLIGHTED_DECISIONS = {
 };
 
 /**
+ * @typedef {object} AfterPlanWork
+ * @property {string} title
+ * @property {string} what one sentence
+ * @property {string[]} pullRequests their numbers, in order
+ * @property {string} decision the decision it is about
+ */
+
+/**
+ * What came after P13, outside the parts of the plan: the delivery close and the redesign (diario). The plan's table
+ * «Partes y PR» stops at P13, so these pull requests are listed here; `tools/recorrido.test.ts` checks that each one
+ * comes after the parts and that every decision is defined.
+ * @type {readonly AfterPlanWork[]}
+ */
+export const AFTER_PLAN = [
+  {
+    title: 'Conversaciones con la IA y privacidad',
+    what: 'Las sesiones de construcción enteras, convertidas a Markdown, y una comprobación de privacidad de todo lo entregado.',
+    pullRequests: ['23', '26'],
+    decision: 'D-188',
+  },
+  {
+    title: '«Lo más destacable» del README',
+    what: 'Siete líneas, cada una con el enlace a lo que la demuestra y con sus cifras leídas de su fuente.',
+    pullRequests: ['24'],
+    decision: 'D-190',
+  },
+  {
+    title: 'Rediseño visual a partir de tres maquetas',
+    what: 'Una dirección visual nueva para la interfaz, sin tocar su lógica, con capturas y recorrido regenerados.',
+    pullRequests: ['25'],
+    decision: 'D-191',
+  },
+];
+
+/**
  * @typedef {object} CycleStep
  * @property {string} name
  * @property {string} what

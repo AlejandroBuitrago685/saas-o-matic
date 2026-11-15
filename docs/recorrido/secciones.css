@@ -462,6 +462,19 @@
   font-weight: 800;
 }
 
+/* The work after the plan has no part number: a dot on the same line. */
+.tl-dot {
+  justify-self: center;
+  align-self: start;
+  width: 16px;
+  height: 16px;
+  margin-top: 8px;
+  border: 3px solid var(--color-surface);
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
 .tl-body {
   display: grid;
   gap: 4px;

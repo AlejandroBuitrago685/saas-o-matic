@@ -6,12 +6,13 @@ import { describe, expect, it } from 'vitest';
 import { REQUEST_PATH, RATES_CALL } from '../scripts/recorrido/content/architecture.mjs';
 import { FLOW_STEPS } from '../scripts/recorrido/content/flow.mjs';
 import { REPO_MAP } from '../scripts/recorrido/content/repo-map.mjs';
-import { HIGHLIGHTED_DECISIONS, PART_CYCLE } from '../scripts/recorrido/content/timeline.mjs';
+import { AFTER_PLAN, HIGHLIGHTED_DECISIONS, PART_CYCLE } from '../scripts/recorrido/content/timeline.mjs';
 import { reachableModules } from '../scripts/recorrido/generate-recorrido.mjs';
 import { escapeHtml } from '../scripts/recorrido/html.mjs';
 import { CONTENT_SECURITY_POLICY } from '../scripts/recorrido/render/page.mjs';
 import { DEMO_URL, PAGES_URL, REPO_URL } from '../scripts/recorrido/repo-links.mjs';
 import { buildSite, SITE_DIR } from '../scripts/recorrido/site.mjs';
+import { partPullRequests, PLAN_FILE } from '../scripts/recorrido/sources/workflow.mjs';
 import { REPO_ROOT } from './lint-fixture.js';
 
 const read = (path: string): string => readFileSync(join(REPO_ROOT, path), 'utf8');
@@ -60,7 +61,16 @@ describe('D-183 everything the walkthrough curates points to something real', ()
     for (const id of [...REQUEST_PATH, RATES_CALL].flatMap((piece) => piece.controlIds)) {
       expect(security).toContain(`| ${id} |`);
     }
-    for (const id of Object.values(HIGHLIGHTED_DECISIONS)) expect(decisions).toContain(`| ${id} | **`);
+    const highlighted = [...Object.values(HIGHLIGHTED_DECISIONS), ...AFTER_PLAN.map((work) => work.decision)];
+    for (const id of highlighted) expect(decisions).toContain(`| ${id} | **`);
+  });
+
+  it('lists the work after the plan with pull requests that come after those of every part', () => {
+    const partNumbers = [...partPullRequests(read(PLAN_FILE)).values()].flat().map(Number);
+    const afterNumbers = AFTER_PLAN.flatMap((work) => work.pullRequests).map(Number);
+
+    expect(afterNumbers.length).toBeGreaterThan(0);
+    expect(Math.min(...afterNumbers)).toBeGreaterThan(Math.max(...partNumbers));
   });
 
   it('shows 25 to 35 entries in the repository map, each with at least one interest', () => {
