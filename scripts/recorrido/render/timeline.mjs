@@ -1,9 +1,10 @@
 // @ts-check
 /**
  * How it was built (D-183): the timeline of the parts P0 to P13 (objective, pull requests and one decision, all read
- * from the plan and from decisiones.md) and the cycle every part followed.
+ * from the plan and from decisiones.md), the work that closed the delivery after them, and the cycle every part
+ * followed.
  */
-import { HIGHLIGHTED_DECISIONS, PART_CYCLE } from '../content/timeline.mjs';
+import { AFTER_PLAN, HIGHLIGHTED_DECISIONS, PART_CYCLE } from '../content/timeline.mjs';
 import { markup } from '../html.mjs';
 import { inlineMarkdown } from '../inline-markdown.mjs';
 import { githubUrl, REPO_URL } from '../repo-links.mjs';
@@ -55,6 +56,28 @@ function renderPart(part, data) {
   </li>`;
 }
 
+/**
+ * @param {import('../content/timeline.mjs').AfterPlanWork} work
+ * @param {TimelineData} data
+ */
+function renderAfterPlan(work, data) {
+  const lead = data.decisionLeads.get(work.decision);
+  if (lead === undefined) throw new Error(`renderAfterPlan: no decision ${work.decision}`);
+  return markup`<li class="tl-part">
+    <span class="tl-dot" aria-hidden="true"></span>
+    <div class="tl-body">
+      <h3>${work.title}</h3>
+      <p>${work.what}</p>
+      <p class="tl-meta">
+        ${renderPullRequests(work.pullRequests)}<span class="tl-decision"
+          ><a href="${githubUrl(DECISIONS_FILE)}">${work.decision}</a> ·
+          ${inlineMarkdown(lead, DECISIONS_FILE)}</span
+        >
+      </p>
+    </div>
+  </li>`;
+}
+
 function renderCycle() {
   return markup`<ol class="cycle">
     ${PART_CYCLE.map(
@@ -82,5 +105,9 @@ export function renderTimeline(data) {
     <h3 class="sub-title">Las partes, de P0 a ${data.parts.at(-1)?.id ?? ''}</h3>
     <ol class="timeline">
       ${data.parts.map((part) => renderPart(part, data))}
+    </ol>
+    <h3 class="sub-title">Después del plan: el cierre</h3>
+    <ol class="timeline">
+      ${AFTER_PLAN.map((work) => renderAfterPlan(work, data))}
     </ol>`;
 }

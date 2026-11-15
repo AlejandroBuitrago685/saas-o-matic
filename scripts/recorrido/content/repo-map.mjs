@@ -95,6 +95,12 @@ export const REPO_MAP = [
         when: 'Para ver qué se pidió exactamente.',
         interests: ['ia'],
       },
+      {
+        path: 'ai-workspace/conversaciones',
+        what: 'Las sesiones de construcción con la IA, enteras y legibles, convertidas a Markdown.',
+        when: 'Para ver la interacción real, empezando por sus momentos clave.',
+        interests: ['ia'],
+      },
     ],
   },
   {
