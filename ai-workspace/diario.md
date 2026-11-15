@@ -1765,3 +1765,28 @@ revisiones; la PR, a la mañana siguiente.
 **Decisiones:** ninguna nueva; las omisiones siguen D-175 y D-189, con el mismo criterio que el prompt 28.
 
 **Tiempo:** unos 40 min.
+
+## Prueba del clon limpio tras el rediseño — 2026-11-15 · `main` en `7892e86`
+
+Clon de `main` desde GitHub en una carpeta temporal fuera del proyecto, con una caché de npm nueva y vacía. Windows 11 y
+Node 22.23.4. **Es la medición vigente**: la anterior se tomó antes de los tests del rediseño.
+
+| Paso del README | Resultado | Tiempo |
+|---|---|---|
+| `git clone` | bien | 2 s |
+| `npm ci` | bien, con la caché vacía | 59 s |
+| `npm run setup` | bien | 4 s |
+| `npm run dev` | API y web en 200; `/customers` responde con los datos de ejemplo | listo en 7 s |
+| `npm test` | 1 270 + 310 tests (Node y web), 1 580 en total, todos en verde | 42 s |
+
+- Como en el CI, la parte local de `tools/privacy.test.ts` se salta porque el fichero privado no está junto al clon.
+  Es el único test que no corre.
+- `npm run dev` se midió en frío, sin la caché de Angular, y con los puertos 3000 y 4200 libres. La primera comprobación
+  pedía `/api/customers` a la API, una ruta que solo existe a través del proxy de la web, y se repitió.
+- No se repitieron la descarga de Chromium, `e2e:smoke` ni Docker: siguen valiendo los de P12. El CI de `main` sobre
+  este mismo commit pasó los e2e y los `smoke`.
+- `npm ci`, `setup` y `npm test` suman 105 s: los «unos 2 minutos» de la guía siguen siendo ciertos.
+- La demo corre ya las imágenes de este commit: el usuario la redesplegó con `sha-7892e86…` y Claude la comprobó en vivo
+  (el aviso, las tres vistas a 1 280 y 360 px, la consola sin errores, la redirección a HTTPS, una sola cabecera HSTS y
+  los 25 clientes de ejemplo).
+
