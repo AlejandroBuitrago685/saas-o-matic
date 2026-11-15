@@ -4,6 +4,9 @@ Herramienta interna para que el equipo comercial simule y presupueste suscripcio
 corporativos: alta de clientes con validación fiscal, simulación por tramos con impuestos y conversión de divisas en
 tiempo real.
 
+> **¿Evalúas el proyecto? Empieza por la [guía del evaluador](GUIA-EVALUADOR.md):** recorridos de 5, 15 y 60 minutos,
+> y una tabla que lleva cada requisito del enunciado a la pantalla donde se ve y al test que lo comprueba.
+>
 > **Demo pública:** <https://saas-o-matic.codeserviceapi.es>, con datos ficticios que se regeneran cada día. Admite 5
 > escrituras por minuto e IP.
 >
@@ -48,9 +51,6 @@ npm run dev
 - Web: <http://localhost:4200>. API: <http://localhost:3000/health>.
 - `setup` crea la base de datos local con 25 clientes ficticios y sus simulaciones. Si ya tiene clientes, no hace
   nada.
-
-> **¿Evalúas el proyecto?** La [guía del evaluador](GUIA-EVALUADOR.md) propone recorridos de 5, 15 y 60 minutos y lleva
-> cada requisito del enunciado a la pantalla donde se ve y al test que lo comprueba.
 
 ## Si algo falla
 
